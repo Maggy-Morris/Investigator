@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:luminalens/core/resources/app_colors.dart';
-import 'package:luminalens/core/widgets/sizedbox.dart';
+import 'package:Investigator/core/resources/app_colors.dart';
+import 'package:Investigator/core/widgets/sizedbox.dart';
 
 class CustomText extends StatelessWidget {
   const CustomText({

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:luminalens/core/resources/app_colors.dart';
+import 'package:Investigator/core/resources/app_colors.dart';
 
 import 'spining_lines_loader.dart';
 

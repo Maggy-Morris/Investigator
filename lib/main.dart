@@ -2,15 +2,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:luminalens/authentication/auth_bloc/app_bloc.dart';
-import 'package:luminalens/authentication/authentication_repository.dart';
-import 'package:luminalens/bloc_observer.dart';
-import 'package:luminalens/core/widgets/no_animation_page.dart';
-import 'package:luminalens/presentation/add_camera/bloc/home_bloc.dart';
-import 'package:luminalens/presentation/login/view/login_page.dart';
-import 'package:luminalens/presentation/standard_layout/bloc/standard_layout_cubit.dart';
-import 'package:luminalens/routes.dart';
-import 'package:luminalens/theme.dart';
+import 'package:Investigator/authentication/auth_bloc/app_bloc.dart';
+import 'package:Investigator/authentication/authentication_repository.dart';
+import 'package:Investigator/bloc_observer.dart';
+import 'package:Investigator/core/widgets/no_animation_page.dart';
+import 'package:Investigator/presentation/add_camera/bloc/home_bloc.dart';
+import 'package:Investigator/presentation/login/view/login_page.dart';
+import 'package:Investigator/presentation/standard_layout/bloc/standard_layout_cubit.dart';
+import 'package:Investigator/routes.dart';
+import 'package:Investigator/theme.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:routemaster/routemaster.dart';
 
@@ -96,7 +96,7 @@ class AppView extends StatelessWidget {
           child: OverlaySupport.global(
             child: MaterialApp.router(
               // title: "Intelligence".tr(),
-              title: "Luminalens",
+              title: "Investigator",
               debugShowCheckedModeBanner: false,
               localizationsDelegates: context.localizationDelegates,
               supportedLocales: context.supportedLocales,

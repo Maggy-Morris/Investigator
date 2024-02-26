@@ -1,13 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:luminalens/authentication/call_back_authentication.dart';
-import 'package:luminalens/core/models/add_camera_model.dart';
-import 'package:luminalens/core/models/apply_model_model.dart';
-import 'package:luminalens/core/models/camera_details_model.dart';
-import 'package:luminalens/core/models/dashboard_models.dart';
-import 'package:luminalens/core/remote_provider/remote_data_source.dart';
-
+import 'package:Investigator/authentication/call_back_authentication.dart';
+import 'package:Investigator/core/models/add_camera_model.dart';
+import 'package:Investigator/core/models/apply_model_model.dart';
+import 'package:Investigator/core/models/camera_details_model.dart';
+import 'package:Investigator/core/models/dashboard_models.dart';
+import 'package:Investigator/core/remote_provider/remote_data_source.dart';
 enum AppLifecycleStatus { online, offline }
 
 class RemoteProvider {

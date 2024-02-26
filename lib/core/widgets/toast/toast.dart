@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:luminalens/core/constant/toast_offset.dart';
-import 'package:luminalens/core/enum/enum.dart';
+import 'package:Investigator/core/constant/toast_offset.dart';
+import 'package:Investigator/core/enum/enum.dart';
 
 import 'toast_animation.dart';
 import 'toast_provider.dart';

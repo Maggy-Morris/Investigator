@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:luminalens/core/resources/adaptive.dart';
+import 'package:Investigator/core/resources/adaptive.dart';
 
 class NavigationRailHeader extends StatelessWidget {
   const NavigationRailHeader(

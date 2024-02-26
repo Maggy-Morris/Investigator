@@ -1,13 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:luminalens/core/resources/app_colors.dart';
-import 'package:luminalens/core/utils/responsive.dart';
-import 'package:luminalens/core/widgets/drop_down_widgets.dart';
-import 'package:luminalens/core/widgets/sizedbox.dart';
-import 'package:luminalens/core/widgets/toast/toast.dart';
-import 'package:luminalens/presentation/add_camera/bloc/home_bloc.dart';
-import 'package:luminalens/presentation/standard_layout/screens/standard_layout.dart';
+import 'package:Investigator/core/resources/app_colors.dart';
+import 'package:Investigator/core/utils/responsive.dart';
+import 'package:Investigator/core/widgets/drop_down_widgets.dart';
+import 'package:Investigator/core/widgets/sizedbox.dart';
+import 'package:Investigator/core/widgets/toast/toast.dart';
+import 'package:Investigator/presentation/add_camera/bloc/home_bloc.dart';
+import 'package:Investigator/presentation/standard_layout/screens/standard_layout.dart';
 
 class ApplyModelScreen extends StatefulWidget {
   const ApplyModelScreen({Key? key}) : super(key: key);

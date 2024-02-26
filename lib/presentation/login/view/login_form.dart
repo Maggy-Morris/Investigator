@@ -2,11 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:luminalens/core/loader/loading_indicator.dart';
-import 'package:luminalens/core/resources/app_fonts.dart';
-import 'package:luminalens/core/utils/responsive.dart';
-import 'package:luminalens/core/widgets/sizedbox.dart';
-import 'package:luminalens/presentation/login/widgets/custom_text.dart';
+import 'package:Investigator/core/loader/loading_indicator.dart';
+import 'package:Investigator/core/resources/app_fonts.dart';
+import 'package:Investigator/core/utils/responsive.dart';
+import 'package:Investigator/core/widgets/sizedbox.dart';
+import 'package:Investigator/presentation/login/widgets/custom_text.dart';
 import 'package:svg_flutter/svg.dart';
 
 import '../../../core/resources/app_colors.dart';

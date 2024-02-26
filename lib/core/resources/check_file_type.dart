@@ -1,4 +1,4 @@
-import 'package:luminalens/core/enum/enum.dart';
+import 'package:Investigator/core/enum/enum.dart';
 import 'package:path/path.dart' as p;
 
 class UrlTypeHelper {

@@ -2,12 +2,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:luminalens/core/resources/adaptive.dart';
-import 'package:luminalens/core/resources/app_colors.dart';
-import 'package:luminalens/core/resources/app_fonts.dart';
-import 'package:luminalens/presentation/standard_layout/bloc/standard_layout_cubit.dart';
-import 'package:luminalens/presentation/standard_layout/widgets/main_app_bar.dart';
-import 'package:luminalens/presentation/standard_layout/widgets/navigation_rail_header.dart';
+import 'package:Investigator/core/resources/adaptive.dart';
+import 'package:Investigator/core/resources/app_colors.dart';
+import 'package:Investigator/core/resources/app_fonts.dart';
+import 'package:Investigator/presentation/standard_layout/bloc/standard_layout_cubit.dart';
+import 'package:Investigator/presentation/standard_layout/widgets/main_app_bar.dart';
+import 'package:Investigator/presentation/standard_layout/widgets/navigation_rail_header.dart';
 import 'package:routemaster/routemaster.dart';
 
 class StandardLayoutScreen extends StatelessWidget {

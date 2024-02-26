@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:luminalens/core/enum/enum.dart';
-import 'package:luminalens/core/models/add_camera_model.dart';
-import 'package:luminalens/core/remote_provider/remote_provider.dart';
+import 'package:Investigator/core/enum/enum.dart';
+import 'package:Investigator/core/models/add_camera_model.dart';
+import 'package:Investigator/core/remote_provider/remote_provider.dart';
 
 part 'home_event.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:luminalens/core/resources/app_colors.dart';
+import 'package:Investigator/core/resources/app_colors.dart';
 import '../../../authentication/authentication_repository.dart';
 import '../cubit/login_cubit.dart';
 import 'login_form.dart';

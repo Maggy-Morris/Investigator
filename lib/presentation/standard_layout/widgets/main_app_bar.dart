@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:luminalens/authentication/auth_bloc/app_bloc.dart';
-import 'package:luminalens/core/resources/app_colors.dart';
+import 'package:Investigator/authentication/auth_bloc/app_bloc.dart';
+import 'package:Investigator/core/resources/app_colors.dart';
 import 'package:routemaster/routemaster.dart';
 
 logout(BuildContext context) {

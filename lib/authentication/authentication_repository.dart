@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:luminalens/core/remote_provider/remote_provider.dart';
+import 'package:Investigator/core/remote_provider/remote_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:luminalens/authentication/call_back_authentication.dart';
+import 'package:Investigator/authentication/call_back_authentication.dart';
 
 enum AuthenticationStatus { authenticated, unauthenticated }
 

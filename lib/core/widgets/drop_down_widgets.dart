@@ -1,7 +1,7 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/painting/borders.dart' as painting;
-import 'package:luminalens/core/resources/app_colors.dart';
+import 'package:Investigator/core/resources/app_colors.dart';
 
 Widget multiSelectGenericDropdown<T>({
   required bool isEnabled,

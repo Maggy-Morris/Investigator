@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:luminalens/core/enum/enum.dart';
+import 'package:Investigator/core/enum/enum.dart';
 
 Offset getOffset(ToastPosition position) {
   if (position == ToastPosition.top) {

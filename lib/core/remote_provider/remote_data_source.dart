@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'dart:html';
 
 import 'package:flutter/foundation.dart';
-import 'package:luminalens/authentication/authentication_repository.dart';
+import 'package:Investigator/authentication/authentication_repository.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:luminalens/core/error/exceptions.dart';
+import 'package:Investigator/core/error/exceptions.dart';
 
 class RemoteDataSource {
   static String baseURL = 'http://192.168.1.96:8080';
