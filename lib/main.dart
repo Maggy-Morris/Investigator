@@ -14,6 +14,11 @@ import 'package:Investigator/theme.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:routemaster/routemaster.dart';
 
+import 'presentation/add_camera/screens/add_camera_screen.dart';
+import 'presentation/all_cameras/screens/all_cameras.dart';
+import 'presentation/all_cameras/screens/camera_details.dart';
+import 'presentation/apply_model/screens/apply_model.dart';
+import 'presentation/dashboard/screens/dashboard_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -129,7 +134,16 @@ class AppView extends StatelessWidget {
     //   return const Redirect("/");
     // },
     routes: {
-      '/': (route) => const NoAnimationPage(child: LoginPage()),
+      '/': (route) => const NoAnimationPage(child: DashboardScreen()),
+      '/allCameras': (route) =>
+          const NoAnimationPage(child: AllCamerasScreen()),
+      '/cameraDetails': (route) => NoAnimationPage(
+              child: CameraDetails(
+            cameraName: route.queryParameters["name"] ?? "",
+          )),
+      '/addCamera': (route) => const NoAnimationPage(child: AddCameraScreen()),
+      '/applyModel': (route) =>
+          const NoAnimationPage(child: ApplyModelScreen()),
     },
   );
 }
@@ -180,6 +194,6 @@ RouteMap _buildRouteMap(BuildContext context) {
         ),
       );
     },
-    routes: checkAuthority(),
+    routes: getRoutesAdmin(),
   );
 }

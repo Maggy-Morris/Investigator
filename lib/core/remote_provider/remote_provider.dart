@@ -28,13 +28,18 @@ class RemoteProvider {
       var loginCallBack = await RemoteDataSource().postWithFile(
           endPoint: "/signin", body: {"username": email, "password": password});
       if (loginCallBack != null) {
+
+
         // CallBackRemote callBackRemote = CallBackRemote.fromJson(loginCallBack);
         // if (callBackRemote.data != null) {
         // debugPrint(loginCallBack.toString());
+
         UserData callBackDetailID = UserData.fromJson(loginCallBack);
 
         if (kDebugMode) {
+
           debugPrint(loginCallBack.toString());
+          
         }
         return callBackDetailID;
         // return AddNewMainPersonalDataInitial.fromJson(callBackRemote.data ?? {});
