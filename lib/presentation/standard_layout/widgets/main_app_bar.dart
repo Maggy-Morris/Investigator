@@ -19,9 +19,7 @@ AppBar mainAppBar(
   return AppBar(
     scrolledUnderElevation: 0.0,
     title: Text(
-      (title?.isNotEmpty ?? false)
-          ? title ?? "Luminalens"
-          : "Luminalens",
+      (title?.isNotEmpty ?? false) ? title ?? "Investigator" : "Investigator",
       style: const TextStyle(color: AppColors.blueBlack, fontFamily: "Cairo"),
     ),
     automaticallyImplyLeading: false,
@@ -56,7 +54,9 @@ Drawer mainDrawer(BuildContext context) {
       children: [
         Container(
             margin: const EdgeInsets.all(10),
-            child: const Divider(color: Colors.transparent,)),
+            child: const Divider(
+              color: Colors.transparent,
+            )),
 
         /// Language
         ListTile(
@@ -225,6 +225,7 @@ Drawer mainDrawer(BuildContext context) {
             }
           },
         ),
+
         /// sign out
         ListTile(
           title: Text(

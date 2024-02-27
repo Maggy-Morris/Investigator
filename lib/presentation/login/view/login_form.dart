@@ -87,27 +87,27 @@ class LoginForm extends StatelessWidget {
                       ),
                       Responsive.isWeb(context)
                           ? Expanded(
-                        child: Column(
-                          children: [
-                            Container(
-                              constraints:
-                              const BoxConstraints(maxHeight: 400),
-                              child: SvgPicture.asset(
-                                "assets/images/Admin_Kit_Text.svg",
+                              child: Column(
+                                children: [
+                                  Container(
+                                    constraints:
+                                        const BoxConstraints(maxHeight: 400),
+                                    child: SvgPicture.asset(
+                                      "assets/images/Admin_Kit_Text.svg",
+                                    ),
+                                  ),
+                                  FxBox.h16,
+                                  // Center(
+                                  //   child: CustomText(
+                                  //     title: languageModel.authentication.signInHeader,
+                                  //     fontSize: 15,
+                                  //     fontWeight: FontWeight.w700,
+                                  //     textColor: ColorConst.lightFontColor,
+                                  //   ),
+                                  // ),
+                                ],
                               ),
-                            ),
-                            FxBox.h16,
-                            // Center(
-                            //   child: CustomText(
-                            //     title: languageModel.authentication.signInHeader,
-                            //     fontSize: 15,
-                            //     fontWeight: FontWeight.w700,
-                            //     textColor: ColorConst.lightFontColor,
-                            //   ),
-                            // ),
-                          ],
-                        ),
-                      )
+                            )
                           : Container(),
                     ],
                   ),
@@ -147,9 +147,11 @@ class LoginForm extends StatelessWidget {
     );
   }
 }
+
 Widget _logoView() {
   return SvgPicture.asset("assets/images/Admin_Kit.svg");
 }
+
 Widget _bottomView() {
   return Column(
     mainAxisAlignment: MainAxisAlignment.start,
@@ -157,7 +159,7 @@ Widget _bottomView() {
     //mainAxisSize: MainAxisSize.min,
     children: [
       FxBox.h16,
-      headerView("login".tr(),"",false),
+      headerView("login".tr(), "", false),
       FxBox.h28,
       Padding(
         padding: const EdgeInsets.all(8.0),
@@ -277,8 +279,7 @@ class _PasswordInputState extends State<_PasswordInput> {
               isDense: true,
               // labelText: 'Password',
               hintText: 'enterPassword'.tr(),
-              errorText:
-                  state.password.invalid ? 'wrongPassword'.tr() : null,
+              errorText: state.password.invalid ? 'wrongPassword'.tr() : null,
             ),
           ),
         );
@@ -294,8 +295,8 @@ class _LoginButton extends StatelessWidget {
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
         return state.status.isSubmissionInProgress
-            ?  loadingIndicator(
-              color: AppColors.blueBlack,
+            ? loadingIndicator(
+                color: AppColors.blueBlack,
               )
             : SizedBox(
                 width: Responsive.isWeb(context)
@@ -314,8 +315,8 @@ class _LoginButton extends StatelessWidget {
                       ? () => context.read<LoginCubit>().logInWithCredentials()
                       : null,
                   child: Text('login'.tr(),
-                      style:
-                          const TextStyle(fontFamily: "Cairo", color: Colors.white)),
+                      style: const TextStyle(
+                          fontFamily: "Cairo", color: Colors.white)),
                 ),
               );
       },

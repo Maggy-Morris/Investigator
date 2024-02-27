@@ -9,7 +9,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:Investigator/core/error/exceptions.dart';
 
 class RemoteDataSource {
-  static String baseURL = 'http://192.168.1.96:8080';
+  static String baseURL = 'http://192.168.1.136:5000';
 
   Future<Map<String, dynamic>> post({
     required String endPoint,

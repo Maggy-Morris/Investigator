@@ -2,16 +2,22 @@ part of 'home_bloc.dart';
 
 class HomeState extends Equatable {
   final List<String> camerasNamesList;
+  final List<String> companyNamesList;
+
   final List<String> sourceTypesList;
   final List<String> modelsNameList;
   final Submission submission;
 
   final List<String> cameraSelectedModels;
+  final String companyName;
+
   final String cameraName;
   final String cameraSource;
   final String cameraSourceType;
 
   const HomeState({
+    this.companyName = "",
+    this.companyNamesList = const [],
     this.camerasNamesList = const [],
     this.sourceTypesList = const [],
     this.modelsNameList = const [],
@@ -23,6 +29,8 @@ class HomeState extends Equatable {
   });
 
   HomeState copyWith({
+    List<String>? companyNamesList,
+    String? companyName,
     List<String>? camerasNamesList,
     List<String>? sourceTypesList,
     List<String>? modelsNameList,
@@ -33,6 +41,8 @@ class HomeState extends Equatable {
     Submission? submission,
   }) {
     return HomeState(
+      companyName: companyName ?? this.companyName,
+      companyNamesList: companyNamesList ?? this.companyNamesList,
       camerasNamesList: camerasNamesList ?? this.camerasNamesList,
       sourceTypesList: sourceTypesList ?? this.sourceTypesList,
       modelsNameList: modelsNameList ?? this.modelsNameList,
@@ -46,6 +56,8 @@ class HomeState extends Equatable {
 
   @override
   List<Object> get props => [
+        companyName,
+        companyNamesList,
         camerasNamesList,
         sourceTypesList,
         modelsNameList,

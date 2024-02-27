@@ -14,6 +14,15 @@ class DataEvent extends HomeEvent {
   List<Object?> get props => [];
 }
 
+///
+class GetCompanyNames extends HomeEvent {
+  const GetCompanyNames();
+
+  @override
+  List<Object?> get props => [];
+}
+
+
 class GetCamerasNames extends HomeEvent {
   const GetCamerasNames();
 
@@ -36,6 +45,20 @@ class GetModelsName extends HomeEvent {
 }
 
 /// handle state events
+/// 
+
+class AddCompanyName extends HomeEvent {
+  final String companyName;
+
+  const AddCompanyName({required this.companyName});
+
+  @override
+  List<Object?> get props => [companyName];
+}
+
+
+
+
 class AddCameraName extends HomeEvent {
   final String cameraName;
 
@@ -71,6 +94,17 @@ class AddCameraSourceModels extends HomeEvent {
   @override
   List<Object?> get props => [cameraSelectedModels];
 }
+
+
+
+/// add company event
+class AddCompanyEvent extends HomeEvent {
+  const AddCompanyEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
 
 /// add camera event
 class AddCameraEvent extends HomeEvent {

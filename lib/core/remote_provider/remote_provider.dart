@@ -7,6 +7,10 @@ import 'package:Investigator/core/models/apply_model_model.dart';
 import 'package:Investigator/core/models/camera_details_model.dart';
 import 'package:Investigator/core/models/dashboard_models.dart';
 import 'package:Investigator/core/remote_provider/remote_data_source.dart';
+
+import '../models/add_company_model.dart';
+import '../models/call_back_model.dart';
+
 enum AppLifecycleStatus { online, offline }
 
 class RemoteProvider {
@@ -26,20 +30,14 @@ class RemoteProvider {
       String email, String password) async {
     try {
       var loginCallBack = await RemoteDataSource().postWithFile(
-          endPoint: "/signin", body: {"username": email, "password": password});
+          endPoint: "/qdrant/login",
+          body: {"username": email, "password": password});
+
       if (loginCallBack != null) {
-
-
-        // CallBackRemote callBackRemote = CallBackRemote.fromJson(loginCallBack);
-        // if (callBackRemote.data != null) {
-        // debugPrint(loginCallBack.toString());
-
         UserData callBackDetailID = UserData.fromJson(loginCallBack);
 
         if (kDebugMode) {
-
           debugPrint(loginCallBack.toString());
-          
         }
         return callBackDetailID;
         // return AddNewMainPersonalDataInitial.fromJson(callBackRemote.data ?? {});
@@ -55,11 +53,55 @@ class RemoteProvider {
     }
   }
 
+  ///Add Comany
+  Future<CallBackModel> addCompany({
+    required String companyName,
+  }) async {
+    try {
+      Map<String, dynamic> callBack = await RemoteDataSource()
+          .post(endPoint: "/qdrant/create_collection ", body: {
+        "companyName": companyName,
+      });
+
+      //Change this "Collection Created Successfully!"
+      if (callBack.isNotEmpty) {
+        CallBackModel callBackList = CallBackModel.fromJson(callBack);
+        return callBackList;
+      } else {
+        return CallBackModel();
+      }
+    } catch (e) {
+      return CallBackModel();
+    }
+  }
+
+  /// get all static lists
+  Future<List<String>> getAllCompanyNames() async {
+    try {
+      List<dynamic> callBack = await RemoteDataSource().get(
+        endPoint: "/qdrant/retrieve_it_all",
+      );
+      if (callBack.isNotEmpty) {
+        List<String> callBackList = callBack.cast<String>();
+
+        if (kDebugMode) {
+          debugPrint(callBack.toString());
+        }
+        return callBackList;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return [];
+    }
+  }
+
   /// get all static lists
   Future<List<String>> getAllCamerasNames() async {
     try {
       List<dynamic> callBack = await RemoteDataSource().get(
-        endPoint: "/get_cameraname",
+        endPoint: "/c",
       );
       if (callBack.isNotEmpty) {
         List<String> callBackList = callBack.cast<String>();
@@ -149,8 +191,8 @@ class RemoteProvider {
     required List<String> modelName,
   }) async {
     try {
-      Map<String, dynamic> callBack =
-          await RemoteDataSource().postWithFile(endPoint: "/applyModel", body: {
+      Map<String, dynamic> callBack = await RemoteDataSource()
+          .postWithFile(endPoint: "/Investigator", body: {
         "cameraname": cameraName,
         // "modelname": modelName.join(","),
         "modelname": jsonEncode(modelName),
@@ -191,32 +233,31 @@ class RemoteProvider {
     required String month,
     required String year,
   }) async {
-    Map<String,String> body ={};
+    Map<String, String> body = {};
 
-    if(cameraName.isNotEmpty){
+    if (cameraName.isNotEmpty) {
       body["cameraname"] = cameraName;
     }
-    if(day.isNotEmpty){
+    if (day.isNotEmpty) {
       body["day"] = day;
     }
-    if(month.isNotEmpty){
+    if (month.isNotEmpty) {
       body["month"] = month;
     }
-    if(year.isNotEmpty){
+    if (year.isNotEmpty) {
       body["year"] = year;
     }
 
     try {
       List<dynamic> callBack = await RemoteDataSource()
-          .postWithFile(endPoint: "/allmodelsstatistics",
-          body: body
-      //     {
-      //   "cameraname": cameraName,
-      //   "day": "19",
-      //   "month": "2",
-      //   "year": "2024",
-      // }
-      );
+          .postWithFile(endPoint: "/allmodelsstatistics", body: body
+              //     {
+              //   "cameraname": cameraName,
+              //   "day": "19",
+              //   "month": "2",
+              //   "year": "2024",
+              // }
+              );
       if (callBack.isNotEmpty) {
         debugPrint("0-0-0-0$callBack");
         List<GetAllCameraCountPerHour> callbackList = [];
@@ -233,15 +274,15 @@ class RemoteProvider {
     }
   }
 
-
   Future<GetAllCameraDetails> getAllCamerasDetails(
       {required String cameraName}) async {
     try {
       var callBack = await RemoteDataSource().postWithFile(
-          endPoint: "/getallmodelsincam",
-          body: {"cameraname": cameraName});
+          endPoint: "/getallmodelsincam", body: {"cameraname": cameraName});
+
       if (callBack.isNotEmpty) {
-        GetAllCameraDetails countsModel = GetAllCameraDetails.fromJson(callBack);
+        GetAllCameraDetails countsModel =
+            GetAllCameraDetails.fromJson(callBack);
         return countsModel;
       } else {
         return GetAllCameraDetails();
@@ -251,5 +292,4 @@ class RemoteProvider {
       return GetAllCameraDetails();
     }
   }
-
 }

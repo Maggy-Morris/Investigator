@@ -102,14 +102,14 @@ class StandardLayoutScreen extends StatelessWidget {
                                       selectedIcon: const Icon(
                                         Icons.dashboard,
                                       ),
-                                      label: Text('dashboard'.tr()),
+                                      label: Text('All'.tr()),
                                     ),
                                     NavigationRailDestination(
-                                      icon: const Icon(Icons.camera),
+                                      icon: const Icon(Icons.search),
                                       selectedIcon: const Icon(
-                                        Icons.camera,
+                                        Icons.search,
                                       ),
-                                      label: Text('addCamera'.tr()),
+                                      label: Text('Search'.tr()),
                                     ),
 
                                     NavigationRailDestination(
@@ -118,16 +118,15 @@ class StandardLayoutScreen extends StatelessWidget {
                                       selectedIcon: const Icon(
                                         Icons.model_training_outlined,
                                       ),
-                                      label: Text('applyModel'.tr()),
+                                      label: Text('Investigator'.tr()),
                                     ),
 
                                     NavigationRailDestination(
-                                      icon: const Icon(
-                                          Icons.photo_camera_outlined),
+                                      icon: const Icon(Icons.person_outlined),
                                       selectedIcon: const Icon(
-                                        Icons.photo_camera_outlined,
+                                        Icons.person_outlined,
                                       ),
-                                      label: Text('AllCameras'.tr()),
+                                      label: Text('allEmployees'.tr()),
                                     ),
 
                                     /// Language
@@ -287,15 +286,13 @@ class StandardLayoutScreen extends StatelessWidget {
                                     if (index == 0) {
                                       Routemaster.of(context).push('/');
                                     } else if (index == 1) {
-                                      Routemaster.of(context)
-                                          .push('/addCamera');
+                                      Routemaster.of(context).push('/search');
                                     } else if (index == 2) {
                                       Routemaster.of(context)
-                                          .push('/applyModel');
-                                    }
-                                    else if (index == 3) {
+                                          .push('/Investigator');
+                                    } else if (index == 3) {
                                       Routemaster.of(context)
-                                          .push('/allCameras');
+                                          .push('/allEmployees');
                                     }
                                     // else if (index == 4) {
                                     //   Routemaster.of(context)
