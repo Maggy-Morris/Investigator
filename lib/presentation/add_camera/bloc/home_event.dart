@@ -15,13 +15,22 @@ class DataEvent extends HomeEvent {
 }
 
 ///
-class GetCompanyNames extends HomeEvent {
-  const GetCompanyNames();
+
+class GetEmployeeNames extends HomeEvent {
+  final String companyName;
+
+  const GetEmployeeNames({required this.companyName});
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [companyName];
 }
 
+// class GetCompaniesNames extends HomeEvent {
+//   const GetCompaniesNames();
+
+//   @override
+//   List<Object?> get props => [];
+// }
 
 class GetCamerasNames extends HomeEvent {
   const GetCamerasNames();
@@ -45,7 +54,7 @@ class GetModelsName extends HomeEvent {
 }
 
 /// handle state events
-/// 
+///
 
 class AddCompanyName extends HomeEvent {
   final String companyName;
@@ -56,17 +65,14 @@ class AddCompanyName extends HomeEvent {
   List<Object?> get props => [companyName];
 }
 
+// class AddCameraName extends HomeEvent {
+//   final String cameraName;
 
+//   const AddCameraName({required this.cameraName});
 
-
-class AddCameraName extends HomeEvent {
-  final String cameraName;
-
-  const AddCameraName({required this.cameraName});
-
-  @override
-  List<Object?> get props => [cameraName];
-}
+//   @override
+//   List<Object?> get props => [cameraName];
+// }
 
 class AddCameraSource extends HomeEvent {
   final String cameraSource;
@@ -77,27 +83,15 @@ class AddCameraSource extends HomeEvent {
   List<Object?> get props => [cameraSource];
 }
 
-class AddCameraSourceType extends HomeEvent {
-  final String cameraSourceType;
-
-  const AddCameraSourceType({required this.cameraSourceType});
-
-  @override
-  List<Object?> get props => [cameraSourceType];
-}
-
-class AddCameraSourceModels extends HomeEvent {
-  final List<String> cameraSelectedModels;
-
-  const AddCameraSourceModels({required this.cameraSelectedModels});
-
-  @override
-  List<Object?> get props => [cameraSelectedModels];
-}
-
-
-
 /// add company event
+class GetEmployeeNamesEvent extends HomeEvent {
+  const GetEmployeeNamesEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
+// Add company event
 class AddCompanyEvent extends HomeEvent {
   const AddCompanyEvent();
 
@@ -105,6 +99,59 @@ class AddCompanyEvent extends HomeEvent {
   List<Object?> get props => [];
 }
 
+// Delete company event
+class DeleteCompanyEvent extends HomeEvent {
+  // final String companyName;
+
+  const DeleteCompanyEvent(
+      // this.companyName
+      );
+
+  @override
+  List<Object?> get props => [];
+}
+
+// get person data by name
+class GetPersonByNameEvent extends HomeEvent {
+  final String companyName;
+  final String personName;
+
+  const GetPersonByNameEvent(this.companyName, this.personName);
+
+  @override
+  List<Object?> get props => [companyName, personName];
+}
+
+// get person data by id
+class GetPersonByIdEvent extends HomeEvent {
+  final String companyName;
+  final String personId;
+  const GetPersonByIdEvent(this.companyName, this.personId);
+
+  @override
+  List<Object?> get props => [companyName, personId];
+}
+
+// delete person data by name
+class DeletePersonByNameEvent extends HomeEvent {
+  final String companyName;
+  final String personName;
+
+  const DeletePersonByNameEvent(this.companyName, this.personName);
+
+  @override
+  List<Object?> get props => [companyName, personName];
+}
+
+// delete person data by id
+class DeletePersonByIdEvent extends HomeEvent {
+  final String companyName;
+  final String personId;
+  const DeletePersonByIdEvent(this.companyName, this.personId);
+
+  @override
+  List<Object?> get props => [companyName, personId];
+}
 
 /// add camera event
 class AddCameraEvent extends HomeEvent {
@@ -120,11 +167,11 @@ class ApplyModelEvent extends HomeEvent {
   // final List<String> modelName;
 
   const ApplyModelEvent(
-  //     {
-  //   required this.modelName,
-  //   required this.cameraName,
-  // }
-  );
+      //     {
+      //   required this.modelName,
+      //   required this.cameraName,
+      // }
+      );
 
   @override
   List<Object?> get props => [

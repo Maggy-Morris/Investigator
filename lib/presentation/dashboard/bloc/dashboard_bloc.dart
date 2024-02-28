@@ -28,7 +28,8 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
   _onDashboardEvent(DashboardEvent event, Emitter<DashboardState> emit) {}
 
-  _onDashboardInitializeDate(DashboardInitializeDate event, Emitter<DashboardState> emit) {
+  _onDashboardInitializeDate(
+      DashboardInitializeDate event, Emitter<DashboardState> emit) {
     add(DashboardAddDay(selectedDay: DateTime.now().day.toString()));
     add(DashboardAddMonth(selectedMonth: DateTime.now().month.toString()));
     add(DashboardAddYear(selectedYear: DateTime.now().year.toString()));
@@ -47,15 +48,12 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     emit(state.copyWith(selectedYear: event.selectedYear));
   }
 
-
-  
-
   _onDashboardMainDataEvent(
       DashboardMainDataEvent event, Emitter<DashboardState> emit) async {
     try {
-      await RemoteProvider().getAllCamerasNames().then((value) {
-        emit(state.copyWith(allCameras: value));
-      });
+      // await RemoteProvider().getAllCamerasNames().then((value) {
+      //   emit(state.copyWith(allCameras: value));
+      // });
       if (state.allCameras.isNotEmpty) {
         add(const DashboardGetAllCamerasCounts());
       }
@@ -82,26 +80,27 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     } catch (_) {}
   }
 
-  _onDashboardGetAllCamerasStatistics(DashboardGetAllCamerasStatistics event, Emitter<DashboardState> emit) async {
+  _onDashboardGetAllCamerasStatistics(DashboardGetAllCamerasStatistics event,
+      Emitter<DashboardState> emit) async {
     try {
       emit(state.copyWith(
         camerasCountsPerHour: [],
       ));
       for (var element in state.allCameras) {
         await RemoteProvider()
-          .getAllCamerasCountsPerHourForDashboard(
-        cameraName: element,
-        day: state.selectedDay,
-        month: state.selectedMonth,
-        year: state.selectedYear,
-      )
-          .then((value) {
-        if (value.isNotEmpty) {
-          emit(state.copyWith(
-            camerasCountsPerHour: [...state.camerasCountsPerHour, value],
-          ));
-        }
-      });
+            .getAllCamerasCountsPerHourForDashboard(
+          cameraName: element,
+          day: state.selectedDay,
+          month: state.selectedMonth,
+          year: state.selectedYear,
+        )
+            .then((value) {
+          if (value.isNotEmpty) {
+            emit(state.copyWith(
+              camerasCountsPerHour: [...state.camerasCountsPerHour, value],
+            ));
+          }
+        });
       }
     } catch (_) {}
   }

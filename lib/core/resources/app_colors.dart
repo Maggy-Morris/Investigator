@@ -14,6 +14,7 @@ class AppColors {
   static const Color thinkRedColor = Color(0xFFDD0E1D);
 
   static const Color mediumBlue = Color(0xFF145DA0);
+
   ///
   static const Color grey = Color(0xFF51555B);
   static const Color blueBlack = Color(0xFF223C60);

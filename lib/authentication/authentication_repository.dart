@@ -124,6 +124,38 @@ class AuthenticationRepository {
     }
   }
 
+  /// Signs Up with the provided [email] and [password].
+
+  Future<void> SignUpWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      await RemoteProvider().SignUpRemoteCredentials(email, password).then(
+        (value) {
+          if (value?.authentication != null) {
+            sharedUser?.setString(userCacheKey, jsonEncode(value));
+            sharedUser?.setString(usernameCacheKey, email);
+            sharedUser?.setString(passwordCacheKey, password);
+            sharedUser?.setStringList(routesCacheKey, ["/"]);
+
+            controller.add(value!);
+          } else {
+            controller.add(UserData.empty);
+            logOut();
+            return;
+          }
+        },
+      );
+    } catch (e) {
+      if (e.toString().isNotEmpty) {
+        throw SignUpWithEmailAndPasswordFailureFirebase.fromCode(e.toString());
+      } else {
+        throw const SignUpWithEmailAndPasswordFailureFirebase();
+      }
+    }
+  }
+
   Future<void> logOut() async {
     try {
       sharedUser?.clear();

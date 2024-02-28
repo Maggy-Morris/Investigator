@@ -15,7 +15,7 @@ class CameraBloc extends Bloc<CameraEvent, CameraState> {
   CameraBloc() : super(const CameraState()) {
     /// Main Events
     on<CameraEvent>(_onCameraEvent);
-    on<CameraMainDataEvent>(_onCameraMainDataEvent);
+    // on<CameraMainDataEvent>(_onCameraMainDataEvent);
 
     /// Get Data
     on<CameraDetailsEvent>(_onCameraDetailsEvent);
@@ -42,9 +42,10 @@ class CameraBloc extends Bloc<CameraEvent, CameraState> {
   _onCameraAddDay(CameraAddDay event, Emitter<CameraState> emit) {
     emit(state.copyWith(
         selectedDay: event.selectedDay, submission: Submission.editing));
-    if(state.singleCameraDetails.isNotEmpty){
-      add(GetModelsChartsData(modelsList: state.singleCameraDetails.first.models??[],
-          cameraName: state.singleCameraDetails.first.cameraName??""));
+    if (state.singleCameraDetails.isNotEmpty) {
+      add(GetModelsChartsData(
+          modelsList: state.singleCameraDetails.first.models ?? [],
+          cameraName: state.singleCameraDetails.first.cameraName ?? ""));
     }
   }
 
@@ -81,8 +82,7 @@ class CameraBloc extends Bloc<CameraEvent, CameraState> {
       )
           .then((value) {
         emit(state.copyWith(
-            camerasCountsPerHour: [value],
-            submission: Submission.success));
+            camerasCountsPerHour: [value], submission: Submission.success));
       });
     } catch (_) {
       emit(state
@@ -100,29 +100,29 @@ class CameraBloc extends Bloc<CameraEvent, CameraState> {
         selectedYear: event.selectedYear, submission: Submission.editing));
   }
 
-  _onCameraMainDataEvent(
-      CameraMainDataEvent event, Emitter<CameraState> emit) async {
-    try {
-      await RemoteProvider().getAllCamerasNames().then((value) {
-        emit(state.copyWith(allCameras: value));
-      });
-      // if (state.allCameras.isNotEmpty) {
-      //   add(const CameraGetAllCamerasCounts());
-      // }
-    } catch (_) {
-      emit(state.copyWith(allCameras: []));
-    }
-    if (state.allCameras.isNotEmpty) {
-      for (var element in state.allCameras) {
-        try {
-          await RemoteProvider()
-              .getAllCamerasDetails(cameraName: element)
-              .then((value) {
-            emit(state
-                .copyWith(camerasDetails: [...state.camerasDetails, value]));
-          });
-        } catch (_) {}
-      }
-    }
-  }
+  // _onCameraMainDataEvent(
+  //     CameraMainDataEvent event, Emitter<CameraState> emit) async {
+  //   try {
+  //     await RemoteProvider().getAllCamerasNames().then((value) {
+  //       emit(state.copyWith(allCameras: value));
+  //     });
+  //     // if (state.allCameras.isNotEmpty) {
+  //     //   add(const CameraGetAllCamerasCounts());
+  //     // }
+  //   } catch (_) {
+  //     emit(state.copyWith(allCameras: []));
+  //   }
+  //   if (state.allCameras.isNotEmpty) {
+  //     for (var element in state.allCameras) {
+  //       try {
+  //         await RemoteProvider()
+  //             .getAllCamerasDetails(cameraName: element)
+  //             .then((value) {
+  //           emit(state
+  //               .copyWith(camerasDetails: [...state.camerasDetails, value]));
+  //         });
+  //       } catch (_) {}
+  //     }
+  //   }
+  // }
 }

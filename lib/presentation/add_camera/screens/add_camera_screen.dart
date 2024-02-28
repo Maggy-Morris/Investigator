@@ -76,9 +76,9 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                           controller: cameraNameController,
                                           hintText: "addCameraName".tr(),
                                           onChanged: (value) {
-                                            HomeBloc.get(context).add(
-                                                AddCameraName(
-                                                    cameraName: value));
+                                            // HomeBloc.get(context).add(
+                                            // AddCameraName(
+                                            //     cameraName: value));
                                           }),
                                     ],
                                   ),
@@ -87,7 +87,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       _commonText("sourceType".tr()),
                                       FxBox.h4,
@@ -98,10 +98,10 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                         selectedItem: state.cameraSourceType,
                                         onChanged: (value) {
                                           if (value?.isNotEmpty ?? false) {
-                                            HomeBloc.get(context).add(
-                                                AddCameraSourceType(
-                                                    cameraSourceType:
-                                                    value ?? ""));
+                                            // HomeBloc.get(context).add(
+                                            //     AddCameraSourceType(
+                                            //         cameraSourceType:
+                                            //             value ?? ""));
                                           }
                                         },
                                         itemsList: state.sourceTypesList,
@@ -117,13 +117,14 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       _commonText("sourceTxt".tr()),
                                       FxBox.h4,
                                       _listBox(
                                           hintText: "addSourceTxt".tr(),
-                                          enabled: state.cameraSourceType.isNotEmpty,
+                                          enabled:
+                                              state.cameraSourceType.isNotEmpty,
                                           controller: cameraSourceController,
                                           onChanged: (value) {
                                             HomeBloc.get(context).add(
@@ -148,10 +149,10 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                         selectedItem:
                                             state.cameraSelectedModels,
                                         onChanged: (value) {
-                                          HomeBloc.get(context).add(
-                                              AddCameraSourceModels(
-                                                  cameraSelectedModels:
-                                                      value ?? []));
+                                          // HomeBloc.get(context).add(
+                                          //     AddCameraSourceModels(
+                                          //         cameraSelectedModels:
+                                          //             value ?? []));
                                         },
                                         itemsList: state.modelsNameList,
                                       ),
@@ -166,16 +167,22 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                 : Center(
                                     child: ElevatedButton.icon(
                                         onPressed: () {
-                                          if(state.cameraName.isEmpty){
-                                            FxToast.showErrorToast(context: context,message: "Add Camera Name");
+                                          if (state.cameraName.isEmpty) {
+                                            FxToast.showErrorToast(
+                                                context: context,
+                                                message: "Add Camera Name");
                                             return;
                                           }
-                                          if(state.cameraSource.isEmpty){
-                                            FxToast.showErrorToast(context: context,message: "Add Source");
+                                          if (state.cameraSource.isEmpty) {
+                                            FxToast.showErrorToast(
+                                                context: context,
+                                                message: "Add Source");
                                             return;
                                           }
-                                          if(state.cameraSourceType.isEmpty){
-                                            FxToast.showErrorToast(context: context,message: "Add Source Type");
+                                          if (state.cameraSourceType.isEmpty) {
+                                            FxToast.showErrorToast(
+                                                context: context,
+                                                message: "Add Source Type");
                                             return;
                                           }
                                           HomeBloc.get(context)
@@ -208,8 +215,8 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                 hintText: "addCameraName".tr(),
                                 controller: cameraNameController,
                                 onChanged: (value) {
-                                  HomeBloc.get(context)
-                                      .add(AddCameraName(cameraName: value));
+                                  // HomeBloc.get(context)
+                                  //     .add(AddCameraName(cameraName: value));
                                 }),
                             FxBox.h10,
                             _commonText("sourceType".tr()),
@@ -221,8 +228,8 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                               selectedItem: state.cameraSourceType,
                               onChanged: (value) {
                                 if (value?.isNotEmpty ?? false) {
-                                  HomeBloc.get(context).add(AddCameraSourceType(
-                                      cameraSourceType: value ?? ""));
+                                  // HomeBloc.get(context).add(AddCameraSourceType(
+                                  //     cameraSourceType: value ?? ""));
                                 }
                               },
                               itemsList: state.sourceTypesList,
@@ -247,8 +254,8 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                               filled: true,
                               selectedItem: state.cameraSelectedModels,
                               onChanged: (value) {
-                                HomeBloc.get(context).add(AddCameraSourceModels(
-                                    cameraSelectedModels: value ?? []));
+                                // HomeBloc.get(context).add(AddCameraSourceModels(
+                                //     cameraSelectedModels: value ?? []));
                               },
                               itemsList: state.modelsNameList,
                             ),
@@ -290,12 +297,12 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
     );
   }
 
-  Widget _listBox(
-      {required String hintText,
-      required void Function(String)? onChanged,
-      required TextEditingController? controller,
-      bool? enabled,
-      }) {
+  Widget _listBox({
+    required String hintText,
+    required void Function(String)? onChanged,
+    required TextEditingController? controller,
+    bool? enabled,
+  }) {
     return CustomTextField(
       border: const OutlineInputBorder(),
       contentPadding: const EdgeInsets.symmetric(
@@ -308,9 +315,9 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
       fillColor: Colors.grey.shade200,
       enabledBorder:
           OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      disabledBorder:
-          OutlineInputBorder(borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(style: BorderStyle.none)),
+      disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(style: BorderStyle.none)),
       focusedBorder:
           OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       hintText: hintText,

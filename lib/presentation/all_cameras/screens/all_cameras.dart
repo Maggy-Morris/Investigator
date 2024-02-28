@@ -162,14 +162,65 @@ class AllCamerasScreen extends StatelessWidget {
                             height: 50,
                             minWidth: 210,
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25.0)),
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
                             color: Colors.blueGrey,
-                            onPressed: () {},
-                            child: ConstText.largeText(
-                              text: "Add Employee",
-                              fontSize: 16,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
+                            onPressed: () {
+                              // Show dialog to fill in employee data
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text("Add Employee"),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        TextFormField(
+                                          decoration: InputDecoration(
+                                              labelText: 'Name'),
+                                        ),
+                                        FxBox.h24,
+                                        TextFormField(
+                                          decoration: InputDecoration(
+                                              labelText: 'Phone Number'),
+                                        ),
+                                        FxBox.h24,
+
+                                        TextFormField(
+                                          decoration: InputDecoration(
+                                              labelText: 'Email'),
+                                        ),
+                                        // Add more fields as needed
+                                      ],
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .pop(); // Close the dialog
+                                        },
+                                        child: Text('Cancel'),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          // Add logic to save employee data
+                                          Navigator.of(context)
+                                              .pop(); // Close the dialog
+                                        },
+                                        child: Text('Save'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            child: Text(
+                              "Add Employee",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                         ],
@@ -271,9 +322,10 @@ class AllCamerasScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const Icon(
-                Icons.more_horiz,
+               IconButton(
+                icon: Icon(Icons.more_horiz),
                 color: Colors.black,
+                onPressed: () {}
               ),
             ],
           ),
@@ -302,6 +354,9 @@ class AllCamerasScreen extends StatelessWidget {
       ),
     );
   }
+
+
+
 
   Widget _iconWithText({
     required Icon icon,

@@ -2,7 +2,8 @@ part of 'home_bloc.dart';
 
 class HomeState extends Equatable {
   final List<String> camerasNamesList;
-  final List<String> companyNamesList;
+  final List<String> employeeNamesList;
+  final List<String> companiesNamesList;
 
   final List<String> sourceTypesList;
   final List<String> modelsNameList;
@@ -10,14 +11,19 @@ class HomeState extends Equatable {
 
   final List<String> cameraSelectedModels;
   final String companyName;
+  final String personName;
+  final String personId;
 
   final String cameraName;
   final String cameraSource;
   final String cameraSourceType;
 
   const HomeState({
+    this.personName = "",
+    this.personId = "",
     this.companyName = "",
-    this.companyNamesList = const [],
+    this.companiesNamesList = const [],
+    this.employeeNamesList = const [],
     this.camerasNamesList = const [],
     this.sourceTypesList = const [],
     this.modelsNameList = const [],
@@ -29,8 +35,11 @@ class HomeState extends Equatable {
   });
 
   HomeState copyWith({
-    List<String>? companyNamesList,
+    List<String>? companiesNamesList,
+    List<String>? employeeNamesList,
     String? companyName,
+    String? personName,
+    String? personId,
     List<String>? camerasNamesList,
     List<String>? sourceTypesList,
     List<String>? modelsNameList,
@@ -41,8 +50,11 @@ class HomeState extends Equatable {
     Submission? submission,
   }) {
     return HomeState(
+      personId: personId ?? this.personId,
+      personName: personName ?? this.personName,
+      companiesNamesList: companiesNamesList ?? this.companiesNamesList,
       companyName: companyName ?? this.companyName,
-      companyNamesList: companyNamesList ?? this.companyNamesList,
+      employeeNamesList: employeeNamesList ?? this.employeeNamesList,
       camerasNamesList: camerasNamesList ?? this.camerasNamesList,
       sourceTypesList: sourceTypesList ?? this.sourceTypesList,
       modelsNameList: modelsNameList ?? this.modelsNameList,
@@ -56,8 +68,11 @@ class HomeState extends Equatable {
 
   @override
   List<Object> get props => [
+        personName,
+        personId,
+        companiesNamesList,
         companyName,
-        companyNamesList,
+        employeeNamesList,
         camerasNamesList,
         sourceTypesList,
         modelsNameList,

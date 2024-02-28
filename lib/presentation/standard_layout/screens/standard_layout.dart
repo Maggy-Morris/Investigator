@@ -286,10 +286,10 @@ class StandardLayoutScreen extends StatelessWidget {
                                     if (index == 0) {
                                       Routemaster.of(context).push('/');
                                     } else if (index == 1) {
-                                      Routemaster.of(context).push('/search');
-                                    } else if (index == 2) {
                                       Routemaster.of(context)
                                           .push('/Investigator');
+                                    } else if (index == 2) {
+                                      Routemaster.of(context).push('/search');
                                     } else if (index == 3) {
                                       Routemaster.of(context)
                                           .push('/allEmployees');

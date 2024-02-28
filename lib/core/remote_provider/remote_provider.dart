@@ -10,6 +10,7 @@ import 'package:Investigator/core/remote_provider/remote_data_source.dart';
 
 import '../models/add_company_model.dart';
 import '../models/call_back_model.dart';
+import '../models/employee_model.dart';
 
 enum AppLifecycleStatus { online, offline }
 
@@ -53,14 +54,42 @@ class RemoteProvider {
     }
   }
 
+  //SignUp API
+  Future<UserData?> SignUpRemoteCredentials(
+      String email, String password) async {
+    try {
+      var loginCallBack = await RemoteDataSource().postWithFile(
+          endPoint: "/qdrant/signup",
+          body: {"username": email, "password": password});
+
+      if (loginCallBack != null) {
+        UserData callBackDetailID = UserData.fromJson(loginCallBack);
+
+        if (kDebugMode) {
+          debugPrint(loginCallBack.toString());
+        }
+        return callBackDetailID;
+        // return AddNewMainPersonalDataInitial.fromJson(callBackRemote.data ?? {});
+        // } else {
+        //   return null;
+        // }
+      } else {
+        return null;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return null;
+    }
+  }
+
   ///Add Comany
   Future<CallBackModel> addCompany({
     required String companyName,
   }) async {
     try {
       Map<String, dynamic> callBack = await RemoteDataSource()
-          .post(endPoint: "/qdrant/create_collection ", body: {
-        "companyName": companyName,
+          .post(endPoint: "/qdrant/create_collection", body: {
+        "collection_name": companyName,
       });
 
       //Change this "Collection Created Successfully!"
@@ -75,91 +104,192 @@ class RemoteProvider {
     }
   }
 
-  /// get all static lists
-  Future<List<String>> getAllCompanyNames() async {
+  ///Delete Company
+  Future<CallBackModel> deleteCompany({
+    required String companyName,
+  }) async {
     try {
-      List<dynamic> callBack = await RemoteDataSource().get(
-        endPoint: "/qdrant/retrieve_it_all",
-      );
-      if (callBack.isNotEmpty) {
-        List<String> callBackList = callBack.cast<String>();
+      Map<String, dynamic> callBack = await RemoteDataSource()
+          .post(endPoint: "/qdrant/delete_qcollection", body: {
+        "collection_name": companyName,
+      });
 
-        if (kDebugMode) {
-          debugPrint(callBack.toString());
-        }
+      //Change this "Collection Created Successfully!"
+      if (callBack.isNotEmpty) {
+        CallBackModel callBackList = CallBackModel.fromJson(callBack);
         return callBackList;
       } else {
-        return [];
+        return CallBackModel();
       }
     } catch (e) {
-      debugPrint(e.toString());
-      return [];
+      return CallBackModel();
     }
   }
 
-  /// get all static lists
-  Future<List<String>> getAllCamerasNames() async {
+  /// Get all EmployeeNames
+  Future<EmployeeModel> getAllEmployeeNames({
+    required String companyName,
+  }) async {
     try {
-      List<dynamic> callBack = await RemoteDataSource().get(
-        endPoint: "/c",
-      );
+      Map<String, dynamic> callBack = await RemoteDataSource()
+          .post(endPoint: "/qdrant/retrieve_it_all", body: {
+        "collection_name": companyName,
+      });
       if (callBack.isNotEmpty) {
-        List<String> callBackList = callBack.cast<String>();
-
+        EmployeeModel employeeModel = EmployeeModel.fromJson(callBack);
         if (kDebugMode) {
           debugPrint(callBack.toString());
         }
-        return callBackList;
+        print('CallBackModel' + employeeModel.toString());
+        return employeeModel;
       } else {
-        return [];
+        return EmployeeModel();
       }
     } catch (e) {
       debugPrint(e.toString());
-      return [];
+      return EmployeeModel();
     }
   }
 
-  Future<List<String>> getAllModelsNames() async {
+  ///get person data by name
+  Future<EmployeeModel> getPersonByName(
+      {required String companyName, required String personName}) async {
     try {
-      List<dynamic> callBack = await RemoteDataSource().get(
-        endPoint: "/get_modelname",
-      );
+      var callBack = await RemoteDataSource().post(
+          endPoint: "/qdrant/get_document_by_name",
+          body: {"collection_name": companyName, "target_name": personName});
       if (callBack.isNotEmpty) {
-        List<String> callBackList = callBack.cast<String>();
-
-        if (kDebugMode) {
-          debugPrint(callBack.toString());
-        }
-        return callBackList;
+        EmployeeModel employeeModel = EmployeeModel.fromJson(callBack);
+        return employeeModel;
       } else {
-        return [];
+        return EmployeeModel();
       }
     } catch (e) {
       debugPrint(e.toString());
-      return [];
+      return EmployeeModel();
     }
   }
 
-  Future<List<String>> getAllSourceTypes() async {
+  ///get person data by ID
+  Future<EmployeeModel> getDocumentById(
+      {required String companyName, required String personId}) async {
     try {
-      List<dynamic> callBack = await RemoteDataSource().get(
-        endPoint: "/get_sourcetype",
-      );
+      var callBack = await RemoteDataSource().post(
+          endPoint: "/qdrant/get_document_by_id",
+          body: {"collection_name": companyName, "point_id": personId});
       if (callBack.isNotEmpty) {
-        List<String> callBackList = callBack.cast<String>();
-
-        if (kDebugMode) {
-          debugPrint(callBack.toString());
-        }
-        return callBackList;
+        EmployeeModel employeeModel = EmployeeModel.fromJson(callBack);
+        return employeeModel;
       } else {
-        return [];
+        return EmployeeModel();
       }
     } catch (e) {
       debugPrint(e.toString());
-      return [];
+      return EmployeeModel();
     }
   }
+
+  ///Delete person data by Name
+  Future<EmployeeModel> deleteDocumentByName(
+      {required String companyName, required String personName}) async {
+    try {
+      var callBack = await RemoteDataSource().post(
+          endPoint: "/qdrant/delete_document_by_name",
+          body: {"collection_name": companyName, "target_name": personName});
+      if (callBack.isNotEmpty) {
+        EmployeeModel employeeModel = EmployeeModel.fromJson(callBack);
+        return employeeModel;
+      } else {
+        return EmployeeModel();
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return EmployeeModel();
+    }
+  }
+
+  ///Delete person data by ID
+  Future<EmployeeModel> deleteDocumentById(
+      {required String companyName, required String personId}) async {
+    try {
+      var callBack = await RemoteDataSource().post(
+          endPoint: "/qdrant/delete_document_by_id",
+          body: {"collection_name": companyName, "point_id": personId});
+      if (callBack.isNotEmpty) {
+        EmployeeModel employeeModel = EmployeeModel.fromJson(callBack);
+        return employeeModel;
+      } else {
+        return EmployeeModel();
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return EmployeeModel();
+    }
+  }
+
+  // /// get all static lists
+  // Future<List<String>> getAllCamerasNames() async {
+  //   try {
+  //     List<dynamic> callBack = await RemoteDataSource().get(
+  //       endPoint: "/c",
+  //     );
+  //     if (callBack.isNotEmpty) {
+  //       List<String> callBackList = callBack.cast<String>();
+
+  //       if (kDebugMode) {
+  //         debugPrint(callBack.toString());
+  //       }
+  //       return callBackList;
+  //     } else {
+  //       return [];
+  //     }
+  //   } catch (e) {
+  //     debugPrint(e.toString());
+  //     return [];
+  //   }
+  // }
+
+  // Future<List<String>> getAllModelsNames() async {
+  //   try {
+  //     List<dynamic> callBack = await RemoteDataSource().get(
+  //       endPoint: "/get_modelname",
+  //     );
+  //     if (callBack.isNotEmpty) {
+  //       List<String> callBackList = callBack.cast<String>();
+
+  //       if (kDebugMode) {
+  //         debugPrint(callBack.toString());
+  //       }
+  //       return callBackList;
+  //     } else {
+  //       return [];
+  //     }
+  //   } catch (e) {
+  //     debugPrint(e.toString());
+  //     return [];
+  //   }
+  // }
+
+  // Future<List<String>> getAllSourceTypes() async {
+  //   try {
+  //     List<dynamic> callBack = await RemoteDataSource().get(
+  //       endPoint: "/get_sourcetype",
+  //     );
+  //     if (callBack.isNotEmpty) {
+  //       List<String> callBackList = callBack.cast<String>();
+
+  //       if (kDebugMode) {
+  //         debugPrint(callBack.toString());
+  //       }
+  //       return callBackList;
+  //     } else {
+  //       return [];
+  //     }
+  //   } catch (e) {
+  //     debugPrint(e.toString());
+  //     return [];
+  //   }
+  // }
 
   /// Add camera
   Future<AddCameraModel> addCamera({
