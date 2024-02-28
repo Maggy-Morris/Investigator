@@ -16,8 +16,8 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     on<DashboardMainDataEvent>(_onDashboardMainDataEvent);
 
     /// Get Data
-    on<DashboardGetAllCamerasCounts>(_onDashboardGetAllCamerasCounts);
-    on<DashboardGetAllCamerasStatistics>(_onDashboardGetAllCamerasStatistics);
+    // on<DashboardGetAllCamerasCounts>(_onDashboardGetAllCamerasCounts);
+    // on<DashboardGetAllCamerasStatistics>(_onDashboardGetAllCamerasStatistics);
 
     /// update date
     on<DashboardInitializeDate>(_onDashboardInitializeDate);
@@ -62,46 +62,46 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     }
   }
 
-  _onDashboardGetAllCamerasCounts(
-      DashboardGetAllCamerasCounts event, Emitter<DashboardState> emit) async {
-    try {
-      for (var element in state.allCameras) {
-        try {
-          await RemoteProvider()
-              .getAllCamerasCountsForDashboard(cameraName: element)
-              .then((value) {
-            emit(state.copyWith(
-              camerasCounts: [...state.camerasCounts, value],
-            ));
-          });
-        } catch (_) {}
-      }
-      add(const DashboardGetAllCamerasStatistics());
-    } catch (_) {}
-  }
+  // _onDashboardGetAllCamerasCounts(
+  //     DashboardGetAllCamerasCounts event, Emitter<DashboardState> emit) async {
+  //   try {
+  //     for (var element in state.allCameras) {
+  //       try {
+  //         await RemoteProvider()
+  //             .getAllCamerasCountsForDashboard(cameraName: element)
+  //             .then((value) {
+  //           emit(state.copyWith(
+  //             camerasCounts: [...state.camerasCounts, value],
+  //           ));
+  //         });
+  //       } catch (_) {}
+  //     }
+  //     add(const DashboardGetAllCamerasStatistics());
+  //   } catch (_) {}
+  // }
 
-  _onDashboardGetAllCamerasStatistics(DashboardGetAllCamerasStatistics event,
-      Emitter<DashboardState> emit) async {
-    try {
-      emit(state.copyWith(
-        camerasCountsPerHour: [],
-      ));
-      for (var element in state.allCameras) {
-        await RemoteProvider()
-            .getAllCamerasCountsPerHourForDashboard(
-          cameraName: element,
-          day: state.selectedDay,
-          month: state.selectedMonth,
-          year: state.selectedYear,
-        )
-            .then((value) {
-          if (value.isNotEmpty) {
-            emit(state.copyWith(
-              camerasCountsPerHour: [...state.camerasCountsPerHour, value],
-            ));
-          }
-        });
-      }
-    } catch (_) {}
-  }
+  // _onDashboardGetAllCamerasStatistics(DashboardGetAllCamerasStatistics event,
+  //     Emitter<DashboardState> emit) async {
+  //   try {
+  //     emit(state.copyWith(
+  //       camerasCountsPerHour: [],
+  //     ));
+  //     for (var element in state.allCameras) {
+  //       await RemoteProvider()
+  //           .getAllCamerasCountsPerHourForDashboard(
+  //         cameraName: element,
+  //         day: state.selectedDay,
+  //         month: state.selectedMonth,
+  //         year: state.selectedYear,
+  //       )
+  //           .then((value) {
+  //         if (value.isNotEmpty) {
+  //           emit(state.copyWith(
+  //             camerasCountsPerHour: [...state.camerasCountsPerHour, value],
+  //           ));
+  //         }
+  //       });
+  //     }
+  //   } catch (_) {}
+  // }
 }

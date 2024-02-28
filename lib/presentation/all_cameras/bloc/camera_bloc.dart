@@ -18,8 +18,8 @@ class CameraBloc extends Bloc<CameraEvent, CameraState> {
     // on<CameraMainDataEvent>(_onCameraMainDataEvent);
 
     /// Get Data
-    on<CameraDetailsEvent>(_onCameraDetailsEvent);
-    on<GetModelsChartsData>(_onGetModelsChartsData);
+    // on<CameraDetailsEvent>(_onCameraDetailsEvent);
+    // on<GetModelsChartsData>(_onGetModelsChartsData);
     // on<CameraGetAllCamerasCounts>(_onCameraGetAllCamerasCounts);
     // on<CameraGetAllCamerasStatistics>(_onCameraGetAllCamerasStatistics);
 
@@ -49,46 +49,46 @@ class CameraBloc extends Bloc<CameraEvent, CameraState> {
     }
   }
 
-  _onCameraDetailsEvent(
-      CameraDetailsEvent event, Emitter<CameraState> emit) async {
-    emit(state.copyWith(submission: Submission.loading));
-    try {
-      await RemoteProvider()
-          .getAllCamerasDetails(cameraName: event.cameraName)
-          .then((value) {
-        emit(state.copyWith(
-            singleCameraDetails: [value], submission: Submission.success));
+  // _onCameraDetailsEvent(
+  //     CameraDetailsEvent event, Emitter<CameraState> emit) async {
+  //   emit(state.copyWith(submission: Submission.loading));
+  //   try {
+  //     await RemoteProvider()
+  //         // .getAllCamerasDetails(cameraName: event.cameraName)
+  //         // .then((value) {
+  //       emit(state.copyWith(
+  //           singleCameraDetails: [value], submission: Submission.success));
 
-        /// get models Data
-        add(GetModelsChartsData(
-            modelsList: value.models ?? [], cameraName: event.cameraName));
-      });
-    } catch (_) {
-      emit(state
-          .copyWith(singleCameraDetails: [], submission: Submission.error));
-    }
-  }
+  //       /// get models Data
+  //       add(GetModelsChartsData(
+  //           modelsList: value.models ?? [], cameraName: event.cameraName));
+  //     });
+  //   } catch (_) {
+  //     emit(state
+  //         .copyWith(singleCameraDetails: [], submission: Submission.error));
+  //   }
+  // }
 
-  _onGetModelsChartsData(
-      GetModelsChartsData event, Emitter<CameraState> emit) async {
-    emit(state.copyWith(submission: Submission.loading));
-    try {
-      await RemoteProvider()
-          .getAllCamerasCountsPerHourForDashboard(
-        cameraName: event.cameraName,
-        day: state.selectedDay,
-        month: state.selectedMonth,
-        year: state.selectedYear,
-      )
-          .then((value) {
-        emit(state.copyWith(
-            camerasCountsPerHour: [value], submission: Submission.success));
-      });
-    } catch (_) {
-      emit(state
-          .copyWith(singleCameraDetails: [], submission: Submission.error));
-    }
-  }
+  // _onGetModelsChartsData(
+  //     GetModelsChartsData event, Emitter<CameraState> emit) async {
+  //   emit(state.copyWith(submission: Submission.loading));
+  //   try {
+  //     await RemoteProvider()
+  //         .getAllCamerasCountsPerHourForDashboard(
+  //       cameraName: event.cameraName,
+  //       day: state.selectedDay,
+  //       month: state.selectedMonth,
+  //       year: state.selectedYear,
+  //     )
+  //         .then((value) {
+  //       emit(state.copyWith(
+  //           camerasCountsPerHour: [value], submission: Submission.success));
+  //     });
+  //   } catch (_) {
+  //     emit(state
+  //         .copyWith(singleCameraDetails: [], submission: Submission.error));
+  //   }
+  // }
 
   _onCameraAddMonth(CameraAddMonth event, Emitter<CameraState> emit) {
     emit(state.copyWith(

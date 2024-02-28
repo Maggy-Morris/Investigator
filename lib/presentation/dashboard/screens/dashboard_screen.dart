@@ -100,8 +100,8 @@ class _AddCameraScreenState extends State<DashboardScreen> {
 
                                           HomeBloc.get(context)
                                               .add(AddCompanyEvent());
-                                          print('ssssssssssssssssss' +
-                                              state.companyName);
+                                          // print('ssssssssssssssssss' +
+                                          //     state.companyName);
                                         },
                                         style: ElevatedButton.styleFrom(
                                           shape: RoundedRectangleBorder(

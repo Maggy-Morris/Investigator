@@ -17,8 +17,6 @@ enum AppLifecycleStatus { online, offline }
 class RemoteProvider {
   static final RemoteProvider _inst = RemoteProvider._internal();
 
-  // final firebase_auth.FirebaseAuth _firebaseAuth = firebase_auth.FirebaseAuth.instance;
-
   RemoteProvider._internal();
 
   factory RemoteProvider() {
@@ -140,7 +138,7 @@ class RemoteProvider {
         if (kDebugMode) {
           debugPrint(callBack.toString());
         }
-        print('CallBackModel' + employeeModel.toString());
+        // print('CallBackModel' + employeeModel.toString());
         return employeeModel;
       } else {
         return EmployeeModel();
@@ -316,110 +314,110 @@ class RemoteProvider {
   }
 
   ///  Apply Model
-  Future<ApplyModelModel> applyModelToCamera({
-    required String cameraName,
-    required List<String> modelName,
-  }) async {
-    try {
-      Map<String, dynamic> callBack = await RemoteDataSource()
-          .postWithFile(endPoint: "/Investigator", body: {
-        "cameraname": cameraName,
-        // "modelname": modelName.join(","),
-        "modelname": jsonEncode(modelName),
-      });
-      if (callBack.isNotEmpty) {
-        ApplyModelModel callBackList = ApplyModelModel.fromJson(callBack);
-        return callBackList;
-      } else {
-        return ApplyModelModel();
-      }
-    } catch (e) {
-      return ApplyModelModel();
-    }
-  }
+  // Future<ApplyModelModel> applyModelToCamera({
+  //   required String cameraName,
+  //   required List<String> modelName,
+  // }) async {
+  //   try {
+  //     Map<String, dynamic> callBack = await RemoteDataSource()
+  //         .postWithFile(endPoint: "/Investigator", body: {
+  //       "cameraname": cameraName,
+  //       // "modelname": modelName.join(","),
+  //       "modelname": jsonEncode(modelName),
+  //     });
+  //     if (callBack.isNotEmpty) {
+  //       ApplyModelModel callBackList = ApplyModelModel.fromJson(callBack);
+  //       return callBackList;
+  //     } else {
+  //       return ApplyModelModel();
+  //     }
+  //   } catch (e) {
+  //     return ApplyModelModel();
+  //   }
+  // }
 
-  Future<GetAllCameraCount> getAllCamerasCountsForDashboard(
-      {required String cameraName}) async {
-    try {
-      var callBack = await RemoteDataSource().postWithFile(
-          endPoint: "/postcam_getallmodelsStat",
-          body: {"cameraname": cameraName});
-      if (callBack.isNotEmpty) {
-        GetAllCameraCount countsModel = GetAllCameraCount.fromJson(callBack);
-        return countsModel;
-      } else {
-        return GetAllCameraCount();
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-      return GetAllCameraCount();
-    }
-  }
+  // Future<GetAllCameraCount> getAllCamerasCountsForDashboard(
+  //     {required String cameraName}) async {
+  //   try {
+  //     var callBack = await RemoteDataSource().postWithFile(
+  //         endPoint: "/postcam_getallmodelsStat",
+  //         body: {"cameraname": cameraName});
+  //     if (callBack.isNotEmpty) {
+  //       GetAllCameraCount countsModel = GetAllCameraCount.fromJson(callBack);
+  //       return countsModel;
+  //     } else {
+  //       return GetAllCameraCount();
+  //     }
+  //   } catch (e) {
+  //     debugPrint(e.toString());
+  //     return GetAllCameraCount();
+  //   }
+  // }
 
-  Future<List<GetAllCameraCountPerHour>>
-      getAllCamerasCountsPerHourForDashboard({
-    required String cameraName,
-    required String day,
-    required String month,
-    required String year,
-  }) async {
-    Map<String, String> body = {};
+  // Future<List<GetAllCameraCountPerHour>>
+  //     getAllCamerasCountsPerHourForDashboard({
+  //   required String cameraName,
+  //   required String day,
+  //   required String month,
+  //   required String year,
+  // }) async {
+  //   Map<String, String> body = {};
 
-    if (cameraName.isNotEmpty) {
-      body["cameraname"] = cameraName;
-    }
-    if (day.isNotEmpty) {
-      body["day"] = day;
-    }
-    if (month.isNotEmpty) {
-      body["month"] = month;
-    }
-    if (year.isNotEmpty) {
-      body["year"] = year;
-    }
+  //   if (cameraName.isNotEmpty) {
+  //     body["cameraname"] = cameraName;
+  //   }
+  //   if (day.isNotEmpty) {
+  //     body["day"] = day;
+  //   }
+  //   if (month.isNotEmpty) {
+  //     body["month"] = month;
+  //   }
+  //   if (year.isNotEmpty) {
+  //     body["year"] = year;
+  //   }
 
-    try {
-      List<dynamic> callBack = await RemoteDataSource()
-          .postWithFile(endPoint: "/allmodelsstatistics", body: body
-              //     {
-              //   "cameraname": cameraName,
-              //   "day": "19",
-              //   "month": "2",
-              //   "year": "2024",
-              // }
-              );
-      if (callBack.isNotEmpty) {
-        debugPrint("0-0-0-0$callBack");
-        List<GetAllCameraCountPerHour> callbackList = [];
-        for (var element in callBack) {
-          callbackList.add(GetAllCameraCountPerHour.fromJson(element));
-        }
-        return callbackList;
-      } else {
-        return [];
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-      return [];
-    }
-  }
+  //   try {
+  //     List<dynamic> callBack = await RemoteDataSource()
+  //         .postWithFile(endPoint: "/allmodelsstatistics", body: body
+  //             //     {
+  //             //   "cameraname": cameraName,
+  //             //   "day": "19",
+  //             //   "month": "2",
+  //             //   "year": "2024",
+  //             // }
+  //             );
+  //     if (callBack.isNotEmpty) {
+  //       debugPrint("0-0-0-0$callBack");
+  //       List<GetAllCameraCountPerHour> callbackList = [];
+  //       for (var element in callBack) {
+  //         callbackList.add(GetAllCameraCountPerHour.fromJson(element));
+  //       }
+  //       return callbackList;
+  //     } else {
+  //       return [];
+  //     }
+  //   } catch (e) {
+  //     debugPrint(e.toString());
+  //     return [];
+  //   }
+  // }
 
-  Future<GetAllCameraDetails> getAllCamerasDetails(
-      {required String cameraName}) async {
-    try {
-      var callBack = await RemoteDataSource().postWithFile(
-          endPoint: "/getallmodelsincam", body: {"cameraname": cameraName});
+  // Future<GetAllCameraDetails> getAllCamerasDetails(
+  //     {required String cameraName}) async {
+  //   try {
+  //     var callBack = await RemoteDataSource().postWithFile(
+  //         endPoint: "/getallmodelsincam", body: {"cameraname": cameraName});
 
-      if (callBack.isNotEmpty) {
-        GetAllCameraDetails countsModel =
-            GetAllCameraDetails.fromJson(callBack);
-        return countsModel;
-      } else {
-        return GetAllCameraDetails();
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-      return GetAllCameraDetails();
-    }
-  }
+  //     if (callBack.isNotEmpty) {
+  //       GetAllCameraDetails countsModel =
+  //           GetAllCameraDetails.fromJson(callBack);
+  //       return countsModel;
+  //     } else {
+  //       return GetAllCameraDetails();
+  //     }
+  //   } catch (e) {
+  //     debugPrint(e.toString());
+  //     return GetAllCameraDetails();
+  //   }
+  // }
 }
