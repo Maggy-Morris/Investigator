@@ -125,7 +125,8 @@ class RemoteProvider {
   }
 
   /// Get all EmployeeNames
-  Future<EmployeeModel> getAllEmployeeNames({
+  ///
+  Future<List<Data>> getAllEmployeeNames({
     required String companyName,
   }) async {
     try {
@@ -133,21 +134,50 @@ class RemoteProvider {
           .post(endPoint: "/qdrant/retrieve_it_all", body: {
         "collection_name": companyName,
       });
-      if (callBack.isNotEmpty) {
-        EmployeeModel employeeModel = EmployeeModel.fromJson(callBack);
-        if (kDebugMode) {
-          debugPrint(callBack.toString());
-        }
-        // print('CallBackModel' + employeeModel.toString());
-        return employeeModel;
+
+      if (callBack.isNotEmpty && callBack['data'] != null) {
+        // Extract the relevant data from the callBack
+        List<dynamic> dataList = callBack['data'];
+
+        // Map the extracted data to my EmployeeModel
+        List<Data> employeeDataList =
+            dataList.map((data) => Data.fromJson(data)).toList();
+
+        return employeeDataList;
       } else {
-        return EmployeeModel();
+        return [];
       }
     } catch (e) {
       debugPrint(e.toString());
-      return EmployeeModel();
+      return [];
     }
   }
+
+  // Future<EmployeeModel> getAllEmployeeNames({
+  //   required String companyName,
+  // }) async {
+  //   try {
+  //     // var callBack = await RemoteDataSource()
+
+  //     Map<String, dynamic> callBack = await RemoteDataSource()
+  //         .post(endPoint: "/qdrant/retrieve_it_all", body: {
+  //       "collection_name": companyName,
+  //     });
+  //     if (callBack.isNotEmpty) {
+  //       EmployeeModel employeeModel = EmployeeModel.fromJson(callBack);
+  //       if (kDebugMode) {
+  //         debugPrint(
+  //             "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk" + callBack.toString());
+  //       }
+  //       return employeeModel;
+  //     } else {
+  //       return EmployeeModel();
+  //     }
+  //   } catch (e) {
+  //     debugPrint(e.toString());
+  //     return EmployeeModel();
+  //   }
+  // }
 
   ///get person data by name
   Future<EmployeeModel> getPersonByName(
@@ -402,22 +432,22 @@ class RemoteProvider {
   //   }
   // }
 
-  // Future<GetAllCameraDetails> getAllCamerasDetails(
-  //     {required String cameraName}) async {
-  //   try {
-  //     var callBack = await RemoteDataSource().postWithFile(
-  //         endPoint: "/getallmodelsincam", body: {"cameraname": cameraName});
+  Future<GetAllCameraDetails> getAllCamerasDetails(
+      {required String cameraName}) async {
+    try {
+      var callBack = await RemoteDataSource().postWithFile(
+          endPoint: "/getallmodelsincam", body: {"cameraname": cameraName});
 
-  //     if (callBack.isNotEmpty) {
-  //       GetAllCameraDetails countsModel =
-  //           GetAllCameraDetails.fromJson(callBack);
-  //       return countsModel;
-  //     } else {
-  //       return GetAllCameraDetails();
-  //     }
-  //   } catch (e) {
-  //     debugPrint(e.toString());
-  //     return GetAllCameraDetails();
-  //   }
-  // }
+      if (callBack.isNotEmpty) {
+        GetAllCameraDetails countsModel =
+            GetAllCameraDetails.fromJson(callBack);
+        return countsModel;
+      } else {
+        return GetAllCameraDetails();
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return GetAllCameraDetails();
+    }
+  }
 }

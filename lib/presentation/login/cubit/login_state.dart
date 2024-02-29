@@ -29,5 +29,4 @@ class LoginState extends Equatable {
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }
-
 }

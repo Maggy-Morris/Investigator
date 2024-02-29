@@ -42,256 +42,257 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
               FxToast.showErrorToast(context: context);
             }
           },
-          child: BlocBuilder<HomeBloc, HomeState>(
-            builder: (context, state) {
-              return Card(
-                margin: const EdgeInsets.all(20),
-                color: AppColors.white,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15)),
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      Text(
-                        "addCamera".tr(),
-                        style: const TextStyle(
-                            fontSize: 17, fontWeight: FontWeight.w600),
-                      ),
-                      FxBox.h24,
-                      if (Responsive.isWeb(context))
-                        Column(
-                          children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      _commonText("cameraName".tr()),
-                                      FxBox.h4,
-                                      _listBox(
-                                          controller: cameraNameController,
-                                          hintText: "addCameraName".tr(),
-                                          onChanged: (value) {
-                                            // HomeBloc.get(context).add(
-                                            // AddCameraName(
-                                            //     cameraName: value));
-                                          }),
-                                    ],
-                                  ),
-                                ),
-                                FxBox.w16,
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      _commonText("sourceType".tr()),
-                                      FxBox.h4,
-                                      singleSelectGenericDropdown(
-                                        isEnabled: true,
-                                        isRequired: false,
-                                        filled: true,
-                                        selectedItem: state.cameraSourceType,
-                                        onChanged: (value) {
-                                          if (value?.isNotEmpty ?? false) {
-                                            // HomeBloc.get(context).add(
-                                            //     AddCameraSourceType(
-                                            //         cameraSourceType:
-                                            //             value ?? ""));
-                                          }
-                                        },
-                                        itemsList: state.sourceTypesList,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            FxBox.h16,
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      _commonText("sourceTxt".tr()),
-                                      FxBox.h4,
-                                      _listBox(
-                                          hintText: "addSourceTxt".tr(),
-                                          enabled:
-                                              state.cameraSourceType.isNotEmpty,
-                                          controller: cameraSourceController,
-                                          onChanged: (value) {
-                                            HomeBloc.get(context).add(
-                                                AddCameraSource(
-                                                    cameraSource: value));
-                                          }),
-                                    ],
-                                  ),
-                                ),
-                                FxBox.w16,
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      _commonText("cameraModels".tr()),
-                                      FxBox.h4,
-                                      multiSelectGenericDropdown(
-                                        isEnabled: true,
-                                        isRequired: false,
-                                        filled: true,
-                                        selectedItem:
-                                            state.cameraSelectedModels,
-                                        onChanged: (value) {
-                                          // HomeBloc.get(context).add(
-                                          //     AddCameraSourceModels(
-                                          //         cameraSelectedModels:
-                                          //             value ?? []));
-                                        },
-                                        itemsList: state.modelsNameList,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            FxBox.h60,
-                            (state.submission == Submission.loading)
-                                ? loadingIndicator()
-                                : Center(
-                                    child: ElevatedButton.icon(
-                                        onPressed: () {
-                                          if (state.cameraName.isEmpty) {
-                                            FxToast.showErrorToast(
-                                                context: context,
-                                                message: "Add Camera Name");
-                                            return;
-                                          }
-                                          if (state.cameraSource.isEmpty) {
-                                            FxToast.showErrorToast(
-                                                context: context,
-                                                message: "Add Source");
-                                            return;
-                                          }
-                                          if (state.cameraSourceType.isEmpty) {
-                                            FxToast.showErrorToast(
-                                                context: context,
-                                                message: "Add Source Type");
-                                            return;
-                                          }
-                                          HomeBloc.get(context)
-                                              .add(const AddCameraEvent());
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          backgroundColor: AppColors.green,
-                                        ),
-                                        label: Text(
-                                          "confirm".tr(),
-                                          style: const TextStyle(
-                                              color: AppColors.white),
-                                        ),
-                                        icon: const Icon(
-                                          Icons.check_circle_outline,
-                                          color: AppColors.white,
-                                        )),
-                                  ),
-                          ],
-                        ),
-                      if (!Responsive.isWeb(context))
-                        Column(
-                          children: [
-                            _commonText("cameraName".tr()),
-                            FxBox.h4,
-                            _listBox(
-                                hintText: "addCameraName".tr(),
-                                controller: cameraNameController,
-                                onChanged: (value) {
-                                  // HomeBloc.get(context)
-                                  //     .add(AddCameraName(cameraName: value));
-                                }),
-                            FxBox.h10,
-                            _commonText("sourceType".tr()),
-                            FxBox.h4,
-                            singleSelectGenericDropdown(
-                              isEnabled: true,
-                              isRequired: false,
-                              filled: true,
-                              selectedItem: state.cameraSourceType,
-                              onChanged: (value) {
-                                if (value?.isNotEmpty ?? false) {
-                                  // HomeBloc.get(context).add(AddCameraSourceType(
-                                  //     cameraSourceType: value ?? ""));
-                                }
-                              },
-                              itemsList: state.sourceTypesList,
-                            ),
-                            FxBox.h10,
-                            _commonText("sourceTxt".tr()),
-                            FxBox.h4,
-                            _listBox(
-                                hintText: "addSourceTxt".tr(),
-                                enabled: state.cameraSourceType.isNotEmpty,
-                                controller: cameraSourceController,
-                                onChanged: (value) {
-                                  HomeBloc.get(context).add(
-                                      AddCameraSource(cameraSource: value));
-                                }),
-                            FxBox.h10,
-                            _commonText("cameraModels".tr()),
-                            FxBox.h4,
-                            multiSelectGenericDropdown(
-                              isEnabled: true,
-                              isRequired: false,
-                              filled: true,
-                              selectedItem: state.cameraSelectedModels,
-                              onChanged: (value) {
-                                // HomeBloc.get(context).add(AddCameraSourceModels(
-                                //     cameraSelectedModels: value ?? []));
-                              },
-                              itemsList: state.modelsNameList,
-                            ),
-                            FxBox.h60,
-                            (state.submission == Submission.loading)
-                                ? loadingIndicator()
-                                : Center(
-                                    child: ElevatedButton.icon(
-                                        onPressed: () {
-                                          HomeBloc.get(context)
-                                              .add(const AddCameraEvent());
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          backgroundColor: AppColors.green,
-                                        ),
-                                        label: Text(
-                                          "confirm".tr(),
-                                          style: const TextStyle(
-                                              color: AppColors.white),
-                                        ),
-                                        icon: const Icon(
-                                          Icons.check_circle_outline,
-                                          color: AppColors.white,
-                                        )),
-                                  ),
-                          ],
-                        ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
+
+          // child: BlocBuilder<HomeBloc, HomeState>(
+          //   builder: (context, state) {
+          //     return Card(
+          //       margin: const EdgeInsets.all(20),
+          //       color: AppColors.white,
+          //       elevation: 0,
+          //       shape: RoundedRectangleBorder(
+          //           borderRadius: BorderRadius.circular(15)),
+          //       child: Padding(
+          //         padding: const EdgeInsets.all(20),
+          //         child: Column(
+          //           children: [
+          //             Text(
+          //               "addCamera".tr(),
+          //               style: const TextStyle(
+          //                   fontSize: 17, fontWeight: FontWeight.w600),
+          //             ),
+          //             FxBox.h24,
+          //             if (Responsive.isWeb(context))
+          //               Column(
+          //                 children: [
+          //                   Row(
+          //                     children: [
+          //                       Expanded(
+          //                         child: Column(
+          //                           crossAxisAlignment:
+          //                               CrossAxisAlignment.start,
+          //                           children: [
+          //                             _commonText("cameraName".tr()),
+          //                             FxBox.h4,
+          //                             _listBox(
+          //                                 controller: cameraNameController,
+          //                                 hintText: "addCameraName".tr(),
+          //                                 onChanged: (value) {
+          //                                   // HomeBloc.get(context).add(
+          //                                   // AddCameraName(
+          //                                   //     cameraName: value));
+          //                                 }),
+          //                           ],
+          //                         ),
+          //                       ),
+          //                       FxBox.w16,
+          //                       Expanded(
+          //                         child: Column(
+          //                           crossAxisAlignment:
+          //                               CrossAxisAlignment.start,
+          //                           children: [
+          //                             _commonText("sourceType".tr()),
+          //                             FxBox.h4,
+          //                             singleSelectGenericDropdown(
+          //                               isEnabled: true,
+          //                               isRequired: false,
+          //                               filled: true,
+          //                               // selectedItem: state.cameraSourceType,
+          //                               onChanged: (value) {
+          //                                 // if (value?.isNotEmpty ?? false) {
+          //                                 //   // HomeBloc.get(context).add(
+          //                                 //   //     AddCameraSourceType(
+          //                                 //   //         cameraSourceType:
+          //                                 //   //             value ?? ""));
+          //                                 // }
+          //                               },
+          //                               // itemsList: state.sourceTypesList,
+          //                             ),
+          //                           ],
+          //                         ),
+          //                       ),
+          //                     ],
+          //                   ),
+          //                   FxBox.h16,
+          //                   Row(
+          //                     children: [
+          //                       Expanded(
+          //                         child: Column(
+          //                           crossAxisAlignment:
+          //                               CrossAxisAlignment.start,
+          //                           children: [
+          //                             _commonText("sourceTxt".tr()),
+          //                             FxBox.h4,
+          //                             _listBox(
+          //                                 hintText: "addSourceTxt".tr(),
+          //                                 enabled:
+          //                                     state.cameraSourceType.isNotEmpty,
+          //                                 controller: cameraSourceController,
+          //                                 onChanged: (value) {
+          //                                   // HomeBloc.get(context).add(
+          //                                   //     AddCameraSource(
+          //                                   //         cameraSource: value));
+          //                                 }),
+          //                           ],
+          //                         ),
+          //                       ),
+          //                       FxBox.w16,
+          //                       Expanded(
+          //                         child: Column(
+          //                           crossAxisAlignment:
+          //                               CrossAxisAlignment.start,
+          //                           children: [
+          //                             _commonText("cameraModels".tr()),
+          //                             FxBox.h4,
+          //                             multiSelectGenericDropdown(
+          //                               isEnabled: true,
+          //                               isRequired: false,
+          //                               filled: true,
+          //                               selectedItem:
+          //                                   state.cameraSelectedModels,
+          //                               onChanged: (value) {
+          //                                 // HomeBloc.get(context).add(
+          //                                 //     AddCameraSourceModels(
+          //                                 //         cameraSelectedModels:
+          //                                 //             value ?? []));
+          //                               },
+          //                               itemsList: state.modelsNameList,
+          //                             ),
+          //                           ],
+          //                         ),
+          //                       ),
+          //                     ],
+          //                   ),
+          //                   FxBox.h60,
+          //                   (state.submission == Submission.loading)
+          //                       ? loadingIndicator()
+          //                       : Center(
+          //                           child: ElevatedButton.icon(
+          //                               onPressed: () {
+          //                                 if (state.cameraName.isEmpty) {
+          //                                   FxToast.showErrorToast(
+          //                                       context: context,
+          //                                       message: "Add Camera Name");
+          //                                   return;
+          //                                 }
+          //                                 if (state.cameraSource.isEmpty) {
+          //                                   FxToast.showErrorToast(
+          //                                       context: context,
+          //                                       message: "Add Source");
+          //                                   return;
+          //                                 }
+          //                                 if (state.cameraSourceType.isEmpty) {
+          //                                   FxToast.showErrorToast(
+          //                                       context: context,
+          //                                       message: "Add Source Type");
+          //                                   return;
+          //                                 }
+          //                                 // HomeBloc.get(context)
+          //                                 //     .add(const AddCameraEvent());
+          //                               },
+          //                               style: ElevatedButton.styleFrom(
+          //                                 shape: RoundedRectangleBorder(
+          //                                     borderRadius:
+          //                                         BorderRadius.circular(10)),
+          //                                 backgroundColor: AppColors.green,
+          //                               ),
+          //                               label: Text(
+          //                                 "confirm".tr(),
+          //                                 style: const TextStyle(
+          //                                     color: AppColors.white),
+          //                               ),
+          //                               icon: const Icon(
+          //                                 Icons.check_circle_outline,
+          //                                 color: AppColors.white,
+          //                               )),
+          //                         ),
+          //                 ],
+          //               ),
+          //             if (!Responsive.isWeb(context))
+          //               Column(
+          //                 children: [
+          //                   _commonText("cameraName".tr()),
+          //                   FxBox.h4,
+          //                   _listBox(
+          //                       hintText: "addCameraName".tr(),
+          //                       controller: cameraNameController,
+          //                       onChanged: (value) {
+          //                         // HomeBloc.get(context)
+          //                         //     .add(AddCameraName(cameraName: value));
+          //                       }),
+          //                   FxBox.h10,
+          //                   _commonText("sourceType".tr()),
+          //                   FxBox.h4,
+          //                   singleSelectGenericDropdown(
+          //                     isEnabled: true,
+          //                     isRequired: false,
+          //                     filled: true,
+          //                     selectedItem: state.cameraSourceType,
+          //                     onChanged: (value) {
+          //                       if (value?.isNotEmpty ?? false) {
+          //                         // HomeBloc.get(context).add(AddCameraSourceType(
+          //                         //     cameraSourceType: value ?? ""));
+          //                       }
+          //                     },
+          //                     itemsList: state.sourceTypesList,
+          //                   ),
+          //                   FxBox.h10,
+          //                   _commonText("sourceTxt".tr()),
+          //                   FxBox.h4,
+          //                   _listBox(
+          //                       hintText: "addSourceTxt".tr(),
+          //                       enabled: state.cameraSourceType.isNotEmpty,
+          //                       controller: cameraSourceController,
+          //                       onChanged: (value) {
+          //                         // HomeBloc.get(context).add(
+          //                         //     AddCameraSource(cameraSource: value));
+          //                       }),
+          //                   FxBox.h10,
+          //                   _commonText("cameraModels".tr()),
+          //                   FxBox.h4,
+          //                   multiSelectGenericDropdown(
+          //                     isEnabled: true,
+          //                     isRequired: false,
+          //                     filled: true,
+          //                     selectedItem: state.cameraSelectedModels,
+          //                     onChanged: (value) {
+          //                       // HomeBloc.get(context).add(AddCameraSourceModels(
+          //                       //     cameraSelectedModels: value ?? []));
+          //                     },
+          //                     itemsList: state.modelsNameList,
+          //                   ),
+          //                   FxBox.h60,
+          //                   (state.submission == Submission.loading)
+          //                       ? loadingIndicator()
+          //                       : Center(
+          //                           child: ElevatedButton.icon(
+          //                               onPressed: () {
+          //                                 // HomeBloc.get(context)
+          //                                 //     .add(const AddCameraEvent());
+          //                               },
+          //                               style: ElevatedButton.styleFrom(
+          //                                 shape: RoundedRectangleBorder(
+          //                                     borderRadius:
+          //                                         BorderRadius.circular(10)),
+          //                                 backgroundColor: AppColors.green,
+          //                               ),
+          //                               label: Text(
+          //                                 "confirm".tr(),
+          //                                 style: const TextStyle(
+          //                                     color: AppColors.white),
+          //                               ),
+          //                               icon: const Icon(
+          //                                 Icons.check_circle_outline,
+          //                                 color: AppColors.white,
+          //                               )),
+          //                         ),
+          //                 ],
+          //               ),
+          //           ],
+          //         ),
+          //       ),
+          //     );
+          //   },
+          // ),
         ),
       ),
     );

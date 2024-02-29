@@ -15,7 +15,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   static HomeBloc get(context) => BlocProvider.of<HomeBloc>(context);
   HomeBloc() : super(const HomeState()) {
     on<HomeEvent>(_onHomeEvent);
-    on<DataEvent>(_onDataEvent);
+    // on<DataEvent>(_onDataEvent);
 
     /// change fields events
     on<AddCompanyEvent>(_onAddCompanyEvent);
@@ -29,6 +29,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     /// get static list
 
     on<GetEmployeeNames>(_onGetEmployeeNames);
+    on<GetEmployeeNamesEvent>(_onGetEmployeeNamesEvent);
 
     // on<GetCompaniesNames>(_onGetCompaniesNames);
 
@@ -47,18 +48,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<DeletePersonByIdEvent>(_onDeletePersonByIdEvent);
 
     /// functionality cameras
-    on<GetEmployeeNamesEvent>(_onGetEmployeeNamesEvent);
 
     // on<AddCameraEvent>(_onAddCameraEvent);
   }
 
   _onHomeEvent(HomeEvent event, Emitter<HomeState> emit) async {}
 
-  _onDataEvent(DataEvent event, Emitter<HomeState> emit) async {
-    add(const GetCamerasNames());
-    add(const GetSourceTypes());
-    add(const GetModelsName());
-  }
+  // _onDataEvent(DataEvent event, Emitter<HomeState> emit) async {
+  //   add(const GetCamerasNames());
+  //   add(const GetSourceTypes());
+  //   add(const GetModelsName());
+  // }
 
   _onAddCompanyName(AddCompanyName event, Emitter<HomeState> emit) async {
     emit(state.copyWith(
@@ -68,33 +68,66 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   /// Get Company Employees Handle
 
   _onGetEmployeeNames(GetEmployeeNames event, Emitter<HomeState> emit) async {
-    await RemoteProvider()
-        .getAllEmployeeNames(companyName: state.companyName)
-        .then((value) {
-      emit(state.copyWith(
-          companyName: event.companyName, submission: Submission.hasData));
-    });
+    // await RemoteProvider()
+    //     .getAllEmployeeNames(companyName: state.companyName)
+    //     .then((value) {
+    emit(state.copyWith(
+        companyName: event.companyName, submission: Submission.hasData));
+    // });
   }
 
-  /// Add Company Handle
   _onGetEmployeeNamesEvent(
       GetEmployeeNamesEvent event, Emitter<HomeState> emit) async {
     emit(state.copyWith(submission: Submission.loading));
-    await RemoteProvider()
-        .getAllEmployeeNames(
-      companyName: state.companyName,
-    )
-        .then((value) {
-      // if (state.cameraSelectedModels.isNotEmpty) {
-      //   add(const ApplyModelEvent());
-      // }
-      if (value != AddCompanyModel()) {
-        emit(const HomeState().copyWith(submission: Submission.success));
+
+    try {
+      final employeeModel = await RemoteProvider().getAllEmployeeNames(
+        companyName: state.companyName,
+      );
+
+      if (employeeModel.isNotEmpty) {
+        // final List<EmployeeModel> employeeList =
+        //     List<EmployeeModel>.from(employeeModel.data!);
+
+        emit(state.copyWith(
+          submission: Submission.success,
+          employeeNamesList: employeeModel,
+        ));
       } else {
-        emit(state.copyWith(submission: Submission.error));
+        emit(state.copyWith(
+          submission: Submission.error,
+          employeeNamesList: [],
+        ));
       }
-    });
+    } catch (e) {
+      emit(state.copyWith(
+        submission: Submission.error,
+        employeeNamesList: [],
+      ));
+    }
   }
+
+// _onGetEmployeeNamesEvent(
+//   GetEmployeeNamesEvent event, Emitter<HomeState> emit) async {
+//   emit(state.copyWith(submission: Submission.loading));
+
+//   try {
+//     final employeeModel = await RemoteProvider().getAllEmployeeNames(
+//       companyName: state.companyName,
+//     );
+
+//     if (employeeModel.data != null && employeeModel.data!.isNotEmpty) {
+//       emit(state.copyWith(
+//         submission: Submission.success,
+//         employeeNamesList: employeeModel.data ?? [],
+//       ));
+//     } else {
+//       emit(state.copyWith(submission: Submission.error));
+//     }
+//   } catch (e) {
+//     emit(state.copyWith(submission: Submission.error));
+//   }
+// }
 
   /// Add Company Handle
   _onAddCompanyEvent(AddCompanyEvent event, Emitter<HomeState> emit) async {
@@ -241,14 +274,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   // }
 
   /// get static lists
-
-  /// Get Companies List
-  //   _onGetCompaniesNames(GetCompaniesNames event, Emitter<HomeState> emit) async {
-  //   await RemoteProvider().getAllCamerasNames().then((value) {
-  //     emit(state.copyWith(
-  //         companiesNamesList: value, submission: Submission.hasData));
-  //   });
-  // }
 
   // _onGetCamerasNames(GetCamerasNames event, Emitter<HomeState> emit) async {
   //   await RemoteProvider().getAllCamerasNames().then((value) {

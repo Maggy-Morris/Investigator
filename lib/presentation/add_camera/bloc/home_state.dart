@@ -1,22 +1,22 @@
 part of 'home_bloc.dart';
 
 class HomeState extends Equatable {
-  final List<String> camerasNamesList;
-  final List<String> employeeNamesList;
+  // final List<String> camerasNamesList;
+  final List<Data> employeeNamesList;
   final List<String> companiesNamesList;
 
-  final List<String> sourceTypesList;
-  final List<String> modelsNameList;
+  // final List<String> sourceTypesList;
+  // final List<String> modelsNameList;
   final Submission submission;
 
-  final List<String> cameraSelectedModels;
+  // final List<String> cameraSelectedModels;
   final String companyName;
   final String personName;
   final String personId;
 
-  final String cameraName;
-  final String cameraSource;
-  final String cameraSourceType;
+  // final String cameraName;
+  // final String cameraSource;
+  // final String cameraSourceType;
 
   const HomeState({
     this.personName = "",
@@ -24,29 +24,29 @@ class HomeState extends Equatable {
     this.companyName = "",
     this.companiesNamesList = const [],
     this.employeeNamesList = const [],
-    this.camerasNamesList = const [],
-    this.sourceTypesList = const [],
-    this.modelsNameList = const [],
-    this.cameraSelectedModels = const [],
-    this.cameraName = "",
-    this.cameraSource = "",
-    this.cameraSourceType = "",
+    // this.camerasNamesList = const [],
+    // this.sourceTypesList = const [],
+    // this.modelsNameList = const [],
+    // this.cameraSelectedModels = const [],
+    // this.cameraName = "",
+    // this.cameraSource = "",
+    // this.cameraSourceType = "",
     this.submission = Submission.initial,
   });
 
   HomeState copyWith({
     List<String>? companiesNamesList,
-    List<String>? employeeNamesList,
+    List<Data>? employeeNamesList,
     String? companyName,
     String? personName,
     String? personId,
-    List<String>? camerasNamesList,
-    List<String>? sourceTypesList,
-    List<String>? modelsNameList,
-    List<String>? cameraSelectedModels,
-    String? cameraName,
-    String? cameraSource,
-    String? cameraSourceType,
+    // List<String>? camerasNamesList,
+    // List<String>? sourceTypesList,
+    // List<String>? modelsNameList,
+    // List<String>? cameraSelectedModels,
+    // String? cameraName,
+    // String? cameraSource,
+    // String? cameraSourceType,
     Submission? submission,
   }) {
     return HomeState(
@@ -55,13 +55,13 @@ class HomeState extends Equatable {
       companiesNamesList: companiesNamesList ?? this.companiesNamesList,
       companyName: companyName ?? this.companyName,
       employeeNamesList: employeeNamesList ?? this.employeeNamesList,
-      camerasNamesList: camerasNamesList ?? this.camerasNamesList,
-      sourceTypesList: sourceTypesList ?? this.sourceTypesList,
-      modelsNameList: modelsNameList ?? this.modelsNameList,
-      cameraName: cameraName ?? this.cameraName,
-      cameraSource: cameraSource ?? this.cameraSource,
-      cameraSourceType: cameraSourceType ?? this.cameraSourceType,
-      cameraSelectedModels: cameraSelectedModels ?? this.cameraSelectedModels,
+      // camerasNamesList: camerasNamesList ?? this.camerasNamesList,
+      // sourceTypesList: sourceTypesList ?? this.sourceTypesList,
+      // modelsNameList: modelsNameList ?? this.modelsNameList,
+      // cameraName: cameraName ?? this.cameraName,
+      // cameraSource: cameraSource ?? this.cameraSource,
+      // cameraSourceType: cameraSourceType ?? this.cameraSourceType,
+      // cameraSelectedModels: cameraSelectedModels ?? this.cameraSelectedModels,
       submission: submission ?? this.submission,
     );
   }
@@ -73,13 +73,13 @@ class HomeState extends Equatable {
         companiesNamesList,
         companyName,
         employeeNamesList,
-        camerasNamesList,
-        sourceTypesList,
-        modelsNameList,
-        cameraName,
-        cameraSource,
-        cameraSourceType,
-        cameraSelectedModels,
+        // camerasNamesList,
+        // sourceTypesList,
+        // modelsNameList,
+        // cameraName,
+        // cameraSource,
+        // cameraSourceType,
+        // cameraSelectedModels,
         submission,
       ];
 }

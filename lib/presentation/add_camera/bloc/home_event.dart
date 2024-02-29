@@ -32,26 +32,26 @@ class GetEmployeeNames extends HomeEvent {
 //   List<Object?> get props => [];
 // }
 
-class GetCamerasNames extends HomeEvent {
-  const GetCamerasNames();
+// class GetCamerasNames extends HomeEvent {
+//   const GetCamerasNames();
 
-  @override
-  List<Object?> get props => [];
-}
+//   @override
+//   List<Object?> get props => [];
+// }
 
-class GetSourceTypes extends HomeEvent {
-  const GetSourceTypes();
+// class GetSourceTypes extends HomeEvent {
+//   const GetSourceTypes();
 
-  @override
-  List<Object?> get props => [];
-}
+//   @override
+//   List<Object?> get props => [];
+// }
 
-class GetModelsName extends HomeEvent {
-  const GetModelsName();
+// class GetModelsName extends HomeEvent {
+//   const GetModelsName();
 
-  @override
-  List<Object?> get props => [];
-}
+//   @override
+//   List<Object?> get props => [];
+// }
 
 /// handle state events
 ///
@@ -65,23 +65,16 @@ class AddCompanyName extends HomeEvent {
   List<Object?> get props => [companyName];
 }
 
-// class AddCameraName extends HomeEvent {
-//   final String cameraName;
 
-//   const AddCameraName({required this.cameraName});
+
+// class AddCameraSource extends HomeEvent {
+//   final String cameraSource;
+
+//   const AddCameraSource({required this.cameraSource});
 
 //   @override
-//   List<Object?> get props => [cameraName];
+//   List<Object?> get props => [cameraSource];
 // }
-
-class AddCameraSource extends HomeEvent {
-  final String cameraSource;
-
-  const AddCameraSource({required this.cameraSource});
-
-  @override
-  List<Object?> get props => [cameraSource];
-}
 
 /// add company event
 class GetEmployeeNamesEvent extends HomeEvent {
@@ -153,29 +146,29 @@ class DeletePersonByIdEvent extends HomeEvent {
   List<Object?> get props => [companyName, personId];
 }
 
-/// add camera event
-class AddCameraEvent extends HomeEvent {
-  const AddCameraEvent();
+// /// add camera event
+// class AddCameraEvent extends HomeEvent {
+//   const AddCameraEvent();
 
-  @override
-  List<Object?> get props => [];
-}
+//   @override
+//   List<Object?> get props => [];
+// }
 
 /// apply model event
-class ApplyModelEvent extends HomeEvent {
-  // final String cameraName;
-  // final List<String> modelName;
+// class ApplyModelEvent extends HomeEvent {
+//   // final String cameraName;
+//   // final List<String> modelName;
 
-  const ApplyModelEvent(
-      //     {
-      //   required this.modelName,
-      //   required this.cameraName,
-      // }
-      );
+//   const ApplyModelEvent(
+//       //     {
+//       //   required this.modelName,
+//       //   required this.cameraName,
+//       // }
+//       );
 
-  @override
-  List<Object?> get props => [
-        // cameraName,
-        // modelName,
-      ];
-}
+//   @override
+//   List<Object?> get props => [
+//         // cameraName,
+//         // modelName,
+//       ];
+// }

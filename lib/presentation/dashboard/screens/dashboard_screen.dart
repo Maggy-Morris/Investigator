@@ -22,20 +22,17 @@ class DashboardScreen extends StatefulWidget {
 class _AddCameraScreenState extends State<DashboardScreen> {
   // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController companyNameController = TextEditingController();
-  TextEditingController companySourceController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return StandardLayoutScreen(
-      // key: _scaffoldKey,
-      // appBar: AppBar(),
+
       body: BlocProvider(
         create: (context) => HomeBloc()..add(const DataEvent()),
         child: BlocListener<HomeBloc, HomeState>(
           listener: (context, state) {
             if (state.submission == Submission.success) {
               companyNameController.clear();
-              companySourceController.clear();
               FxToast.showSuccessToast(context: context);
             }
             if (state.submission == Submission.error) {
@@ -99,9 +96,8 @@ class _AddCameraScreenState extends State<DashboardScreen> {
                                           }
 
                                           HomeBloc.get(context)
-                                              .add(AddCompanyEvent());
-                                          // print('ssssssssssssssssss' +
-                                          //     state.companyName);
+                                              .add(const AddCompanyEvent());
+                                          
                                         },
                                         style: ElevatedButton.styleFrom(
                                           shape: RoundedRectangleBorder(
@@ -140,7 +136,7 @@ class _AddCameraScreenState extends State<DashboardScreen> {
                                     child: ElevatedButton.icon(
                                         onPressed: () {
                                           HomeBloc.get(context)
-                                              .add(AddCompanyEvent());
+                                              .add(const AddCompanyEvent());
                                         },
                                         style: ElevatedButton.styleFrom(
                                           shape: RoundedRectangleBorder(
