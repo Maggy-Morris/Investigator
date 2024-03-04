@@ -10,17 +10,14 @@ import 'package:Investigator/presentation/login/widgets/custom_text.dart';
 import 'package:svg_flutter/svg.dart';
 
 import '../../../core/resources/app_colors.dart';
-import '../../signup/screens/signup_screen.dart';
-import '../cubit/login_cubit.dart';
+import '../cubit/signup_cubit.dart';
 
-class LoginForm extends StatelessWidget {
-  const LoginForm({super.key});
+class SignUpForm extends StatelessWidget {
+  const SignUpForm({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return
-    
-     BlocListener<LoginCubit, LoginState>(
+    return BlocListener<SignupCubit, SignupState>(
       listener: (context, state) {
         if (state.status.isSubmissionFailure) {
           ScaffoldMessenger.of(context)
@@ -51,7 +48,6 @@ class LoginForm extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          // mainAxisSize: MainAxisSize.min,
                           children: [
                             FxBox.h20,
                             Center(
@@ -72,13 +68,7 @@ class LoginForm extends StatelessWidget {
                                 child: Column(
                                   children: [
                                     _logoView(),
-                                    // Image.asset("assets/images/logo.png"),
                                     FxBox.h16,
-                                    // ConstantAuth.headerView(
-                                    //   languageModel.authentication.signIn,
-                                    //   languageModel.authentication.signInText,
-                                    //   context,
-                                    // ),
                                     _bottomView(),
                                   ],
                                 ),
@@ -88,30 +78,22 @@ class LoginForm extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Responsive.isWeb(context)
-                          ? Expanded(
-                              child: Column(
-                                children: [
-                                  Container(
-                                    constraints:
-                                        const BoxConstraints(maxHeight: 400),
-                                    child: SvgPicture.asset(
-                                      "assets/images/Admin_Kit_Text.svg",
-                                    ),
-                                  ),
-                                  FxBox.h16,
-                                  // Center(
-                                  //   child: CustomText(
-                                  //     title: languageModel.authentication.signInHeader,
-                                  //     fontSize: 15,
-                                  //     fontWeight: FontWeight.w700,
-                                  //     textColor: ColorConst.lightFontColor,
-                                  //   ),
-                                  // ),
-                                ],
-                              ),
-                            )
-                          : Container(),
+                      // Responsive.isWeb(context)
+                      // ? Expanded(
+                      //     child: Column(
+                      //       children: [
+                      //         Container(
+                      //           constraints:
+                      //               const BoxConstraints(maxHeight: 400),
+                      //           child: SvgPicture.asset(
+                      //             "assets/images/Admin_Kit_Text.svg",
+                      //           ),
+                      //         ),
+                      //         FxBox.h16,
+                      //       ],
+                      //     ),
+                      //   )
+                      // : Container(),
                     ],
                   ),
                 ],
@@ -120,37 +102,7 @@ class LoginForm extends StatelessWidget {
           ),
         ],
       ),
-      // child: Align(
-      //   alignment: const Alignment(0, -1 / 3),
-      //   child: Container(
-      //     padding: const EdgeInsets.all(50),
-      //     decoration: BoxDecoration(
-      //         color: Colors.white38.withOpacity(0.3),
-      //         borderRadius: BorderRadius.circular(15)),
-      //     child: SingleChildScrollView(
-      //       child: Column(
-      //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      //         mainAxisSize: MainAxisSize.min,
-      //         children: [
-      //           Image.asset(
-      //             'assets/images/logo.png',
-      //             height: 160,
-      //             width: 263,
-      //           ),
-      //           _EmailInput(),
-      //           const SizedBox(height: 20),
-      //           _PasswordInput(),
-      //           const SizedBox(height: 30),
-      //           _LoginButton(),
-      //         ],
-      //       ),
-      //     ),
-      //   ),
-      // ),
     );
-  
-  
-  
   }
 }
 
@@ -165,7 +117,7 @@ Widget _bottomView() {
     //mainAxisSize: MainAxisSize.min,
     children: [
       FxBox.h16,
-      headerView("login".tr(), "", false),
+      headerView("Sign Up".tr(), "", false),
       FxBox.h28,
       Padding(
         padding: const EdgeInsets.all(8.0),
@@ -189,12 +141,8 @@ Widget _bottomView() {
       FxBox.h8,
       _PasswordInput(),
       FxBox.h28,
-      Center(child: _LoginButton()),
-      FxBox.h20,
       Center(child: _SignUpButton()),
-
       FxBox.h20,
-      // _serviceText(),
     ],
   );
 }
@@ -202,7 +150,7 @@ Widget _bottomView() {
 class _EmailInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoginCubit, LoginState>(
+    return BlocBuilder<SignupCubit, SignupState>(
       buildWhen: (previous, current) => previous.email != current.email,
       builder: (context, state) {
         return SizedBox(
@@ -211,7 +159,7 @@ class _EmailInput extends StatelessWidget {
             cursorColor: Colors.black,
             key: const Key('loginForm_emailInput_textField'),
             onChanged: (email) =>
-                context.read<LoginCubit>().emailChanged(email),
+                context.read<SignupCubit>().emailChanged(email),
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
               // hintStyle: const TextStyle(color: Colors.black),
@@ -248,7 +196,7 @@ class _PasswordInputState extends State<_PasswordInput> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoginCubit, LoginState>(
+    return BlocBuilder<SignupCubit, SignupState>(
       buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
         return SizedBox(
@@ -259,7 +207,7 @@ class _PasswordInputState extends State<_PasswordInput> {
             obscuringCharacter: "•",
             key: const Key('loginForm_passwordInput_textField'),
             onChanged: (password) =>
-                context.read<LoginCubit>().passwordChanged(password),
+                context.read<SignupCubit>().passwordChanged(password),
             decoration: InputDecoration(
               prefixIcon: IconButton(
                 icon: Icon(
@@ -295,10 +243,10 @@ class _PasswordInputState extends State<_PasswordInput> {
   }
 }
 
-class _LoginButton extends StatelessWidget {
+class _SignUpButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoginCubit, LoginState>(
+    return BlocBuilder<SignupCubit, SignupState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
         return state.status.isSubmissionInProgress
@@ -311,7 +259,7 @@ class _LoginButton extends StatelessWidget {
                     : MediaQuery.of(context).size.width,
                 height: 50,
                 child: ElevatedButton(
-                  key: const Key('loginForm_continue_raisedButton'),
+                  key: const Key('signUpForm_continue_raisedButton'),
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
@@ -319,53 +267,15 @@ class _LoginButton extends StatelessWidget {
                     backgroundColor: const Color(0xff1c1c1a),
                   ),
                   onPressed: state.status.isValidated
-                      ? () => context.read<LoginCubit>().logInWithCredentials()
+                      ? () =>
+                          context.read<SignupCubit>().signUpWithCredentials()
                       : null,
-                  child: Text('login'.tr(),
+                  child: Text('Sign Up'.tr(),
                       style: const TextStyle(
                           fontFamily: "Cairo", color: Colors.white)),
                 ),
               );
       },
-    );
-  }
-}
-
-// class _GoogleLoginButton extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     final theme = Theme.of(context);
-//     return ElevatedButton.icon(
-//       key: const Key('loginForm_googleLogin_raisedButton'),
-//       label: const Text(
-//         'SIGN IN WITH GOOGLE',
-//         style: TextStyle(color: Colors.white),
-//       ),
-//       style: ElevatedButton.styleFrom(
-//         shape: RoundedRectangleBorder(
-//           borderRadius: BorderRadius.circular(30),
-//         ),
-//         backgroundColor: theme.colorScheme.secondary,
-//       ),
-//       icon: const Icon(FontAwesomeIcons.google, color: Colors.white),
-//       onPressed: () => context.read<LoginCubit>().logInWithGoogle(),
-//     );
-//   }
-// }
-
-class _SignUpButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return TextButton(
-      key: const Key('loginForm_createAccount_flatButton'),
-      onPressed: () {
-        Navigator.of(context).push<void>(SignUpPage.route());
-      },
-      child: Text(
-        'CREATE ACCOUNT',
-        style: TextStyle(color: theme.primaryColor),
-      ),
     );
   }
 }

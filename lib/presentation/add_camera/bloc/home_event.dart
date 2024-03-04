@@ -25,6 +25,14 @@ class GetEmployeeNames extends HomeEvent {
   List<Object?> get props => [companyName];
 }
 
+/// Get Emoloyees Data event
+class GetEmployeeNamesEvent extends HomeEvent {
+  const GetEmployeeNamesEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
 // class GetCompaniesNames extends HomeEvent {
 //   const GetCompaniesNames();
 
@@ -65,8 +73,6 @@ class AddCompanyName extends HomeEvent {
   List<Object?> get props => [companyName];
 }
 
-
-
 // class AddCameraSource extends HomeEvent {
 //   final String cameraSource;
 
@@ -75,16 +81,28 @@ class AddCompanyName extends HomeEvent {
 //   @override
 //   List<Object?> get props => [cameraSource];
 // }
-
-/// add company event
-class GetEmployeeNamesEvent extends HomeEvent {
-  const GetEmployeeNamesEvent();
+class AddNewEmployeeEvent extends HomeEvent {
+  const AddNewEmployeeEvent();
 
   @override
   List<Object?> get props => [];
 }
 
+class AddNewEmployee extends HomeEvent {
+  final String companyName;
+  final String personName;
+  final String image;
+  PlatformFile? files;
+
+  AddNewEmployee(
+      {this.files, required this.personName, required this.companyName, required this.image});
+
+  @override
+  List<Object?> get props => [companyName, personName, files , image];
+}
+
 // Add company event
+
 class AddCompanyEvent extends HomeEvent {
   const AddCompanyEvent();
 
@@ -106,10 +124,16 @@ class DeleteCompanyEvent extends HomeEvent {
 
 // get person data by name
 class GetPersonByNameEvent extends HomeEvent {
+  const GetPersonByNameEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class GetPersonByName extends HomeEvent {
   final String companyName;
   final String personName;
-
-  const GetPersonByNameEvent(this.companyName, this.personName);
+  const GetPersonByName({required this.companyName, required this.personName});
 
   @override
   List<Object?> get props => [companyName, personName];

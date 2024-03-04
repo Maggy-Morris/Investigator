@@ -97,13 +97,22 @@ class StandardLayoutScreen extends StatelessWidget {
                                     )),
                                 child: NavigationRail(
                                   destinations: [
+                                    // NavigationRailDestination(
+                                    //   icon: const Icon(Icons.dashboard),
+                                    //   selectedIcon: const Icon(
+                                    //     Icons.dashboard,
+                                    //   ),
+                                    //   label: Text('All'.tr()),
+                                    // ),
+
                                     NavigationRailDestination(
-                                      icon: const Icon(Icons.dashboard),
+                                      icon: const Icon(Icons.person_outlined),
                                       selectedIcon: const Icon(
-                                        Icons.dashboard,
+                                        Icons.person_outlined,
                                       ),
-                                      label: Text('All'.tr()),
+                                      label: Text('AllEmployees'.tr()),
                                     ),
+
                                     NavigationRailDestination(
                                       icon: const Icon(Icons.search),
                                       selectedIcon: const Icon(
@@ -119,14 +128,6 @@ class StandardLayoutScreen extends StatelessWidget {
                                         Icons.model_training_outlined,
                                       ),
                                       label: Text('Investigator'.tr()),
-                                    ),
-
-                                    NavigationRailDestination(
-                                      icon: const Icon(Icons.person_outlined),
-                                      selectedIcon: const Icon(
-                                        Icons.person_outlined,
-                                      ),
-                                      label: Text('allEmployees'.tr()),
                                     ),
 
                                     /// Language
@@ -220,6 +221,8 @@ class StandardLayoutScreen extends StatelessWidget {
                                                   );
                                                 },
                                               );
+                                           
+                                           
                                             },
                                             label: Text('logout'.tr()),
                                           )
@@ -283,17 +286,26 @@ class StandardLayoutScreen extends StatelessWidget {
                                     EasyLoading.dismiss();
                                     StandardLayoutCubit.get(context)
                                         .onEditPageNavigationNumber(index);
+
                                     if (index == 0) {
-                                      Routemaster.of(context).push('/');
-                                    } else if (index == 1) {
-                                      Routemaster.of(context)
-                                          .push('/Investigator');
-                                    } else if (index == 2) {
-                                      Routemaster.of(context).push('/search');
-                                    } else if (index == 3) {
                                       Routemaster.of(context)
                                           .push('/allEmployees');
+                                      // Routemaster.of(context).push('/home');
+                                    } else if (index == 1) {
+                                      Routemaster.of(context).push('/search');
+                                    } else if (index == 2) {
+                                      Routemaster.of(context)
+                                          .push('/investigator');
                                     }
+                                    // else if (index == 3) {
+                                    //   Routemaster.of(context)
+                                    //       .push('/allEmployees');
+                                    // }
+                                    ///////////////////////////////////////////////////////////////////////////////
+                                    // else if (index == 4) {
+                                    //   Routemaster.of(context)
+                                    //       .push('/managementScreen');
+                                    // }
                                     // else if (index == 4) {
                                     //   Routemaster.of(context)
                                     //       .push('/managementScreen');

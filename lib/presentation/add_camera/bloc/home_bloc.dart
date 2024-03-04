@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:Investigator/core/enum/enum.dart';
 // import 'package:Investigator/core/models/add_camera_model.dart';
@@ -13,7 +14,7 @@ part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   static HomeBloc get(context) => BlocProvider.of<HomeBloc>(context);
-  HomeBloc() : super(const HomeState()) {
+  HomeBloc() : super(HomeState()) {
     on<HomeEvent>(_onHomeEvent);
     // on<DataEvent>(_onDataEvent);
 
@@ -21,21 +22,18 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<AddCompanyEvent>(_onAddCompanyEvent);
     on<DeleteCompanyEvent>(_onDeleteCompanyEvent);
 
-    // on<AddCameraName>(_onAddCameraName);
-    // on<AddCameraSource>(_onAddCameraSource);
-    // on<AddCameraSourceType>(_onAddCameraSourceType);
-    // on<AddCameraSourceModels>(_onAddCameraSourceModels);
+    /// Add New Employee
+    on<AddNewEmployee>(_onAddNewEmployee);
+    on<AddNewEmployeeEvent>(_onAddNewEmployeeEvent);
 
     /// get static list
+
+    on<GetPersonByName>(_onGetPersonByName);
 
     on<GetEmployeeNames>(_onGetEmployeeNames);
     on<GetEmployeeNamesEvent>(_onGetEmployeeNamesEvent);
 
     // on<GetCompaniesNames>(_onGetCompaniesNames);
-
-    // on<GetCamerasNames>(_onGetCamerasNames);
-    // on<GetSourceTypes>(_onGetSourceTypes);
-    // on<GetModelsName>(_onGetModelsName);
 
     /// functionality Company get employees Data
     on<GetPersonByNameEvent>(_onGetPersonByNameEvent);
@@ -65,6 +63,38 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         companyName: event.companyName, submission: Submission.editing));
   }
 
+  /// New Employees Added
+  _onAddNewEmployee(AddNewEmployee event, Emitter<HomeState> emit) async {
+    emit(state.copyWith(
+        companyName: event.companyName,
+        personName: event.personName,
+        // files: event.files,
+        image: event.image,
+        submission: Submission.editing));
+  }
+
+  _onAddNewEmployeeEvent(
+      AddNewEmployeeEvent event, Emitter<HomeState> emit) async {
+    emit(state.copyWith(submission: Submission.loading));
+    await RemoteProvider()
+        .addNewPersonToACompany(
+      companyName: state.companyName,
+      personName: state.personName,
+      // image: state.files,
+      image:state.image,
+    )
+        .then((value) {
+      // if (state.cameraSelectedModels.isNotEmpty) {
+      //   add(const ApplyModelEvent());
+      // }
+      if (value != AddCompanyModel()) {
+        emit(const HomeState().copyWith(submission: Submission.success));
+      } else {
+        emit(state.copyWith(submission: Submission.error));
+      }
+    });
+  }
+
   /// Get Company Employees Handle
 
   _onGetEmployeeNames(GetEmployeeNames event, Emitter<HomeState> emit) async {
@@ -78,6 +108,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   _onGetEmployeeNamesEvent(
       GetEmployeeNamesEvent event, Emitter<HomeState> emit) async {
+    // Check if the data is already loaded
+    // if (state.submission == Submission.success) {
+    //   return;
+    // }
+
     emit(state.copyWith(submission: Submission.loading));
 
     try {
@@ -86,16 +121,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       );
 
       if (employeeModel.isNotEmpty) {
-        // final List<EmployeeModel> employeeList =
-        //     List<EmployeeModel>.from(employeeModel.data!);
-
         emit(state.copyWith(
           submission: Submission.success,
           employeeNamesList: employeeModel,
         ));
       } else {
         emit(state.copyWith(
-          submission: Submission.error,
+          submission: Submission.noDataFound,
           employeeNamesList: [],
         ));
       }
@@ -106,30 +138,39 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       ));
     }
   }
+  // _onGetEmployeeNamesEvent(
+  //     GetEmployeeNamesEvent event, Emitter<HomeState> emit) async {
+  //   emit(state.copyWith(submission: Submission.loading));
 
-// _onGetEmployeeNamesEvent(
-//   GetEmployeeNamesEvent event, Emitter<HomeState> emit) async {
-//   emit(state.copyWith(submission: Submission.loading));
+  //   try {
+  //     final employeeModel = await RemoteProvider().getAllEmployeeNames(
+  //       companyName: state.companyName,
+  //     );
 
-//   try {
-//     final employeeModel = await RemoteProvider().getAllEmployeeNames(
-//       companyName: state.companyName,
-//     );
+  //     if (employeeModel.isNotEmpty) {
+  //       // final List<EmployeeModel> employeeList =
+  //       //     List<EmployeeModel>.from(employeeModel.data!);
 
-//     if (employeeModel.data != null && employeeModel.data!.isNotEmpty) {
-//       emit(state.copyWith(
-//         submission: Submission.success,
-//         employeeNamesList: employeeModel.data ?? [],
-//       ));
-//     } else {
-//       emit(state.copyWith(submission: Submission.error));
-//     }
-//   } catch (e) {
-//     emit(state.copyWith(submission: Submission.error));
-//   }
-// }
+  //       emit(state.copyWith(
+  //         submission: Submission.success,
+  //         employeeNamesList: employeeModel,
+  //       ));
+  //     } else {
+  //       emit(state.copyWith(
+  //         submission: Submission.noDataFound,
+  //         employeeNamesList: [],
+  //       ));
+  //     }
+  //   } catch (e) {
+  //     emit(state.copyWith(
+  //       submission: Submission.error,
+  //       employeeNamesList: [],
+  //     ));
+  //   }
+  // }
 
   /// Add Company Handle
+
   _onAddCompanyEvent(AddCompanyEvent event, Emitter<HomeState> emit) async {
     emit(state.copyWith(submission: Submission.loading));
     await RemoteProvider()
@@ -169,6 +210,19 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     });
   }
 
+////////////////////////////////////////////
+  ///
+  _onGetPersonByName(GetPersonByName event, Emitter<HomeState> emit) async {
+    // await RemoteProvider()
+    //     .getPersonByName(
+    //         companyName: state.companyName, personName: state.personName)
+    //     .then((value) {
+    emit(state.copyWith(
+        companyName: event.companyName, submission: Submission.hasData));
+    // });
+  }
+
+//////////////////////////////////////////
   /// Add GetPersonByName Handle
   _onGetPersonByNameEvent(
       GetPersonByNameEvent event, Emitter<HomeState> emit) async {
@@ -183,9 +237,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       //   add(const ApplyModelEvent());
       // }
       if (value != EmployeeModel()) {
-        emit(const HomeState().copyWith(submission: Submission.success));
+        // final updatedList = state.employeeNamesList
+        //     .where((employee) => employee.name != event.personName)
+        //     .toList();
+        // emit(const HomeState().copyWith(
+        //   submission: Submission.success,
+        //   employeeNamesList: updatedList,
+        // ));
       } else {
-        emit(state.copyWith(submission: Submission.error));
+        emit(state.copyWith(
+          submission: Submission.error,
+        ));
       }
     });
   }
@@ -221,12 +283,23 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       personName: state.personName,
     )
         .then((value) {
-      // if (state.companyName.isNotEmpty) {
-      //   add(const ApplyModelEvent());
-      // }
+      /// this to update the state once i deleted a person
       if (value != EmployeeModel()) {
-        emit(const HomeState().copyWith(submission: Submission.success));
-      } else {
+        // Remove the deleted employee from the state
+        final updatedList = state.employeeNamesList
+            .where((employee) => employee.name != event.personName)
+            .toList();
+        emit(state.copyWith(
+          submission: Submission.success,
+          employeeNamesList: updatedList,
+        ));
+      }
+
+      // if (value != EmployeeModel()) {
+      //   emit(const HomeState().copyWith(submission: Submission.success));
+      // }
+
+      else {
         emit(state.copyWith(submission: Submission.error));
       }
     });

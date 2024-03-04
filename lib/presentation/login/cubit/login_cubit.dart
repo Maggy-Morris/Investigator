@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:Investigator/presentation/login/widgets/password.dart';
 
-
 import '../../../authentication/authentication_repository.dart';
 import '../widgets/email.dart';
 
@@ -17,7 +16,6 @@ class LoginCubit extends Cubit<LoginState> {
   void emailChanged(String value) {
     final email = Email.dirty(value);
     emit(
-
       state.copyWith(
         email: email,
         status: Formz.validate([email, state.password]),

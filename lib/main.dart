@@ -136,7 +136,7 @@ class AppView extends StatelessWidget {
       //       cameraName: route.queryParameters["name"] ?? "",
       //     )),
       // '/search': (route) => const NoAnimationPage(child: AddCameraScreen()),
-      // '/Investigator': (route) =>
+      // '/investigator': (route) =>
       //     const NoAnimationPage(child: ApplyModelScreen()),
     },
   );
@@ -209,10 +209,12 @@ RouteMap _buildRouteMap(BuildContext context) {
 // import 'package:routemaster/routemaster.dart';
 
 // import 'presentation/add_camera/screens/add_camera_screen.dart';
-// import 'presentation/all_cameras/screens/all_cameras.dart';
-// import 'presentation/all_cameras/screens/camera_details.dart';
-// import 'presentation/apply_model/screens/apply_model.dart';
+
+// import 'presentation/all_employees/screens/all_employees.dart';
+// import 'presentation/all_employees/screens/camera_details.dart';
+// import 'presentation/choose_your_company/choose_your_company_screen.dart';
 // import 'presentation/dashboard/screens/dashboard_screen.dart';
+// import 'presentation/search/screens/search_screen.dart';
 
 // void main() async {
 //   WidgetsFlutterBinding.ensureInitialized();
@@ -327,17 +329,29 @@ RouteMap _buildRouteMap(BuildContext context) {
 //     // onUnknownRoute: (path) {
 //     //   return const Redirect("/");
 //     // },
+
+//     //  '/': (route) => const NoAnimationPage(child: ChooseYourCompany()),
+//     // '/home': (route) => const NoAnimationPage(child: DashboardScreen()),
+//     // '/allEmployees': (route) =>
+//     //     const NoAnimationPage(child: AllCamerasScreen()),
+//     // '/cameraDetails': (route) => NoAnimationPage(
+//     //         child: CameraDetails(
+//     //       cameraName: route.queryParameters["name"] ?? "",
+//     //     )),
+//     // '/investigator': (route) => const NoAnimationPage(child: AddCameraScreen()),
+//     // '/search': (route) => const NoAnimationPage(child: Search()),
 //     routes: {
-//       '/': (route) => const NoAnimationPage(child: DashboardScreen()),
+//       '/': (route) => const NoAnimationPage(child: ChooseYourCompany()),
+//       // '/home': (route) => const NoAnimationPage(child: DashboardScreen()),
 //       '/allEmployees': (route) =>
-//           const NoAnimationPage(child: AllCamerasScreen()),
+//           const NoAnimationPage(child: AllEmployeesScreen()),
 //       '/cameraDetails': (route) => NoAnimationPage(
 //               child: CameraDetails(
 //             cameraName: route.queryParameters["name"] ?? "",
 //           )),
-//       '/search': (route) => const NoAnimationPage(child: AddCameraScreen()),
-//       '/Investigator': (route) =>
-//           const NoAnimationPage(child: ApplyModelScreen()),
+//       '/investigator': (route) =>
+//           const NoAnimationPage(child: AddCameraScreen()),
+//       '/search': (route) => const NoAnimationPage(child: Search()),
 //     },
 //   );
 // }

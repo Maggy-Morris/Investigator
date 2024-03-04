@@ -1,15 +1,19 @@
+import 'package:Investigator/presentation/signup/screens/signup_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:Investigator/core/resources/app_colors.dart';
 import '../../../authentication/authentication_repository.dart';
-import '../cubit/login_cubit.dart';
-import 'login_form.dart';
+import '../../../core/resources/app_colors.dart';
+import '../cubit/signup_cubit.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
-
-  static Page<void> page() => const MaterialPage<void>(child: LoginPage());
+class SignUpPage extends StatelessWidget {
+   static Route<dynamic> route() {
+    return MaterialPageRoute<dynamic>(
+      builder: (_) => SignUpPage(),
+    );
+  }
+  
+  const SignUpPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +30,12 @@ class LoginPage extends StatelessWidget {
             // Colors.blueGrey.withOpacity(0.5),
             // Colors.blueGrey.withOpacity(0.6),
             // Colors.white24,
-          ]
-          )
-          ),
+          ])),
       child: BlocProvider(
-        create: (_) => LoginCubit(context.read<AuthenticationRepository>()),
-        child: const LoginForm(),
+        create: (_) => SignupCubit(context.read<AuthenticationRepository>()),
+        child: const SignUpForm(),
       ),
-    );
+    );;
   }
 }
+

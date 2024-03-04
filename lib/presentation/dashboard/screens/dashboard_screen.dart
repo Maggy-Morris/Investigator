@@ -13,6 +13,12 @@ import 'package:Investigator/presentation/add_camera/bloc/home_bloc.dart';
 import 'package:Investigator/presentation/standard_layout/screens/standard_layout.dart';
 
 class DashboardScreen extends StatefulWidget {
+  static Route<dynamic> route() {
+    return MaterialPageRoute<dynamic>(
+      builder: (_) => DashboardScreen(),
+    );
+  }
+
   const DashboardScreen({Key? key}) : super(key: key);
 
   @override
@@ -26,7 +32,6 @@ class _AddCameraScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return StandardLayoutScreen(
-
       body: BlocProvider(
         create: (context) => HomeBloc()..add(const DataEvent()),
         child: BlocListener<HomeBloc, HomeState>(
@@ -97,7 +102,6 @@ class _AddCameraScreenState extends State<DashboardScreen> {
 
                                           HomeBloc.get(context)
                                               .add(const AddCompanyEvent());
-                                          
                                         },
                                         style: ElevatedButton.styleFrom(
                                           shape: RoundedRectangleBorder(

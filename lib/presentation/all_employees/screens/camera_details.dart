@@ -6,9 +6,10 @@ import 'package:Investigator/core/resources/app_colors.dart';
 import 'package:Investigator/core/utils/responsive.dart';
 import 'package:Investigator/core/widgets/badge_builder.dart';
 import 'package:Investigator/core/widgets/sizedbox.dart';
-import 'package:Investigator/presentation/all_cameras/bloc/camera_bloc.dart';
 import 'package:Investigator/presentation/standard_layout/screens/standard_layout.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+
+import '../bloc/camera_bloc.dart';
 
 class CameraDetails extends StatefulWidget {
   final String cameraName;

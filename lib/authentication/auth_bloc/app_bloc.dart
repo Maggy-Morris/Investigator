@@ -49,7 +49,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
             : const AppState.unauthenticated(),
       );
     }
-
+ 
   }
 
   void _onLogoutRequested(AppLogoutRequested event, Emitter<AppState> emit) {

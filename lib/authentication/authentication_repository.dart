@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:Investigator/core/remote_provider/remote_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -129,24 +130,33 @@ class AuthenticationRepository {
   Future<void> SignUpWithEmailAndPassword({
     required String email,
     required String password,
+
   }) async {
     try {
-      await RemoteProvider().SignUpRemoteCredentials(email, password).then(
-        (value) {
-          if (value?.authentication != null) {
-            sharedUser?.setString(userCacheKey, jsonEncode(value));
-            sharedUser?.setString(usernameCacheKey, email);
-            sharedUser?.setString(passwordCacheKey, password);
-            sharedUser?.setStringList(routesCacheKey, ["/"]);
+      final modelAuth =
+          await RemoteProvider().SignUpRemoteCredentials(email, password);
 
-            controller.add(value!);
-          } else {
-            controller.add(UserData.empty);
-            logOut();
-            return;
-          }
-        },
-      );
+      print("kkkkkkkkkkkkkkkkkkkkkk" + modelAuth.toString());
+
+      //  .then(
+
+      // (value) {
+      //   print("kkkkkkkkkkkkkkkkkkkkkk" + value.toString());
+      // if (value?.authentication != null) {
+      //   sharedUser?.setString(userCacheKey, jsonEncode(value));
+      //   sharedUser?.setString(usernameCacheKey, email);
+      //   sharedUser?.setString(passwordCacheKey, password);
+      //   sharedUser?.setStringList(routesCacheKey, ["/"]);
+
+      //   controller.add(value!);
+      // }
+      // else {
+      // controller.add(UserData.empty);
+      // logOut();
+      // return;
+      // }
+      // },
+      // );
     } catch (e) {
       if (e.toString().isNotEmpty) {
         throw SignUpWithEmailAndPasswordFailureFirebase.fromCode(e.toString());

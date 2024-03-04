@@ -4,7 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 part 'standard_layout_state.dart';
 
 class StandardLayoutCubit extends Cubit<StandardLayoutState> {
-  static StandardLayoutCubit get(context) => BlocProvider.of<StandardLayoutCubit>(context);
+  static StandardLayoutCubit get(context) =>
+      BlocProvider.of<StandardLayoutCubit>(context);
   StandardLayoutCubit() : super(StandardLayoutState());
 
   onEditExtend(bool extend) {
@@ -19,5 +20,4 @@ class StandardLayoutCubit extends Cubit<StandardLayoutState> {
       selectedPage: navigationPage,
     ));
   }
-
 }
