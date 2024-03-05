@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:Investigator/authentication/call_back_authentication.dart';
 import 'package:Investigator/core/models/add_camera_model.dart';
@@ -40,10 +37,6 @@ class RemoteProvider {
           debugPrint(loginCallBack.toString());
         }
         return callBackDetailID;
-        // return AddNewMainPersonalDataInitial.fromJson(callBackRemote.data ?? {});
-        // } else {
-        //   return null;
-        // }
       } else {
         return null;
       }
@@ -98,7 +91,6 @@ class RemoteProvider {
         CallBackModel callBackList = CallBackModel.fromJson(callBack);
 
         return callBackList;
-        
       } else {
         return CallBackModel();
       }
@@ -107,7 +99,7 @@ class RemoteProvider {
     }
   }
 
-  /// Add New Person
+  /// Add New Person with image as stream of bytes
   Future<CallBackModel> addNewPersonToACompany({
     required String companyName,
     required String personName,
@@ -116,13 +108,12 @@ class RemoteProvider {
   }) async {
     try {
       Map<String, dynamic> callBack = await RemoteDataSource().post(
-        endPoint: "/add_a_new_person2",
+        endPoint: "/add_a_new_person",
         body: {
-          "collection_name": "maggy",
-          "target_name": "mm",
+          "collection_name": companyName,
+          "target_name": personName,
           "image": image,
         },
-        // files: image,
       );
 
       //Change this "Collection Created Successfully!"

@@ -7,7 +7,7 @@ import 'package:Investigator/core/resources/app_fonts.dart';
 import 'package:Investigator/core/utils/responsive.dart';
 import 'package:Investigator/core/widgets/sizedbox.dart';
 import 'package:Investigator/presentation/login/widgets/custom_text.dart';
-import 'package:svg_flutter/svg.dart';
+// import 'package:svg_flutter/svg.dart';
 
 import '../../../core/resources/app_colors.dart';
 import '../cubit/signup_cubit.dart';
@@ -37,7 +37,7 @@ class SignUpForm extends StatelessWidget {
                 alignment: Alignment.center,
                 children: [
                   Image.asset(
-                    "assets/images/Auth-BG.png",
+                    "assets/images/bbb.jpeg",
                     height: MediaQuery.of(context).size.height,
                     width: MediaQuery.of(context).size.width,
                     fit: BoxFit.cover,
@@ -59,15 +59,15 @@ class SignUpForm extends StatelessWidget {
                                     ? const EdgeInsets.all(32)
                                     : const EdgeInsets.all(40),
                                 decoration: BoxDecoration(
-                                  color: AppColors.white,
+                                  color: AppColors.blueB,
                                   border: Border.all(
-                                    color: AppColors.white,
+                                    color: AppColors.blueB,
                                   ),
                                   borderRadius: BorderRadius.circular(24),
                                 ),
                                 child: Column(
                                   children: [
-                                    _logoView(),
+                                    SizedBox(height: 80, child: _logoView()),
                                     FxBox.h16,
                                     _bottomView(),
                                   ],
@@ -107,7 +107,10 @@ class SignUpForm extends StatelessWidget {
 }
 
 Widget _logoView() {
-  return SvgPicture.asset("assets/images/Admin_Kit.svg");
+  return Image.asset(
+    "assets/images/ico.png",
+  );
+  // SvgPicture.asset("assets/images/Admin_Kit.svg");
 }
 
 Widget _bottomView() {

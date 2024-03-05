@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:Investigator/core/resources/app_colors.dart';
@@ -24,6 +25,7 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   TextEditingController companyNameController = TextEditingController();
   TextEditingController employeeNameController = TextEditingController();
+  Widget? _image;
 
   @override
   Widget build(BuildContext context) {
@@ -55,54 +57,165 @@ class _SearchState extends State<Search> {
                     padding: const EdgeInsets.all(20),
                     child: Column(
                       children: [
-                        Text(
-                          "Search For Company".tr(),
-                          style: const TextStyle(
-                              fontSize: 17, fontWeight: FontWeight.w600),
-                        ),
+                        // Text(
+                        //   "Search For Your Employee".tr(),
+                        //   style: const TextStyle(
+                        //       fontSize: 17, fontWeight: FontWeight.w600),
+                        // ),
                         FxBox.h24,
                         if (Responsive.isWeb(context))
                           Column(
                             children: [
-                              Row(
+                              const Row(
                                 children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        _commonText("Company Name".tr()),
-                                        FxBox.h4,
-                                        _listBox(
-                                            controller: companyNameController,
-                                            hintText: "Search Company".tr(),
-                                            onChanged: (value) {
-                                              HomeBloc.get(context).add(
-                                                GetEmployeeNames(
-                                                  companyName: value,
-                                                ),
-                                              );
-                                            }),
-                                      ],
-                                    ),
-                                  ),
+                                  // Expanded(
+                                  //   child: Column(
+                                  //     crossAxisAlignment:
+                                  //         CrossAxisAlignment.start,
+                                  //     children: [
+                                  //       _commonText("Company Name".tr()),
+                                  //       FxBox.h4,
+                                  //       _listBox(
+                                  //           controller: companyNameController,
+                                  //           hintText: "Search Company".tr(),
+                                  //           onChanged: (value) {
+                                  //             HomeBloc.get(context).add(
+                                  //               GetEmployeeNames(
+                                  //                 companyName: value,
+                                  //               ),
+                                  //             );
+                                  //           }),
+                                  //     ],
+                                  //   ),
+                                  // ),
                                 ],
                               ),
-                              FxBox.h60,
+                              // FxBox.h60,
+                              // (state.submission == Submission.loading)
+                              //     ? loadingIndicator()
+                              //     : Center(
+                              //         child: ElevatedButton.icon(
+                              //           onPressed: () {
+                              //             if (state.companyName.isEmpty) {
+                              //               FxToast.showErrorToast(
+                              //                   context: context,
+                              //                   message: "Add Company Name");
+                              //               return;
+                              //             }
+
+                              //             HomeBloc.get(context).add(
+                              //                 const GetEmployeeNamesEvent());
+                              //           },
+                              //           style: ElevatedButton.styleFrom(
+                              //             shape: RoundedRectangleBorder(
+                              //                 borderRadius:
+                              //                     BorderRadius.circular(10)),
+                              //             backgroundColor: AppColors.green,
+                              //           ),
+                              //           label: Text(
+                              //             "confirm".tr(),
+                              //             style: const TextStyle(
+                              //                 color: AppColors.white),
+                              //           ),
+                              //           icon: const Icon(
+                              //             Icons.check_circle_outline,
+                              //             color: AppColors.white,
+                              //           ),
+                              //         ),
+                              //       ),
+
+                              FxBox.h24,
+
+                              // Here to search for an Employee in the database
+                              Card(
+                                elevation: 4,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Stack(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () async {
+                                          FilePickerResult? result =
+                                              await FilePicker.platform
+                                                  .pickFiles(
+                                            type: FileType.image,
+                                          );
+                                          if (result != null &&
+                                              result.files.isNotEmpty) {
+                                            // Use the selected image file
+                                            final imageFile =
+                                                result.files.first;
+                                            // Load the image file as an image
+                                            final image =
+                                                imageFile.bytes != null
+                                                    ? Image.memory(
+                                                        imageFile.bytes!,
+                                                        fit: BoxFit.cover,
+                                                      )
+                                                    : loadingIndicator(); //
+
+                                            // Replace the image with the selected image
+                                            setState(() {
+                                              _image = image;
+                                            });
+                                          }
+                                        },
+                                        child: _image ??
+                                            Image.network(
+                                              'https://images.pexels.com/photos/414171/pexels-photo-414171.jpeg',
+                                              width: double.infinity,
+                                              // height: 200,
+                                              fit: BoxFit.cover,
+                                            ),
+                                      ),
+                                      Positioned(
+                                        bottom: 0,
+                                        left: 0,
+                                        right: 0,
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 8, horizontal: 16),
+                                          decoration: BoxDecoration(
+                                            borderRadius: const BorderRadius.only(
+                                              bottomLeft: Radius.circular(12),
+                                              bottomRight: const Radius.circular(12),
+                                            ),
+                                            color:
+                                                Colors.black.withOpacity(0.6),
+                                          ),
+                                          child: const Text(
+                                            '',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+//Confirm Button to send the image
+                              FxBox.h24,
                               (state.submission == Submission.loading)
                                   ? loadingIndicator()
                                   : Center(
                                       child: ElevatedButton.icon(
                                         onPressed: () {
-                                          if (state.companyName.isEmpty) {
+                                          if (_image == null) {
                                             FxToast.showErrorToast(
                                                 context: context,
-                                                message: "Add Company Name");
+                                                message: "pick your picture ");
                                             return;
                                           }
 
-                                          HomeBloc.get(context).add(
-                                              const GetEmployeeNamesEvent());
+                                          // HomeBloc.get(context).add(
+                                          //     const GetEmployeeNamesEvent());
                                         },
                                         style: ElevatedButton.styleFrom(
                                           shape: RoundedRectangleBorder(
@@ -120,7 +233,7 @@ class _SearchState extends State<Search> {
                                           color: AppColors.white,
                                         ),
                                       ),
-                                    ),
+                                    ), /////////////////////////////////////////////
                               // search for employees
                               // Row(
                               //   children: [
@@ -521,7 +634,7 @@ class _SearchState extends State<Search> {
       decoration: BoxDecoration(
           color:
               // context.isDarkMode ?
-              Color.fromARGB(255, 143, 188, 211),
+              const Color.fromARGB(255, 143, 188, 211),
           // : ColorConst.white,
           borderRadius: BorderRadius.circular(12.0)),
       child: Column(
@@ -549,7 +662,7 @@ class _SearchState extends State<Search> {
                 ),
               ),
               PopupMenuButton<String>(
-                icon: Icon(Icons.more_horiz, color: Colors.black),
+                icon: const Icon(Icons.more_horiz, color: Colors.black),
                 onSelected: (String choice) {
                   if (choice == 'Edit') {
                     // Handle edit action
@@ -627,11 +740,11 @@ class _SearchState extends State<Search> {
           ),
           FxBox.h24,
           _iconWithText(
-              icon: Icon(Icons.badge_outlined), text: 'Peterdraw Studio'),
+              icon: const Icon(Icons.badge_outlined), text: 'Peterdraw Studio'),
           FxBox.h28,
-          _iconWithText(icon: Icon(Icons.contact_phone), text: '+123 456 789'),
+          _iconWithText(icon: const Icon(Icons.contact_phone), text: '+123 456 789'),
           FxBox.h28,
-          _iconWithText(icon: Icon(Icons.email), text: 'email@mail.com'),
+          _iconWithText(icon: const Icon(Icons.email), text: 'email@mail.com'),
           // FxBox.h24,
         ],
       ),

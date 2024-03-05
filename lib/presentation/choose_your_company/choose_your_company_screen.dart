@@ -40,240 +40,259 @@ class ChooseYourCompany extends StatelessWidget {
           builder: (context, state) {
             return SingleChildScrollView(
               // physics: NeverScrollableScrollPhysics(),
-              child: Card(
-                margin:
-                    const EdgeInsets.symmetric(vertical: 150, horizontal: 400),
-                color: AppColors.white,
-                elevation: 2,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15)),
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      Text(
-                        "Enter Your Company Name".tr(),
-                        style: const TextStyle(
-                            fontSize: 17, fontWeight: FontWeight.w600),
-                      ),
-                      FxBox.h24,
-                      if (Responsive.isWeb(context))
-                        Column(
-                          children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      // _commonText("Company Name".tr()),
-                                      FxBox.h4,
 
-                                      _listBox(
-                                          controller: companyNameController,
-                                          hintText: "Company Name".tr(),
-                                          onChanged: (value) {
-                                            saveCompanyName(value);
-                                            print(
-                                                "pppppppppppppppppppppppppppppppppp" +
-                                                    value);
-                                            HomeBloc.get(context).add(
-                                                AddCompanyName(
-                                                    companyName: value));
+              // Stack(
+              //   alignment: Alignment.center,
+              //   children: [
+              //     Image.asset(
+              //       "assets/images/bbb.jpeg",
+              //       height: MediaQuery.of(context).size.height,
+              //       width: MediaQuery.of(context).size.width,
+              //       fit: BoxFit.cover,
+              //     ),
+              child: Stack(alignment: Alignment.center, children: [
+                Image.asset(
+                  "assets/images/bbb.jpeg",
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  fit: BoxFit.cover,
+                ),
+                Card(
+                  margin: const EdgeInsets.symmetric(
+                      vertical: 150, horizontal: 400),
+                  color: AppColors.blueB,
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      children: [
+                        Text(
+                          "Enter Your Company Name".tr(),
+                          style: const TextStyle(
+                              fontSize: 17, fontWeight: FontWeight.w600),
+                        ),
+                        FxBox.h24,
+                        if (Responsive.isWeb(context))
+                          Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        // _commonText("Company Name".tr()),
+                                        FxBox.h4,
+
+                                        _listBox(
+                                            controller: companyNameController,
+                                            hintText: "Company Name".tr(),
+                                            onChanged: (value) {
+                                              saveCompanyName(value);
+                                              print(
+                                                  "pppppppppppppppppppppppppppppppppp" +
+                                                      value);
+                                              HomeBloc.get(context).add(
+                                                  AddCompanyName(
+                                                      companyName: value));
+
+                                              // HomeBloc.get(context).add(
+                                              //   GetEmployeeNames(
+                                              //     companyName: value,
+                                              //   ),
+                                              // );
+                                            }),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              FxBox.h60,
+                              (state.submission == Submission.loading)
+                                  ? loadingIndicator()
+                                  : Center(
+                                      child: ElevatedButton.icon(
+                                          onPressed: () {
+                                            if (state.companyName.isEmpty) {
+                                              FxToast.showErrorToast(
+                                                  context: context,
+                                                  message:
+                                                      "Enter Company Name");
+                                              return;
+                                            }
+                                            HomeBloc.get(context)
+                                                .add(const AddCompanyEvent());
 
                                             // HomeBloc.get(context).add(
-                                            //   GetEmployeeNames(
-                                            //     companyName: value,
-                                            //   ),
-                                            // );
-                                          }),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            FxBox.h60,
-                            (state.submission == Submission.loading)
-                                ? loadingIndicator()
-                                : Center(
-                                    child: ElevatedButton.icon(
-                                        onPressed: () {
-                                          if (state.companyName.isEmpty) {
-                                            FxToast.showErrorToast(
-                                                context: context,
-                                                message: "Enter Company Name");
-                                            return;
-                                          }
-                                          HomeBloc.get(context)
-                                              .add(const AddCompanyEvent());
+                                            //     const GetEmployeeNamesEvent());
 
-                                          // HomeBloc.get(context).add(
-                                          //     const GetEmployeeNamesEvent());
+                                            Navigator.of(context).push<void>(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const AllEmployeesScreen(
+                                                        // data: state
+                                                        //     .employeeNamesList
 
-                                          Navigator.of(context).push<void>(
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  AllEmployeesScreen(
-                                                      // data: state
-                                                      //     .employeeNamesList
+                                                        ),
+                                              ),
+                                              // AllEmployeesScreen.route()
+                                            );
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            backgroundColor: AppColors.green,
+                                          ),
+                                          label: Text(
+                                            "confirm".tr(),
+                                            style: const TextStyle(
+                                                color: AppColors.white),
+                                          ),
+                                          icon: const Icon(
+                                            Icons.check_circle_outline,
+                                            color: AppColors.white,
+                                          )),
+                                    ),
+                              // BlocBuilder<HomeBloc, HomeState>(
+                              //   builder: (context, state) {
+                              //     return
+                              // Padding(
+                              //       padding: const EdgeInsets.all(10.0),
+                              //       child: SingleChildScrollView(
+                              //         child: Column(
+                              //           children: [
+                              //             SizedBox(
+                              //               width:
+                              //                   MediaQuery.of(context).size.width,
+                              //               child: GridView.builder(
+                              //                 shrinkWrap: true,
+                              //                 physics:
+                              //                     const NeverScrollableScrollPhysics(),
+                              //                 itemCount:
+                              //                     state.employeeNamesList.length,
+                              //                 gridDelegate: Responsive.isMobile(
+                              //                         context)
+                              //                     ? const SliverGridDelegateWithFixedCrossAxisCount(
+                              //                         crossAxisCount: 1,
+                              //                         crossAxisSpacing: 45,
+                              //                         mainAxisSpacing: 45,
+                              //                         mainAxisExtent: 350,
+                              //                       )
+                              //                     : Responsive.isTablet(context)
+                              //                         ? const SliverGridDelegateWithFixedCrossAxisCount(
+                              //                             crossAxisCount: 2,
+                              //                             crossAxisSpacing: 45,
+                              //                             mainAxisSpacing: 45,
+                              //                             mainAxisExtent: 350,
+                              //                           )
+                              //                         : MediaQuery.of(context)
+                              //                                     .size
+                              //                                     .width <
+                              //                                 1500
+                              //                             ? SliverGridDelegateWithMaxCrossAxisExtent(
+                              //                                 maxCrossAxisExtent:
+                              //                                     MediaQuery.of(
+                              //                                                 context)
+                              //                                             .size
+                              //                                             .width *
+                              //                                         0.24,
+                              //                                 crossAxisSpacing:
+                              //                                     45,
+                              //                                 mainAxisSpacing: 45,
+                              //                                 mainAxisExtent: 350,
+                              //                               )
+                              //                             : SliverGridDelegateWithMaxCrossAxisExtent(
+                              //                                 maxCrossAxisExtent:
+                              //                                     MediaQuery.of(
+                              //                                                 context)
+                              //                                             .size
+                              //                                             .width *
+                              //                                         0.24,
+                              //                                 crossAxisSpacing:
+                              //                                     45,
+                              //                                 mainAxisSpacing: 45,
+                              //                                 mainAxisExtent: 350,
+                              //                               ),
+                              //                 itemBuilder: (context, index) {
+                              //                   final employee = state
+                              //                       .employeeNamesList[index];
 
-                                                      ),
-                                            ),
-                                            // AllEmployeesScreen.route()
-                                          );
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          backgroundColor: AppColors.green,
-                                        ),
-                                        label: Text(
-                                          "confirm".tr(),
-                                          style: const TextStyle(
-                                              color: AppColors.white),
-                                        ),
-                                        icon: const Icon(
-                                          Icons.check_circle_outline,
-                                          color: AppColors.white,
-                                        )),
-                                  ),
-                            // BlocBuilder<HomeBloc, HomeState>(
-                            //   builder: (context, state) {
-                            //     return
-                            // Padding(
-                            //       padding: const EdgeInsets.all(10.0),
-                            //       child: SingleChildScrollView(
-                            //         child: Column(
-                            //           children: [
-                            //             SizedBox(
-                            //               width:
-                            //                   MediaQuery.of(context).size.width,
-                            //               child: GridView.builder(
-                            //                 shrinkWrap: true,
-                            //                 physics:
-                            //                     const NeverScrollableScrollPhysics(),
-                            //                 itemCount:
-                            //                     state.employeeNamesList.length,
-                            //                 gridDelegate: Responsive.isMobile(
-                            //                         context)
-                            //                     ? const SliverGridDelegateWithFixedCrossAxisCount(
-                            //                         crossAxisCount: 1,
-                            //                         crossAxisSpacing: 45,
-                            //                         mainAxisSpacing: 45,
-                            //                         mainAxisExtent: 350,
-                            //                       )
-                            //                     : Responsive.isTablet(context)
-                            //                         ? const SliverGridDelegateWithFixedCrossAxisCount(
-                            //                             crossAxisCount: 2,
-                            //                             crossAxisSpacing: 45,
-                            //                             mainAxisSpacing: 45,
-                            //                             mainAxisExtent: 350,
-                            //                           )
-                            //                         : MediaQuery.of(context)
-                            //                                     .size
-                            //                                     .width <
-                            //                                 1500
-                            //                             ? SliverGridDelegateWithMaxCrossAxisExtent(
-                            //                                 maxCrossAxisExtent:
-                            //                                     MediaQuery.of(
-                            //                                                 context)
-                            //                                             .size
-                            //                                             .width *
-                            //                                         0.24,
-                            //                                 crossAxisSpacing:
-                            //                                     45,
-                            //                                 mainAxisSpacing: 45,
-                            //                                 mainAxisExtent: 350,
-                            //                               )
-                            //                             : SliverGridDelegateWithMaxCrossAxisExtent(
-                            //                                 maxCrossAxisExtent:
-                            //                                     MediaQuery.of(
-                            //                                                 context)
-                            //                                             .size
-                            //                                             .width *
-                            //                                         0.24,
-                            //                                 crossAxisSpacing:
-                            //                                     45,
-                            //                                 mainAxisSpacing: 45,
-                            //                                 mainAxisExtent: 350,
-                            //                               ),
-                            //                 itemBuilder: (context, index) {
-                            //                   final employee = state
-                            //                       .employeeNamesList[index];
-
-                            //                   return _contactUi(
-                            //                     name: employee.name ?? '',
-                            //                     profession: employee.sId ?? '',
-                            //                   );
-                            //                 },
-                            //               ),
-                            //             ),
-                            //           ],
-                            //         ),
-                            //       ),
-                            //     );
-                            //   },
-                            // ),
-                          ],
-                        ),
-                      if (!Responsive.isWeb(context))
-                        Column(
-                          children: [
-                            // _commonText("Company Name".tr()),
-                            FxBox.h4,
-                            _listBox(
-                                hintText: "Company Name".tr(),
-                                controller: companyNameController,
-                                onChanged: (value) {
-                                  HomeBloc.get(context)
-                                      .add(AddCompanyName(companyName: value));
-                                  // HomeBloc.get(context).add(
-                                  //   GetEmployeeNames(companyName: value),
-                                  // );
-                                }),
-                            FxBox.h60,
-                            (state.submission == Submission.loading)
-                                ? loadingIndicator()
-                                : Center(
-                                    child: ElevatedButton.icon(
-                                        onPressed: () {
-                                          HomeBloc.get(context)
-                                              .add(const AddCompanyEvent());
-                                          // HomeBloc.get(context).add(
-                                          //     const GetEmployeeNamesEvent());
-                                          Navigator.of(context).push<void>(
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  AllEmployeesScreen(),
-                                            ),
-                                          );
-                                          // Navigator.pushNamedAndRemoveUntil(
-                                          //     context, "/home", (route) => false);
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          backgroundColor: AppColors.green,
-                                        ),
-                                        label: Text(
-                                          "confirm".tr(),
-                                          style: const TextStyle(
-                                              color: AppColors.white),
-                                        ),
-                                        icon: const Icon(
-                                          Icons.check_circle_outline,
-                                          color: AppColors.white,
-                                        )),
-                                  ),
-                          ],
-                        ),
-                    ],
+                              //                   return _contactUi(
+                              //                     name: employee.name ?? '',
+                              //                     profession: employee.sId ?? '',
+                              //                   );
+                              //                 },
+                              //               ),
+                              //             ),
+                              //           ],
+                              //         ),
+                              //       ),
+                              //     );
+                              //   },
+                              // ),
+                            ],
+                          ),
+                        if (!Responsive.isWeb(context))
+                          Column(
+                            children: [
+                              // _commonText("Company Name".tr()),
+                              FxBox.h4,
+                              _listBox(
+                                  hintText: "Company Name".tr(),
+                                  controller: companyNameController,
+                                  onChanged: (value) {
+                                    HomeBloc.get(context).add(
+                                        AddCompanyName(companyName: value));
+                                    // HomeBloc.get(context).add(
+                                    //   GetEmployeeNames(companyName: value),
+                                    // );
+                                  }),
+                              FxBox.h60,
+                              (state.submission == Submission.loading)
+                                  ? loadingIndicator()
+                                  : Center(
+                                      child: ElevatedButton.icon(
+                                          onPressed: () {
+                                            HomeBloc.get(context)
+                                                .add(const AddCompanyEvent());
+                                            // HomeBloc.get(context).add(
+                                            //     const GetEmployeeNamesEvent());
+                                            Navigator.of(context).push<void>(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const AllEmployeesScreen(),
+                                              ),
+                                            );
+                                            // Navigator.pushNamedAndRemoveUntil(
+                                            //     context, "/home", (route) => false);
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            backgroundColor: AppColors.green,
+                                          ),
+                                          label: Text(
+                                            "confirm".tr(),
+                                            style: const TextStyle(
+                                                color: AppColors.white),
+                                          ),
+                                          icon: const Icon(
+                                            Icons.check_circle_outline,
+                                            color: AppColors.white,
+                                          )),
+                                    ),
+                            ],
+                          ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
+              ]),
             );
           },
         ),

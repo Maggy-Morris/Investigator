@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 
+import 'package:Investigator/core/loader/loading_indicator.dart';
 import 'package:Investigator/core/models/employee_model.dart';
 import 'package:Investigator/core/resources/app_colors.dart';
 import 'package:Investigator/presentation/all_employees/screens/text.dart';
@@ -9,22 +9,15 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:Investigator/core/utils/responsive.dart';
-import 'package:Investigator/core/widgets/badge_builder.dart';
 import 'package:Investigator/core/widgets/sizedbox.dart';
 import 'package:Investigator/presentation/standard_layout/screens/standard_layout.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:routemaster/routemaster.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../add_camera/bloc/home_bloc.dart';
-import '../bloc/camera_bloc.dart';
 
 class AllEmployeesScreen extends StatefulWidget {
-  // final List<Data> data;
-
   static Route<dynamic> route(List<Data> data) {
     return MaterialPageRoute<dynamic>(
-      builder: (_) => AllEmployeesScreen(
+      builder: (_) => const AllEmployeesScreen(
           // data: data
           ),
     );
@@ -42,11 +35,26 @@ class AllEmployeesScreen extends StatefulWidget {
 class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
   PlatformFile? selectedImage;
   TextEditingController employeeNameController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   Future<String> getCompanyName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('companyName') ??
-        ''; // If 'companyName' is not found, return an empty string
+
+    return prefs.getString('companyName') ?? '';
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      final String? companyName = prefs.getString('companyName');
+      // Trigger the event to fetch employee names once the screen is built
+      context.read<HomeBloc>().add(GetEmployeeNames(companyName: companyName!));
+
+      context.read<HomeBloc>().add(const GetEmployeeNamesEvent());
+    });
   }
 
   @override
@@ -56,257 +64,537 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
         create: (context) => HomeBloc()..add(const DataEvent()),
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
-            return Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    FxBox.h24,
-                    SizedBox(
-                      width: double.infinity,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          //displaying the CompanyName across the app
-                          FutureBuilder<String>(
-                            future: getCompanyName(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                // Return a placeholder or loading indicator while waiting for the result
-                                return CircularProgressIndicator(); // Example placeholder
-                              } else {
-                                // Once the future is resolved, display the result
-                                return Text(
-                                  "All Employees ${snapshot.data}".tr(),
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                );
-                              }
-                            },
-                          ),
-                          // Text("All Employees ${getCompanyName()}".tr(),
-                          //     style: const TextStyle(
-                          //         fontSize: 20, fontWeight: FontWeight.bold)),
-
-                          // Add Employee Button
-
-                          BlocBuilder<HomeBloc, HomeState>(
-                              builder: (context, state) {
-                            return MaterialButton(
-                              height: 50,
-                              minWidth: 210,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25.0),
-                              ),
-                              color: Color.fromARGB(255, 143, 188, 211),
-                              onPressed: () {
-                                // Show dialog to fill in employee data
-
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text("Add Employee"),
-                                      content: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          TextFormField(
-                                            controller: employeeNameController,
-                                            decoration: InputDecoration(
-                                                labelText: 'Name'),
-                                            onChanged: (value) {
-                                              // HomeBloc.get(context).add(
-                                              // AddNewEmployee(
-                                              //   companyName: 'maggy',
-                                              //   personName: "mm",
-                                              //   files: selectedImage,
-                                              // ),
-                                              // );
-                                            },
-                                          ),
-                                          FxBox.h24,
-                                          if (selectedImage != null &&
-                                              selectedImage!.bytes != null)
-                                            SizedBox(
-                                              height: 100,
-                                              child: Image.memory(
-                                                selectedImage!.bytes!,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          FxBox.h24,
-
-                                          ///pick and encode the image
-
-                                          ElevatedButton(
-                                            onPressed: () async {
-                                              try {
-                                                FilePickerResult? result =
-                                                    await FilePicker.platform
-                                                        .pickFiles(
-                                                  type: FileType.image,
-                                                );
-                                                if (result != null &&
-                                                    result.files.isNotEmpty) {
-                                                  selectedImage =
-                                                      result.files.first;
-                                                  List<int> imageBytes =
-                                                      selectedImage!.bytes!;
-                                                  String base64Image =
-                                                      base64Encode(imageBytes);
-                                                  HomeBloc.get(context).add(
-                                                    AddNewEmployee(
-                                                      companyName: "maggy",
-                                                      personName: 'mm',
-                                                      image: base64Image,
-                                                      // files: selectedImage,
-                                                    ),
-                                                  );
-                                                }
-                                              } catch (e) {
-                                                print("Error picking file: $e");
-                                              }
-                                            },
-                                            child: Text('Upload Image'),
-                                          ),
-
-                                          // ElevatedButton(
-                                          //   onPressed: () async {
-                                          //     try {
-                                          //       FilePickerResult? result =
-                                          //           await FilePicker.platform
-                                          //               .pickFiles(
-                                          //         type: FileType.image,
-                                          //       );
-                                          //       if (result != null &&
-                                          //           result.files.isNotEmpty) {
-                                          //         selectedImage =
-                                          //             result.files.first;
-
-                                          //         HomeBloc.get(context).add(
-                                          //           AddNewEmployee(
-                                          //             companyName: "maggy",
-                                          //             personName: 'mm',
-                                          //             image: selectedImage!
-                                          //                 .bytes
-                                          //                 .toString(),
-                                          //             files: selectedImage,
-                                          //           ),
-                                          //         );
-                                          //       }
-                                          //     } catch (e) {
-                                          //       print("Error picking file: $e");
-                                          //     }
-                                          //   },
-                                          //   child: Text('Upload Image'),
-                                          // ),
-                                        ],
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context)
-                                                .pop(); // Close the dialog
-                                          },
-                                          child: Text('Cancel'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            HomeBloc.get(context)
-                                                .add(AddNewEmployeeEvent());
-
-                                            // Add logic to save employee data
-                                            // Navigator.of(context)
-                                            //     .pop(); // Close the dialog
-                                          },
-                                          child: Text('Save'),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
-                              child: const Text(
-                                "Add Employee",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                ),
+            return Card(
+              margin: const EdgeInsets.all(20),
+              color: AppColors.white,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15)),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      //displaying the CompanyName across the app
+                      FutureBuilder<String>(
+                        future: getCompanyName(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            // Return a placeholder or loading indicator while waiting for the result
+                            return loadingIndicator(); // Example placeholder
+                          } else {
+                            // Once the future is resolved, display the result
+                            return Text(
+                              "All Employees ${snapshot.data}".tr(),
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
                               ),
                             );
-                          })
-                        ],
+                          }
+                        },
                       ),
-                    ),
-                    FxBox.h24,
 
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: state.employeeNamesList.length,
-                        // widget.data.length,
-                        gridDelegate: Responsive.isMobile(context)
-                            ? const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 1,
-                                crossAxisSpacing: 45,
-                                mainAxisSpacing: 45,
-                                mainAxisExtent: 350,
-                              )
-                            : Responsive.isTablet(context)
-                                ? const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    crossAxisSpacing: 45,
-                                    mainAxisSpacing: 45,
-                                    mainAxisExtent: 350,
-                                  )
-                                : MediaQuery.of(context).size.width < 1500
-                                    ? SliverGridDelegateWithMaxCrossAxisExtent(
-                                        maxCrossAxisExtent:
-                                            MediaQuery.of(context).size.width *
-                                                0.24,
-                                        crossAxisSpacing: 45,
-                                        mainAxisSpacing: 45,
-                                        mainAxisExtent: 350,
-                                      )
-                                    : SliverGridDelegateWithMaxCrossAxisExtent(
-                                        maxCrossAxisExtent:
-                                            MediaQuery.of(context).size.width *
-                                                0.24,
-                                        crossAxisSpacing: 45,
-                                        mainAxisSpacing: 45,
-                                        mainAxisExtent: 350,
+                      FxBox.h24,
+                      SizedBox(
+                        width: double.infinity,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // Add Employee Button
+
+                            Column(
+                              children: [
+                                Form(
+                                  child: SizedBox(
+                                    height: 40,
+                                    width: 300,
+                                    child: TextFormField(
+                                      controller: _searchController,
+                                      decoration: InputDecoration(
+                                        labelText: 'Search For Employee'.tr(),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        suffixIcon: IconButton(
+                                          icon: const Icon(Icons.search),
+                                          onPressed: () async {
+                                            final SharedPreferences prefs =
+                                                await SharedPreferences
+                                                    .getInstance();
+
+                                            final String? companyName =
+                                                prefs.getString('companyName');
+
+                                            print("Hopaaaaaaaaaaaaaaaaaaaaaa" +
+                                                companyName!);
+                                            state.personName =
+                                                _searchController.text;
+
+                                            HomeBloc.get(context).add(
+                                              GetPersonByName(
+                                                companyName: companyName ,
+                                                personName: state.personName,
+                                              ),
+                                            );
+                                            HomeBloc.get(context)
+                                                .add(const GetPersonByNameEvent());
+
+                                            print(
+                                                'Searching for: ${_searchController.text}');
+                                          },
+                                        ),
                                       ),
-                        itemBuilder: (context, index) {
-                          final employee = state.employeeNamesList;
-                          // print("KKKKKKKKKKKKKKK" +
-                          //         widget.data.length.toString() ??
-                          //     '');
-                          return _contactUi(
-                            name: employee[index].name ?? '',
-                            profession: employee[index].sId ?? '',
-                            onDelete: () {
-                              context.read<HomeBloc>().add(
-                                    DeletePersonByNameEvent(
-                                      getCompanyName() as String,
-                                      employee[index].name ?? '',
+                                    ),
+                                  ),
+                                ),
+                                
+                                
+                                FxBox.h24,
+                                BlocBuilder<HomeBloc, HomeState>(
+                                    builder: (context, state) {
+                                  return MaterialButton(
+                                    height: 50,
+                                    minWidth: 210,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                    color: AppColors.blueB,
+                                    //  Color.fromARGB(255, 143, 188, 211),
+                                    onPressed: () {
+                                      // Show dialog to fill in employee data
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return StatefulBuilder(
+                                            builder: (context, setState) {
+                                              return AlertDialog(
+                                                title: const Text("Add Employee"),
+                                                content: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    TextFormField(
+                                                      controller:
+                                                          employeeNameController,
+                                                      decoration:
+                                                          const InputDecoration(
+                                                              labelText:
+                                                                  'Name'),
+                                                      onChanged: (value) async {
+                                                        state.personName =
+                                                            value;
+                                                      },
+                                                    ),
+                                                    const SizedBox(height: 24),
+                                                    if (selectedImage != null &&
+                                                        selectedImage!.bytes !=
+                                                            null)
+                                                      SizedBox(
+                                                          height: 100,
+                                                          child: selectedImage!
+                                                                      .bytes !=
+                                                                  null
+                                                              ? Image.memory(
+                                                                  selectedImage!
+                                                                      .bytes!,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                )
+                                                              : loadingIndicator() // Show circular progress indicator while loading
+                                                          ),
+                                                    const SizedBox(height: 24),
+                                                    ElevatedButton(
+                                                      onPressed: () async {
+                                                        try {
+                                                          FilePickerResult?
+                                                              result =
+                                                              await FilePicker
+                                                                  .platform
+                                                                  .pickFiles(
+                                                            type:
+                                                                FileType.image,
+                                                          );
+                                                          if (result != null &&
+                                                              result.files
+                                                                  .isNotEmpty) {
+                                                            setState(() {
+                                                              selectedImage =
+                                                                  result.files
+                                                                      .first;
+                                                            });
+
+                                                            List<int>
+                                                                imageBytes =
+                                                                selectedImage!
+                                                                    .bytes!;
+
+                                                            // String imageName =
+                                                            //     selectedImage!.name;
+
+                                                            final SharedPreferences
+                                                                prefs =
+                                                                await SharedPreferences
+                                                                    .getInstance();
+
+                                                            final String?
+                                                                companyName =
+                                                                prefs.getString(
+                                                                    'companyName');
+
+                                                            String base64Image =
+                                                                base64Encode(
+                                                                    imageBytes);
+                                                            HomeBloc.get(
+                                                                    context)
+                                                                .add(
+                                                              AddNewEmployee(
+                                                                companyName:
+                                                                    companyName ??
+                                                                        "No Company ",
+                                                                personName: state
+                                                                    .personName,
+                                                                image:
+                                                                    base64Image,
+                                                                // nameofImage:imageName,
+
+                                                                // files: selectedImage,
+                                                              ),
+                                                            );
+                                                          }
+                                                        } catch (e) {
+                                                          print(
+                                                              "Error picking file: $e");
+                                                        }
+                                                      },
+                                                      child:
+                                                          const Text('Upload Image'),
+                                                    ),
+                                                  ],
+                                                ),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop(); // Close the dialog
+                                                    },
+                                                    child: const Text('Cancel'),
+                                                  ),
+                                                  ElevatedButton(
+                                                    onPressed: () {
+                                                      context.read<HomeBloc>().add(
+                                                          const GetEmployeeNamesEvent());
+
+                                                      HomeBloc.get(context).add(
+                                                          const AddNewEmployeeEvent());
+                                                      employeeNameController
+                                                          .clear();
+                                                      setState(() {
+                                                        selectedImage = null;
+                                                      });
+                                                      Navigator.of(context)
+                                                          .pop(); // Close the dialog
+                                                    },
+                                                    child: const Text('Save'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        },
+                                      );
+
+                                      // showDialog(
+                                      //   context: context,
+                                      //   builder: (BuildContext context) {
+                                      //     return AlertDialog(
+                                      //       title: Text("Add Employee"),
+                                      //       content: Column(
+                                      //         mainAxisSize: MainAxisSize.min,
+                                      //         children: [
+                                      //           TextFormField(
+                                      //             controller: employeeNameController,
+                                      //             decoration: InputDecoration(
+                                      //                 labelText: 'Name'),
+                                      //             onChanged: (value) async {
+                                      //               state.personName = value;
+                                      //             },
+                                      //           ),
+
+                                      //           FxBox.h24,
+                                      //           if (selectedImage != null &&
+                                      //               selectedImage!.bytes != null)
+                                      //             SizedBox(
+                                      //               height: 100,
+                                      //               child: selectedImage!.bytes !=
+                                      //                       null
+                                      //                   ? Image.memory(
+                                      //                       selectedImage!.bytes!,
+                                      //                       fit: BoxFit.cover,
+                                      //                     )
+                                      //                   : CircularProgressIndicator(
+                                      //                       color: Colors.amber,
+                                      //                     ), // Show circular progress indicator while loading
+                                      //             ),
+                                      //           FxBox.h24,
+
+                                      //           ///pick and encode the image
+
+                                      //           ElevatedButton(
+                                      //             onPressed: () async {
+                                      //               try {
+                                      //                 FilePickerResult? result =
+                                      //                     await FilePicker.platform
+                                      //                         .pickFiles(
+                                      //                   type: FileType.image,
+                                      //                 );
+                                      //                 if (result != null &&
+                                      //                     result.files.isNotEmpty) {
+                                      //                   selectedImage =
+                                      //                       result.files.first;
+
+                                      //                   List<int> imageBytes =
+                                      //                       selectedImage!.bytes!;
+
+                                      //                   // String imageName =
+                                      //                   //     selectedImage!.name;
+
+                                      //                   final SharedPreferences
+                                      //                       prefs =
+                                      //                       await SharedPreferences
+                                      //                           .getInstance();
+
+                                      //                   final String? companyName =
+                                      //                       prefs.getString(
+                                      //                           'companyName');
+
+                                      //                   String base64Image =
+                                      //                       base64Encode(imageBytes);
+                                      //                   HomeBloc.get(context).add(
+                                      //                     AddNewEmployee(
+                                      //                       companyName:
+                                      //                           companyName ??
+                                      //                               "No Company ",
+                                      //                       personName:
+                                      //                           state.personName,
+                                      //                       image: base64Image,
+                                      //                       // nameofImage:imageName,
+
+                                      //                       // files: selectedImage,
+                                      //                     ),
+                                      //                   );
+                                      //                 }
+                                      //               } catch (e) {
+                                      //                 print("Error picking file: $e");
+                                      //               }
+                                      //             },
+                                      //             child: Text('Upload Image'),
+                                      //           ),
+                                      //         ],
+                                      //       ),
+                                      //       actions: [
+                                      //         TextButton(
+                                      //           onPressed: () {
+                                      //             Navigator.of(context)
+                                      //                 .pop(); // Close the dialog
+                                      //           },
+                                      //           child: Text('Cancel'),
+                                      //         ),
+                                      //         ElevatedButton(
+                                      //           onPressed: () {
+                                      //             HomeBloc.get(context)
+                                      //                 .add(AddNewEmployeeEvent());
+                                      //             employeeNameController.clear();
+                                      //             setState(() {
+                                      //               selectedImage = null;
+                                      //             });
+                                      //             Navigator.of(context)
+                                      //                 .pop(); // Close the dialog
+                                      //           },
+                                      //           child: Text('Save'),
+                                      //         ),
+                                      //       ],
+                                      //     );
+                                      //   },
+                                      // );
+                                    },
+                                    child: const Text(
+                                      "Add Employee",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
                                   );
-                            },
+                                }),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      FxBox.h24,
+                      BlocBuilder<HomeBloc, HomeState>(
+                        builder: (context, state) {
+                          return Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width,
+                                    child: GridView.builder(
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemCount: state.employeeNamesList.length,
+                                      gridDelegate: Responsive.isMobile(context)
+                                          ? const SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 1,
+                                              crossAxisSpacing: 45,
+                                              mainAxisSpacing: 45,
+                                              mainAxisExtent: 350,
+                                            )
+                                          : Responsive.isTablet(context)
+                                              ? const SliverGridDelegateWithFixedCrossAxisCount(
+                                                  crossAxisCount: 2,
+                                                  crossAxisSpacing: 45,
+                                                  mainAxisSpacing: 45,
+                                                  mainAxisExtent: 350,
+                                                )
+                                              : MediaQuery.of(context)
+                                                          .size
+                                                          .width <
+                                                      1500
+                                                  ? SliverGridDelegateWithMaxCrossAxisExtent(
+                                                      maxCrossAxisExtent:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.24,
+                                                      crossAxisSpacing: 45,
+                                                      mainAxisSpacing: 45,
+                                                      mainAxisExtent: 350,
+                                                    )
+                                                  : SliverGridDelegateWithMaxCrossAxisExtent(
+                                                      maxCrossAxisExtent:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.24,
+                                                      crossAxisSpacing: 45,
+                                                      mainAxisSpacing: 45,
+                                                      mainAxisExtent: 350,
+                                                    ),
+                                      itemBuilder: (context, index) {
+                                        final employee =
+                                            state.employeeNamesList[index];
+                                        _contactUi(
+                                          name: employee.name ?? '',
+                                          profession: employee.sId ?? '',
+                                          onDelete: () async {
+                                            final SharedPreferences prefs =
+                                                await SharedPreferences
+                                                    .getInstance();
+
+                                            final String? companyName =
+                                                prefs.getString('companyName');
+                                            context.read<HomeBloc>().add(
+                                                  DeletePersonByNameEvent(
+                                                    companyName!,
+                                                    employee.name ?? '',
+                                                  ),
+                                                );
+                                          },
+                                        );
+                                        return const Text("WOOOOOOOOOOOOO");
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           );
                         },
                       ),
-                    ),
+                      // SingleChildScrollView(
+                      //   physics: NeverScrollableScrollPhysics(),
+                      //   child: Column(
+                      //     children: [
+                      //       SizedBox(
+                      //         width: MediaQuery.of(context).size.width,
+                      //         child: GridView.builder(
+                      //           shrinkWrap: true,
+                      //           physics: const NeverScrollableScrollPhysics(),
+                      //           itemCount: state.employeeNamesList.length < 5
+                      //               ? state.employeeNamesList.length
+                      //               : 5,
+                      //           gridDelegate: Responsive.isMobile(context)
+                      //               ? const SliverGridDelegateWithFixedCrossAxisCount(
+                      //                   crossAxisCount: 1,
+                      //                   crossAxisSpacing: 45,
+                      //                   mainAxisSpacing: 45,
+                      //                   mainAxisExtent: 350,
+                      //                 )
+                      //               : Responsive.isTablet(context)
+                      //                   ? const SliverGridDelegateWithFixedCrossAxisCount(
+                      //                       crossAxisCount: 2,
+                      //                       crossAxisSpacing: 45,
+                      //                       mainAxisSpacing: 45,
+                      //                       mainAxisExtent: 350,
+                      //                     )
+                      //                   : MediaQuery.of(context).size.width < 1500
+                      //                       ? SliverGridDelegateWithMaxCrossAxisExtent(
+                      //                           maxCrossAxisExtent:
+                      //                               MediaQuery.of(context)
+                      //                                       .size
+                      //                                       .width *
+                      //                                   0.24,
+                      //                           crossAxisSpacing: 45,
+                      //                           mainAxisSpacing: 45,
+                      //                           mainAxisExtent: 350,
+                      //                         )
+                      //                       : SliverGridDelegateWithMaxCrossAxisExtent(
+                      //                           maxCrossAxisExtent:
+                      //                               MediaQuery.of(context)
+                      //                                       .size
+                      //                                       .width *
+                      //                                   0.24,
+                      //                           crossAxisSpacing: 45,
+                      //                           mainAxisSpacing: 45,
+                      //                           mainAxisExtent: 350,
+                      //                         ),
+                      //           itemBuilder: (context, index) {
+                      //             final employee = state.employeeNamesList;
+                      //             print("KKKKKKKKKKKKKKK" +
+                      //                 state.employeeNamesList.length.toString());
+                      //             return _contactUi(
+                      //               name: employee[index].name ?? '',
+                      //               profession: employee[index].sId ?? '',
+                      //               onDelete: () async {
+                      //                 final SharedPreferences prefs =
+                      //                     await SharedPreferences.getInstance();
 
-                    // Wrap(
-                    //     children: _responsiveCardList(
-                    //         context: context, cameras: dummyEmployees)),
-                  ],
+                      //                 final String? companyName =
+                      //                     prefs.getString('companyName');
+                      //                 context.read<HomeBloc>().add(
+                      //                       DeletePersonByNameEvent(
+                      //                         companyName!,
+                      //                         employee[index].name ?? '',
+                      //                       ),
+                      //                     );
+                      //               },
+                      //             );
+                      //           },
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                    ],
+                  ),
                 ),
               ),
             );
@@ -327,7 +615,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
       decoration: BoxDecoration(
           color:
               // context.isDarkMode ?
-              Color.fromARGB(255, 143, 188, 211),
+              const Color.fromARGB(255, 143, 188, 211),
           // : ColorConst.white,
           borderRadius: BorderRadius.circular(12.0)),
       child: Column(
@@ -357,7 +645,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
               BlocBuilder<HomeBloc, HomeState>(
                 builder: (context, state) {
                   return PopupMenuButton<String>(
-                    icon: Icon(Icons.more_horiz, color: Colors.black),
+                    icon: const Icon(Icons.more_horiz, color: Colors.black),
                     onSelected: (String choice) {
                       if (choice == 'Edit') {
                         // Handle edit action
@@ -439,11 +727,11 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
           ),
           FxBox.h24,
           _iconWithText(
-              icon: Icon(Icons.badge_outlined), text: 'Peterdraw Studio'),
+              icon: const Icon(Icons.badge_outlined), text: 'Peterdraw Studio'),
           FxBox.h28,
-          _iconWithText(icon: Icon(Icons.contact_phone), text: '+123 456 789'),
+          _iconWithText(icon: const Icon(Icons.contact_phone), text: '+123 456 789'),
           FxBox.h28,
-          _iconWithText(icon: Icon(Icons.email), text: 'email@mail.com'),
+          _iconWithText(icon: const Icon(Icons.email), text: 'email@mail.com'),
           // FxBox.h24,
         ],
       ),

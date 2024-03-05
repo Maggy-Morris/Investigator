@@ -15,7 +15,7 @@ import 'package:Investigator/presentation/standard_layout/screens/standard_layou
 class DashboardScreen extends StatefulWidget {
   static Route<dynamic> route() {
     return MaterialPageRoute<dynamic>(
-      builder: (_) => DashboardScreen(),
+      builder: (_) => const DashboardScreen(),
     );
   }
 

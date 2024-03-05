@@ -77,23 +77,23 @@ class StandardLayoutScreen extends StatelessWidget {
                                     labelType: (!state.extend)
                                         ? NavigationRailLabelType.selected
                                         : NavigationRailLabelType.none,
-                                    backgroundColor: AppColors.white,
+                                    backgroundColor: AppColors.blueB,
                                     indicatorColor: AppColors.blueBlack,
                                     selectedLabelTextStyle: const TextStyle(
                                       fontFamily: "Cairo",
                                       fontSize: AppFontSize.s20,
-                                      color: AppColors.blueBlack,
+                                      color: AppColors.white,
                                     ),
                                     unselectedLabelTextStyle: const TextStyle(
                                       fontFamily: "Cairo",
                                       fontSize: AppFontSize.s18,
-                                      color: AppColors.blueBlack,
+                                      color: AppColors.white,
                                     ),
                                     selectedIconTheme: const IconThemeData(
                                       color: Colors.white,
                                     ),
                                     unselectedIconTheme: const IconThemeData(
-                                      color: AppColors.blueBlack,
+                                      color: AppColors.white,
                                     )),
                                 child: NavigationRail(
                                   destinations: [
@@ -221,8 +221,6 @@ class StandardLayoutScreen extends StatelessWidget {
                                                   );
                                                 },
                                               );
-                                           
-                                           
                                             },
                                             label: Text('logout'.tr()),
                                           )
@@ -586,6 +584,7 @@ class StandardLayoutScreen extends StatelessWidget {
             ),
             Expanded(
                 child: Scaffold(
+                    backgroundColor: AppColors.babyBlue,
                     appBar: mainAppBar(
                       leading: leading,
                       title: title,

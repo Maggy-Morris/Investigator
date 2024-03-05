@@ -6,7 +6,7 @@ part 'standard_layout_state.dart';
 class StandardLayoutCubit extends Cubit<StandardLayoutState> {
   static StandardLayoutCubit get(context) =>
       BlocProvider.of<StandardLayoutCubit>(context);
-  StandardLayoutCubit() : super(StandardLayoutState());
+  StandardLayoutCubit() : super(const StandardLayoutState());
 
   onEditExtend(bool extend) {
     emit(state.copyWith(

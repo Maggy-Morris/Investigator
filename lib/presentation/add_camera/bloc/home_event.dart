@@ -92,13 +92,22 @@ class AddNewEmployee extends HomeEvent {
   final String companyName;
   final String personName;
   final String image;
+  // final String imageName;
   PlatformFile? files;
 
   AddNewEmployee(
-      {this.files, required this.personName, required this.companyName, required this.image});
+      {this.files,
+      // this.imageName,
+
+      required this.personName,
+      required this.companyName,
+      required this.image});
 
   @override
-  List<Object?> get props => [companyName, personName, files , image];
+  List<Object?> get props => [
+        companyName, personName, files, image,
+        // imageName
+      ];
 }
 
 // Add company event

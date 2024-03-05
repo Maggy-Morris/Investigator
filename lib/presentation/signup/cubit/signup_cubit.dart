@@ -9,7 +9,7 @@ import '../../login/widgets/email.dart';
 part 'signup_state.dart';
 
 class SignupCubit extends Cubit<SignupState> {
-  SignupCubit(this._authenticationRepository) : super(SignupState());
+  SignupCubit(this._authenticationRepository) : super(const SignupState());
 
   final AuthenticationRepository _authenticationRepository;
 

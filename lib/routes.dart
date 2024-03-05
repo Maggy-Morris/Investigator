@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:Investigator/presentation/add_camera/screens/add_camera_screen.dart';
 
 import 'package:Investigator/presentation/search/screens/search_screen.dart';
-import 'package:Investigator/presentation/dashboard/screens/dashboard_screen.dart';
+// import 'package:Investigator/presentation/dashboard/screens/dashboard_screen.dart';
 import 'package:Investigator/presentation/login/view/login_page.dart';
 import 'package:routemaster/routemaster.dart';
 
@@ -30,7 +30,7 @@ getRoutesAdmin() {
     '/': (route) => const NoAnimationPage(child: ChooseYourCompany()),
     // '/home': (route) => const NoAnimationPage(child: DashboardScreen()),
     '/allEmployees': (route) =>
-        NoAnimationPage(child: AllEmployeesScreen(
+        const NoAnimationPage(child: AllEmployeesScreen(
           // data: []
           )),
     '/cameraDetails': (route) => NoAnimationPage(

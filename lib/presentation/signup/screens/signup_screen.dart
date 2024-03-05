@@ -35,7 +35,7 @@ class SignUpPage extends StatelessWidget {
         create: (_) => SignupCubit(context.read<AuthenticationRepository>()),
         child: const SignUpForm(),
       ),
-    );;
+    );
   }
 }
 

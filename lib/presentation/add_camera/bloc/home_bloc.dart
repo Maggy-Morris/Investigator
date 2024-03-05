@@ -44,10 +44,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     on<DeletePersonByNameEvent>(_onDeletePersonByNameEvent);
     on<DeletePersonByIdEvent>(_onDeletePersonByIdEvent);
-
-    /// functionality cameras
-
-    // on<AddCameraEvent>(_onAddCameraEvent);
   }
 
   _onHomeEvent(HomeEvent event, Emitter<HomeState> emit) async {}
@@ -68,6 +64,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(state.copyWith(
         companyName: event.companyName,
         personName: event.personName,
+        // imageName: event.imageName,
         // files: event.files,
         image: event.image,
         submission: Submission.editing));
@@ -80,15 +77,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         .addNewPersonToACompany(
       companyName: state.companyName,
       personName: state.personName,
+      // imageName:state.imageName,
       // image: state.files,
-      image:state.image,
+      image: state.image,
     )
         .then((value) {
       // if (state.cameraSelectedModels.isNotEmpty) {
       //   add(const ApplyModelEvent());
       // }
       if (value != AddCompanyModel()) {
-        emit(const HomeState().copyWith(submission: Submission.success));
+        emit(HomeState().copyWith(submission: Submission.success));
       } else {
         emit(state.copyWith(submission: Submission.error));
       }
@@ -116,6 +114,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(state.copyWith(submission: Submission.loading));
 
     try {
+      // final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      // final String? companyName = prefs.getString('companyName');
+
       final employeeModel = await RemoteProvider().getAllEmployeeNames(
         companyName: state.companyName,
       );
@@ -138,36 +140,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       ));
     }
   }
-  // _onGetEmployeeNamesEvent(
-  //     GetEmployeeNamesEvent event, Emitter<HomeState> emit) async {
-  //   emit(state.copyWith(submission: Submission.loading));
-
-  //   try {
-  //     final employeeModel = await RemoteProvider().getAllEmployeeNames(
-  //       companyName: state.companyName,
-  //     );
-
-  //     if (employeeModel.isNotEmpty) {
-  //       // final List<EmployeeModel> employeeList =
-  //       //     List<EmployeeModel>.from(employeeModel.data!);
-
-  //       emit(state.copyWith(
-  //         submission: Submission.success,
-  //         employeeNamesList: employeeModel,
-  //       ));
-  //     } else {
-  //       emit(state.copyWith(
-  //         submission: Submission.noDataFound,
-  //         employeeNamesList: [],
-  //       ));
-  //     }
-  //   } catch (e) {
-  //     emit(state.copyWith(
-  //       submission: Submission.error,
-  //       employeeNamesList: [],
-  //     ));
-  //   }
-  // }
 
   /// Add Company Handle
 
@@ -182,7 +154,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       //   add(const ApplyModelEvent());
       // }
       if (value != AddCompanyModel()) {
-        emit(const HomeState().copyWith(submission: Submission.success));
+        emit(HomeState().copyWith(submission: Submission.success));
       } else {
         emit(state.copyWith(submission: Submission.error));
       }
@@ -203,7 +175,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       //   add(const ApplyModelEvent());
       // }
       if (value != AddCompanyModel()) {
-        emit(const HomeState().copyWith(submission: Submission.success));
+        emit(HomeState().copyWith(submission: Submission.success));
       } else {
         emit(state.copyWith(submission: Submission.error));
       }
@@ -211,7 +183,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
 ////////////////////////////////////////////
-  ///
+
   _onGetPersonByName(GetPersonByName event, Emitter<HomeState> emit) async {
     // await RemoteProvider()
     //     .getPersonByName(
@@ -237,10 +209,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       //   add(const ApplyModelEvent());
       // }
       if (value != EmployeeModel()) {
+        // Update the employeeNamesList with the new list of employees
+        emit(state.copyWith(
+          submission: Submission.success,
+          employeeNamesList: [...state.employeeNamesList],
+        ));
         // final updatedList = state.employeeNamesList
         //     .where((employee) => employee.name != event.personName)
         //     .toList();
-        // emit(const HomeState().copyWith(
+        // emit(HomeState().copyWith(
         //   submission: Submission.success,
         //   employeeNamesList: updatedList,
         // ));
@@ -266,7 +243,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       //   add(const ApplyModelEvent());
       // }
       if (value != EmployeeModel()) {
-        emit(const HomeState().copyWith(submission: Submission.success));
+        emit(HomeState().copyWith(submission: Submission.success));
       } else {
         emit(state.copyWith(submission: Submission.error));
       }
@@ -316,7 +293,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     )
         .then((value) {
       if (value != EmployeeModel()) {
-        emit(const HomeState().copyWith(submission: Submission.success));
+        emit(HomeState().copyWith(submission: Submission.success));
       } else {
         emit(state.copyWith(submission: Submission.error));
       }
