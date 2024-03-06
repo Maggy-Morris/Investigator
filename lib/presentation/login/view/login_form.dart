@@ -61,9 +61,9 @@ class LoginForm extends StatelessWidget {
                                     ? const EdgeInsets.all(32)
                                     : const EdgeInsets.all(40),
                                 decoration: BoxDecoration(
-                                  color: AppColors.blueB,
+                                  color: AppColors.blueB.withOpacity(0.9),
                                   border: Border.all(
-                                    color: AppColors.blueB,
+                                    color: AppColors.blueB.withOpacity(0.9),
                                   ),
                                   borderRadius: BorderRadius.circular(24),
                                 ),

@@ -1,9 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:Investigator/core/enum/enum.dart';
 // import 'package:Investigator/core/models/add_camera_model.dart';
 import 'package:Investigator/core/remote_provider/remote_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/models/add_company_model.dart';
 import '../../../core/models/employee_model.dart';
@@ -96,9 +98,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   /// Get Company Employees Handle
 
   _onGetEmployeeNames(GetEmployeeNames event, Emitter<HomeState> emit) async {
-    // await RemoteProvider()
-    //     .getAllEmployeeNames(companyName: state.companyName)
-    //     .then((value) {
+    await RemoteProvider();
+    // .getAllEmployeeNames(companyName: state.companyName)
+    // .then((value) {
     emit(state.copyWith(
         companyName: event.companyName, submission: Submission.hasData));
     // });
@@ -106,20 +108,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   _onGetEmployeeNamesEvent(
       GetEmployeeNamesEvent event, Emitter<HomeState> emit) async {
-    // Check if the data is already loaded
-    // if (state.submission == Submission.success) {
-    //   return;
-    // }
-
     emit(state.copyWith(submission: Submission.loading));
 
     try {
-      // final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-      // final String? companyName = prefs.getString('companyName');
+      final String? companyName = prefs.getString('companyName');
 
       final employeeModel = await RemoteProvider().getAllEmployeeNames(
-        companyName: state.companyName,
+        // companyName: "Think" ?? "",
+        companyName: companyName ?? '',
       );
 
       if (employeeModel.isNotEmpty) {
@@ -134,6 +132,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         ));
       }
     } catch (e) {
+      debugPrint(e.toString());
+
       emit(state.copyWith(
         submission: Submission.error,
         employeeNamesList: [],
@@ -183,7 +183,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
 ////////////////////////////////////////////
-
+  /// Add GetPersonByName
   _onGetPersonByName(GetPersonByName event, Emitter<HomeState> emit) async {
     // await RemoteProvider()
     //     .getPersonByName(
@@ -299,91 +299,91 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
     });
   }
-  // _onAddCameraName(AddCameraName event, Emitter<HomeState> emit) async {
-  //   emit(state.copyWith(
-  //       cameraName: event.cameraName, submission: Submission.editing));
-  // }
-
-  // _onAddCameraSource(AddCameraSource event, Emitter<HomeState> emit) async {
-  //   emit(state.copyWith(
-  //       cameraSource: event.cameraSource, submission: Submission.editing));
-  // }
-
-  // _onAddCameraSourceType(
-  //     AddCameraSourceType event, Emitter<HomeState> emit) async {
-  //   emit(state.copyWith(
-  //       cameraSourceType: event.cameraSourceType,
-  //       submission: Submission.editing));
-  // }
-
-  // _onAddCameraSourceModels(
-  //     AddCameraSourceModels event, Emitter<HomeState> emit) async {
-  //   emit(state.copyWith(
-  //       cameraSelectedModels: event.cameraSelectedModels,
-  //       submission: Submission.editing));
-  // }
-
-  /// get static lists
-
-  // _onGetCamerasNames(GetCamerasNames event, Emitter<HomeState> emit) async {
-  //   await RemoteProvider().getAllCamerasNames().then((value) {
-  //     emit(state.copyWith(
-  //         camerasNamesList: value, submission: Submission.hasData));
-  //   });
-  // }
-
-  // _onGetSourceTypes(GetSourceTypes event, Emitter<HomeState> emit) async {
-  //   await RemoteProvider().getAllSourceTypes().then((value) {
-  //     emit(state.copyWith(
-  //         sourceTypesList: value, submission: Submission.hasData));
-  //   });
-  // }
-
-  // _onGetModelsName(GetModelsName event, Emitter<HomeState> emit) async {
-  //   await RemoteProvider().getAllModelsNames().then((value) {
-  //     emit(state.copyWith(
-  //         modelsNameList: value, submission: Submission.hasData));
-  //   });
-  // }
-  ///////////////////////////////
-
-  /// Add Camera Handle
-  // _onAddCameraEvent(AddCameraEvent event, Emitter<HomeState> emit) async {
-  //   emit(state.copyWith(submission: Submission.loading));
-  //   await RemoteProvider()
-  //       .addCamera(
-  //     cameraName: state.cameraName,
-  //     sourceType: state.cameraSourceType,
-  //     sourceData: state.cameraSource,
-  //   )
-  //       .then((value) {
-  //     if (state.cameraSelectedModels.isNotEmpty) {
-  //       add(const ApplyModelEvent());
-  //     }
-  //     if (value != AddCameraModel()) {
-  //       emit(const HomeState().copyWith(submission: Submission.success));
-  //     } else {
-  //       emit(state.copyWith(submission: Submission.error));
-  //     }
-  //   });
-  // }
-
-  /// Apply Model Handle
-  // _onApplyModelEvent(ApplyModelEvent event, Emitter<HomeState> emit) async {
-  //   emit(state.copyWith(submission: Submission.loading));
-  //   await RemoteProvider()
-  //       .applyModelToCamera(
-  //     cameraName: state.cameraName,
-  //     modelName: state.cameraSelectedModels,
-  //   )
-  //       .then((value) {
-  //     emit(const HomeState().copyWith(submission: Submission.success));
-  //     // EasyLoading.showSuccess("value.cameraName.toString()");
-  //   }).timeout(
-  //     const Duration(seconds: 4),
-  //     onTimeout: () {
-  //       emit(const HomeState().copyWith(submission: Submission.success));
-  //     },
-  //   );
-  // }
 }
+// _onAddCameraName(AddCameraName event, Emitter<HomeState> emit) async {
+//   emit(state.copyWith(
+//       cameraName: event.cameraName, submission: Submission.editing));
+// }
+
+// _onAddCameraSource(AddCameraSource event, Emitter<HomeState> emit) async {
+//   emit(state.copyWith(
+//       cameraSource: event.cameraSource, submission: Submission.editing));
+// }
+
+// _onAddCameraSourceType(
+//     AddCameraSourceType event, Emitter<HomeState> emit) async {
+//   emit(state.copyWith(
+//       cameraSourceType: event.cameraSourceType,
+//       submission: Submission.editing));
+// }
+
+// _onAddCameraSourceModels(
+//     AddCameraSourceModels event, Emitter<HomeState> emit) async {
+//   emit(state.copyWith(
+//       cameraSelectedModels: event.cameraSelectedModels,
+//       submission: Submission.editing));
+// }
+
+/// get static lists
+
+// _onGetCamerasNames(GetCamerasNames event, Emitter<HomeState> emit) async {
+//   await RemoteProvider().getAllCamerasNames().then((value) {
+//     emit(state.copyWith(
+//         camerasNamesList: value, submission: Submission.hasData));
+//   });
+// }
+
+// _onGetSourceTypes(GetSourceTypes event, Emitter<HomeState> emit) async {
+//   await RemoteProvider().getAllSourceTypes().then((value) {
+//     emit(state.copyWith(
+//         sourceTypesList: value, submission: Submission.hasData));
+//   });
+// }
+
+// _onGetModelsName(GetModelsName event, Emitter<HomeState> emit) async {
+//   await RemoteProvider().getAllModelsNames().then((value) {
+//     emit(state.copyWith(
+//         modelsNameList: value, submission: Submission.hasData));
+//   });
+// }
+///////////////////////////////
+
+/// Add Camera Handle
+// _onAddCameraEvent(AddCameraEvent event, Emitter<HomeState> emit) async {
+//   emit(state.copyWith(submission: Submission.loading));
+//   await RemoteProvider()
+//       .addCamera(
+//     cameraName: state.cameraName,
+//     sourceType: state.cameraSourceType,
+//     sourceData: state.cameraSource,
+//   )
+//       .then((value) {
+//     if (state.cameraSelectedModels.isNotEmpty) {
+//       add(const ApplyModelEvent());
+//     }
+//     if (value != AddCameraModel()) {
+//       emit(const HomeState().copyWith(submission: Submission.success));
+//     } else {
+//       emit(state.copyWith(submission: Submission.error));
+//     }
+//   });
+// }
+
+/// Apply Model Handle
+// _onApplyModelEvent(ApplyModelEvent event, Emitter<HomeState> emit) async {
+//   emit(state.copyWith(submission: Submission.loading));
+//   await RemoteProvider()
+//       .applyModelToCamera(
+//     cameraName: state.cameraName,
+//     modelName: state.cameraSelectedModels,
+//   )
+//       .then((value) {
+//     emit(const HomeState().copyWith(submission: Submission.success));
+//     // EasyLoading.showSuccess("value.cameraName.toString()");
+//   }).timeout(
+//     const Duration(seconds: 4),
+//     onTimeout: () {
+//       emit(const HomeState().copyWith(submission: Submission.success));
+//     },
+//   );
+// }

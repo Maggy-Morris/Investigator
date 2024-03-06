@@ -162,15 +162,15 @@ class RemoteProvider {
         "collection_name": companyName,
       });
 
-      if (callBack.isNotEmpty && callBack['data'] != null) {
+      if (callBack.isNotEmpty) {
         // Extract the relevant data from the callBack
-        List<dynamic> dataList = callBack['data'];
-
+        // List<dynamic> dataList = callBack['data'];
+       EmployeeModel general = EmployeeModel.fromJson(callBack);
         // Map the extracted data to my EmployeeModel
-        List<Data> employeeDataList =
-            dataList.map((data) => Data.fromJson(data)).toList();
+        // List<Data> employeeDataList =
+        //     dataList.map((data) => Data.fromJson(data)).toList();
 
-        return employeeDataList;
+        return general.data??[];
       } else {
         return [];
       }

@@ -68,62 +68,10 @@ class _SearchState extends State<Search> {
                             children: [
                               const Row(
                                 children: [
-                                  // Expanded(
-                                  //   child: Column(
-                                  //     crossAxisAlignment:
-                                  //         CrossAxisAlignment.start,
-                                  //     children: [
-                                  //       _commonText("Company Name".tr()),
-                                  //       FxBox.h4,
-                                  //       _listBox(
-                                  //           controller: companyNameController,
-                                  //           hintText: "Search Company".tr(),
-                                  //           onChanged: (value) {
-                                  //             HomeBloc.get(context).add(
-                                  //               GetEmployeeNames(
-                                  //                 companyName: value,
-                                  //               ),
-                                  //             );
-                                  //           }),
-                                  //     ],
-                                  //   ),
-                                  // ),
+                                 
                                 ],
                               ),
-                              // FxBox.h60,
-                              // (state.submission == Submission.loading)
-                              //     ? loadingIndicator()
-                              //     : Center(
-                              //         child: ElevatedButton.icon(
-                              //           onPressed: () {
-                              //             if (state.companyName.isEmpty) {
-                              //               FxToast.showErrorToast(
-                              //                   context: context,
-                              //                   message: "Add Company Name");
-                              //               return;
-                              //             }
-
-                              //             HomeBloc.get(context).add(
-                              //                 const GetEmployeeNamesEvent());
-                              //           },
-                              //           style: ElevatedButton.styleFrom(
-                              //             shape: RoundedRectangleBorder(
-                              //                 borderRadius:
-                              //                     BorderRadius.circular(10)),
-                              //             backgroundColor: AppColors.green,
-                              //           ),
-                              //           label: Text(
-                              //             "confirm".tr(),
-                              //             style: const TextStyle(
-                              //                 color: AppColors.white),
-                              //           ),
-                              //           icon: const Icon(
-                              //             Icons.check_circle_outline,
-                              //             color: AppColors.white,
-                              //           ),
-                              //         ),
-                              //       ),
-
+                             
                               FxBox.h24,
 
                               // Here to search for an Employee in the database
@@ -179,9 +127,11 @@ class _SearchState extends State<Search> {
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 8, horizontal: 16),
                                           decoration: BoxDecoration(
-                                            borderRadius: const BorderRadius.only(
+                                            borderRadius:
+                                                const BorderRadius.only(
                                               bottomLeft: Radius.circular(12),
-                                              bottomRight: const Radius.circular(12),
+                                              bottomRight:
+                                                  const Radius.circular(12),
                                             ),
                                             color:
                                                 Colors.black.withOpacity(0.6),
@@ -200,7 +150,7 @@ class _SearchState extends State<Search> {
                                   ),
                                 ),
                               ),
-//Confirm Button to send the image
+                              //Confirm Button to send the image
                               FxBox.h24,
                               (state.submission == Submission.loading)
                                   ? loadingIndicator()
@@ -234,67 +184,6 @@ class _SearchState extends State<Search> {
                                         ),
                                       ),
                                     ), /////////////////////////////////////////////
-                              // search for employees
-                              // Row(
-                              //   children: [
-                              //     Expanded(
-                              //       child: Column(
-                              //         crossAxisAlignment:
-                              //             CrossAxisAlignment.start,
-                              //         children: [
-                              //           _commonText("Employee Name".tr()),
-                              //           FxBox.h4,
-                              //           _listBox(
-                              //             controller: employeeNameController,
-                              //             hintText: "Search Employee".tr(),
-                              //             onChanged: (value) {
-                              //               HomeBloc.get(context).add(
-                              //                 GetPersonByName(
-                              //                   companyName: state.companyName,
-                              //                   personName: value,
-                              //                 ),
-                              //               );
-                              //             },
-                              //           ),
-                              //         ],
-                              //       ),
-                              //     ),
-                              //   ],
-                              // ),
-
-                              // FxBox.h60,
-                              // (state.submission == Submission.loading)
-                              //     ? loadingIndicator()
-                              //     : Center(
-                              //         child: ElevatedButton.icon(
-                              //           onPressed: () {
-                              //             if (state.companyName.isEmpty) {
-                              //               FxToast.showErrorToast(
-                              //                   context: context,
-                              //                   message: "Add Employee Name");
-                              //               return;
-                              //             }
-
-                              //             HomeBloc.get(context).add(
-                              //                 const GetPersonByNameEvent());
-                              //           },
-                              //           style: ElevatedButton.styleFrom(
-                              //             shape: RoundedRectangleBorder(
-                              //                 borderRadius:
-                              //                     BorderRadius.circular(10)),
-                              //             backgroundColor: AppColors.green,
-                              //           ),
-                              //           label: Text(
-                              //             "confirm".tr(),
-                              //             style: const TextStyle(
-                              //                 color: AppColors.white),
-                              //           ),
-                              //           icon: const Icon(
-                              //             Icons.check_circle_outline,
-                              //             color: AppColors.white,
-                              //           ),
-                              //         ),
-                              //       ),
 
                               /////////////////////////////////////////////////
                               // BlocBuilder<HomeBloc, HomeState>(
@@ -305,109 +194,7 @@ class _SearchState extends State<Search> {
                                 child: SingleChildScrollView(
                                   child: Column(
                                     children: [
-                                      // FxBox.h24,
-                                      // SizedBox(
-                                      //   width: double.infinity,
-                                      //   child: Row(
-                                      //     mainAxisAlignment:
-                                      //         MainAxisAlignment
-                                      //             .spaceBetween,
-                                      //     children: [
-                                      //       Text("All Employees".tr(),
-                                      //           style: const TextStyle(
-                                      //               fontSize: 20,
-                                      //               fontWeight:
-                                      //                   FontWeight.bold)),
-
-                                      //       // //Add Employee Button
-                                      //       // MaterialButton(
-                                      //       //   height: 50,
-                                      //       //   minWidth: 210,
-                                      //       //   shape: RoundedRectangleBorder(
-                                      //       //     borderRadius:
-                                      //       //         BorderRadius.circular(
-                                      //       //             25.0),
-                                      //       //   ),
-                                      //       //   color: Color.fromARGB(
-                                      //       //       255, 143, 188, 211),
-                                      //       //   onPressed: () {
-                                      //       //     // Show dialog to fill in employee data
-                                      //       //     showDialog(
-                                      //       //       context: context,
-                                      //       //       builder: (BuildContext
-                                      //       //           context) {
-                                      //       //         return AlertDialog(
-                                      //       //           title: Text(
-                                      //       //               "Add Employee"),
-                                      //       //           content: Column(
-                                      //       //             mainAxisSize:
-                                      //       //                 MainAxisSize
-                                      //       //                     .min,
-                                      //       //             children: [
-                                      //       //               TextFormField(
-                                      //       //                 decoration:
-                                      //       //                     InputDecoration(
-                                      //       //                         labelText:
-                                      //       //                             'Name'),
-                                      //       //               ),
-                                      //       //               FxBox.h24,
-                                      //       //               TextFormField(
-                                      //       //                 decoration:
-                                      //       //                     InputDecoration(
-                                      //       //                         labelText:
-                                      //       //                             'Phone Number'),
-                                      //       //               ),
-                                      //       //               FxBox.h24,
-
-                                      //       //               TextFormField(
-                                      //       //                 decoration:
-                                      //       //                     InputDecoration(
-                                      //       //                         labelText:
-                                      //       //                             'Email'),
-                                      //       //               ),
-                                      //       //               // Add more fields as needed
-                                      //       //             ],
-                                      //       //           ),
-                                      //       //           actions: [
-                                      //       //             TextButton(
-                                      //       //               onPressed: () {
-                                      //       //                 Navigator.of(
-                                      //       //                         context)
-                                      //       //                     .pop(); // Close the dialog
-                                      //       //               },
-                                      //       //               child: Text(
-                                      //       //                   'Cancel'),
-                                      //       //             ),
-                                      //       //             ElevatedButton(
-                                      //       //               onPressed: () {
-                                      //       //                 // Add logic to save employee data
-                                      //       //                 Navigator.of(
-                                      //       //                         context)
-                                      //       //                     .pop(); // Close the dialog
-                                      //       //               },
-                                      //       //               child:
-                                      //       //                   Text('Save'),
-                                      //       //             ),
-                                      //       //           ],
-                                      //       //         );
-                                      //       //       },
-                                      //       //     );
-                                      //       //   },
-                                      //       //   child: const Text(
-                                      //       //     "Add Employee",
-                                      //       //     style: TextStyle(
-                                      //       //       fontSize: 16,
-                                      //       //       color: Colors.white,
-                                      //       //       fontWeight:
-                                      //       //           FontWeight.w500,
-                                      //       //     ),
-                                      //       //   ),
-                                      //       // ),
-                                      //     ],
-                                      //   ),
-                                      // ),
-
-                                      // FxBox.h24,
+                                     
                                       SizedBox(
                                         width:
                                             MediaQuery.of(context).size.width,
@@ -742,7 +529,8 @@ class _SearchState extends State<Search> {
           _iconWithText(
               icon: const Icon(Icons.badge_outlined), text: 'Peterdraw Studio'),
           FxBox.h28,
-          _iconWithText(icon: const Icon(Icons.contact_phone), text: '+123 456 789'),
+          _iconWithText(
+              icon: const Icon(Icons.contact_phone), text: '+123 456 789'),
           FxBox.h28,
           _iconWithText(icon: const Icon(Icons.email), text: 'email@mail.com'),
           // FxBox.h24,

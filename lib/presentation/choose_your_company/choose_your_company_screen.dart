@@ -60,7 +60,7 @@ class ChooseYourCompany extends StatelessWidget {
                 Card(
                   margin: const EdgeInsets.symmetric(
                       vertical: 150, horizontal: 400),
-                  color: AppColors.blueB,
+                  color: AppColors.blueB.withOpacity(0.9),
                   elevation: 2,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15)),
@@ -71,7 +71,7 @@ class ChooseYourCompany extends StatelessWidget {
                         Text(
                           "Enter Your Company Name".tr(),
                           style: const TextStyle(
-                              fontSize: 17, fontWeight: FontWeight.w600),
+                              fontSize: 17, fontWeight: FontWeight.w900),
                         ),
                         FxBox.h24,
                         if (Responsive.isWeb(context))

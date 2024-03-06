@@ -6,12 +6,19 @@ class EmployeeModel {
   EmployeeModel({this.data});
 
   EmployeeModel.fromJson(Map<String, dynamic> json) {
-    if (json['data'] != null) {
+    try{
+if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
-        data!.add(Data.fromJson(v));
+        data?.add(Data.fromJson(v));
       });
+    } else {
+       data = <Data>[];
     }
+    }catch(e){
+data = <Data>[];
+    }
+    
   }
 
   Map<String, dynamic> toJson() {
