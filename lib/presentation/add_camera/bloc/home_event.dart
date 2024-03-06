@@ -7,11 +7,16 @@ class HomeEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class DataEvent extends HomeEvent {
-  const DataEvent();
+class CompnyNameFromSP extends HomeEvent {
+    final String companyName;
+
+  const CompnyNameFromSP(
+{required this.companyName}
+
+  );
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [companyName];
 }
 
 ///

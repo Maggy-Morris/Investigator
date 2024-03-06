@@ -3,10 +3,6 @@ part of 'home_bloc.dart';
 class HomeState extends Equatable {
   final List<Data> employeeNamesList;
   final List<String> companiesNamesList;
-  // final PlatformFile? files;
-  final String image;
-    // final String imageName;
-
 
   final Submission submission;
 
@@ -14,10 +10,7 @@ class HomeState extends Equatable {
   String personName;
   final String personId;
 
-   HomeState({
-    // this.imageName = '',
-    this.image = "",
-    // this.files,
+  HomeState({
     this.personName = "",
     this.personId = "",
     this.companyName = "",
@@ -27,10 +20,6 @@ class HomeState extends Equatable {
   });
 
   HomeState copyWith({
-    String? image,
-        // String? imageName,
-
-    // PlatformFile? files,
     List<String>? companiesNamesList,
     List<Data>? employeeNamesList,
     String? companyName,
@@ -39,9 +28,6 @@ class HomeState extends Equatable {
     Submission? submission,
   }) {
     return HomeState(
-      // imageName:imageName?? this.imageName,
-      image: image ?? this.image,
-      // files: files ?? this.files,
       personId: personId ?? this.personId,
       personName: personName ?? this.personName,
       companiesNamesList: companiesNamesList ?? this.companiesNamesList,
@@ -53,16 +39,11 @@ class HomeState extends Equatable {
 
   @override
   List<Object> get props => [
-    // imageName,
-        // files ?? PlatformFile(), // Provide a default value if files is null
-        image,
-        // if (files != null) files!,
         personName,
         personId,
         companiesNamesList,
         companyName,
         employeeNamesList,
-
         submission,
       ];
 }
