@@ -20,12 +20,21 @@ class ChooseYourCompany extends StatelessWidget {
     await prefs.setString('companyName', value);
   }
 
+  Future<String> getCompanyName() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('companyName') ?? '';
+  }
+
   @override
   Widget build(BuildContext context) {
     TextEditingController companyNameController = TextEditingController();
 
     return BlocProvider(
-      create: (context) => HomeBloc()..add(const DataEvent()),
+      create: (context) => HomeBloc()
+
+      // ..add(const DataEvent())
+
+      ,
       child: BlocListener<HomeBloc, HomeState>(
         listener: (context, state) {
           if (state.submission == Submission.success) {
@@ -39,17 +48,6 @@ class ChooseYourCompany extends StatelessWidget {
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
             return SingleChildScrollView(
-              // physics: NeverScrollableScrollPhysics(),
-
-              // Stack(
-              //   alignment: Alignment.center,
-              //   children: [
-              //     Image.asset(
-              //       "assets/images/bbb.jpeg",
-              //       height: MediaQuery.of(context).size.height,
-              //       width: MediaQuery.of(context).size.width,
-              //       fit: BoxFit.cover,
-              //     ),
               child: Stack(alignment: Alignment.center, children: [
                 Image.asset(
                   "assets/images/bbb.jpeg",
@@ -99,11 +97,9 @@ class ChooseYourCompany extends StatelessWidget {
                                                   AddCompanyName(
                                                       companyName: value));
 
-                                              // HomeBloc.get(context).add(
-                                              //   GetEmployeeNames(
-                                              //     companyName: value,
-                                              //   ),
-                                              // );
+                                              HomeBloc.get(context).add(
+                                                  CompnyNameFromSP(
+                                                      companyName: value));
                                             }),
                                       ],
                                     ),
@@ -126,9 +122,6 @@ class ChooseYourCompany extends StatelessWidget {
                                             HomeBloc.get(context)
                                                 .add(const AddCompanyEvent());
 
-                                            // HomeBloc.get(context).add(
-                                            //     const GetEmployeeNamesEvent());
-
                                             Navigator.of(context).push<void>(
                                               MaterialPageRoute(
                                                 builder: (context) =>
@@ -138,7 +131,6 @@ class ChooseYourCompany extends StatelessWidget {
 
                                                         ),
                                               ),
-                                              // AllEmployeesScreen.route()
                                             );
                                           },
                                           style: ElevatedButton.styleFrom(
@@ -157,89 +149,11 @@ class ChooseYourCompany extends StatelessWidget {
                                             color: AppColors.white,
                                           )),
                                     ),
-                              // BlocBuilder<HomeBloc, HomeState>(
-                              //   builder: (context, state) {
-                              //     return
-                              // Padding(
-                              //       padding: const EdgeInsets.all(10.0),
-                              //       child: SingleChildScrollView(
-                              //         child: Column(
-                              //           children: [
-                              //             SizedBox(
-                              //               width:
-                              //                   MediaQuery.of(context).size.width,
-                              //               child: GridView.builder(
-                              //                 shrinkWrap: true,
-                              //                 physics:
-                              //                     const NeverScrollableScrollPhysics(),
-                              //                 itemCount:
-                              //                     state.employeeNamesList.length,
-                              //                 gridDelegate: Responsive.isMobile(
-                              //                         context)
-                              //                     ? const SliverGridDelegateWithFixedCrossAxisCount(
-                              //                         crossAxisCount: 1,
-                              //                         crossAxisSpacing: 45,
-                              //                         mainAxisSpacing: 45,
-                              //                         mainAxisExtent: 350,
-                              //                       )
-                              //                     : Responsive.isTablet(context)
-                              //                         ? const SliverGridDelegateWithFixedCrossAxisCount(
-                              //                             crossAxisCount: 2,
-                              //                             crossAxisSpacing: 45,
-                              //                             mainAxisSpacing: 45,
-                              //                             mainAxisExtent: 350,
-                              //                           )
-                              //                         : MediaQuery.of(context)
-                              //                                     .size
-                              //                                     .width <
-                              //                                 1500
-                              //                             ? SliverGridDelegateWithMaxCrossAxisExtent(
-                              //                                 maxCrossAxisExtent:
-                              //                                     MediaQuery.of(
-                              //                                                 context)
-                              //                                             .size
-                              //                                             .width *
-                              //                                         0.24,
-                              //                                 crossAxisSpacing:
-                              //                                     45,
-                              //                                 mainAxisSpacing: 45,
-                              //                                 mainAxisExtent: 350,
-                              //                               )
-                              //                             : SliverGridDelegateWithMaxCrossAxisExtent(
-                              //                                 maxCrossAxisExtent:
-                              //                                     MediaQuery.of(
-                              //                                                 context)
-                              //                                             .size
-                              //                                             .width *
-                              //                                         0.24,
-                              //                                 crossAxisSpacing:
-                              //                                     45,
-                              //                                 mainAxisSpacing: 45,
-                              //                                 mainAxisExtent: 350,
-                              //                               ),
-                              //                 itemBuilder: (context, index) {
-                              //                   final employee = state
-                              //                       .employeeNamesList[index];
-
-                              //                   return _contactUi(
-                              //                     name: employee.name ?? '',
-                              //                     profession: employee.sId ?? '',
-                              //                   );
-                              //                 },
-                              //               ),
-                              //             ),
-                              //           ],
-                              //         ),
-                              //       ),
-                              //     );
-                              //   },
-                              // ),
                             ],
                           ),
                         if (!Responsive.isWeb(context))
                           Column(
                             children: [
-                              // _commonText("Company Name".tr()),
                               FxBox.h4,
                               _listBox(
                                   hintText: "Company Name".tr(),
@@ -247,9 +161,6 @@ class ChooseYourCompany extends StatelessWidget {
                                   onChanged: (value) {
                                     HomeBloc.get(context).add(
                                         AddCompanyName(companyName: value));
-                                    // HomeBloc.get(context).add(
-                                    //   GetEmployeeNames(companyName: value),
-                                    // );
                                   }),
                               FxBox.h60,
                               (state.submission == Submission.loading)
@@ -259,16 +170,13 @@ class ChooseYourCompany extends StatelessWidget {
                                           onPressed: () {
                                             HomeBloc.get(context)
                                                 .add(const AddCompanyEvent());
-                                            // HomeBloc.get(context).add(
-                                            //     const GetEmployeeNamesEvent());
+
                                             Navigator.of(context).push<void>(
                                               MaterialPageRoute(
                                                 builder: (context) =>
                                                     const AllEmployeesScreen(),
                                               ),
                                             );
-                                            // Navigator.pushNamedAndRemoveUntil(
-                                            //     context, "/home", (route) => false);
                                           },
                                           style: ElevatedButton.styleFrom(
                                             shape: RoundedRectangleBorder(
@@ -299,108 +207,6 @@ class ChooseYourCompany extends StatelessWidget {
       ),
     );
   }
-
-  // Widget _contactUi({
-  //   required String name,
-  //   required String profession,
-  // }) {
-  //   return Container(
-  //     width: 300,
-  //     padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 18),
-  //     decoration: BoxDecoration(
-  //         color:
-  //             // context.isDarkMode ?
-  //             Color.fromARGB(255, 143, 188, 211),
-  //         // : ColorConst.white,
-  //         borderRadius: BorderRadius.circular(12.0)),
-  //     child: Column(
-  //       mainAxisSize: MainAxisSize.min,
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         Row(
-  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             Container(
-  //               height: 70,
-  //               width: 70,
-  //               decoration: BoxDecoration(
-  //                 color: Colors.white,
-  //                 borderRadius: BorderRadius.circular(6.0),
-  //               ),
-  //               child: ClipRRect(
-  //                 borderRadius: BorderRadius.circular(6.0),
-  //                 child: Image.asset(
-  //                   'assets/images/logo.png',
-  //                   // Images.profileImage,
-  //                   fit: BoxFit.cover,
-  //                 ),
-  //               ),
-  //             ),
-  //             PopupMenuButton<String>(
-  //               icon: Icon(Icons.more_horiz, color: Colors.black),
-  //               onSelected: (String choice) {
-  //                 if (choice == 'Edit') {
-  //                   // Handle edit action
-  //                 } else if (choice == 'Delete') {
-  //                   // Handle delete action
-  //                 }
-  //               },
-  //               itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-  //                 const PopupMenuItem<String>(
-  //                   value: 'Edit',
-  //                   child: Text('Edit'),
-  //                 ),
-  //                 const PopupMenuItem<String>(
-  //                   value: 'Delete',
-  //                   child: Text('Delete'),
-  //                 ),
-  //               ],
-  //             )
-  //           ],
-  //         ),
-  //         FxBox.h24,
-  //         ConstText.lightText(
-  //           text: name,
-  //           fontSize: 18,
-  //           fontWeight: FontWeight.w700,
-  //         ),
-  //         FxBox.h8,
-  //         ConstText.lightText(
-  //           text: profession,
-  //           fontSize: 14,
-  //           color: Colors.black,
-  //           fontWeight: FontWeight.w400,
-  //         ),
-  //         FxBox.h24,
-  //         _iconWithText(
-  //             icon: Icon(Icons.badge_outlined), text: 'Peterdraw Studio'),
-  //         FxBox.h28,
-  //         _iconWithText(icon: Icon(Icons.contact_phone), text: '+123 456 789'),
-  //         FxBox.h28,
-  //         _iconWithText(icon: Icon(Icons.email), text: 'email@mail.com'),
-  //         // FxBox.h24,
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  // Widget _iconWithText({
-  //   required Icon icon,
-  //   required String text,
-  // }) {
-  //   return Row(
-  //     children: [
-  //       icon,
-  //       FxBox.w16,
-  //       ConstText.lightText(
-  //         text: text,
-  //         fontSize: 14,
-  //         fontWeight: FontWeight.w400,
-  //       ),
-  //     ],
-  //   );
-  // }
 
   Widget _listBox({
     required String hintText,

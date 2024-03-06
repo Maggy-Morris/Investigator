@@ -32,7 +32,7 @@ class _SearchState extends State<Search> {
   Widget build(BuildContext context) {
     return StandardLayoutScreen(
       body: BlocProvider(
-        create: (context) => HomeBloc()..add(const DataEvent()),
+        create: (context) => HomeBloc(),
         child: BlocListener<HomeBloc, HomeState>(
           listener: (context, state) {
             if (state.submission == Submission.success) {
@@ -68,11 +68,9 @@ class _SearchState extends State<Search> {
                           Column(
                             children: [
                               const Row(
-                                children: [
-                                 
-                                ],
+                                children: [],
                               ),
-                             
+
                               FxBox.h24,
 
                               // Here to search for an Employee in the database
@@ -187,13 +185,12 @@ class _SearchState extends State<Search> {
                                     ), /////////////////////////////////////////////
 
                               /////////////////////////////////////////////////
-                             
+
                               Padding(
                                 padding: const EdgeInsets.all(10.0),
                                 child: SingleChildScrollView(
                                   child: Column(
                                     children: [
-                                     
                                       SizedBox(
                                         width:
                                             MediaQuery.of(context).size.width,
@@ -258,7 +255,9 @@ class _SearchState extends State<Search> {
                                               name: employee.name ?? '',
                                               profession: employee.sId ?? '',
                                               onDelete: () {
-                                                context.read<AllEmployeesBloc>().add(
+                                                context
+                                                    .read<AllEmployeesBloc>()
+                                                    .add(
                                                       DeletePersonByNameEvent(
                                                         state.companyName,
                                                         employee.name ?? '',
@@ -270,8 +269,6 @@ class _SearchState extends State<Search> {
                                           },
                                         ),
                                       ),
-
-                                     
                                     ],
                                   ),
                                 ),

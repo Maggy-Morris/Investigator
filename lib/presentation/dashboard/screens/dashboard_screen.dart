@@ -33,7 +33,9 @@ class _AddCameraScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return StandardLayoutScreen(
       body: BlocProvider(
-        create: (context) => HomeBloc()..add(const DataEvent()),
+        create: (context) => HomeBloc()
+        // ..add(const DataEvent())
+        ,
         child: BlocListener<HomeBloc, HomeState>(
           listener: (context, state) {
             if (state.submission == Submission.success) {

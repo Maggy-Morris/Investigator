@@ -20,17 +20,14 @@ class AddCameraScreen extends StatefulWidget {
 }
 
 class _AddCameraScreenState extends State<AddCameraScreen> {
-  // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController cameraNameController = TextEditingController();
   TextEditingController cameraSourceController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return StandardLayoutScreen(
-      // key: _scaffoldKey,
-      // appBar: AppBar(),
       body: BlocProvider(
-        create: (context) => HomeBloc()..add(const DataEvent()),
+        create: (context) => HomeBloc(),
         child: BlocListener<HomeBloc, HomeState>(
           listener: (context, state) {
             if (state.submission == Submission.success) {

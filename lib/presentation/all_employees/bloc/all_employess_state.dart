@@ -15,10 +15,8 @@ class AllEmployeesState extends Equatable {
   final String selectedYear;
   final Submission submission;
 
-   AllEmployeesState({
-
-        this.image = "",
-
+  AllEmployeesState({
+    this.image = "",
     this.personName = "",
     this.companyName = "",
     this.employeeNamesList = const [],
@@ -33,8 +31,7 @@ class AllEmployeesState extends Equatable {
   });
 
   AllEmployeesState copyWith({
-        String? image,
-
+    String? image,
     List<Data>? employeeNamesList,
     String? companyName,
     String? personName,
@@ -48,8 +45,7 @@ class AllEmployeesState extends Equatable {
     String? selectedYear,
   }) {
     return AllEmployeesState(
-            image: image ?? this.image,
-
+      image: image ?? this.image,
       employeeNamesList: employeeNamesList ?? this.employeeNamesList,
       companyName: companyName ?? this.companyName,
       personName: personName ?? this.personName,
@@ -66,8 +62,7 @@ class AllEmployeesState extends Equatable {
 
   @override
   List<Object> get props => [
-            image,
-
+        image,
         submission,
         singleCameraDetails,
         selectedDay,
