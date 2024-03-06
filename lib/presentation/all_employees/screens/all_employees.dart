@@ -37,14 +37,11 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
   TextEditingController employeeNameController = TextEditingController();
   final TextEditingController _searchController = TextEditingController();
 
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    
     });
   }
 
@@ -76,215 +73,444 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                         ),
                       ),
                       FxBox.h24,
-                      SizedBox(
-                        width: double.infinity,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            // Add Employee Button
+                      if (Responsive.isWeb(context))
+                        SizedBox(
+                          width: double.infinity,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // Add Employee Button
 
-                            Form(
-                              child: SizedBox(
-                                height: 40,
-                                width: 300,
-                                child: TextFormField(
-                                  controller: _searchController,
-                                  decoration: InputDecoration(
-                                    labelText: 'Search For Employee'.tr(),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    suffixIcon: IconButton(
-                                      icon: const Icon(Icons.search),
-                                      onPressed: () async {
-                                        final SharedPreferences prefs =
-                                            await SharedPreferences
-                                                .getInstance();
+                              Form(
+                                child: SizedBox(
+                                  height: 40,
+                                  width: 300,
+                                  child: TextFormField(
+                                    controller: _searchController,
+                                    decoration: InputDecoration(
+                                      labelText: 'Search For Employee'.tr(),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      suffixIcon: IconButton(
+                                        icon: const Icon(Icons.search),
+                                        onPressed: () async {
+                                          final SharedPreferences prefs =
+                                              await SharedPreferences
+                                                  .getInstance();
 
-                                        final String? companyName =
-                                            prefs.getString('companyName');
+                                          final String? companyName =
+                                              prefs.getString('companyName');
 
-                                        AllEmployeesBloc.get(context).add(
-                                          GetPersonByNameEvent(
-                                            companyName: companyName ?? "",
-                                            personName: _searchController.text,
-                                          ),
-                                        );
-                                        // AllEmployeesBloc.get(context)
-                                        //     .add(const GetPersonByNameEvent());
-                                      },
+                                          AllEmployeesBloc.get(context).add(
+                                            GetPersonByNameEvent(
+                                              companyName: companyName ?? "",
+                                              personName:
+                                                  _searchController.text,
+                                            ),
+                                          );
+                                          // AllEmployeesBloc.get(context)
+                                          //     .add(const GetPersonByNameEvent());
+                                        },
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
 
-                            // Add Employee Button
-                            FxBox.h24,
-                            BlocBuilder<AllEmployeesBloc, AllEmployeesState>(
-                                builder: (context, state) {
-                              return MaterialButton(
-                                height: 50,
-                                minWidth: 210,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(25.0),
-                                ),
-                                color: AppColors.blueB,
-                                //  Color.fromARGB(255, 143, 188, 211),
-                                onPressed: () {
-                                  // Show dialog to fill in employee data
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return BlocProvider(
-                                        create: (context) => AllEmployeesBloc(),
-                                        child: StatefulBuilder(
-                                          builder: (context, setState) {
-                                            return AlertDialog(
-                                              title: const Text("Add Employee"),
-                                              content: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  TextFormField(
-                                                    // controller:
-                                                    //     employeeNameController,
-                                                    decoration:
-                                                        const InputDecoration(
-                                                            labelText: 'Name'),
-                                                    onChanged: (value) async {
-                                                      state.personName = value;
-                                                    },
-                                                  ),
-                                                  const SizedBox(height: 24),
-                                                  if (selectedImage != null &&
-                                                      selectedImage!.bytes !=
-                                                          null)
-                                                    SizedBox(
-                                                        height: 100,
-                                                        child: selectedImage!
-                                                                    .bytes !=
-                                                                null
-                                                            ? Image.memory(
-                                                                selectedImage!
-                                                                    .bytes!,
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                              )
-                                                            : loadingIndicator() // Show circular progress indicator while loading
-                                                        ),
-                                                  const SizedBox(height: 24),
-                                                  ElevatedButton(
-                                                    onPressed: () async {
-                                                      try {
-                                                        FilePickerResult?
-                                                            result =
-                                                            await FilePicker
-                                                                .platform
-                                                                .pickFiles(
-                                                          type: FileType.image,
-                                                        );
-                                                        if (result != null &&
-                                                            result.files
-                                                                .isNotEmpty) {
-                                                          setState(() {
-                                                            selectedImage =
-                                                                result.files
-                                                                    .first;
-                                                          });
-
-                                                          List<int> imageBytes =
-                                                              selectedImage!
-                                                                  .bytes!;
-
-                                                          // String imageName =
-                                                          //     selectedImage!.name;
-
-                                                          final SharedPreferences
-                                                              prefs =
-                                                              await SharedPreferences
-                                                                  .getInstance();
-
-                                                          final String?
-                                                              companyName =
-                                                              prefs.getString(
-                                                                  'companyName');
-
-                                                          String base64Image =
-                                                              base64Encode(
-                                                                  imageBytes);
-
-                                                          AllEmployeesBloc.get(
-                                                                  context)
-                                                              .add(
-                                                            AddNewEmployee(
-                                                              companyName:
-                                                                  companyName ??
-                                                                      "No Company ",
-                                                              personName: state
-                                                                  .personName,
-                                                              image:
-                                                                  base64Image,
-                                                            ),
+                              // Add Employee Button
+                              FxBox.h24,
+                              BlocBuilder<AllEmployeesBloc, AllEmployeesState>(
+                                  builder: (context, state) {
+                                return MaterialButton(
+                                  height: 50,
+                                  minWidth: 210,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25.0),
+                                  ),
+                                  color: AppColors.blueB,
+                                  //  Color.fromARGB(255, 143, 188, 211),
+                                  onPressed: () {
+                                    // Show dialog to fill in employee data
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return BlocProvider(
+                                          create: (context) =>
+                                              AllEmployeesBloc(),
+                                          child: StatefulBuilder(
+                                            builder: (context, setState) {
+                                              return AlertDialog(
+                                                title:
+                                                    const Text("Add Employee"),
+                                                content: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    TextFormField(
+                                                      // controller:
+                                                      //     employeeNameController,
+                                                      decoration:
+                                                          const InputDecoration(
+                                                              labelText:
+                                                                  'Name'),
+                                                      onChanged: (value) async {
+                                                        state.personName =
+                                                            value;
+                                                      },
+                                                    ),
+                                                    const SizedBox(height: 24),
+                                                    if (selectedImage != null &&
+                                                        selectedImage!.bytes !=
+                                                            null)
+                                                      SizedBox(
+                                                          height: 100,
+                                                          child: selectedImage!
+                                                                      .bytes !=
+                                                                  null
+                                                              ? Image.memory(
+                                                                  selectedImage!
+                                                                      .bytes!,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                )
+                                                              : loadingIndicator() // Show circular progress indicator while loading
+                                                          ),
+                                                    const SizedBox(height: 24),
+                                                    ElevatedButton(
+                                                      onPressed: () async {
+                                                        try {
+                                                          FilePickerResult?
+                                                              result =
+                                                              await FilePicker
+                                                                  .platform
+                                                                  .pickFiles(
+                                                            type:
+                                                                FileType.image,
                                                           );
+                                                          if (result != null &&
+                                                              result.files
+                                                                  .isNotEmpty) {
+                                                            setState(() {
+                                                              selectedImage =
+                                                                  result.files
+                                                                      .first;
+                                                            });
+
+                                                            List<int>
+                                                                imageBytes =
+                                                                selectedImage!
+                                                                    .bytes!;
+
+                                                            // String imageName =
+                                                            //     selectedImage!.name;
+
+                                                            final SharedPreferences
+                                                                prefs =
+                                                                await SharedPreferences
+                                                                    .getInstance();
+
+                                                            final String?
+                                                                companyName =
+                                                                prefs.getString(
+                                                                    'companyName');
+
+                                                            String base64Image =
+                                                                base64Encode(
+                                                                    imageBytes);
+
+                                                            AllEmployeesBloc
+                                                                    .get(
+                                                                        context)
+                                                                .add(
+                                                              AddNewEmployee(
+                                                                companyName:
+                                                                    companyName ??
+                                                                        "No Company ",
+                                                                personName: state
+                                                                    .personName,
+                                                                image:
+                                                                    base64Image,
+                                                              ),
+                                                            );
+                                                          }
+                                                        } catch (e) {
+                                                          print(
+                                                              "Error picking file: $e");
                                                         }
-                                                      } catch (e) {
-                                                        print(
-                                                            "Error picking file: $e");
-                                                      }
+                                                      },
+                                                      child: const Text(
+                                                          'Upload Image'),
+                                                    ),
+                                                  ],
+                                                ),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop(); // Close the dialog
                                                     },
-                                                    child: const Text(
-                                                        'Upload Image'),
+                                                    child: const Text('Cancel'),
+                                                  ),
+                                                  ElevatedButton(
+                                                    onPressed: () {
+                                                      // context.read<AllEmolyessBloc>().add(
+                                                      //     const GetEmployeeNamesEvent());
+
+                                                      AllEmployeesBloc.get(
+                                                              context)
+                                                          .add(
+                                                              const AddNewEmployeeEvent());
+                                                      employeeNameController
+                                                          .clear();
+                                                      setState(() {
+                                                        selectedImage = null;
+                                                      });
+                                                      Navigator.of(context)
+                                                          .pop(); // Close the dialog
+                                                    },
+                                                    child: const Text('Save'),
                                                   ),
                                                 ],
-                                              ),
-                                              actions: [
-                                                TextButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context)
-                                                        .pop(); // Close the dialog
-                                                  },
-                                                  child: const Text('Cancel'),
-                                                ),
-                                                ElevatedButton(
-                                                  onPressed: () {
-                                                    // context.read<AllEmolyessBloc>().add(
-                                                    //     const GetEmployeeNamesEvent());
+                                              );
+                                            },
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: const Text(
+                                    "Add Employee",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                );
+                              }),
+                            ],
+                          ),
+                        ),
+                      if (!Responsive.isWeb(context))
+                        SizedBox(
+                          width: double.infinity,
+                          child: Column(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // Add Employee Button
 
-                                                    AllEmployeesBloc.get(
-                                                            context)
-                                                        .add(
-                                                            const AddNewEmployeeEvent());
-                                                    employeeNameController
-                                                        .clear();
-                                                    setState(() {
-                                                      selectedImage = null;
-                                                    });
-                                                    Navigator.of(context)
-                                                        .pop(); // Close the dialog
-                                                  },
-                                                  child: const Text('Save'),
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                                child: const Text(
-                                  "Add Employee",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500,
+                              Form(
+                                child: SizedBox(
+                                  height: 40,
+                                  width: 300,
+                                  child: TextFormField(
+                                    controller: _searchController,
+                                    decoration: InputDecoration(
+                                      labelText: 'Search For Employee'.tr(),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      suffixIcon: IconButton(
+                                        icon: const Icon(Icons.search),
+                                        onPressed: () async {
+                                          final SharedPreferences prefs =
+                                              await SharedPreferences
+                                                  .getInstance();
+
+                                          final String? companyName =
+                                              prefs.getString('companyName');
+
+                                          AllEmployeesBloc.get(context).add(
+                                            GetPersonByNameEvent(
+                                              companyName: companyName ?? "",
+                                              personName:
+                                                  _searchController.text,
+                                            ),
+                                          );
+                                          // AllEmployeesBloc.get(context)
+                                          //     .add(const GetPersonByNameEvent());
+                                        },
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              );
-                            }),
-                          ],
+                              ),
+
+                              // Add Employee Button
+                              FxBox.h24,
+                              BlocBuilder<AllEmployeesBloc, AllEmployeesState>(
+                                  builder: (context, state) {
+                                return MaterialButton(
+                                  height: 50,
+                                  minWidth: 210,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25.0),
+                                  ),
+                                  color: AppColors.blueB,
+                                  //  Color.fromARGB(255, 143, 188, 211),
+                                  onPressed: () {
+                                    // Show dialog to fill in employee data
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return BlocProvider(
+                                          create: (context) =>
+                                              AllEmployeesBloc(),
+                                          child: StatefulBuilder(
+                                            builder: (context, setState) {
+                                              return AlertDialog(
+                                                title:
+                                                    const Text("Add Employee"),
+                                                content: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    TextFormField(
+                                                      // controller:
+                                                      //     employeeNameController,
+                                                      decoration:
+                                                          const InputDecoration(
+                                                              labelText:
+                                                                  'Name'),
+                                                      onChanged: (value) async {
+                                                        state.personName =
+                                                            value;
+                                                      },
+                                                    ),
+                                                    const SizedBox(height: 24),
+                                                    if (selectedImage != null &&
+                                                        selectedImage!.bytes !=
+                                                            null)
+                                                      SizedBox(
+                                                          height: 100,
+                                                          child: selectedImage!
+                                                                      .bytes !=
+                                                                  null
+                                                              ? Image.memory(
+                                                                  selectedImage!
+                                                                      .bytes!,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                )
+                                                              : loadingIndicator() // Show circular progress indicator while loading
+                                                          ),
+                                                    const SizedBox(height: 24),
+                                                    ElevatedButton(
+                                                      onPressed: () async {
+                                                        try {
+                                                          FilePickerResult?
+                                                              result =
+                                                              await FilePicker
+                                                                  .platform
+                                                                  .pickFiles(
+                                                            type:
+                                                                FileType.image,
+                                                          );
+                                                          if (result != null &&
+                                                              result.files
+                                                                  .isNotEmpty) {
+                                                            setState(() {
+                                                              selectedImage =
+                                                                  result.files
+                                                                      .first;
+                                                            });
+
+                                                            List<int>
+                                                                imageBytes =
+                                                                selectedImage!
+                                                                    .bytes!;
+
+                                                            // String imageName =
+                                                            //     selectedImage!.name;
+
+                                                            final SharedPreferences
+                                                                prefs =
+                                                                await SharedPreferences
+                                                                    .getInstance();
+
+                                                            final String?
+                                                                companyName =
+                                                                prefs.getString(
+                                                                    'companyName');
+
+                                                            String base64Image =
+                                                                base64Encode(
+                                                                    imageBytes);
+
+                                                            AllEmployeesBloc
+                                                                    .get(
+                                                                        context)
+                                                                .add(
+                                                              AddNewEmployee(
+                                                                companyName:
+                                                                    companyName ??
+                                                                        "No Company ",
+                                                                personName: state
+                                                                    .personName,
+                                                                image:
+                                                                    base64Image,
+                                                              ),
+                                                            );
+                                                          }
+                                                        } catch (e) {
+                                                          print(
+                                                              "Error picking file: $e");
+                                                        }
+                                                      },
+                                                      child: const Text(
+                                                          'Upload Image'),
+                                                    ),
+                                                  ],
+                                                ),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop(); // Close the dialog
+                                                    },
+                                                    child: const Text('Cancel'),
+                                                  ),
+                                                  ElevatedButton(
+                                                    onPressed: () {
+                                                      // context.read<AllEmolyessBloc>().add(
+                                                      //     const GetEmployeeNamesEvent());
+
+                                                      AllEmployeesBloc.get(
+                                                              context)
+                                                          .add(
+                                                              const AddNewEmployeeEvent());
+                                                      employeeNameController
+                                                          .clear();
+                                                      setState(() {
+                                                        selectedImage = null;
+                                                      });
+                                                      Navigator.of(context)
+                                                          .pop(); // Close the dialog
+                                                    },
+                                                    child: const Text('Save'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: const Text(
+                                    "Add Employee",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                );
+                              }),
+                            ],
+                          ),
                         ),
-                      ),
                       FxBox.h24,
                       BlocBuilder<AllEmployeesBloc, AllEmployeesState>(
                         builder: (context, state) {

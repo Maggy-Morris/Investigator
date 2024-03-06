@@ -206,7 +206,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                       if (!Responsive.isWeb(context))
                         Column(
                           children: [
-                            _commonText("cameraName".tr()),
+                            _commonText("MaggyyyyName".tr()),
                             FxBox.h4,
                             _listBox(
                                 hintText: "addCameraName".tr(),
