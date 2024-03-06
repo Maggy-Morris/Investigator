@@ -208,57 +208,26 @@ class RemoteProvider {
   // }
 
   ///get person data by name
-  Future<CallBackModel> getPersonByName(
+  Future<List<Data>> getPersonByName(
       {required String companyName, required String personName}) async {
     try {
       var callBack = await RemoteDataSource().post(
           endPoint: "/qdrant/get_document_by_name",
           body: {"collection_name": companyName, "target_name": personName});
 
-      if (callBack.isNotEmpty && callBack['data'] != null) {
+      if (callBack.isNotEmpty) {
         // Extract the relevant data from the callBack
-        CallBackModel callBackList = CallBackModel.fromJson(callBack);
-        return callBackList;
+        EmployeeModel general = EmployeeModel.fromJson(callBack);
+
+        // CallBackModel callBackList = CallBackModel.fromJson(callBack);
+        return general.data ?? [];
       } else {
-        return CallBackModel();
+        return [];
       }
     } catch (e) {
-      return CallBackModel();
+      return [];
     }
   }
-  //       List<dynamic> dataList = callBack['data'];
-
-  //       // Map the extracted data to my EmployeeModel
-  //       List<Data> employeeDataList =
-  //           dataList.map((data) => Data.fromJson(data)).toList();
-
-  //       return employeeDataList;
-  //     } else {
-  //       return [];
-  //     }
-  //   } catch (e) {
-  //     debugPrint(e.toString());
-  //     return [];
-  //   }
-  // }
-
-  // Future<EmployeeModel> getPersonByName(
-  //     {required String companyName, required String personName}) async {
-  //   try {
-  //     var callBack = await RemoteDataSource().post(
-  //         endPoint: "/qdrant/get_document_by_name",
-  //         body: {"collection_name": companyName, "target_name": personName});
-  //     if (callBack.isNotEmpty) {
-  //       EmployeeModel employeeModel = EmployeeModel.fromJson(callBack);
-  //       return employeeModel;
-  //     } else {
-  //       return EmployeeModel();
-  //     }
-  //   } catch (e) {
-  //     debugPrint(e.toString());
-  //     return EmployeeModel();
-  //   }
-  // }
 
   ///get person data by ID
   Future<EmployeeModel> getDocumentById(
@@ -279,31 +248,6 @@ class RemoteProvider {
     }
   }
 
-  ///Delete person data by Name
-  // Future<List<Data>> deleteDocumentByName(
-  //     {required String companyName, required String personName}) async {
-  //   try {
-  //     var callBack = await RemoteDataSource().post(
-  //         endPoint: "/qdrant/delete_document_by_name",
-  //         body: {"collection_name": companyName, "target_name": personName});
-
-  //     if (callBack.isNotEmpty && callBack['data'] != null) {
-  //       // Extract the relevant data from the callBack
-  //       List<dynamic> dataList = callBack['data'];
-
-  //       // Map the extracted data to my EmployeeModel
-  //       List<Data> employeeDataList =
-  //           dataList.map((data) => Data.fromJson(data)).toList();
-
-  //       return employeeDataList;
-  //     } else {
-  //       return [];
-  //     }
-  //   } catch (e) {
-  //     debugPrint(e.toString());
-  //     return [];
-  //   }
-  // }
   Future<EmployeeModel> deleteDocumentByName(
       {required String companyName, required String personName}) async {
     try {
