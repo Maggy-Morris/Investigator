@@ -75,24 +75,17 @@ class AddNewEmployee extends AllEmployeesEvent {
       ];
 }
 
-
-
 // get person data by name
 class GetPersonByNameEvent extends AllEmployeesEvent {
-  const GetPersonByNameEvent();
-
-  @override
-  List<Object?> get props => [];
-}
-
-class GetPersonByName extends AllEmployeesEvent {
   final String companyName;
   final String personName;
-  const GetPersonByName({required this.companyName, required this.personName});
+  const GetPersonByNameEvent(
+      {required this.companyName, required this.personName});
 
   @override
   List<Object?> get props => [companyName, personName];
 }
+
 //////////////////////////////////
 
 class CameraInitializeDate extends AllEmployeesEvent {

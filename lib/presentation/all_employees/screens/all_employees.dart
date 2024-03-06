@@ -37,11 +37,6 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
   TextEditingController employeeNameController = TextEditingController();
   final TextEditingController _searchController = TextEditingController();
 
-  // Future<String> getCompanyName() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-
-  //   return prefs.getString('companyName') ?? '';
-  // }
 
   @override
   void initState() {
@@ -49,11 +44,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-      // final String? companyName = prefs.getString('companyName');
-      // Trigger the event to fetch employee names once the screen is built
-      // context.read<HomeBloc>().add(GetEmployeeNames(companyName: companyName!));
-
-      // context.read<HomeBloc>().add(const GetEmployeeNamesEvent());
+    
     });
   }
 
@@ -114,13 +105,13 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                             prefs.getString('companyName');
 
                                         AllEmployeesBloc.get(context).add(
-                                          GetPersonByName(
+                                          GetPersonByNameEvent(
                                             companyName: companyName ?? "",
                                             personName: _searchController.text,
                                           ),
                                         );
-                                        AllEmployeesBloc.get(context)
-                                            .add(const GetPersonByNameEvent());
+                                        // AllEmployeesBloc.get(context)
+                                        //     .add(const GetPersonByNameEvent());
                                       },
                                     ),
                                   ),

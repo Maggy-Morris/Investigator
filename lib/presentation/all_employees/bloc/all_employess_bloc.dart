@@ -21,7 +21,7 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
   AllEmployeesBloc() : super(AllEmployeesState()) {
     /// Main Events
     on<AllEmployeesEvent>(_onAllEmployeesEvent);
-    on<GetPersonByName>(_onGetPersonByName);
+    // on<GetPersonByName>(_onGetPersonByName);
 
     on<GetPersonByNameEvent>(_onGetPersonByNameEvent);
 
@@ -179,16 +179,16 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
   }
 
   /// Add GetPersonByName
-  _onGetPersonByName(
-      GetPersonByName event, Emitter<AllEmployeesState> emit) async {
-    // await RemoteProvider()
-    //     .getPersonByName(
-    //         companyName: state.companyName, personName: state.personName)
-    //     .then((value) {
-    emit(state.copyWith(
-        companyName: event.companyName, submission: Submission.hasData));
-    // });
-  }
+  // _onGetPersonByName(
+  //     GetPersonByName event, Emitter<AllEmployeesState> emit) async {
+  //   await RemoteProvider();
+  //   //     .getPersonByName(
+  //   //         companyName: state.companyName, personName: state.personName)
+  //   //     .then((value) {
+  //   emit(state.copyWith(
+  //       companyName: event.companyName, submission: Submission.hasData));
+  //   // });
+  // }
 
   /// Add GetPersonByName Handle
   _onGetPersonByNameEvent(
@@ -196,8 +196,8 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
     emit(state.copyWith(submission: Submission.loading));
     await RemoteProvider()
         .getPersonByName(
-      companyName: state.companyName,
-      personName: state.personName,
+      companyName: event.companyName,
+      personName: event.personName,
     )
         .then((value) {
       // if (state.companyName.isNotEmpty) {
@@ -207,7 +207,7 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
         // Update the employeeNamesList with the new list of employees
         emit(state.copyWith(
           submission: Submission.success,
-          employeeNamesList: [...state.employeeNamesList],
+          employeeNamesList: value,
         ));
         // final updatedList = state.employeeNamesList
         //     .where((employee) => employee.name != event.personName)
