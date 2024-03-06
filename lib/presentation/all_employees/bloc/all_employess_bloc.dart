@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/models/add_company_model.dart';
 import '../../../core/models/employee_model.dart';
+import '../../../core/widgets/toast/toast.dart';
 
 part 'all_employess_event.dart';
 
@@ -153,7 +154,7 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
     await RemoteProvider()
         .deleteDocumentByName(
       companyName: companyName ?? '',
-      personName: state.personName,
+      personName: event.personName,
     )
         .then((value) {
       /// this to update the state once i deleted a person
@@ -165,6 +166,10 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
         emit(state.copyWith(
           submission: Submission.success,
           employeeNamesList: updatedList,
+        ));
+      } else if (value.data!.isEmpty) {
+        emit(state.copyWith(
+          submission: Submission.noDataFound,
         ));
       }
 
@@ -209,6 +214,7 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
           submission: Submission.success,
           employeeNamesList: value,
         ));
+
         // final updatedList = state.employeeNamesList
         //     .where((employee) => employee.name != event.personName)
         //     .toList();
@@ -216,6 +222,10 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
         //   submission: Submission.success,
         //   employeeNamesList: updatedList,
         // ));
+      } else if (value.length == 0) {
+        emit(state.copyWith(
+          submission: Submission.noDataFound,
+        ));
       } else {
         emit(state.copyWith(
           submission: Submission.error,

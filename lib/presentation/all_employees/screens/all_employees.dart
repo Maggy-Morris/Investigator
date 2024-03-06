@@ -12,6 +12,7 @@ import 'package:Investigator/core/utils/responsive.dart';
 import 'package:Investigator/core/widgets/sizedbox.dart';
 import 'package:Investigator/presentation/standard_layout/screens/standard_layout.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../core/enum/enum.dart';
 import '../bloc/all_employess_bloc.dart';
 
 class AllEmployeesScreen extends StatefulWidget {
@@ -521,78 +522,78 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                 children: [
                                   SizedBox(
                                     width: MediaQuery.of(context).size.width,
-                                    child: GridView.builder(
-                                      shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemCount:
-                                          state.employeeNamesList.length < 5
-                                              ? state.employeeNamesList.length
-                                              : 5,
-                                      gridDelegate: Responsive.isMobile(context)
-                                          ? const SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 1,
-                                              crossAxisSpacing: 45,
-                                              mainAxisSpacing: 45,
-                                              mainAxisExtent: 350,
-                                            )
-                                          : Responsive.isTablet(context)
-                                              ? const SliverGridDelegateWithFixedCrossAxisCount(
-                                                  crossAxisCount: 2,
-                                                  crossAxisSpacing: 45,
-                                                  mainAxisSpacing: 45,
-                                                  mainAxisExtent: 350,
-                                                )
-                                              : MediaQuery.of(context)
-                                                          .size
-                                                          .width <
-                                                      1500
-                                                  ? SliverGridDelegateWithMaxCrossAxisExtent(
-                                                      maxCrossAxisExtent:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.24,
-                                                      crossAxisSpacing: 45,
-                                                      mainAxisSpacing: 45,
-                                                      mainAxisExtent: 350,
-                                                    )
-                                                  : SliverGridDelegateWithMaxCrossAxisExtent(
-                                                      maxCrossAxisExtent:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.24,
-                                                      crossAxisSpacing: 45,
-                                                      mainAxisSpacing: 45,
-                                                      mainAxisExtent: 350,
-                                                    ),
-                                      itemBuilder: (context, index) {
-                                        final employee =
-                                            state.employeeNamesList[index];
-                                        return _contactUi(
-                                          // context: context,
-                                          name: employee.name ?? '',
-                                          profession: employee.sId ?? '',
-                                          onDelete: () async {
-                                            final SharedPreferences prefs =
-                                                await SharedPreferences
-                                                    .getInstance();
-
-                                            final String? companyName =
-                                                prefs.getString('companyName');
-                                            context
-                                                .read<AllEmployeesBloc>()
-                                                .add(
-                                                  DeletePersonByNameEvent(
-                                                    companyName ?? '',
-                                                    employee.name ?? '',
-                                                  ),
-                                                );
-                                          },
-                                        );
-                                      },
-                                    ),
+                                    child: (state.submission ==
+                                            Submission.noDataFound)
+                                        ? Center(
+                                            child: Text(
+                                            "No data found Yet!",
+                                            style: TextStyle(
+                                                color: AppColors.blueB,
+                                                fontSize: 25,
+                                                fontWeight: FontWeight.w600),
+                                          ))
+                                        : GridView.builder(
+                                            shrinkWrap: true,
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            itemCount: state.employeeNamesList
+                                                        .length <
+                                                    5
+                                                ? state.employeeNamesList.length
+                                                : 5,
+                                            gridDelegate: Responsive.isMobile(
+                                                    context)
+                                                ? const SliverGridDelegateWithFixedCrossAxisCount(
+                                                    crossAxisCount: 1,
+                                                    crossAxisSpacing: 45,
+                                                    mainAxisSpacing: 45,
+                                                    mainAxisExtent: 350,
+                                                  )
+                                                : Responsive.isTablet(context)
+                                                    ? const SliverGridDelegateWithFixedCrossAxisCount(
+                                                        crossAxisCount: 2,
+                                                        crossAxisSpacing: 45,
+                                                        mainAxisSpacing: 45,
+                                                        mainAxisExtent: 350,
+                                                      )
+                                                    : MediaQuery.of(context)
+                                                                .size
+                                                                .width <
+                                                            1500
+                                                        ? SliverGridDelegateWithMaxCrossAxisExtent(
+                                                            maxCrossAxisExtent:
+                                                                MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width *
+                                                                    0.24,
+                                                            crossAxisSpacing:
+                                                                45,
+                                                            mainAxisSpacing: 45,
+                                                            mainAxisExtent: 350,
+                                                          )
+                                                        : SliverGridDelegateWithMaxCrossAxisExtent(
+                                                            maxCrossAxisExtent:
+                                                                MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width *
+                                                                    0.24,
+                                                            crossAxisSpacing:
+                                                                45,
+                                                            mainAxisSpacing: 45,
+                                                            mainAxisExtent: 350,
+                                                          ),
+                                            itemBuilder: (context, index) {
+                                              final employee = state
+                                                  .employeeNamesList[index];
+                                              return _contactUi(
+                                                // context: context,
+                                                name: employee.name ?? '',
+                                                profession: employee.sId ?? '',
+                                              );
+                                            },
+                                          ),
                                   ),
                                 ],
                               ),
@@ -614,7 +615,6 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
   Widget _contactUi({
     required String name,
     required String profession,
-    required VoidCallback onDelete,
   }) {
     return Container(
       width: 300,
@@ -681,7 +681,17 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                           color: AppColors.thinkRedColor),
                                     ),
                                     onPressed: () async {
-                                      onDelete();
+                                      final SharedPreferences prefs =
+                                          await SharedPreferences.getInstance();
+
+                                      final String? companyName =
+                                          prefs.getString('companyName');
+                                      context.read<AllEmployeesBloc>().add(
+                                            DeletePersonByNameEvent(
+                                              companyName ?? '',
+                                              name ?? '',
+                                            ),
+                                          );
 
                                       Navigator.of(ctx).pop();
                                       // await logout(

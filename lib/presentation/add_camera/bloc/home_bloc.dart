@@ -25,17 +25,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<DeleteCompanyEvent>(_onDeleteCompanyEvent);
 
     // /// Add New Employee
-    // on<AddNewEmployee>(_onAddNewEmployee);
-    // on<AddNewEmployeeEvent>(_onAddNewEmployeeEvent);
-
-    /// get static list
-
-    // on<GetPersonByName>(_onGetPersonByName);
-
-    // on<GetEmployeeNames>(_onGetEmployeeNames);
-    // on<GetEmployeeNamesEvent>(_onGetEmployeeNamesEvent);
-
-    // on<GetCompaniesNames>(_onGetCompaniesNames);
+   
 
     /// functionality Company get employees Data
     // on<GetPersonByNameEvent>(_onGetPersonByNameEvent);
@@ -60,86 +50,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(state.copyWith(
         companyName: event.companyName, submission: Submission.editing));
   }
-
-  // /// New Employees Added
-  // _onAddNewEmployee(AddNewEmployee event, Emitter<HomeState> emit) async {
-  //   emit(state.copyWith(
-  //       companyName: event.companyName,
-  //       personName: event.personName,
-  //       // imageName: event.imageName,
-  //       // files: event.files,
-  //       image: event.image,
-  //       submission: Submission.editing));
-  // }
-
-  // _onAddNewEmployeeEvent(
-  //     AddNewEmployeeEvent event, Emitter<HomeState> emit) async {
-  //   emit(state.copyWith(submission: Submission.loading));
-  //   await RemoteProvider()
-  //       .addNewPersonToACompany(
-  //     companyName: state.companyName,
-  //     personName: state.personName,
-  //     // imageName:state.imageName,
-  //     // image: state.files,
-  //     image: state.image,
-  //   )
-  //       .then((value) {
-  //     // if (state.cameraSelectedModels.isNotEmpty) {
-  //     //   add(const ApplyModelEvent());
-  //     // }
-  //     if (value != AddCompanyModel()) {
-  //       emit(HomeState().copyWith(submission: Submission.success));
-  //     } else {
-  //       emit(state.copyWith(submission: Submission.error));
-  //     }
-  //   });
-  // }
-
-  /// Get Company Employees Handle
-
-  // _onGetEmployeeNames(GetEmployeeNames event, Emitter<HomeState> emit) async {
-  //   await RemoteProvider();
-  //   // .getAllEmployeeNames(companyName: state.companyName)
-  //   // .then((value) {
-  //   emit(state.copyWith(
-  //       companyName: event.companyName, submission: Submission.hasData));
-  //   // });
-  // }
-
-  // _onGetEmployeeNamesEvent(
-  //     GetEmployeeNamesEvent event, Emitter<HomeState> emit) async {
-  //   emit(state.copyWith(submission: Submission.loading));
-
-  //   try {
-  //     final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-  //     final String? companyName = prefs.getString('companyName');
-
-  //     final employeeModel = await RemoteProvider().getAllEmployeeNames(
-  //       // companyName: "Think" ?? "",
-  //       companyName: companyName ?? '',
-  //     );
-
-  //     if (employeeModel.isNotEmpty) {
-  //       emit(state.copyWith(
-  //         submission: Submission.success,
-  //         employeeNamesList: employeeModel,
-  //       ));
-  //     } else {
-  //       emit(state.copyWith(
-  //         submission: Submission.noDataFound,
-  //         employeeNamesList: [],
-  //       ));
-  //     }
-  //   } catch (e) {
-  //     debugPrint(e.toString());
-
-  //     emit(state.copyWith(
-  //       submission: Submission.error,
-  //       employeeNamesList: [],
-  //     ));
-  //   }
-  // }
 
   /// Add Company Handle
 
@@ -183,51 +93,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
 ////////////////////////////////////////////
-  // /// Add GetPersonByName
-  // _onGetPersonByName(GetPersonByName event, Emitter<HomeState> emit) async {
-  //   // await RemoteProvider()
-  //   //     .getPersonByName(
-  //   //         companyName: state.companyName, personName: state.personName)
-  //   //     .then((value) {
-  //   emit(state.copyWith(
-  //       companyName: event.companyName, submission: Submission.hasData));
-  //   // });
-  // }
-
-//////////////////////////////////////////
-  // /// Add GetPersonByName Handle
-  // _onGetPersonByNameEvent(
-  //     GetPersonByNameEvent event, Emitter<HomeState> emit) async {
-  //   emit(state.copyWith(submission: Submission.loading));
-  //   await RemoteProvider()
-  //       .getPersonByName(
-  //     companyName: state.companyName,
-  //     personName: state.personName,
-  //   )
-  //       .then((value) {
-  //     // if (state.companyName.isNotEmpty) {
-  //     //   add(const ApplyModelEvent());
-  //     // }
-  //     if (value != EmployeeModel()) {
-  //       // Update the employeeNamesList with the new list of employees
-  //       emit(state.copyWith(
-  //         submission: Submission.success,
-  //         employeeNamesList: [...state.employeeNamesList],
-  //       ));
-  //       // final updatedList = state.employeeNamesList
-  //       //     .where((employee) => employee.name != event.personName)
-  //       //     .toList();
-  //       // emit(HomeState().copyWith(
-  //       //   submission: Submission.success,
-  //       //   employeeNamesList: updatedList,
-  //       // ));
-  //     } else {
-  //       emit(state.copyWith(
-  //         submission: Submission.error,
-  //       ));
-  //     }
-  //   });
-  // }
+ 
 
   /// Add GetPersonByIdHandle
   _onGetPersonByIdEvent(
@@ -250,37 +116,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     });
   }
 
-  // /// Delete person data by Name
-  // _onDeletePersonByNameEvent(
-  //     DeletePersonByNameEvent event, Emitter<HomeState> emit) async {
-  //   emit(state.copyWith(submission: Submission.loading));
-  //   await RemoteProvider()
-  //       .deleteDocumentByName(
-  //     companyName: state.companyName,
-  //     personName: state.personName,
-  //   )
-  //       .then((value) {
-  //     /// this to update the state once i deleted a person
-  //     if (value != EmployeeModel()) {
-  //       // Remove the deleted employee from the state
-  //       final updatedList = state.employeeNamesList
-  //           .where((employee) => employee.name != event.personName)
-  //           .toList();
-  //       emit(state.copyWith(
-  //         submission: Submission.success,
-  //         employeeNamesList: updatedList,
-  //       ));
-  //     }
-
-  //     // if (value != EmployeeModel()) {
-  //     //   emit(const HomeState().copyWith(submission: Submission.success));
-  //     // }
-
-  //     else {
-  //       emit(state.copyWith(submission: Submission.error));
-  //     }
-  //   });
-  // }
+ 
 
   /// Delete person data by Id
   _onDeletePersonByIdEvent(
@@ -300,90 +136,3 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     });
   }
 }
-// _onAddCameraName(AddCameraName event, Emitter<HomeState> emit) async {
-//   emit(state.copyWith(
-//       cameraName: event.cameraName, submission: Submission.editing));
-// }
-
-// _onAddCameraSource(AddCameraSource event, Emitter<HomeState> emit) async {
-//   emit(state.copyWith(
-//       cameraSource: event.cameraSource, submission: Submission.editing));
-// }
-
-// _onAddCameraSourceType(
-//     AddCameraSourceType event, Emitter<HomeState> emit) async {
-//   emit(state.copyWith(
-//       cameraSourceType: event.cameraSourceType,
-//       submission: Submission.editing));
-// }
-
-// _onAddCameraSourceModels(
-//     AddCameraSourceModels event, Emitter<HomeState> emit) async {
-//   emit(state.copyWith(
-//       cameraSelectedModels: event.cameraSelectedModels,
-//       submission: Submission.editing));
-// }
-
-/// get static lists
-
-// _onGetCamerasNames(GetCamerasNames event, Emitter<HomeState> emit) async {
-//   await RemoteProvider().getAllCamerasNames().then((value) {
-//     emit(state.copyWith(
-//         camerasNamesList: value, submission: Submission.hasData));
-//   });
-// }
-
-// _onGetSourceTypes(GetSourceTypes event, Emitter<HomeState> emit) async {
-//   await RemoteProvider().getAllSourceTypes().then((value) {
-//     emit(state.copyWith(
-//         sourceTypesList: value, submission: Submission.hasData));
-//   });
-// }
-
-// _onGetModelsName(GetModelsName event, Emitter<HomeState> emit) async {
-//   await RemoteProvider().getAllModelsNames().then((value) {
-//     emit(state.copyWith(
-//         modelsNameList: value, submission: Submission.hasData));
-//   });
-// }
-///////////////////////////////
-
-/// Add Camera Handle
-// _onAddCameraEvent(AddCameraEvent event, Emitter<HomeState> emit) async {
-//   emit(state.copyWith(submission: Submission.loading));
-//   await RemoteProvider()
-//       .addCamera(
-//     cameraName: state.cameraName,
-//     sourceType: state.cameraSourceType,
-//     sourceData: state.cameraSource,
-//   )
-//       .then((value) {
-//     if (state.cameraSelectedModels.isNotEmpty) {
-//       add(const ApplyModelEvent());
-//     }
-//     if (value != AddCameraModel()) {
-//       emit(const HomeState().copyWith(submission: Submission.success));
-//     } else {
-//       emit(state.copyWith(submission: Submission.error));
-//     }
-//   });
-// }
-
-/// Apply Model Handle
-// _onApplyModelEvent(ApplyModelEvent event, Emitter<HomeState> emit) async {
-//   emit(state.copyWith(submission: Submission.loading));
-//   await RemoteProvider()
-//       .applyModelToCamera(
-//     cameraName: state.cameraName,
-//     modelName: state.cameraSelectedModels,
-//   )
-//       .then((value) {
-//     emit(const HomeState().copyWith(submission: Submission.success));
-//     // EasyLoading.showSuccess("value.cameraName.toString()");
-//   }).timeout(
-//     const Duration(seconds: 4),
-//     onTimeout: () {
-//       emit(const HomeState().copyWith(submission: Submission.success));
-//     },
-//   );
-// }
