@@ -13,6 +13,7 @@ import 'package:Investigator/presentation/standard_layout/screens/standard_layou
 import '../../../core/enum/enum.dart';
 import '../../../core/loader/loading_indicator.dart';
 import '../../../core/widgets/textformfield.dart';
+import '../../all_employees/bloc/all_employess_bloc.dart';
 import '../../all_employees/screens/text.dart';
 
 class Search extends StatefulWidget {
@@ -186,9 +187,7 @@ class _SearchState extends State<Search> {
                                     ), /////////////////////////////////////////////
 
                               /////////////////////////////////////////////////
-                              // BlocBuilder<HomeBloc, HomeState>(
-                              //   builder: (context, state) {
-                              // return
+                             
                               Padding(
                                 padding: const EdgeInsets.all(10.0),
                                 child: SingleChildScrollView(
@@ -259,7 +258,7 @@ class _SearchState extends State<Search> {
                                               name: employee.name ?? '',
                                               profession: employee.sId ?? '',
                                               onDelete: () {
-                                                context.read<HomeBloc>().add(
+                                                context.read<AllEmployeesBloc>().add(
                                                       DeletePersonByNameEvent(
                                                         state.companyName,
                                                         employee.name ?? '',
@@ -272,83 +271,7 @@ class _SearchState extends State<Search> {
                                         ),
                                       ),
 
-                                      //  SizedBox(
-                                      //   width:
-                                      //       MediaQuery.of(context).size.width,
-                                      //   child: BlocProvider.value(
-                                      //     value: BlocProvider.of<HomeBloc>(
-                                      //         context),
-                                      //     child: GridView.builder(
-                                      //       shrinkWrap: true,
-                                      //       physics:
-                                      //           const NeverScrollableScrollPhysics(),
-                                      //       itemCount:
-                                      //           BlocProvider.of<HomeBloc>(
-                                      //                   context)
-                                      //               .state
-                                      //               .employeeNamesList
-                                      //               .length,
-                                      //       gridDelegate: Responsive.isMobile(
-                                      //               context)
-                                      //           ? const SliverGridDelegateWithFixedCrossAxisCount(
-                                      //               crossAxisCount: 1,
-                                      //               crossAxisSpacing: 45,
-                                      //               mainAxisSpacing: 45,
-                                      //               mainAxisExtent: 350,
-                                      //             )
-                                      //           : Responsive.isTablet(context)
-                                      //               ? const SliverGridDelegateWithFixedCrossAxisCount(
-                                      //                   crossAxisCount: 2,
-                                      //                   crossAxisSpacing: 45,
-                                      //                   mainAxisSpacing: 45,
-                                      //                   mainAxisExtent: 350,
-                                      //                 )
-                                      //               : MediaQuery.of(context)
-                                      //                           .size
-                                      //                           .width <
-                                      //                       1500
-                                      //                   ? SliverGridDelegateWithMaxCrossAxisExtent(
-                                      //                       maxCrossAxisExtent:
-                                      //                           MediaQuery.of(
-                                      //                                       context)
-                                      //                                   .size
-                                      //                                   .width *
-                                      //                               0.24,
-                                      //                       crossAxisSpacing:
-                                      //                           45,
-                                      //                       mainAxisSpacing: 45,
-                                      //                       mainAxisExtent: 350,
-                                      //                     )
-                                      //                   : SliverGridDelegateWithMaxCrossAxisExtent(
-                                      //                       maxCrossAxisExtent:
-                                      //                           MediaQuery.of(
-                                      //                                       context)
-                                      //                                   .size
-                                      //                                   .width *
-                                      //                               0.24,
-                                      //                       crossAxisSpacing:
-                                      //                           45,
-                                      //                       mainAxisSpacing: 45,
-                                      //                       mainAxisExtent: 350,
-                                      //                     ),
-                                      //       itemBuilder: (context, index) {
-                                      //         final employee =
-                                      //             BlocProvider.of<HomeBloc>(
-                                      //                     context)
-                                      //                 .state
-                                      //                 .employeeNamesList[index];
-
-                                      //         return _contactUi(
-                                      //           name: employee.name ?? '',
-                                      //           profession: employee.sId ?? '',
-                                      //           onDelete: () {
-                                      //             Navigator.of(context).pop();
-                                      //           },
-                                      //         );
-                                      //       },
-                                      //     ),
-                                      //   ),
-                                      // ),
+                                     
                                     ],
                                   ),
                                 ),
@@ -363,21 +286,21 @@ class _SearchState extends State<Search> {
                             children: [
                               _commonText("Company Name".tr()),
                               FxBox.h4,
-                              _listBox(
-                                  hintText: "Search for Company".tr(),
-                                  controller: companyNameController,
-                                  onChanged: (value) {
-                                    HomeBloc.get(context).add(
-                                        GetEmployeeNames(companyName: value));
-                                  }),
+                              // _listBox(
+                              //     hintText: "Search for Company".tr(),
+                              //     controller: companyNameController,
+                              //     onChanged: (value) {
+                              //       HomeBloc.get(context).add(
+                              //           GetEmployeeNames(companyName: value));
+                              //     }),
                               FxBox.h60,
                               (state.submission == Submission.loading)
                                   ? loadingIndicator()
                                   : Center(
                                       child: ElevatedButton.icon(
                                         onPressed: () {
-                                          HomeBloc.get(context).add(
-                                              const GetEmployeeNamesEvent());
+                                          // HomeBloc.get(context).add(
+                                          //     const GetEmployeeNamesEvent());
                                         },
                                         style: ElevatedButton.styleFrom(
                                           shape: RoundedRectangleBorder(

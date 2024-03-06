@@ -117,6 +117,7 @@ class RemoteProvider {
       );
 
       //Change this "Collection Created Successfully!"
+
       if (callBack.isNotEmpty) {
         CallBackModel callBackList = CallBackModel.fromJson(callBack);
         return callBackList;
@@ -129,6 +130,7 @@ class RemoteProvider {
   }
 
   ///Delete Company
+
   Future<CallBackModel> deleteCompany({
     required String companyName,
   }) async {
@@ -151,7 +153,6 @@ class RemoteProvider {
   }
 
   /// Get all EmployeeNames
-  ///
 
   Future<List<Data>> getAllEmployeeNames({
     required String companyName,
@@ -165,12 +166,12 @@ class RemoteProvider {
       if (callBack.isNotEmpty) {
         // Extract the relevant data from the callBack
         // List<dynamic> dataList = callBack['data'];
-       EmployeeModel general = EmployeeModel.fromJson(callBack);
+        EmployeeModel general = EmployeeModel.fromJson(callBack);
         // Map the extracted data to my EmployeeModel
         // List<Data> employeeDataList =
         //     dataList.map((data) => Data.fromJson(data)).toList();
 
-        return general.data??[];
+        return general.data ?? [];
       } else {
         return [];
       }

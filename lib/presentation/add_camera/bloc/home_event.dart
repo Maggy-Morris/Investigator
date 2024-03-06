@@ -16,22 +16,22 @@ class DataEvent extends HomeEvent {
 
 ///
 
-class GetEmployeeNames extends HomeEvent {
-  final String companyName;
+// class GetEmployeeNames extends HomeEvent {
+//   final String companyName;
 
-  const GetEmployeeNames({required this.companyName});
+//   const GetEmployeeNames({required this.companyName});
 
-  @override
-  List<Object?> get props => [companyName];
-}
+//   @override
+//   List<Object?> get props => [companyName];
+// }
 
-/// Get Emoloyees Data event
-class GetEmployeeNamesEvent extends HomeEvent {
-  const GetEmployeeNamesEvent();
+// /// Get Emoloyees Data event
+// class GetEmployeeNamesEvent extends HomeEvent {
+//   const GetEmployeeNamesEvent();
 
-  @override
-  List<Object?> get props => [];
-}
+//   @override
+//   List<Object?> get props => [];
+// }
 
 // class GetCompaniesNames extends HomeEvent {
 //   const GetCompaniesNames();
@@ -93,10 +93,11 @@ class AddNewEmployee extends HomeEvent {
   final String personName;
   final String image;
   // final String imageName;
-  PlatformFile? files;
+  // PlatformFile? files;
 
   AddNewEmployee(
-      {this.files,
+      {
+        // this.files,
       // this.imageName,
 
       required this.personName,
@@ -105,7 +106,9 @@ class AddNewEmployee extends HomeEvent {
 
   @override
   List<Object?> get props => [
-        companyName, personName, files, image,
+        companyName, personName, 
+        // files, 
+        image,
         // imageName
       ];
 }
@@ -131,22 +134,22 @@ class DeleteCompanyEvent extends HomeEvent {
   List<Object?> get props => [];
 }
 
-// get person data by name
-class GetPersonByNameEvent extends HomeEvent {
-  const GetPersonByNameEvent();
+// // get person data by name
+// class GetPersonByNameEvent extends HomeEvent {
+//   const GetPersonByNameEvent();
 
-  @override
-  List<Object?> get props => [];
-}
+//   @override
+//   List<Object?> get props => [];
+// }
 
-class GetPersonByName extends HomeEvent {
-  final String companyName;
-  final String personName;
-  const GetPersonByName({required this.companyName, required this.personName});
+// class GetPersonByName extends HomeEvent {
+//   final String companyName;
+//   final String personName;
+//   const GetPersonByName({required this.companyName, required this.personName});
 
-  @override
-  List<Object?> get props => [companyName, personName];
-}
+//   @override
+//   List<Object?> get props => [companyName, personName];
+// }
 
 // get person data by id
 class GetPersonByIdEvent extends HomeEvent {
@@ -158,16 +161,16 @@ class GetPersonByIdEvent extends HomeEvent {
   List<Object?> get props => [companyName, personId];
 }
 
-// delete person data by name
-class DeletePersonByNameEvent extends HomeEvent {
-  final String companyName;
-  final String personName;
+// // delete person data by name
+// class DeletePersonByNameEvent extends HomeEvent {
+//   final String companyName;
+//   final String personName;
 
-  const DeletePersonByNameEvent(this.companyName, this.personName);
+//   const DeletePersonByNameEvent(this.companyName, this.personName);
 
-  @override
-  List<Object?> get props => [companyName, personName];
-}
+//   @override
+//   List<Object?> get props => [companyName, personName];
+// }
 
 // delete person data by id
 class DeletePersonByIdEvent extends HomeEvent {

@@ -9,7 +9,7 @@ import 'package:Investigator/core/widgets/sizedbox.dart';
 import 'package:Investigator/presentation/standard_layout/screens/standard_layout.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-import '../bloc/camera_bloc.dart';
+import '../bloc/all_employess_bloc.dart';
 
 class CameraDetails extends StatefulWidget {
   final String cameraName;
@@ -25,12 +25,12 @@ class _CameraDetailsState extends State<CameraDetails> {
   Widget build(BuildContext context) {
     return StandardLayoutScreen(
       body: BlocProvider(
-        create: (context) => CameraBloc()
+        create: (context) => AllEmployeesBloc()
           ..add(CameraDetailsEvent(cameraName: widget.cameraName))
           ..add(const CameraInitializeDate()),
-        child: BlocListener<CameraBloc, CameraState>(
+        child: BlocListener<AllEmployeesBloc, AllEmployeesState>(
           listener: (context, state) {},
-          child: BlocBuilder<CameraBloc, CameraState>(
+          child: BlocBuilder<AllEmployeesBloc, AllEmployeesState>(
             builder: (context, state) {
               if (state.singleCameraDetails.isEmpty) {
                 return Center(child: loadingIndicator());
@@ -194,13 +194,15 @@ class _CameraDetailsState extends State<CameraDetails> {
                                     firstDate: DateTime(2020),
                                   ).then((value) {
                                     if (value != null) {
-                                      CameraBloc.get(context).add(CameraAddDay(
-                                          selectedDay: "${value.day}"));
-                                      CameraBloc.get(context).add(
+                                      AllEmployeesBloc.get(context).add(
+                                          CameraAddDay(
+                                              selectedDay: "${value.day}"));
+                                      AllEmployeesBloc.get(context).add(
                                           CameraAddMonth(
                                               selectedMonth: "${value.month}"));
-                                      CameraBloc.get(context).add(CameraAddYear(
-                                          selectedYear: "${value.year}"));
+                                      AllEmployeesBloc.get(context).add(
+                                          CameraAddYear(
+                                              selectedYear: "${value.year}"));
                                     }
                                   });
                                 },
@@ -218,13 +220,14 @@ class _CameraDetailsState extends State<CameraDetails> {
                                     firstDate: DateTime(2020),
                                   ).then((value) {
                                     if (value != null) {
-                                      CameraBloc.get(context).add(
+                                      AllEmployeesBloc.get(context).add(
                                           const CameraAddDay(selectedDay: ""));
-                                      CameraBloc.get(context).add(
+                                      AllEmployeesBloc.get(context).add(
                                           CameraAddMonth(
                                               selectedMonth: "${value.month}"));
-                                      CameraBloc.get(context).add(CameraAddYear(
-                                          selectedYear: "${value.year}"));
+                                      AllEmployeesBloc.get(context).add(
+                                          CameraAddYear(
+                                              selectedYear: "${value.year}"));
                                     }
                                   });
                                 },
@@ -242,13 +245,14 @@ class _CameraDetailsState extends State<CameraDetails> {
                                     firstDate: DateTime(2020),
                                   ).then((value) {
                                     if (value != null) {
-                                      CameraBloc.get(context).add(
+                                      AllEmployeesBloc.get(context).add(
                                           const CameraAddDay(selectedDay: ""));
-                                      CameraBloc.get(context).add(
+                                      AllEmployeesBloc.get(context).add(
                                           const CameraAddMonth(
                                               selectedMonth: ""));
-                                      CameraBloc.get(context).add(CameraAddYear(
-                                          selectedYear: "${value.year}"));
+                                      AllEmployeesBloc.get(context).add(
+                                          CameraAddYear(
+                                              selectedYear: "${value.year}"));
                                     }
                                   });
                                 },
@@ -278,12 +282,12 @@ class _CameraDetailsState extends State<CameraDetails> {
                             // borderColor: AppColors.white,
                             primaryXAxis: CategoryAxis(
                                 title: AxisTitle(text: "timeRange".tr()),
-                                majorGridLines:
-                                    const MajorGridLines(color: AppColors.white)),
+                                majorGridLines: const MajorGridLines(
+                                    color: AppColors.white)),
                             primaryYAxis: NumericAxis(
                                 title: AxisTitle(text: "count".tr()),
-                                majorGridLines:
-                                    const MajorGridLines(color: AppColors.white)),
+                                majorGridLines: const MajorGridLines(
+                                    color: AppColors.white)),
                             tooltipBehavior: TooltipBehavior(enable: true),
                             series: _seriesList(state: state),
                           ),
@@ -301,7 +305,7 @@ class _CameraDetailsState extends State<CameraDetails> {
   }
 
   List<CartesianSeries<dynamic, dynamic>> _seriesList(
-      {required CameraState state}) {
+      {required AllEmployeesState state}) {
     return List.generate(state.camerasCountsPerHour.length, (index) {
       // List<int> _dataSourceList = [];
       // state.camerasCountsPerHour[index].forEach((element) {

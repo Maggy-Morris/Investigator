@@ -1,6 +1,11 @@
-part of 'camera_bloc.dart';
+part of 'all_employess_bloc.dart';
 
-class CameraState extends Equatable {
+class AllEmployeesState extends Equatable {
+  final List<Data> employeeNamesList;
+  final String companyName;
+  String personName;
+  final String image;
+
   final List<String> allCameras;
   final List<GetAllCameraDetails> camerasDetails;
   final List<GetAllCameraDetails> singleCameraDetails;
@@ -10,7 +15,13 @@ class CameraState extends Equatable {
   final String selectedYear;
   final Submission submission;
 
-  const CameraState({
+   AllEmployeesState({
+
+        this.image = "",
+
+    this.personName = "",
+    this.companyName = "",
+    this.employeeNamesList = const [],
     this.submission = Submission.initial,
     this.singleCameraDetails = const [],
     this.camerasDetails = const [],
@@ -21,7 +32,12 @@ class CameraState extends Equatable {
     this.selectedYear = "",
   });
 
-  CameraState copyWith({
+  AllEmployeesState copyWith({
+        String? image,
+
+    List<Data>? employeeNamesList,
+    String? companyName,
+    String? personName,
     Submission? submission,
     List<String>? allCameras,
     List<GetAllCameraDetails>? camerasDetails,
@@ -31,7 +47,12 @@ class CameraState extends Equatable {
     String? selectedMonth,
     String? selectedYear,
   }) {
-    return CameraState(
+    return AllEmployeesState(
+            image: image ?? this.image,
+
+      employeeNamesList: employeeNamesList ?? this.employeeNamesList,
+      companyName: companyName ?? this.companyName,
+      personName: personName ?? this.personName,
       submission: submission ?? this.submission,
       singleCameraDetails: singleCameraDetails ?? this.singleCameraDetails,
       allCameras: allCameras ?? this.allCameras,
@@ -45,6 +66,8 @@ class CameraState extends Equatable {
 
   @override
   List<Object> get props => [
+            image,
+
         submission,
         singleCameraDetails,
         selectedDay,
@@ -53,5 +76,8 @@ class CameraState extends Equatable {
         allCameras,
         camerasDetails,
         camerasCountsPerHour,
+        personName,
+        companyName,
+        employeeNamesList,
       ];
 }
