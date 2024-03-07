@@ -14,6 +14,42 @@ class CameraMainDataEvent extends AllEmployeesEvent {
   List<Object?> get props => [];
 }
 
+class AddpersonName extends AllEmployeesEvent {
+  final String personName;
+
+  const AddpersonName({required this.personName});
+
+  @override
+  List<Object?> get props => [personName];
+}
+
+class AddphoneNum extends AllEmployeesEvent {
+  final String phoneNum;
+
+  const AddphoneNum({required this.phoneNum});
+
+  @override
+  List<Object?> get props => [phoneNum];
+}
+
+class Addemail extends AllEmployeesEvent {
+  final String email;
+
+  const Addemail({required this.email});
+
+  @override
+  List<Object?> get props => [email];
+}
+
+class AdduserId extends AllEmployeesEvent {
+  final String userId;
+
+  const AdduserId({required this.userId});
+
+  @override
+  List<Object?> get props => [userId];
+}
+
 class GetEmployeeNames extends AllEmployeesEvent {
   final String companyName;
 
@@ -50,28 +86,34 @@ class AddNewEmployeeEvent extends AllEmployeesEvent {
   List<Object?> get props => [];
 }
 
+////////////////////////////////////////////
 class AddNewEmployee extends AllEmployeesEvent {
   final String companyName;
   final String personName;
   final String image;
+  final String phoneNum;
+  final String email;
+  final String userId;
+
   // final String imageName;
   // PlatformFile? files;
 
   AddNewEmployee(
-      {
-      // this.files,
-      // this.imageName,
-
-      required this.personName,
-      required this.companyName,
-      required this.image});
+      {this.userId = '',
+      this.personName = ' ',
+      this.phoneNum = '',
+      this.email = ' ',
+      this.companyName = ' ',
+      this.image = ''});
 
   @override
   List<Object?> get props => [
-        companyName, personName,
-        // files,
+        companyName,
+        personName,
+        phoneNum,
+        userId,
+        email,
         image,
-        // imageName
       ];
 }
 

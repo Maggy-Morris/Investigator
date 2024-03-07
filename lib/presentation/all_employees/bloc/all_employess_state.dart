@@ -5,6 +5,11 @@ class AllEmployeesState extends Equatable {
   final String companyName;
   String personName;
   final String image;
+
+  final String phoneNum;
+  final String email;
+  final String userId;
+  final String profession;
   bool isSearching;
 
   final List<String> allCameras;
@@ -17,6 +22,10 @@ class AllEmployeesState extends Equatable {
   final Submission submission;
 
   AllEmployeesState({
+    this.phoneNum = "",
+    this.email = "",
+    this.profession = "",
+    this.userId = "",
     this.isSearching = false,
     this.image = "",
     this.personName = "",
@@ -33,6 +42,10 @@ class AllEmployeesState extends Equatable {
   });
 
   AllEmployeesState copyWith({
+    String? phoneNum,
+    String? email,
+    String? profession,
+    String? userId,
     bool? isSearching,
     String? image,
     List<Data>? employeeNamesList,
@@ -48,6 +61,12 @@ class AllEmployeesState extends Equatable {
     String? selectedYear,
   }) {
     return AllEmployeesState(
+      userId: userId ?? this.userId,
+      email: email ?? this.email,
+      profession: profession ?? this.profession,
+      phoneNum: phoneNum ?? this.phoneNum,
+
+      ////////////////////////////////////
       isSearching: isSearching ?? this.isSearching,
       image: image ?? this.image,
       employeeNamesList: employeeNamesList ?? this.employeeNamesList,

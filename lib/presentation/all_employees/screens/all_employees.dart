@@ -51,9 +51,8 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
   Widget build(BuildContext context) {
     return StandardLayoutScreen(
       body: BlocProvider(
-        create: (context) => AllEmployeesBloc()
-          ..add(const AddNewEmployeeEvent())
-          ..add(const GetEmployeeNamesEvent()),
+        create: (context) =>
+            AllEmployeesBloc()..add(const GetEmployeeNamesEvent()),
         child: BlocBuilder<AllEmployeesBloc, AllEmployeesState>(
           builder: (context, state) {
             return Card(
@@ -81,8 +80,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              // Add Employee Button
-
+                              ///search field
                               Form(
                                 child: SizedBox(
                                   height: 40,
@@ -94,6 +92,8 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(20),
                                       ),
+
+                                      ///search Toggle
                                       suffixIcon: IconButton(
                                         icon: state.isSearching
                                             ? Icon(Icons.close)
@@ -121,7 +121,6 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                           } else {
                                             AllEmployeesBloc.get(context).add(
                                                 const GetEmployeeNamesEvent());
-                                            // Perform any other action when closing the search
                                           }
                                         },
                                       ),
@@ -150,8 +149,9 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                         return BlocProvider(
                                           create: (context) =>
                                               AllEmployeesBloc(),
-                                          child: StatefulBuilder(
-                                            builder: (context, setState) {
+                                          child: BlocBuilder<AllEmployeesBloc,
+                                              AllEmployeesState>(
+                                            builder: (context, state) {
                                               return AlertDialog(
                                                 title:
                                                     const Text("Add Employee"),
@@ -168,9 +168,34 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                 labelText:
                                                                     'Name'),
                                                         onChanged:
+                                                            (valuee) async {
+                                                          AllEmployeesBloc.get(
+                                                                  context)
+                                                              .add(
+                                                            AddpersonName(
+                                                              personName:
+                                                                  valuee,
+                                                            ),
+                                                          );
+                                                        },
+                                                      ),
+                                                      FxBox.h24,
+                                                      TextFormField(
+                                                        // controller:
+                                                        //     employeeNameController,
+                                                        decoration:
+                                                            const InputDecoration(
+                                                                labelText:
+                                                                    'UserId'),
+                                                        onChanged:
                                                             (value) async {
-                                                          state.personName =
-                                                              value;
+                                                          AllEmployeesBloc.get(
+                                                                  context)
+                                                              .add(
+                                                            AdduserId(
+                                                              userId: value,
+                                                            ),
+                                                          );
                                                         },
                                                       ),
                                                       FxBox.h24,
@@ -182,7 +207,15 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                 labelText:
                                                                     'Phone Number'),
                                                         onChanged:
-                                                            (value) async {},
+                                                            (value) async {
+                                                          AllEmployeesBloc.get(
+                                                                  context)
+                                                              .add(
+                                                            AddphoneNum(
+                                                              phoneNum: value,
+                                                            ),
+                                                          );
+                                                        },
                                                       ),
                                                       FxBox.h24,
                                                       TextFormField(
@@ -193,21 +226,28 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                 labelText:
                                                                     'Email'),
                                                         onChanged:
-                                                            (value) async {},
+                                                            (value) async {
+                                                          AllEmployeesBloc.get(
+                                                                  context)
+                                                              .add(
+                                                            Addemail(
+                                                              email: value,
+                                                            ),
+                                                          );
+                                                        },
                                                       ),
                                                       FxBox.h24,
-                                                      TextFormField(
-                                                        // controller:
-                                                        //     employeeNameController,
-                                                        decoration:
-                                                            const InputDecoration(
-                                                                labelText:
-                                                                    'Profession'),
-                                                        onChanged:
-                                                            (value) async {},
-                                                      ),
-                                                      const SizedBox(
-                                                          height: 24),
+                                                      // TextFormField(
+                                                      //   // controller:
+                                                      //   //     employeeNameController,
+                                                      //   decoration:
+                                                      //       const InputDecoration(
+                                                      //           labelText:
+                                                      //               'Profession'),
+                                                      //   onChanged:
+                                                      //       (valueeeeeee) async {},
+                                                      // ),
+                                                      FxBox.h24,
                                                       if (selectedImage !=
                                                               null &&
                                                           selectedImage!
@@ -276,16 +316,21 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                       .get(
                                                                           context)
                                                                   .add(
-                                                                AddNewEmployee(
-                                                                  companyName:
-                                                                      companyName ??
-                                                                          "No Company ",
-                                                                  personName: state
-                                                                      .personName,
-                                                                  image:
-                                                                      base64Image,
-                                                                ),
-                                                              );
+                                                                      AddNewEmployee(
+                                                                companyName:
+                                                                    companyName ??
+                                                                        "No Company ",
+                                                                personName: state
+                                                                    .personName,
+                                                                userId: state
+                                                                    .userId,
+                                                                email:
+                                                                    state.email,
+                                                                phoneNum: state
+                                                                    .phoneNum,
+                                                                image:
+                                                                    base64Image,
+                                                              ));
                                                             }
                                                           } catch (e) {
                                                             debugPrint(
@@ -312,11 +357,17 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                               context)
                                                           .add(
                                                               const AddNewEmployeeEvent());
+
+                                                      // AllEmployeesBloc.get(
+                                                      //         context)
+                                                      //     .add(
+                                                      //         const GetEmployeeNamesEvent());
                                                       employeeNameController
                                                           .clear();
                                                       setState(() {
                                                         selectedImage = null;
                                                       });
+
                                                       Navigator.of(context)
                                                           .pop();
                                                     },
@@ -409,17 +460,9 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                           child: StatefulBuilder(
                                             builder: (context, setState) {
                                               return AlertDialog(
-                                                contentPadding: const EdgeInsets
-                                                    .symmetric(
-                                                    vertical: 240,
-                                                    horizontal:
-                                                        160), // Specify padding
-
                                                 title:
                                                     const Text("Add Employee"),
-                                                content: SizedBox(
-                                                  width: 300,
-                                                  height: 300,
+                                                content: SingleChildScrollView(
                                                   child: Column(
                                                     mainAxisSize:
                                                         MainAxisSize.min,
@@ -433,12 +476,84 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                     'Name'),
                                                         onChanged:
                                                             (value) async {
-                                                          state.personName =
-                                                              value;
+                                                          AllEmployeesBloc.get(
+                                                                  context)
+                                                              .add(
+                                                            AddpersonName(
+                                                              personName: value,
+                                                            ),
+                                                          );
                                                         },
                                                       ),
-                                                      const SizedBox(
-                                                          height: 24),
+                                                      FxBox.h24,
+                                                      TextFormField(
+                                                        // controller:
+                                                        //     employeeNameController,
+                                                        decoration:
+                                                            const InputDecoration(
+                                                                labelText:
+                                                                    'UserId'),
+                                                        onChanged:
+                                                            (value) async {
+                                                          AllEmployeesBloc.get(
+                                                                  context)
+                                                              .add(
+                                                            AdduserId(
+                                                              userId: value,
+                                                            ),
+                                                          );
+                                                        },
+                                                      ),
+                                                      FxBox.h24,
+                                                      TextFormField(
+                                                        // controller:
+                                                        //     employeeNameController,
+                                                        decoration:
+                                                            const InputDecoration(
+                                                                labelText:
+                                                                    'Phone Number'),
+                                                        onChanged:
+                                                            (value) async {
+                                                          AllEmployeesBloc.get(
+                                                                  context)
+                                                              .add(
+                                                            AddphoneNum(
+                                                              phoneNum: value,
+                                                            ),
+                                                          );
+                                                        },
+                                                      ),
+                                                      FxBox.h24,
+                                                      TextFormField(
+                                                        // controller:
+                                                        //     employeeNameController,
+                                                        decoration:
+                                                            const InputDecoration(
+                                                                labelText:
+                                                                    'Email'),
+                                                        onChanged:
+                                                            (value) async {
+                                                          AllEmployeesBloc.get(
+                                                                  context)
+                                                              .add(
+                                                            Addemail(
+                                                              email: value,
+                                                            ),
+                                                          );
+                                                        },
+                                                      ),
+                                                      FxBox.h24,
+                                                      TextFormField(
+                                                        // controller:
+                                                        //     employeeNameController,
+                                                        decoration:
+                                                            const InputDecoration(
+                                                                labelText:
+                                                                    'Profession'),
+                                                        onChanged:
+                                                            (value) async {},
+                                                      ),
+                                                      FxBox.h24,
                                                       if (selectedImage !=
                                                               null &&
                                                           selectedImage!
@@ -455,7 +570,8 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                     fit: BoxFit
                                                                         .cover,
                                                                   )
-                                                                : loadingIndicator()),
+                                                                : loadingIndicator() // Show circular progress indicator while loading
+                                                            ),
                                                       const SizedBox(
                                                           height: 24),
                                                       ElevatedButton(
@@ -484,6 +600,9 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                   selectedImage!
                                                                       .bytes!;
 
+                                                              // String imageName =
+                                                              //     selectedImage!.name;
+
                                                               final SharedPreferences
                                                                   prefs =
                                                                   await SharedPreferences
@@ -509,6 +628,12 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                           "No Company ",
                                                                   personName: state
                                                                       .personName,
+                                                                  userId: state
+                                                                      .userId,
+                                                                  email: state
+                                                                      .email,
+                                                                  phoneNum: state
+                                                                      .phoneNum,
                                                                   image:
                                                                       base64Image,
                                                                 ),
@@ -539,13 +664,19 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                               context)
                                                           .add(
                                                               const AddNewEmployeeEvent());
+
+                                                      AllEmployeesBloc.get(
+                                                              context)
+                                                          .add(
+                                                              const GetEmployeeNamesEvent());
                                                       employeeNameController
                                                           .clear();
                                                       setState(() {
                                                         selectedImage = null;
                                                       });
+
                                                       Navigator.of(context)
-                                                          .pop(); // Close the dialog
+                                                          .pop();
                                                     },
                                                     child: const Text('Save'),
                                                   ),
@@ -582,7 +713,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                     width: MediaQuery.of(context).size.width,
                                     child: (state.submission ==
                                             Submission.noDataFound)
-                                        ? Center(
+                                        ? const Center(
                                             child: Text(
                                             "No data found Yet!",
                                             style: TextStyle(
@@ -596,9 +727,9 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                 const NeverScrollableScrollPhysics(),
                                             itemCount: state.employeeNamesList
                                                         .length <
-                                                    5
+                                                    20
                                                 ? state.employeeNamesList.length
-                                                : 5,
+                                                : 20,
                                             gridDelegate: Responsive.isMobile(
                                                     context)
                                                 ? const SliverGridDelegateWithFixedCrossAxisCount(
@@ -649,6 +780,11 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                 name: employee.name ?? '',
                                                 profession:
                                                     'Software Developer',
+                                                imagesrc:
+                                                    employee.imagePath ?? '',
+                                                phoneNum: employee.phone ?? '',
+                                                email: employee.email ?? '',
+                                                userId: employee.userId ?? '',
                                               );
                                             },
                                           ),
@@ -673,6 +809,10 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
   Widget _contactUi({
     required String name,
     required String profession,
+    required String phoneNum,
+    required String email,
+    required String userId,
+    required String imagesrc,
   }) {
     return Container(
       width: 300,
@@ -698,8 +838,8 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(6.0),
-                  child: Image.asset(
-                    'assets/images/logo.png',
+                  child: Image.network(
+                    "http://192.168.1.118:8000/$imagesrc",
                     // Images.profileImage,
                     fit: BoxFit.cover,
                   ),
@@ -711,6 +851,160 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                     icon: const Icon(Icons.more_horiz, color: Colors.black),
                     onSelected: (String choice) {
                       if (choice == 'Edit') {
+                        // Show dialog to fill in employee data
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return BlocProvider(
+                              create: (context) => AllEmployeesBloc(),
+                              child: StatefulBuilder(
+                                builder: (context, setState) {
+                                  return AlertDialog(
+                                    title: const Text("Add Employee"),
+                                    content: SingleChildScrollView(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          TextFormField(
+                                            initialValue: name,
+                                            // controller:
+                                            //     employeeNameController,
+                                            decoration: const InputDecoration(
+                                                labelText: 'Name'),
+                                            onChanged: (value) async {
+                                              state.personName = value;
+                                            },
+                                          ),
+                                          FxBox.h24,
+                                          TextFormField(
+                                            initialValue: phoneNum,
+
+                                            // controller:
+                                            //     employeeNameController,
+                                            decoration: const InputDecoration(
+                                                labelText: 'Phone Number'),
+                                            onChanged: (value) async {},
+                                          ),
+                                          FxBox.h24,
+                                          TextFormField(
+                                            initialValue: email,
+
+                                            // controller:
+                                            //     employeeNameController,
+                                            decoration: const InputDecoration(
+                                                labelText: 'Email'),
+                                            onChanged: (value) async {},
+                                          ),
+                                          FxBox.h24,
+                                          TextFormField(
+                                            initialValue: userId,
+                                            // controller:
+                                            //     employeeNameController,
+                                            decoration: const InputDecoration(
+                                                labelText: 'UserID'),
+                                            onChanged: (value) async {},
+                                          ),
+                                          const SizedBox(height: 24),
+                                          // if (selectedImage != null &&
+                                          //     selectedImage!.bytes != null)
+                                          SizedBox(
+                                              height: 100,
+                                              child:
+                                                  // selectedImage!.bytes !=
+                                                  //         null
+                                                  //     ?
+                                                  Image.network(
+                                                "http://192.168.1.118:8000/$imagesrc",
+                                                // Images.profileImage,
+                                                fit: BoxFit.cover,
+                                              )
+                                              // : loadingIndicator() // Show circular progress indicator while loading
+                                              ),
+                                          const SizedBox(height: 24),
+                                          ElevatedButton(
+                                            onPressed: () async {
+                                              try {
+                                                FilePickerResult? result =
+                                                    await FilePicker.platform
+                                                        .pickFiles(
+                                                  type: FileType.image,
+                                                );
+                                                if (result != null &&
+                                                    result.files.isNotEmpty) {
+                                                  setState(() {
+                                                    selectedImage =
+                                                        result.files.first;
+                                                  });
+
+                                                  List<int> imageBytes =
+                                                      selectedImage!.bytes!;
+
+                                                  // String imageName =
+                                                  //     selectedImage!.name;
+
+                                                  final SharedPreferences
+                                                      prefs =
+                                                      await SharedPreferences
+                                                          .getInstance();
+
+                                                  final String? companyName =
+                                                      prefs.getString(
+                                                          'companyName');
+
+                                                  String base64Image =
+                                                      base64Encode(imageBytes);
+
+                                                  // AddNewEmployee(
+                                                  //   companyName: companyName ??
+                                                  //       "No Company ",
+                                                  //   personName:
+                                                  //       state.personName,
+                                                  //   userId: state.userId,
+                                                  //   email: state.email,
+                                                  //   phoneNum: state.phoneNum,
+                                                  //   image: base64Image,
+                                                  // );
+                                                }
+                                              } catch (e) {
+                                                debugPrint(
+                                                    "Error picking file: $e");
+                                              }
+                                            },
+                                            child: const Text('Change Image'),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .pop(); // Close the dialog
+                                        },
+                                        child: const Text('Cancel'),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          // AllEmployeesBloc.get(context)
+                                          //     .add(const AddNewEmployeeEvent());
+
+                                          employeeNameController.clear();
+                                          setState(() {
+                                            selectedImage = null;
+                                          });
+
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('Save'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                        );
+
                         // Handle edit action
                       } else if (choice == 'Delete') {
                         // Handle delete action
@@ -790,19 +1084,18 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
           ),
           FxBox.h8,
           ConstText.lightText(
-            text: profession,
+            text: userId,
             fontSize: 14,
             color: Colors.black,
             fontWeight: FontWeight.w400,
           ),
           FxBox.h24,
           _iconWithText(
-              icon: const Icon(Icons.badge_outlined), text: 'Peterdraw Studio'),
+              icon: const Icon(Icons.badge_outlined), text: profession),
           FxBox.h28,
-          _iconWithText(
-              icon: const Icon(Icons.contact_phone), text: '+123 456 789'),
+          _iconWithText(icon: const Icon(Icons.contact_phone), text: phoneNum),
           FxBox.h28,
-          _iconWithText(icon: const Icon(Icons.email), text: 'email@mail.com'),
+          _iconWithText(icon: const Icon(Icons.email), text: email),
           // FxBox.h24,
         ],
       ),

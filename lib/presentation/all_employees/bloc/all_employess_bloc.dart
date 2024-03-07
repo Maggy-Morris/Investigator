@@ -9,7 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/models/add_company_model.dart';
 import '../../../core/models/employee_model.dart';
-import '../../../core/widgets/toast/toast.dart';
 
 part 'all_employess_event.dart';
 
@@ -36,6 +35,11 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
     on<AddNewEmployee>(_onAddNewEmployee);
     on<AddNewEmployeeEvent>(_onAddNewEmployeeEvent);
 
+    on<AddpersonName>(_onAddpersonName);
+    on<AddphoneNum>(_onAddphoneNum);
+    on<Addemail>(_onAddemail);
+    on<AdduserId>(_onAdduserId);
+
     /// Date
     on<CameraInitializeDate>(_onCameraInitializeDate);
     on<CameraAddDay>(_onCameraAddDay);
@@ -46,9 +50,88 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
   _onAllEmployeesEvent(
       AllEmployeesEvent event, Emitter<AllEmployeesState> emit) {}
 
+  // _onAddpersonName(AddpersonName event, Emitter<AllEmployeesState> emit) async {
+  //   // .getAllEmployeeNames(companyName: state.companyName)
+  //   // .then((value) {
+  //   emit(state.copyWith(
+  //       personName: event.personName, submission: Submission.hasData));
+  //   // });
+  // }
+
+  _onAddpersonName(AddpersonName event, Emitter<AllEmployeesState> emit) async {
+    emit(state.copyWith(
+      personName: event.personName,
+      submission: Submission.hasData,
+    ));
+    _onAddNewEmployee(
+        AddNewEmployee(
+          companyName: state.companyName,
+          personName: event.personName,
+          image: state.image,
+          phoneNum: state.phoneNum,
+          email: state.email,
+          userId: state.userId,
+        ),
+        emit);
+  }
+
+  _onAddphoneNum(AddphoneNum event, Emitter<AllEmployeesState> emit) async {
+    // .getAllEmployeeNames(companyName: state.companyName)
+    // .then((value) {
+    emit(state.copyWith(
+        phoneNum: event.phoneNum, submission: Submission.hasData));
+
+    _onAddNewEmployee(
+        AddNewEmployee(
+          companyName: state.companyName,
+          personName: state.personName,
+          image: state.image,
+          phoneNum: event.phoneNum,
+          email: state.email,
+          userId: state.userId,
+        ),
+        emit);
+    // });
+  }
+
+  _onAddemail(Addemail event, Emitter<AllEmployeesState> emit) async {
+    // .getAllEmployeeNames(companyName: state.companyName)
+    // .then((value) {
+    emit(state.copyWith(email: event.email, submission: Submission.hasData));
+    // });
+    _onAddNewEmployee(
+        AddNewEmployee(
+          companyName: state.companyName,
+          personName: state.personName,
+          image: state.image,
+          phoneNum: state.phoneNum,
+          email: event.email,
+          userId: state.userId,
+        ),
+        emit);
+  }
+
+  _onAdduserId(AdduserId event, Emitter<AllEmployeesState> emit) async {
+    // .getAllEmployeeNames(companyName: state.companyName)
+    // .then((value) {
+    emit(state.copyWith(userId: event.userId, submission: Submission.hasData));
+    // });
+    _onAddNewEmployee(
+        AddNewEmployee(
+          companyName: state.companyName,
+          personName: state.personName,
+          image: state.image,
+          phoneNum: state.phoneNum,
+          email: state.email,
+          userId: event.userId,
+        ),
+        emit);
+  }
+  ///////////////////////////////////////////////////
+
   _onGetEmployeeNames(
       GetEmployeeNames event, Emitter<AllEmployeesState> emit) async {
-    await RemoteProvider();
+    // await RemoteProvider();
     // .getAllEmployeeNames(companyName: state.companyName)
     // .then((value) {
     emit(state.copyWith(
@@ -66,7 +149,6 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
       final String? companyName = prefs.getString('companyName');
 
       final employeeModel = await RemoteProvider().getAllEmployeeNames(
-        // companyName: "Think" ?? "",
         companyName: companyName ?? '',
       );
 
@@ -94,38 +176,64 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
   /// New Employees Added
   _onAddNewEmployee(
       AddNewEmployee event, Emitter<AllEmployeesState> emit) async {
+    // await RemoteProvider();
+
+    //   add(const GetCamerasNames());
+
     emit(state.copyWith(
         companyName: event.companyName,
         personName: event.personName,
-        // imageName: event.imageName,
-        // files: event.files,
         image: event.image,
+        phoneNum: event.phoneNum,
+        email: event.email,
+        userId: event.userId,
         submission: Submission.editing));
   }
 
 /////////////////////////////////////////////////////////////////
+  ///
   _onAddNewEmployeeEvent(
       AddNewEmployeeEvent event, Emitter<AllEmployeesState> emit) async {
     emit(state.copyWith(submission: Submission.loading));
-    await RemoteProvider()
-        .addNewPersonToACompany(
-      companyName: state.companyName,
-      personName: state.personName,
-      // imageName:state.imageName,
-      // image: state.files,
-      image: state.image,
-    )
-        .then((value) {
-      // if (state.cameraSelectedModels.isNotEmpty) {
-      //   add(const ApplyModelEvent());
-      // }
-      if (value != AddCompanyModel()) {
-        emit(AllEmployeesState().copyWith(submission: Submission.success));
+    try {
+      final result = await RemoteProvider().addNewPersonToACompany(
+        companyName: state.companyName,
+        personName: state.personName,
+        phoneNum: state.phoneNum,
+        email: state.email,
+        userId: state.userId,
+        image: state.image,
+      );
+      if (result != AddCompanyModel()) {
+        emit(state.copyWith(submission: Submission.success));
       } else {
         emit(state.copyWith(submission: Submission.error));
       }
-    });
+    } catch (e) {
+      debugPrint(e.toString());
+      emit(state.copyWith(submission: Submission.error));
+    }
   }
+  // _onAddNewEmployeeEvent(
+  //     AddNewEmployeeEvent event, Emitter<AllEmployeesState> emit) async {
+  //   emit(state.copyWith(submission: Submission.loading));
+  //   await RemoteProvider()
+  //       .addNewPersonToACompany(
+  //     companyName: state.companyName,
+  //     personName: state.personName,
+  //     phoneNum: state.phoneNum,
+  //     email: state.email,
+  //     userId: state.userId,
+  //     image: state.image,
+  //   )
+  //       .then((value) {
+  //     if (value != AddCompanyModel()) {
+  //       emit(AllEmployeesState().copyWith(submission: Submission.success));
+  //     } else {
+  //       emit(state.copyWith(submission: Submission.error));
+  //     }
+  //   });
+  // }
 
   _onCameraInitializeDate(
       CameraInitializeDate event, Emitter<AllEmployeesState> emit) {
@@ -214,19 +322,18 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
           submission: Submission.success,
           employeeNamesList: value,
         ));
-
-        // final updatedList = state.employeeNamesList
-        //     .where((employee) => employee.name != event.personName)
-        //     .toList();
-        // emit(HomeState().copyWith(
-        //   submission: Submission.success,
-        //   employeeNamesList: updatedList,
-        // ));
-      } else if (value.length == 0) {
-        emit(state.copyWith(
-          submission: Submission.noDataFound,
-        ));
-      } else {
+        if (value.length == 0) {
+          emit(state.copyWith(
+            submission: Submission.noDataFound,
+          ));
+        }
+      }
+      // else if (value.length == 0) {
+      //   emit(state.copyWith(
+      //     submission: Submission.noDataFound,
+      //   ));
+      // }
+      else {
         emit(state.copyWith(
           submission: Submission.error,
         ));

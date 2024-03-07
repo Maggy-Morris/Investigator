@@ -105,6 +105,9 @@ class RemoteProvider {
     required String personName,
     // required PlatformFile? image,
     required String image,
+    required String email,
+    required String phoneNum,
+    required String userId,
   }) async {
     try {
       Map<String, dynamic> callBack = await RemoteDataSource().post(
@@ -113,6 +116,9 @@ class RemoteProvider {
           "collection_name": companyName,
           "target_name": personName,
           "image": image,
+          "email": email,
+          "phone": phoneNum,
+          "user_id": userId,
         },
       );
 
@@ -180,32 +186,6 @@ class RemoteProvider {
       return [];
     }
   }
-
-  // Future<EmployeeModel> getAllEmployeeNames({
-  //   required String companyName,
-  // }) async {
-  //   try {
-  //     // var callBack = await RemoteDataSource()
-
-  //     Map<String, dynamic> callBack = await RemoteDataSource()
-  //         .post(endPoint: "/qdrant/retrieve_it_all", body: {
-  //       "collection_name": companyName,
-  //     });
-  //     if (callBack.isNotEmpty) {
-  //       EmployeeModel employeeModel = EmployeeModel.fromJson(callBack);
-  //       if (kDebugMode) {
-  //         debugPrint(
-  //             "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk" + callBack.toString());
-  //       }
-  //       return employeeModel;
-  //     } else {
-  //       return EmployeeModel();
-  //     }
-  //   } catch (e) {
-  //     debugPrint(e.toString());
-  //     return EmployeeModel();
-  //   }
-  // }
 
   ///get person data by name
   Future<List<Data>> getPersonByName(
@@ -285,7 +265,34 @@ class RemoteProvider {
     }
   }
 
-  // /// get all static lists
+  ///Search for person in the database by image
+  Future<CallBackModel> searchForpersonByImage({
+    required String companyName,
+    // required PlatformFile? image,
+    required String image,
+  }) async {
+    try {
+      Map<String, dynamic> callBack = await RemoteDataSource().post(
+        endPoint: "/search_with_image",
+        body: {
+          "collection_name": companyName,
+          "image": image,
+        },
+      );
+
+      //Change this "Collection Created Successfully!"
+
+      if (callBack.isNotEmpty) {
+        CallBackModel callBackList = CallBackModel.fromJson(callBack);
+        return callBackList;
+      } else {
+        return CallBackModel();
+      }
+    } catch (e) {
+      return CallBackModel();
+    }
+  }
+
   // Future<List<String>> getAllCamerasNames() async {
   //   try {
   //     List<dynamic> callBack = await RemoteDataSource().get(

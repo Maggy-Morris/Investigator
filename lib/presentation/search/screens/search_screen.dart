@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -7,14 +9,12 @@ import 'package:Investigator/core/utils/responsive.dart';
 // import 'package:Investigator/core/widgets/drop_down_widgets.dart';
 import 'package:Investigator/core/widgets/sizedbox.dart';
 import 'package:Investigator/core/widgets/toast/toast.dart';
-import 'package:Investigator/presentation/add_camera/bloc/home_bloc.dart';
 import 'package:Investigator/presentation/standard_layout/screens/standard_layout.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/enum/enum.dart';
 import '../../../core/loader/loading_indicator.dart';
-import '../../../core/widgets/textformfield.dart';
-import '../../all_employees/bloc/all_employess_bloc.dart';
-import '../../all_employees/screens/text.dart';
+import '../bloc/search_by_image_bloc.dart';
 
 class Search extends StatefulWidget {
   const Search({Key? key}) : super(key: key);
@@ -24,27 +24,23 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  TextEditingController companyNameController = TextEditingController();
-  TextEditingController employeeNameController = TextEditingController();
   Widget? _image;
 
   @override
   Widget build(BuildContext context) {
     return StandardLayoutScreen(
       body: BlocProvider(
-        create: (context) => HomeBloc(),
-        child: BlocListener<HomeBloc, HomeState>(
+        create: (context) => SearchByImageBloc(),
+        child: BlocListener<SearchByImageBloc, SearchByImageState>(
           listener: (context, state) {
             if (state.submission == Submission.success) {
-              companyNameController.clear();
-              employeeNameController.clear();
               FxToast.showSuccessToast(context: context);
             }
             if (state.submission == Submission.error) {
               FxToast.showErrorToast(context: context);
             }
           },
-          child: BlocBuilder<HomeBloc, HomeState>(
+          child: BlocBuilder<SearchByImageBloc, SearchByImageState>(
             builder: (context, state) {
               return SingleChildScrollView(
                 // physics: NeverScrollableScrollPhysics(),
@@ -102,12 +98,26 @@ class _SearchState extends State<Search> {
                                                         imageFile.bytes!,
                                                         fit: BoxFit.cover,
                                                       )
-                                                    : loadingIndicator(); //
+                                                    : loadingIndicator();
 
                                             // Replace the image with the selected image
                                             setState(() {
                                               _image = image;
                                             });
+
+                                            String base64Image =
+                                                base64Encode(imageFile.bytes!);
+                                            final SharedPreferences prefs =
+                                                await SharedPreferences
+                                                    .getInstance();
+                                            final String? companyName =
+                                                prefs.getString('companyName');
+                                            SearchByImageBloc.get(context).add(
+                                              SearchForEmployee(
+                                                companyName: companyName ?? " ",
+                                                image: base64Image,
+                                              ),
+                                            );
                                           }
                                         },
                                         child: _image ??
@@ -164,6 +174,9 @@ class _SearchState extends State<Search> {
                                             return;
                                           }
 
+                                          SearchByImageBloc.get(context).add(
+                                            SearchForEmployeeEvent(),
+                                          );
                                           // HomeBloc.get(context).add(
                                           //     const GetEmployeeNamesEvent());
                                         },
@@ -307,6 +320,9 @@ class _SearchState extends State<Search> {
                     ),
                   ),
                 ),
+            
+            
+            
               );
             },
           ),
