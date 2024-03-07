@@ -37,6 +37,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
   PlatformFile? selectedImage;
   TextEditingController employeeNameController = TextEditingController();
   final TextEditingController _searchController = TextEditingController();
+  // bool isSearching = false;
 
   @override
   void initState() {
@@ -94,24 +95,34 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                         borderRadius: BorderRadius.circular(20),
                                       ),
                                       suffixIcon: IconButton(
-                                        icon: const Icon(Icons.search),
+                                        icon: state.isSearching
+                                            ? Icon(Icons.close)
+                                            : Icon(Icons.search),
                                         onPressed: () async {
-                                          final SharedPreferences prefs =
-                                              await SharedPreferences
-                                                  .getInstance();
+                                          state.isSearching = !state
+                                              .isSearching; // Toggle the search state
+                                          if (!state.isSearching) {
+                                            _searchController.clear();
+                                          }
 
-                                          final String? companyName =
-                                              prefs.getString('companyName');
-
-                                          AllEmployeesBloc.get(context).add(
-                                            GetPersonByNameEvent(
-                                              companyName: companyName ?? "",
-                                              personName:
-                                                  _searchController.text,
-                                            ),
-                                          );
-                                          // AllEmployeesBloc.get(context)
-                                          //     .add(const GetPersonByNameEvent());
+                                          if (state.isSearching) {
+                                            final SharedPreferences prefs =
+                                                await SharedPreferences
+                                                    .getInstance();
+                                            final String? companyName =
+                                                prefs.getString('companyName');
+                                            AllEmployeesBloc.get(context).add(
+                                              GetPersonByNameEvent(
+                                                companyName: companyName ?? "",
+                                                personName:
+                                                    _searchController.text,
+                                              ),
+                                            );
+                                          } else {
+                                            AllEmployeesBloc.get(context).add(
+                                                const GetEmployeeNamesEvent());
+                                            // Perform any other action when closing the search
+                                          }
                                         },
                                       ),
                                     ),
@@ -144,106 +155,148 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                               return AlertDialog(
                                                 title:
                                                     const Text("Add Employee"),
-                                                content: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    TextFormField(
-                                                      // controller:
-                                                      //     employeeNameController,
-                                                      decoration:
-                                                          const InputDecoration(
-                                                              labelText:
-                                                                  'Name'),
-                                                      onChanged: (value) async {
-                                                        state.personName =
-                                                            value;
-                                                      },
-                                                    ),
-                                                    const SizedBox(height: 24),
-                                                    if (selectedImage != null &&
-                                                        selectedImage!.bytes !=
-                                                            null)
-                                                      SizedBox(
-                                                          height: 100,
-                                                          child: selectedImage!
-                                                                      .bytes !=
-                                                                  null
-                                                              ? Image.memory(
-                                                                  selectedImage!
-                                                                      .bytes!,
-                                                                  fit: BoxFit
-                                                                      .cover,
-                                                                )
-                                                              : loadingIndicator() // Show circular progress indicator while loading
-                                                          ),
-                                                    const SizedBox(height: 24),
-                                                    ElevatedButton(
-                                                      onPressed: () async {
-                                                        try {
-                                                          FilePickerResult?
-                                                              result =
-                                                              await FilePicker
-                                                                  .platform
-                                                                  .pickFiles(
-                                                            type:
-                                                                FileType.image,
-                                                          );
-                                                          if (result != null &&
-                                                              result.files
-                                                                  .isNotEmpty) {
-                                                            setState(() {
-                                                              selectedImage =
-                                                                  result.files
-                                                                      .first;
-                                                            });
-
-                                                            List<int>
-                                                                imageBytes =
-                                                                selectedImage!
-                                                                    .bytes!;
-
-                                                            // String imageName =
-                                                            //     selectedImage!.name;
-
-                                                            final SharedPreferences
-                                                                prefs =
-                                                                await SharedPreferences
-                                                                    .getInstance();
-
-                                                            final String?
-                                                                companyName =
-                                                                prefs.getString(
-                                                                    'companyName');
-
-                                                            String base64Image =
-                                                                base64Encode(
-                                                                    imageBytes);
-
-                                                            AllEmployeesBloc
-                                                                    .get(
-                                                                        context)
-                                                                .add(
-                                                              AddNewEmployee(
-                                                                companyName:
-                                                                    companyName ??
-                                                                        "No Company ",
-                                                                personName: state
-                                                                    .personName,
-                                                                image:
-                                                                    base64Image,
-                                                              ),
+                                                content: SingleChildScrollView(
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      TextFormField(
+                                                        // controller:
+                                                        //     employeeNameController,
+                                                        decoration:
+                                                            const InputDecoration(
+                                                                labelText:
+                                                                    'Name'),
+                                                        onChanged:
+                                                            (value) async {
+                                                          state.personName =
+                                                              value;
+                                                        },
+                                                      ),
+                                                      FxBox.h24,
+                                                      TextFormField(
+                                                        // controller:
+                                                        //     employeeNameController,
+                                                        decoration:
+                                                            const InputDecoration(
+                                                                labelText:
+                                                                    'Phone Number'),
+                                                        onChanged:
+                                                            (value) async {},
+                                                      ),
+                                                      FxBox.h24,
+                                                      TextFormField(
+                                                        // controller:
+                                                        //     employeeNameController,
+                                                        decoration:
+                                                            const InputDecoration(
+                                                                labelText:
+                                                                    'Email'),
+                                                        onChanged:
+                                                            (value) async {},
+                                                      ),
+                                                      FxBox.h24,
+                                                      TextFormField(
+                                                        // controller:
+                                                        //     employeeNameController,
+                                                        decoration:
+                                                            const InputDecoration(
+                                                                labelText:
+                                                                    'Profession'),
+                                                        onChanged:
+                                                            (value) async {},
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 24),
+                                                      if (selectedImage !=
+                                                              null &&
+                                                          selectedImage!
+                                                                  .bytes !=
+                                                              null)
+                                                        SizedBox(
+                                                            height: 100,
+                                                            child: selectedImage!
+                                                                        .bytes !=
+                                                                    null
+                                                                ? Image.memory(
+                                                                    selectedImage!
+                                                                        .bytes!,
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                  )
+                                                                : loadingIndicator() // Show circular progress indicator while loading
+                                                            ),
+                                                      const SizedBox(
+                                                          height: 24),
+                                                      ElevatedButton(
+                                                        onPressed: () async {
+                                                          try {
+                                                            FilePickerResult?
+                                                                result =
+                                                                await FilePicker
+                                                                    .platform
+                                                                    .pickFiles(
+                                                              type: FileType
+                                                                  .image,
                                                             );
+                                                            if (result !=
+                                                                    null &&
+                                                                result.files
+                                                                    .isNotEmpty) {
+                                                              setState(() {
+                                                                selectedImage =
+                                                                    result.files
+                                                                        .first;
+                                                              });
+
+                                                              List<int>
+                                                                  imageBytes =
+                                                                  selectedImage!
+                                                                      .bytes!;
+
+                                                              // String imageName =
+                                                              //     selectedImage!.name;
+
+                                                              final SharedPreferences
+                                                                  prefs =
+                                                                  await SharedPreferences
+                                                                      .getInstance();
+
+                                                              final String?
+                                                                  companyName =
+                                                                  prefs.getString(
+                                                                      'companyName');
+
+                                                              String
+                                                                  base64Image =
+                                                                  base64Encode(
+                                                                      imageBytes);
+
+                                                              AllEmployeesBloc
+                                                                      .get(
+                                                                          context)
+                                                                  .add(
+                                                                AddNewEmployee(
+                                                                  companyName:
+                                                                      companyName ??
+                                                                          "No Company ",
+                                                                  personName: state
+                                                                      .personName,
+                                                                  image:
+                                                                      base64Image,
+                                                                ),
+                                                              );
+                                                            }
+                                                          } catch (e) {
+                                                            debugPrint(
+                                                                "Error picking file: $e");
                                                           }
-                                                        } catch (e) {
-                                                          print(
-                                                              "Error picking file: $e");
-                                                        }
-                                                      },
-                                                      child: const Text(
-                                                          'Upload Image'),
-                                                    ),
-                                                  ],
+                                                        },
+                                                        child: const Text(
+                                                            'Upload Image'),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                                 actions: [
                                                   TextButton(
@@ -255,9 +308,6 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                   ),
                                                   ElevatedButton(
                                                     onPressed: () {
-                                                      // context.read<AllEmolyessBloc>().add(
-                                                      //     const GetEmployeeNamesEvent());
-
                                                       AllEmployeesBloc.get(
                                                               context)
                                                           .add(
@@ -268,7 +318,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                         selectedImage = null;
                                                       });
                                                       Navigator.of(context)
-                                                          .pop(); // Close the dialog
+                                                          .pop();
                                                     },
                                                     child: const Text('Save'),
                                                   ),
@@ -329,8 +379,6 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                   _searchController.text,
                                             ),
                                           );
-                                          // AllEmployeesBloc.get(context)
-                                          //     .add(const GetPersonByNameEvent());
                                         },
                                       ),
                                     ),
@@ -361,108 +409,121 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                           child: StatefulBuilder(
                                             builder: (context, setState) {
                                               return AlertDialog(
+                                                contentPadding: const EdgeInsets
+                                                    .symmetric(
+                                                    vertical: 240,
+                                                    horizontal:
+                                                        160), // Specify padding
+
                                                 title:
                                                     const Text("Add Employee"),
-                                                content: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    TextFormField(
-                                                      // controller:
-                                                      //     employeeNameController,
-                                                      decoration:
-                                                          const InputDecoration(
-                                                              labelText:
-                                                                  'Name'),
-                                                      onChanged: (value) async {
-                                                        state.personName =
-                                                            value;
-                                                      },
-                                                    ),
-                                                    const SizedBox(height: 24),
-                                                    if (selectedImage != null &&
-                                                        selectedImage!.bytes !=
-                                                            null)
-                                                      SizedBox(
-                                                          height: 100,
-                                                          child: selectedImage!
-                                                                      .bytes !=
-                                                                  null
-                                                              ? Image.memory(
-                                                                  selectedImage!
-                                                                      .bytes!,
-                                                                  fit: BoxFit
-                                                                      .cover,
-                                                                )
-                                                              : loadingIndicator() // Show circular progress indicator while loading
-                                                          ),
-                                                    const SizedBox(height: 24),
-                                                    ElevatedButton(
-                                                      onPressed: () async {
-                                                        try {
-                                                          FilePickerResult?
-                                                              result =
-                                                              await FilePicker
-                                                                  .platform
-                                                                  .pickFiles(
-                                                            type:
-                                                                FileType.image,
-                                                          );
-                                                          if (result != null &&
-                                                              result.files
-                                                                  .isNotEmpty) {
-                                                            setState(() {
-                                                              selectedImage =
-                                                                  result.files
-                                                                      .first;
-                                                            });
-
-                                                            List<int>
-                                                                imageBytes =
-                                                                selectedImage!
-                                                                    .bytes!;
-
-                                                            // String imageName =
-                                                            //     selectedImage!.name;
-
-                                                            final SharedPreferences
-                                                                prefs =
-                                                                await SharedPreferences
-                                                                    .getInstance();
-
-                                                            final String?
-                                                                companyName =
-                                                                prefs.getString(
-                                                                    'companyName');
-
-                                                            String base64Image =
-                                                                base64Encode(
-                                                                    imageBytes);
-
-                                                            AllEmployeesBloc
-                                                                    .get(
-                                                                        context)
-                                                                .add(
-                                                              AddNewEmployee(
-                                                                companyName:
-                                                                    companyName ??
-                                                                        "No Company ",
-                                                                personName: state
-                                                                    .personName,
-                                                                image:
-                                                                    base64Image,
-                                                              ),
+                                                content: SizedBox(
+                                                  width: 300,
+                                                  height: 300,
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      TextFormField(
+                                                        // controller:
+                                                        //     employeeNameController,
+                                                        decoration:
+                                                            const InputDecoration(
+                                                                labelText:
+                                                                    'Name'),
+                                                        onChanged:
+                                                            (value) async {
+                                                          state.personName =
+                                                              value;
+                                                        },
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 24),
+                                                      if (selectedImage !=
+                                                              null &&
+                                                          selectedImage!
+                                                                  .bytes !=
+                                                              null)
+                                                        SizedBox(
+                                                            height: 100,
+                                                            child: selectedImage!
+                                                                        .bytes !=
+                                                                    null
+                                                                ? Image.memory(
+                                                                    selectedImage!
+                                                                        .bytes!,
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                  )
+                                                                : loadingIndicator()),
+                                                      const SizedBox(
+                                                          height: 24),
+                                                      ElevatedButton(
+                                                        onPressed: () async {
+                                                          try {
+                                                            FilePickerResult?
+                                                                result =
+                                                                await FilePicker
+                                                                    .platform
+                                                                    .pickFiles(
+                                                              type: FileType
+                                                                  .image,
                                                             );
+                                                            if (result !=
+                                                                    null &&
+                                                                result.files
+                                                                    .isNotEmpty) {
+                                                              setState(() {
+                                                                selectedImage =
+                                                                    result.files
+                                                                        .first;
+                                                              });
+
+                                                              List<int>
+                                                                  imageBytes =
+                                                                  selectedImage!
+                                                                      .bytes!;
+
+                                                              final SharedPreferences
+                                                                  prefs =
+                                                                  await SharedPreferences
+                                                                      .getInstance();
+
+                                                              final String?
+                                                                  companyName =
+                                                                  prefs.getString(
+                                                                      'companyName');
+
+                                                              String
+                                                                  base64Image =
+                                                                  base64Encode(
+                                                                      imageBytes);
+
+                                                              AllEmployeesBloc
+                                                                      .get(
+                                                                          context)
+                                                                  .add(
+                                                                AddNewEmployee(
+                                                                  companyName:
+                                                                      companyName ??
+                                                                          "No Company ",
+                                                                  personName: state
+                                                                      .personName,
+                                                                  image:
+                                                                      base64Image,
+                                                                ),
+                                                              );
+                                                            }
+                                                          } catch (e) {
+                                                            debugPrint(
+                                                                "Error picking file: $e");
                                                           }
-                                                        } catch (e) {
-                                                          print(
-                                                              "Error picking file: $e");
-                                                        }
-                                                      },
-                                                      child: const Text(
-                                                          'Upload Image'),
-                                                    ),
-                                                  ],
+                                                        },
+                                                        child: const Text(
+                                                            'Upload Image'),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                                 actions: [
                                                   TextButton(
@@ -474,9 +535,6 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                   ),
                                                   ElevatedButton(
                                                     onPressed: () {
-                                                      // context.read<AllEmolyessBloc>().add(
-                                                      //     const GetEmployeeNamesEvent());
-
                                                       AllEmployeesBloc.get(
                                                               context)
                                                           .add(
@@ -588,9 +646,9 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                               final employee = state
                                                   .employeeNamesList[index];
                                               return _contactUi(
-                                                // context: context,
                                                 name: employee.name ?? '',
-                                                profession: employee.sId ?? '',
+                                                profession:
+                                                    'Software Developer',
                                               );
                                             },
                                           ),
@@ -689,13 +747,11 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                       context.read<AllEmployeesBloc>().add(
                                             DeletePersonByNameEvent(
                                               companyName ?? '',
-                                              name ?? '',
+                                              name,
                                             ),
                                           );
 
                                       Navigator.of(ctx).pop();
-                                      // await logout(
-                                      //     context);
                                     }),
                                 TextButton(
                                     child: Text(

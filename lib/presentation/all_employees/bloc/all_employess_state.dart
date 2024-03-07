@@ -5,6 +5,7 @@ class AllEmployeesState extends Equatable {
   final String companyName;
   String personName;
   final String image;
+  bool isSearching;
 
   final List<String> allCameras;
   final List<GetAllCameraDetails> camerasDetails;
@@ -16,6 +17,7 @@ class AllEmployeesState extends Equatable {
   final Submission submission;
 
   AllEmployeesState({
+    this.isSearching = false,
     this.image = "",
     this.personName = "",
     this.companyName = "",
@@ -31,6 +33,7 @@ class AllEmployeesState extends Equatable {
   });
 
   AllEmployeesState copyWith({
+    bool? isSearching,
     String? image,
     List<Data>? employeeNamesList,
     String? companyName,
@@ -45,6 +48,7 @@ class AllEmployeesState extends Equatable {
     String? selectedYear,
   }) {
     return AllEmployeesState(
+      isSearching: isSearching ?? this.isSearching,
       image: image ?? this.image,
       employeeNamesList: employeeNamesList ?? this.employeeNamesList,
       companyName: companyName ?? this.companyName,
@@ -62,6 +66,7 @@ class AllEmployeesState extends Equatable {
 
   @override
   List<Object> get props => [
+        isSearching,
         image,
         submission,
         singleCameraDetails,
