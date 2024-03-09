@@ -85,6 +85,37 @@ class AddNewEmployeeEvent extends AllEmployeesEvent {
   @override
   List<Object?> get props => [];
 }
+///////////////////////////////////////////
+
+class UpdateEmployeeEvent extends AllEmployeesEvent {
+  final String companyName;
+  final String personName;
+  final String image;
+  final String phoneNum;
+  final String email;
+  final String userId;
+  final String id;
+
+  const UpdateEmployeeEvent(
+      {this.id = '',
+      this.userId = '',
+      this.personName = ' ',
+      this.phoneNum = '',
+      this.email = ' ',
+      this.companyName = ' ',
+      this.image = ''});
+
+  @override
+  List<Object?> get props => [
+        id,
+        companyName,
+        personName,
+        phoneNum,
+        userId,
+        email,
+        image,
+      ];
+}
 
 ////////////////////////////////////////////
 class AddNewEmployee extends AllEmployeesEvent {

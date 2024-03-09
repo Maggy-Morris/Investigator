@@ -135,6 +135,43 @@ class RemoteProvider {
     }
   }
 
+  ///edit Employee data
+
+  /// Add New Person with image as stream of bytes
+  Future<CallBackModel> UpdateEmployeeData({
+    required String companyName,
+    required String personName,
+    required String email,
+    required String id,
+    required String phoneNum,
+    required String userId,
+  }) async {
+    try {
+      Map<String, dynamic> callBack = await RemoteDataSource().post(
+        endPoint: "/qdrant/update_user",
+        body: {
+          "collection_name": companyName,
+          "_id": id,
+          "target_name": personName,
+          "email": email,
+          "phone": phoneNum,
+          "user_id": userId,
+        },
+      );
+
+      //Change this "Collection Created Successfully!"
+
+      if (callBack.isNotEmpty) {
+        CallBackModel callBackList = CallBackModel.fromJson(callBack);
+        return callBackList;
+      } else {
+        return CallBackModel();
+      }
+    } catch (e) {
+      return CallBackModel();
+    }
+  }
+
   ///Delete Company
 
   Future<CallBackModel> deleteCompany({

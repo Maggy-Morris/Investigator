@@ -40,23 +40,19 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
     on<Addemail>(_onAddemail);
     on<AdduserId>(_onAdduserId);
 
+//edit
+
+    on<UpdateEmployeeEvent>(_onUpdateEmployeeEvent);
+
     /// Date
     on<CameraInitializeDate>(_onCameraInitializeDate);
-    on<CameraAddDay>(_onCameraAddDay);
-    on<CameraAddMonth>(_onCameraAddMonth);
-    on<CameraAddYear>(_onCameraAddYear);
+    // on<CameraAddDay>(_onCameraAddDay);
+    // on<CameraAddMonth>(_onCameraAddMonth);
+    // on<CameraAddYear>(_onCameraAddYear);
   }
 
   _onAllEmployeesEvent(
       AllEmployeesEvent event, Emitter<AllEmployeesState> emit) {}
-
-  // _onAddpersonName(AddpersonName event, Emitter<AllEmployeesState> emit) async {
-  //   // .getAllEmployeeNames(companyName: state.companyName)
-  //   // .then((value) {
-  //   emit(state.copyWith(
-  //       personName: event.personName, submission: Submission.hasData));
-  //   // });
-  // }
 
   _onAddpersonName(AddpersonName event, Emitter<AllEmployeesState> emit) async {
     emit(state.copyWith(
@@ -214,26 +210,33 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
       emit(state.copyWith(submission: Submission.error));
     }
   }
-  // _onAddNewEmployeeEvent(
-  //     AddNewEmployeeEvent event, Emitter<AllEmployeesState> emit) async {
-  //   emit(state.copyWith(submission: Submission.loading));
-  //   await RemoteProvider()
-  //       .addNewPersonToACompany(
-  //     companyName: state.companyName,
-  //     personName: state.personName,
-  //     phoneNum: state.phoneNum,
-  //     email: state.email,
-  //     userId: state.userId,
-  //     image: state.image,
-  //   )
-  //       .then((value) {
-  //     if (value != AddCompanyModel()) {
-  //       emit(AllEmployeesState().copyWith(submission: Submission.success));
-  //     } else {
-  //       emit(state.copyWith(submission: Submission.error));
-  //     }
-  //   });
-  // }
+
+  _onUpdateEmployeeEvent(
+      UpdateEmployeeEvent event, Emitter<AllEmployeesState> emit) async {
+    emit(state.copyWith(submission: Submission.loading));
+    try {
+      final result = await RemoteProvider().UpdateEmployeeData(
+        companyName: event.companyName,
+        personName: state.personName,
+        phoneNum: state.phoneNum,
+        email: state.email,
+        userId: state.userId,
+        id: event.id,
+      );
+      if (result != AddCompanyModel()) {
+        emit(state.copyWith(
+          submission: Submission.success,
+
+          // employeeNamesList:
+        ));
+      } else {
+        emit(state.copyWith(submission: Submission.error));
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      emit(state.copyWith(submission: Submission.error));
+    }
+  }
 
   _onCameraInitializeDate(
       CameraInitializeDate event, Emitter<AllEmployeesState> emit) {
@@ -242,15 +245,15 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
     add(CameraAddYear(selectedYear: DateTime.now().year.toString()));
   }
 
-  _onCameraAddDay(CameraAddDay event, Emitter<AllEmployeesState> emit) {
-    emit(state.copyWith(
-        selectedDay: event.selectedDay, submission: Submission.editing));
-    if (state.singleCameraDetails.isNotEmpty) {
-      add(GetModelsChartsData(
-          modelsList: state.singleCameraDetails.first.models ?? [],
-          cameraName: state.singleCameraDetails.first.cameraName ?? ""));
-    }
-  }
+  // _onCameraAddDay(CameraAddDay event, Emitter<AllEmployeesState> emit) {
+  //   emit(state.copyWith(
+  //       selectedDay: event.selectedDay, submission: Submission.editing));
+  //   if (state.singleCameraDetails.isNotEmpty) {
+  //     add(GetModelsChartsData(
+  //         modelsList: state.singleCameraDetails.first.models ?? [],
+  //         cameraName: state.singleCameraDetails.first.cameraName ?? ""));
+  //   }
+  // }
 
   /// Delete person data by Name
   _onDeletePersonByNameEvent(
@@ -382,15 +385,15 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
   //   }
   // }
 
-  _onCameraAddMonth(CameraAddMonth event, Emitter<AllEmployeesState> emit) {
-    emit(state.copyWith(
-        selectedMonth: event.selectedMonth, submission: Submission.editing));
-  }
+  // _onCameraAddMonth(CameraAddMonth event, Emitter<AllEmployeesState> emit) {
+  //   emit(state.copyWith(
+  //       selectedMonth: event.selectedMonth, submission: Submission.editing));
+  // }
 
-  _onCameraAddYear(CameraAddYear event, Emitter<AllEmployeesState> emit) {
-    emit(state.copyWith(
-        selectedYear: event.selectedYear, submission: Submission.editing));
-  }
+  // _onCameraAddYear(CameraAddYear event, Emitter<AllEmployeesState> emit) {
+  //   emit(state.copyWith(
+  //       selectedYear: event.selectedYear, submission: Submission.editing));
+  // }
 
   // _onCameraMainDataEvent(
   //     CameraMainDataEvent event, Emitter<AllEmployeesState> emit) async {

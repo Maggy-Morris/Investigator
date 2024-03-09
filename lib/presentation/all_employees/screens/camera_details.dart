@@ -32,22 +32,22 @@ class _CameraDetailsState extends State<CameraDetails> {
           listener: (context, state) {},
           child: BlocBuilder<AllEmployeesBloc, AllEmployeesState>(
             builder: (context, state) {
-              if (state.singleCameraDetails.isEmpty) {
-                return Center(child: loadingIndicator());
-              }
+              // if (state.singleCameraDetails.isEmpty) {
+              //   return Center(child: loadingIndicator());
+              // }
               return Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
                       FxBox.h24,
-                      SizedBox(
-                        width: double.infinity,
-                        child: Text(
-                            state.singleCameraDetails.first.cameraName ?? "",
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold)),
-                      ),
+                      // SizedBox(
+                      //   width: double.infinity,
+                      //   child: Text(
+                      //       state.singleCameraDetails.first.cameraName ?? "",
+                      //       style: const TextStyle(
+                      //           fontSize: 20, fontWeight: FontWeight.bold)),
+                      // ),
                       FxBox.h24,
 
                       /// Camera's Data
@@ -69,9 +69,9 @@ class _CameraDetailsState extends State<CameraDetails> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     _commonText("cameraName".tr()),
-                                    Text(state.singleCameraDetails.first
-                                            .cameraInfo?.cameraName ??
-                                        ""),
+                                    // Text(state.singleCameraDetails.first
+                                    //         .cameraInfo?.cameraName ??
+                                    //     ""),
                                   ],
                                 ),
                               ),
@@ -86,95 +86,97 @@ class _CameraDetailsState extends State<CameraDetails> {
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    _commonText("insertionDate".tr()),
-                                    Text(state.singleCameraDetails.first
-                                            .cameraInfo?.insertionDate ??
-                                        ""),
+                                    // _commonText("insertionDate".tr()),
+                                    // Text(state.singleCameraDetails.first
+                                    //         .cameraInfo?.insertionDate ??
+                                    //     ""),
                                   ],
                                 ),
                               ),
                             ),
-                            Card(
-                              color: (state.singleCameraDetails.first.cameraInfo
-                                          ?.status ==
-                                      "ON")
-                                  ? AppColors.green
-                                  : (state.singleCameraDetails.first.cameraInfo
-                                              ?.status ==
-                                          "OFF")
-                                      ? AppColors.thinkRedColor
-                                      : AppColors.white,
-                              child: Container(
-                                padding: const EdgeInsets.all(10.0),
-                                width: Responsive.isMobile(context)
-                                    ? MediaQuery.of(context).size.width
-                                    : MediaQuery.of(context).size.width * 0.2,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    _commonText("status".tr()),
-                                    Text(state.singleCameraDetails.first
-                                            .cameraInfo?.status ??
-                                        ""),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Card(
-                              color: AppColors.white,
-                              child: Container(
-                                padding: const EdgeInsets.all(10.0),
-                                width: Responsive.isMobile(context)
-                                    ? MediaQuery.of(context).size.width
-                                    : MediaQuery.of(context).size.width * 0.2,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    _commonText("sourceType".tr()),
-                                    Text(state.singleCameraDetails.first
-                                            .cameraInfo?.sourceType ??
-                                        ""),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Card(
-                              color: AppColors.white,
-                              child: Container(
-                                padding: const EdgeInsets.all(10.0),
-                                width: Responsive.isMobile(context)
-                                    ? MediaQuery.of(context).size.width
-                                    : MediaQuery.of(context).size.width * 0.2,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    _commonText("sourceTxt".tr()),
-                                    Text(state.singleCameraDetails.first
-                                            .cameraInfo?.source ??
-                                        ""),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Card(
-                              color: AppColors.white,
-                              child: Container(
-                                padding: const EdgeInsets.all(10.0),
-                                width: Responsive.isMobile(context)
-                                    ? MediaQuery.of(context).size.width
-                                    : MediaQuery.of(context).size.width * 0.2,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    _commonText("cameraModels".tr()),
-                                    getCardBadgesRow(
-                                        badgesList: state.singleCameraDetails
-                                                .first.models ??
-                                            []),
-                                  ],
-                                ),
-                              ),
-                            ),
+                            // Card(
+                            //   color: (state.singleCameraDetails.first.cameraInfo
+                            //               ?.status ==
+                            //           "ON")
+                            //       ? AppColors.green
+                            //       : (state.singleCameraDetails.first.cameraInfo
+                            //                   ?.status ==
+                            //               "OFF")
+                            //           ? AppColors.thinkRedColor
+                            //           : AppColors.white,
+                            //   child: Container(
+                            //     padding: const EdgeInsets.all(10.0),
+                            //     width: Responsive.isMobile(context)
+                            //         ? MediaQuery.of(context).size.width
+                            //         : MediaQuery.of(context).size.width * 0.2,
+                            //     child: Column(
+                            //       mainAxisSize: MainAxisSize.min,
+                            //       children: [
+                            //         _commonText("status".tr()),
+                            //         Text(state.singleCameraDetails.first
+                            //                 .cameraInfo?.status ??
+                            //             ""),
+                            //       ],
+                            //     ),
+                            //   ),
+                            // ),
+                            // Card(
+                            //   color: AppColors.white,
+                            //   child: Container(
+                            //     padding: const EdgeInsets.all(10.0),
+                            //     width: Responsive.isMobile(context)
+                            //         ? MediaQuery.of(context).size.width
+                            //         : MediaQuery.of(context).size.width * 0.2,
+                            //     child: Column(
+                            //       mainAxisSize: MainAxisSize.min,
+                            //       children: [
+                            //         _commonText("sourceType".tr()),
+                            //         Text(state.singleCameraDetails.first
+                            //                 .cameraInfo?.sourceType ??
+                            //             ""),
+                            //       ],
+                            //     ),
+                            //   ),
+                            // ),
+                            // Card(
+                            //   color: AppColors.white,
+                            //   child: Container(
+                            //     padding: const EdgeInsets.all(10.0),
+                            //     width: Responsive.isMobile(context)
+                            //         ? MediaQuery.of(context).size.width
+                            //         : MediaQuery.of(context).size.width * 0.2,
+                            //     child: Column(
+                            //       mainAxisSize: MainAxisSize.min,
+                            //       children: [
+                            //         _commonText("sourceTxt".tr()),
+                            //         Text(state.singleCameraDetails.first
+                            //                 .cameraInfo?.source ??
+                            //             ""),
+                            //       ],
+                            //     ),
+                            //   ),
+                            // ),
+                            // Card(
+                            //   color: AppColors.white,
+                            //   child: Container(
+                            //     padding: const EdgeInsets.all(10.0),
+                            //     width: Responsive.isMobile(context)
+                            //         ? MediaQuery.of(context).size.width
+                            //         : MediaQuery.of(context).size.width * 0.2,
+                            //     child: Column(
+                            //       mainAxisSize: MainAxisSize.min,
+                            //       children: [
+                            //         _commonText("cameraModels".tr()),
+                            //         getCardBadgesRow(
+                            //             badgesList: state.singleCameraDetails
+                            //                     .first.models ??
+                            //                 []),
+                            //       ],
+                            //     ),
+                            //   ),
+                            // ),
+                        
+                        
                           ],
                         ),
                       ),
@@ -185,80 +187,82 @@ class _CameraDetailsState extends State<CameraDetails> {
                         height: 100,
                         child: Row(
                           children: [
-                            Flexible(
-                              child: ElevatedButton(
-                                onPressed: () async {
-                                  await showDatePicker(
-                                    context: context,
-                                    lastDate: DateTime(3000),
-                                    firstDate: DateTime(2020),
-                                  ).then((value) {
-                                    if (value != null) {
-                                      AllEmployeesBloc.get(context).add(
-                                          CameraAddDay(
-                                              selectedDay: "${value.day}"));
-                                      AllEmployeesBloc.get(context).add(
-                                          CameraAddMonth(
-                                              selectedMonth: "${value.month}"));
-                                      AllEmployeesBloc.get(context).add(
-                                          CameraAddYear(
-                                              selectedYear: "${value.year}"));
-                                    }
-                                  });
-                                },
-                                child: Text((state.selectedDay.isEmpty)
-                                    ? "all".tr()
-                                    : state.selectedDay),
-                              ),
-                            ),
-                            Flexible(
-                              child: ElevatedButton(
-                                onPressed: () async {
-                                  await showDatePicker(
-                                    context: context,
-                                    lastDate: DateTime(3000),
-                                    firstDate: DateTime(2020),
-                                  ).then((value) {
-                                    if (value != null) {
-                                      AllEmployeesBloc.get(context).add(
-                                          const CameraAddDay(selectedDay: ""));
-                                      AllEmployeesBloc.get(context).add(
-                                          CameraAddMonth(
-                                              selectedMonth: "${value.month}"));
-                                      AllEmployeesBloc.get(context).add(
-                                          CameraAddYear(
-                                              selectedYear: "${value.year}"));
-                                    }
-                                  });
-                                },
-                                child: Text((state.selectedMonth.isEmpty)
-                                    ? "all".tr()
-                                    : state.selectedMonth),
-                              ),
-                            ),
-                            Flexible(
-                              child: ElevatedButton(
-                                onPressed: () async {
-                                  await showDatePicker(
-                                    context: context,
-                                    lastDate: DateTime(3000),
-                                    firstDate: DateTime(2020),
-                                  ).then((value) {
-                                    if (value != null) {
-                                      AllEmployeesBloc.get(context).add(
-                                          const CameraAddDay(selectedDay: ""));
-                                      AllEmployeesBloc.get(context).add(
-                                          const CameraAddMonth(
-                                              selectedMonth: ""));
-                                      AllEmployeesBloc.get(context).add(
-                                          CameraAddYear(
-                                              selectedYear: "${value.year}"));
-                                    }
-                                  });
-                                },
-                                child: Text(state.selectedYear),
-                              ),
-                            ),
+                            // Flexible(
+                            //   child: ElevatedButton(
+                            //     onPressed: () async {
+                            //       await showDatePicker(
+                            //         context: context,
+                            //         lastDate: DateTime(3000),
+                            //         firstDate: DateTime(2020),
+                            //       ).then((value) {
+                            //         if (value != null) {
+                            //           AllEmployeesBloc.get(context).add(
+                            //               CameraAddDay(
+                            //                   selectedDay: "${value.day}"));
+                            //           AllEmployeesBloc.get(context).add(
+                            //               CameraAddMonth(
+                            //                   selectedMonth: "${value.month}"));
+                            //           AllEmployeesBloc.get(context).add(
+                            //               CameraAddYear(
+                            //                   selectedYear: "${value.year}"));
+                            //         }
+                            //       });
+                            //     },
+                            //     child: Text((state.selectedDay.isEmpty)
+                            //         ? "all".tr()
+                            //         : state.selectedDay),
+                            //   ),
+                            // ),
+                            // Flexible(
+                            //   child: ElevatedButton(
+                            //     onPressed: () async {
+                            //       await showDatePicker(
+                            //         context: context,
+                            //         lastDate: DateTime(3000),
+                            //         firstDate: DateTime(2020),
+                            //       ).then((value) {
+                            //         if (value != null) {
+                            //           AllEmployeesBloc.get(context).add(
+                            //               const CameraAddDay(selectedDay: ""));
+                            //           AllEmployeesBloc.get(context).add(
+                            //               CameraAddMonth(
+                            //                   selectedMonth: "${value.month}"));
+                            //           AllEmployeesBloc.get(context).add(
+                            //               CameraAddYear(
+                            //                   selectedYear: "${value.year}"));
+                            //         }
+                            //       });
+                            //     },
+                            //     child: Text((state.selectedMonth.isEmpty)
+                            //         ? "all".tr()
+                            //         : state.selectedMonth),
+                            //   ),
+                            // ),
+                            // Flexible(
+                            //   child: ElevatedButton(
+                            //     onPressed: () async {
+                            //       await showDatePicker(
+                            //         context: context,
+                            //         lastDate: DateTime(3000),
+                            //         firstDate: DateTime(2020),
+                            //       ).then((value) {
+                            //         if (value != null) {
+                            //           AllEmployeesBloc.get(context).add(
+                            //               const CameraAddDay(selectedDay: ""));
+                            //           AllEmployeesBloc.get(context).add(
+                            //               const CameraAddMonth(
+                            //                   selectedMonth: ""));
+                            //           AllEmployeesBloc.get(context).add(
+                            //               CameraAddYear(
+                            //                   selectedYear: "${value.year}"));
+                            //         }
+                            //       });
+                            //     },
+                            //     child: Text(state.selectedYear),
+                            //   ),
+                            // ),
+                         
+                         
                           ],
                         ),
                       ),
@@ -289,7 +293,7 @@ class _CameraDetailsState extends State<CameraDetails> {
                                 majorGridLines: const MajorGridLines(
                                     color: AppColors.white)),
                             tooltipBehavior: TooltipBehavior(enable: true),
-                            series: _seriesList(state: state),
+                            // series: _seriesList(state: state),
                           ),
                         ),
                       ),
@@ -304,37 +308,40 @@ class _CameraDetailsState extends State<CameraDetails> {
     );
   }
 
-  List<CartesianSeries<dynamic, dynamic>> _seriesList(
-      {required AllEmployeesState state}) {
-    return List.generate(state.camerasCountsPerHour.length, (index) {
-      // List<int> _dataSourceList = [];
-      // state.camerasCountsPerHour[index].forEach((element) {
-      //   _dataSourceList.add(element.countAverage??0);
-      // });
+  // List<CartesianSeries<dynamic, dynamic>> _seriesList(
+  //     {required AllEmployeesState state}) {
+  //   // return List.generate(state.camerasCountsPerHour.length, (index) {
+  //   //   // List<int> _dataSourceList = [];
+  //   //   // state.camerasCountsPerHour[index].forEach((element) {
+  //   //   //   _dataSourceList.add(element.countAverage??0);
+  //   //   // });
 
-      ///
-      List<Map<String, dynamic>> dataSourceListPartTwo = [];
-      state.camerasCountsPerHour[index].forEach((element) {
-        dataSourceListPartTwo.add({
-          "name": element.cameraName,
-          "count": element.countAverage,
-          "time": element.timeRange,
-        });
-      });
-      return LineSeries(
-        // xValueMapper: (datum, x) => _timeRangeList.isNotEmpty?_timeRangeList[x]:[],
-        xValueMapper: (datum, x) => datum["time"],
-        // dataLabelMapper: (datum, index) => datum["name"],
-        name: dataSourceListPartTwo.isNotEmpty
-            ? dataSourceListPartTwo.first["name"]
-            : "NotDefined".tr(),
-        // yValueMapper: (datum, x) => _dataSourceList.isNotEmpty?_dataSourceList[x]:0,
-        yValueMapper: (datum, x) => datum["count"],
-        dataSource: dataSourceListPartTwo,
-        markerSettings: const MarkerSettings(isVisible: true),
-      );
-    });
-  }
+  //   //   ///
+  //   //   List<Map<String, dynamic>> dataSourceListPartTwo = [];
+  //   //   state.camerasCountsPerHour[index].forEach((element) {
+  //   //     dataSourceListPartTwo.add({
+  //   //       "name": element.cameraName,
+  //   //       "count": element.countAverage,
+  //   //       "time": element.timeRange,
+  //   //     });
+  //   //   });
+  //   //   return LineSeries(
+  //   //     // xValueMapper: (datum, x) => _timeRangeList.isNotEmpty?_timeRangeList[x]:[],
+  //   //     xValueMapper: (datum, x) => datum["time"],
+  //   //     // dataLabelMapper: (datum, index) => datum["name"],
+  //   //     name: dataSourceListPartTwo.isNotEmpty
+  //   //         ? dataSourceListPartTwo.first["name"]
+  //   //         : "NotDefined".tr(),
+  //   //     // yValueMapper: (datum, x) => _dataSourceList.isNotEmpty?_dataSourceList[x]:0,
+  //   //     yValueMapper: (datum, x) => datum["count"],
+  //   //     dataSource: dataSourceListPartTwo,
+  //   //     markerSettings: const MarkerSettings(isVisible: true),
+  //   //   );
+  //   // });
+  
+  
+  // }
+
 
   Widget _commonText(String text) {
     return Padding(
