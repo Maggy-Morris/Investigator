@@ -1022,83 +1022,82 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                   ),
                 ),
               ),
-              // BlocBuilder<AllEmployeesBloc, AllEmployeesState>(
-              //   builder: (context, state) {
-              // return
-              PopupMenuButton<String>(
-                icon: const Icon(Icons.more_horiz, color: Colors.black),
-                onSelected: (String choice) {
-                  if (choice == 'Edit') {
-                    onUpdate();
-                    // Handle edit action
-                  } else if (choice == 'Delete') {
-                    // Handle delete action
+              BlocBuilder<AllEmployeesBloc, AllEmployeesState>(
+                builder: (context, state) {
+                  return PopupMenuButton<String>(
+                    icon: const Icon(Icons.more_horiz, color: Colors.black),
+                    onSelected: (String choice) {
+                      if (choice == 'Edit') {
+                        onUpdate();
+                        // Handle edit action
+                      } else if (choice == 'Delete') {
+                        // Handle delete action
 
-                    showDialog(
-                      context: context,
-                      builder: (ctx) {
-                        return AlertDialog(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          icon: const Icon(
-                            Icons.warning,
-                            color: Colors.amber,
-                          ),
-                          title: Text(
-                            "Are you sure you want to remove this person from the organization?"
-                                .tr(),
-                            style: const TextStyle(color: Colors.black),
-                          ),
-                          actions: [
-                            TextButton(
-                                child: Text(
-                                  "yes".tr(),
-                                  style: const TextStyle(
-                                      color: AppColors.thinkRedColor),
-                                ),
-                                onPressed: () async {
-                                  final SharedPreferences prefs =
-                                      await SharedPreferences.getInstance();
+                        showDialog(
+                          context: context,
+                          builder: (ctx) {
+                            return AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              icon: const Icon(
+                                Icons.warning,
+                                color: Colors.amber,
+                              ),
+                              title: Text(
+                                "Are you sure you want to remove this person from the organization?"
+                                    .tr(),
+                                style: const TextStyle(color: Colors.black),
+                              ),
+                              actions: [
+                                TextButton(
+                                    child: Text(
+                                      "yes".tr(),
+                                      style: const TextStyle(
+                                          color: AppColors.thinkRedColor),
+                                    ),
+                                    onPressed: () async {
+                                      final SharedPreferences prefs =
+                                          await SharedPreferences.getInstance();
 
-                                  final String? companyName =
-                                      prefs.getString('companyName');
-                                  context.read<AllEmployeesBloc>().add(
-                                        DeletePersonByNameEvent(
-                                          companyName ?? '',
-                                          name,
-                                        ),
-                                      );
+                                      final String? companyName =
+                                          prefs.getString('companyName');
+                                      context.read<AllEmployeesBloc>().add(
+                                            DeletePersonByNameEvent(
+                                              companyName ?? '',
+                                              name,
+                                            ),
+                                          );
 
-                                  Navigator.of(ctx).pop();
-                                }),
-                            TextButton(
-                                child: Text(
-                                  "no".tr(),
-                                  style: const TextStyle(
-                                      color: AppColors.blueBlack),
-                                ),
-                                onPressed: () => Navigator.of(ctx).pop()),
-                          ],
+                                      Navigator.of(ctx).pop();
+                                    }),
+                                TextButton(
+                                    child: Text(
+                                      "no".tr(),
+                                      style: const TextStyle(
+                                          color: AppColors.blueBlack),
+                                    ),
+                                    onPressed: () => Navigator.of(ctx).pop()),
+                              ],
+                            );
+                          },
                         );
-                      },
-                    );
-                  }
+                      }
+                    },
+                    itemBuilder: (BuildContext context) =>
+                        <PopupMenuEntry<String>>[
+                      const PopupMenuItem<String>(
+                        value: 'Edit',
+                        child: Text('Edit'),
+                      ),
+                      const PopupMenuItem<String>(
+                        value: 'Delete',
+                        child: Text('Delete'),
+                      ),
+                    ],
+                  );
                 },
-                itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                  const PopupMenuItem<String>(
-                    value: 'Edit',
-                    child: Text('Edit'),
-                  ),
-                  const PopupMenuItem<String>(
-                    value: 'Delete',
-                    child: Text('Delete'),
-                  ),
-                ],
               )
-              // ;
-              //   },
-              // )
             ],
           ),
           FxBox.h24,
@@ -1158,9 +1157,17 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                   initialValue: employee.name,
                   decoration: const InputDecoration(labelText: 'Name'),
                   onChanged: (value) async {
-                    AllEmployeesBloc.get(context).add(
-                      AddpersonName(personName: value),
-                    );
+                    if (value.isEmpty) {
+                      AllEmployeesBloc.get(context).add(
+                        AdduserId(
+                          userId: employee.name!,
+                        ),
+                      );
+                    } else {
+                      AllEmployeesBloc.get(context).add(
+                        AddpersonName(personName: value),
+                      );
+                    }
                   },
                 ),
                 FxBox.h24,
@@ -1168,11 +1175,19 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                   initialValue: employee.userId,
                   decoration: const InputDecoration(labelText: 'UserId'),
                   onChanged: (value) async {
-                    AllEmployeesBloc.get(context).add(
-                      AdduserId(
-                        userId: value,
-                      ),
-                    );
+                    if (value.isEmpty) {
+                      AllEmployeesBloc.get(context).add(
+                        AdduserId(
+                          userId: employee.userId!,
+                        ),
+                      );
+                    } else {
+                      AllEmployeesBloc.get(context).add(
+                        AdduserId(
+                          userId: value,
+                        ),
+                      );
+                    }
                   },
                 ),
                 FxBox.h24,
@@ -1180,11 +1195,19 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                   initialValue: employee.phone,
                   decoration: const InputDecoration(labelText: 'Phone Number'),
                   onChanged: (value) async {
-                    AllEmployeesBloc.get(context).add(
-                      AddphoneNum(
-                        phoneNum: value,
-                      ),
-                    );
+                    if (value.isEmpty) {
+                      AllEmployeesBloc.get(context).add(
+                        AdduserId(
+                          userId: employee.phone!,
+                        ),
+                      );
+                    } else {
+                      AllEmployeesBloc.get(context).add(
+                        AddphoneNum(
+                          phoneNum: value,
+                        ),
+                      );
+                    }
                   },
                 ),
                 FxBox.h24,
@@ -1192,11 +1215,19 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                   initialValue: employee.email,
                   decoration: const InputDecoration(labelText: 'Email'),
                   onChanged: (value) async {
-                    AllEmployeesBloc.get(context).add(
-                      Addemail(
-                        email: value,
-                      ),
-                    );
+                    if (value.isEmpty) {
+                      AllEmployeesBloc.get(context).add(
+                        AdduserId(
+                          userId: employee.email!,
+                        ),
+                      );
+                    } else {
+                      AllEmployeesBloc.get(context).add(
+                        Addemail(
+                          email: value,
+                        ),
+                      );
+                    }
                   },
                 ),
                 FxBox.h24,
@@ -1229,6 +1260,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                   UpdateEmployeeEvent(
                     companyName: companyName ?? '',
                     id: employee.sId ?? '',
+
                     // userId: state.userId,
                     // companyName: state.companyName,
                   ),

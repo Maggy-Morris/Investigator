@@ -48,11 +48,16 @@ class RemoteProvider {
 
   //SignUp API
   Future<CallBackModel> SignUpRemoteCredentials(
-      String email, String password) async {
+      String email, String password,
+      String companyName,
+      
+      ) async {
     try {
       Map<String, dynamic> signUpCallBack = await RemoteDataSource().post(
           endPoint: "/qdrant/signup",
-          body: {"username": email, "password": password});
+          body: {"username": email, "password": password,
+          "company_name":companyName,
+          });
 
       if (signUpCallBack.isNotEmpty) {
         CallBackModel callBackList = CallBackModel.fromJson(signUpCallBack);
@@ -152,10 +157,12 @@ class RemoteProvider {
         body: {
           "collection_name": companyName,
           "_id": id,
-          "target_name": personName,
-          "email": email,
-          "phone": phoneNum,
-          "user_id": userId,
+          "data": {
+            "target_name": personName,
+            "email": email,
+            "phone": phoneNum,
+            "user_id": userId,
+          }
         },
       );
 

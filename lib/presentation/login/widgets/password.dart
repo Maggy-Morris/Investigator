@@ -7,7 +7,9 @@ enum PasswordValidationError {
 }
 
 /// {@template password}
+
 /// Form input for an password input.
+
 /// {@endtemplate}
 class Password extends FormzInput<String, PasswordValidationError> {
   /// {@macro password}

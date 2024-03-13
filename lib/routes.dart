@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:Investigator/presentation/add_camera/screens/add_camera_screen.dart';
+import 'package:Investigator/presentation/add_camera/screens/investigator_screen.dart';
 
 import 'package:Investigator/presentation/search/screens/search_screen.dart';
 // import 'package:Investigator/presentation/dashboard/screens/dashboard_screen.dart';

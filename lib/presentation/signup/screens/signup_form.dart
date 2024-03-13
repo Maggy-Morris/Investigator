@@ -143,6 +143,8 @@ Widget _bottomView() {
       ),
       FxBox.h8,
       _PasswordInput(),
+      FxBox.h8,
+      companyNameInput(),
       FxBox.h28,
       Center(child: _SignUpButton()),
       FxBox.h20,
@@ -192,6 +194,45 @@ class _EmailInput extends StatelessWidget {
 class _PasswordInput extends StatefulWidget {
   @override
   State<_PasswordInput> createState() => _PasswordInputState();
+}
+
+class companyNameInput extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SignupCubit, SignupState>(
+      // buildWhen: (previous, current) => previous.email != current.email,
+      builder: (context, state) {
+        return SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: TextFormField(
+            cursorColor: Colors.black,
+            // key: const Key('loginForm_emailInput_textField'),
+            onChanged: (companyName) =>
+                context.read<SignupCubit>().companyNameChanged(companyName),
+            keyboardType: TextInputType.text,
+            decoration: InputDecoration(
+              // hintStyle: const TextStyle(color: Colors.black),
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(style: BorderStyle.none)),
+              focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(style: BorderStyle.none)),
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(style: BorderStyle.none)),
+              filled: true,
+              fillColor: AppColors.primaryColorDark,
+              isDense: true,
+              // labelText: 'Email',
+              hintText: 'enterCompanyName'.tr(),
+              // errorText: state.email.invalid ? 'wrongUserName'.tr() : null,
+            ),
+          ),
+        );
+      },
+    );
+  }
 }
 
 class _PasswordInputState extends State<_PasswordInput> {

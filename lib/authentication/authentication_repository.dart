@@ -15,6 +15,8 @@ class AuthenticationRepository {
   static const userCacheKey = '__user_cache_key__';
   static const usernameCacheKey = '__username_cache_key__';
   static const passwordCacheKey = '__password_cache_key__';
+  static const companyNameCacheKey = '__companyName_cache_key__';
+
   static const routesCacheKey = '__routes_cache_key__';
 
   // final CacheClient _cache = CacheClient();
@@ -50,6 +52,8 @@ class AuthenticationRepository {
         Map userMap = jsonDecode(data);
         String? username = sharedUser?.getString(usernameCacheKey);
         String? password = sharedUser?.getString(passwordCacheKey);
+        String? comapnyName = sharedUser?.getString(companyNameCacheKey);
+
         var user = UserData.fromJson(userMap as Map<String, dynamic>);
         controller.add(user);
 
@@ -80,6 +84,8 @@ class AuthenticationRepository {
       String? data = sharedUser?.getString(userCacheKey);
       String? username = sharedUser?.getString(usernameCacheKey);
       String? password = sharedUser?.getString(passwordCacheKey);
+      String? companyName = sharedUser?.getString(companyNameCacheKey);
+
       UserData? user = UserData.fromJson(
         jsonDecode(data ?? "") as Map<String, dynamic>,
       );
@@ -124,16 +130,16 @@ class AuthenticationRepository {
     }
   }
 
-  /// Signs Up with the provided [email] and [password].
+  /// Signs Up with the provided [email] and [password] and [companyName]
 
   Future<void> SignUpWithEmailAndPassword({
     required String email,
     required String password,
-
+    required String companyName,
   }) async {
     try {
-      final modelAuth =
-          await RemoteProvider().SignUpRemoteCredentials(email, password);
+      final modelAuth = await RemoteProvider()
+          .SignUpRemoteCredentials(email, password, companyName);
 
       print("kkkkkkkkkkkkkkkkkkkkkk" + modelAuth.toString());
 
