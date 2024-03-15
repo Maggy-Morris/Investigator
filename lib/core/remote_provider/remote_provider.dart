@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:Investigator/authentication/call_back_authentication.dart';
 import 'package:Investigator/core/models/add_camera_model.dart';
@@ -48,16 +49,17 @@ class RemoteProvider {
 
   //SignUp API
   Future<CallBackModel> SignUpRemoteCredentials(
-      String email, String password,
-      String companyName,
-      
-      ) async {
+    String email,
+    String password,
+    String companyName,
+  ) async {
     try {
-      Map<String, dynamic> signUpCallBack = await RemoteDataSource().post(
-          endPoint: "/qdrant/signup",
-          body: {"username": email, "password": password,
-          "company_name":companyName,
-          });
+      Map<String, dynamic> signUpCallBack =
+          await RemoteDataSource().post(endPoint: "/qdrant/signup", body: {
+        "username": email,
+        "password": password,
+        "company_name": companyName,
+      });
 
       if (signUpCallBack.isNotEmpty) {
         CallBackModel callBackList = CallBackModel.fromJson(signUpCallBack);
@@ -326,6 +328,39 @@ class RemoteProvider {
 
       //Change this "Collection Created Successfully!"
 
+      if (callBack.isNotEmpty) {
+        CallBackModel callBackList = CallBackModel.fromJson(callBack);
+        return callBackList;
+      } else {
+        return CallBackModel();
+      }
+    } catch (e) {
+      return CallBackModel();
+    }
+  }
+
+
+
+  ///Search for person in the database by Video 
+  Future<CallBackModel> searchForpersonByVideo({
+    required String companyName,
+    required PlatformFile? video,
+        required PlatformFile? imageFile,
+
+    // required String image,
+    required String personName,
+  }) async {
+    try {
+      Map<String, dynamic> callBack = await RemoteDataSource().postMultiPartFiles(
+        endPoint: "/find_target",
+        body: {
+          "collection_name":companyName,
+          // "image":image,
+          "traget_name":personName,
+        },
+        files: [video! , imageFile!],
+
+      );
       if (callBack.isNotEmpty) {
         CallBackModel callBackList = CallBackModel.fromJson(callBack);
         return callBackList;

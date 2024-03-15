@@ -139,11 +139,21 @@ Widget _bottomView() {
             style: const TextStyle(
                 fontFamily: "Cairo",
                 fontSize: AppFontSize.s14,
-                fontWeight: FontWeight.bold)),
+                fontWeight: FontWeight.bold
+                ),
+                ),
       ),
       FxBox.h8,
       _PasswordInput(),
       FxBox.h8,
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text("Company Name".tr(),
+            style: const TextStyle(
+                fontFamily: "Cairo",
+                fontSize: AppFontSize.s14,
+                fontWeight: FontWeight.bold)),
+      ),
       companyNameInput(),
       FxBox.h28,
       Center(child: _SignUpButton()),
@@ -225,7 +235,7 @@ class companyNameInput extends StatelessWidget {
               fillColor: AppColors.primaryColorDark,
               isDense: true,
               // labelText: 'Email',
-              hintText: 'enterCompanyName'.tr(),
+              hintText: 'Enter Company Name'.tr(),
               // errorText: state.email.invalid ? 'wrongUserName'.tr() : null,
             ),
           ),

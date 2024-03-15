@@ -10,8 +10,8 @@ import 'package:Investigator/core/utils/responsive.dart';
 import 'package:Investigator/core/widgets/sizedbox.dart';
 import 'package:Investigator/core/widgets/toast/toast.dart';
 import 'package:Investigator/presentation/standard_layout/screens/standard_layout.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../authentication/authentication_repository.dart';
 import '../../../core/enum/enum.dart';
 import '../../../core/loader/loading_indicator.dart';
 import '../bloc/search_by_image_bloc.dart';
@@ -25,6 +25,8 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   Widget? _image;
+  String companyNameRepo =
+      AuthenticationRepository.instance.currentUser.companyName ?? "";
 
   @override
   Widget build(BuildContext context) {
@@ -107,14 +109,10 @@ class _SearchState extends State<Search> {
 
                                             String base64Image =
                                                 base64Encode(imageFile.bytes!);
-                                            final SharedPreferences prefs =
-                                                await SharedPreferences
-                                                    .getInstance();
-                                            final String? companyName =
-                                                prefs.getString('companyName');
+
                                             SearchByImageBloc.get(context).add(
                                               SearchForEmployee(
-                                                companyName: companyName ?? " ",
+                                                companyName: companyNameRepo,
                                                 image: base64Image,
                                               ),
                                             );
@@ -320,9 +318,6 @@ class _SearchState extends State<Search> {
                     ),
                   ),
                 ),
-            
-            
-            
               );
             },
           ),

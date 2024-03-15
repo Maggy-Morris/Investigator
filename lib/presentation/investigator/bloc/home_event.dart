@@ -19,6 +19,16 @@ class CompnyNameFromSP extends HomeEvent {
   List<Object?> get props => [companyName];
 }
 
+
+
+class SearchForEmployeeByVideoEvent extends HomeEvent {
+  const SearchForEmployeeByVideoEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
+
 ///
 
 // class GetEmployeeNames extends HomeEvent {

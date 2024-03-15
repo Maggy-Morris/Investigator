@@ -3,6 +3,8 @@ part of 'home_bloc.dart';
 class HomeState extends Equatable {
   final List<Data> employeeNamesList;
   final List<String> companiesNamesList;
+  final PlatformFile? video;
+  final PlatformFile? imageFile;
 
   final Submission submission;
 
@@ -11,6 +13,8 @@ class HomeState extends Equatable {
   final String personId;
 
   HomeState({
+    this.imageFile ,
+    this.video ,
     this.personName = "",
     this.personId = "",
     this.companyName = "",
@@ -20,6 +24,8 @@ class HomeState extends Equatable {
   });
 
   HomeState copyWith({
+    PlatformFile? video,
+    PlatformFile? imageFile,
     List<String>? companiesNamesList,
     List<Data>? employeeNamesList,
     String? companyName,
@@ -28,6 +34,8 @@ class HomeState extends Equatable {
     Submission? submission,
   }) {
     return HomeState(
+      video: video ?? this.video,
+      imageFile: imageFile ?? this.imageFile,
       personId: personId ?? this.personId,
       personName: personName ?? this.personName,
       companiesNamesList: companiesNamesList ?? this.companiesNamesList,
@@ -38,7 +46,9 @@ class HomeState extends Equatable {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
+        video,
+        imageFile,
         personName,
         personId,
         companiesNamesList,

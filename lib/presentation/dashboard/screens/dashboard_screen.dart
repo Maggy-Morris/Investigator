@@ -9,8 +9,9 @@ import 'package:Investigator/core/utils/responsive.dart';
 import 'package:Investigator/core/widgets/sizedbox.dart';
 import 'package:Investigator/core/widgets/textformfield.dart';
 import 'package:Investigator/core/widgets/toast/toast.dart';
-import 'package:Investigator/presentation/add_camera/bloc/home_bloc.dart';
 import 'package:Investigator/presentation/standard_layout/screens/standard_layout.dart';
+
+import '../../investigator/bloc/home_bloc.dart';
 
 class DashboardScreen extends StatefulWidget {
   static Route<dynamic> route() {

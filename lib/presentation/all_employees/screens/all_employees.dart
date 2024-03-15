@@ -11,7 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:Investigator/core/utils/responsive.dart';
 import 'package:Investigator/core/widgets/sizedbox.dart';
 import 'package:Investigator/presentation/standard_layout/screens/standard_layout.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../../../authentication/authentication_repository.dart';
 import '../../../core/enum/enum.dart';
 import '../bloc/all_employess_bloc.dart';
 
@@ -35,17 +35,11 @@ class AllEmployeesScreen extends StatefulWidget {
 
 class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
   PlatformFile? selectedImage;
+  String companyNameRepo =
+      AuthenticationRepository.instance.currentUser.companyName ?? "";
+
   TextEditingController employeeNameController = TextEditingController();
   final TextEditingController _searchController = TextEditingController();
-  // bool isSearching = false;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +61,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                   child: Column(
                     children: [
                       Text(
-                        "All Employees ".tr(),
+                        "All Employees ($companyNameRepo)".tr(),
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -106,14 +100,9 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                           }
 
                                           if (state.isSearching) {
-                                            final SharedPreferences prefs =
-                                                await SharedPreferences
-                                                    .getInstance();
-                                            final String? companyName =
-                                                prefs.getString('companyName');
                                             AllEmployeesBloc.get(context).add(
                                               GetPersonByNameEvent(
-                                                companyName: companyName ?? "",
+                                                companyName: companyNameRepo,
                                                 personName:
                                                     _searchController.text,
                                               ),
@@ -297,16 +286,6 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                               // String imageName =
                                                               //     selectedImage!.name;
 
-                                                              final SharedPreferences
-                                                                  prefs =
-                                                                  await SharedPreferences
-                                                                      .getInstance();
-
-                                                              final String?
-                                                                  companyName =
-                                                                  prefs.getString(
-                                                                      'companyName');
-
                                                               String
                                                                   base64Image =
                                                                   base64Encode(
@@ -318,8 +297,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                   .add(
                                                                       AddNewEmployee(
                                                                 companyName:
-                                                                    companyName ??
-                                                                        "No Company ",
+                                                                    companyNameRepo,
                                                                 personName: state
                                                                     .personName,
                                                                 userId: state
@@ -415,17 +393,10 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                       ),
                                       suffixIcon: IconButton(
                                         icon: const Icon(Icons.search),
-                                        onPressed: () async {
-                                          final SharedPreferences prefs =
-                                              await SharedPreferences
-                                                  .getInstance();
-
-                                          final String? companyName =
-                                              prefs.getString('companyName');
-
+                                        onPressed: () {
                                           AllEmployeesBloc.get(context).add(
                                             GetPersonByNameEvent(
-                                              companyName: companyName ?? "",
+                                              companyName: companyNameRepo,
                                               personName:
                                                   _searchController.text,
                                             ),
@@ -602,19 +573,6 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                   selectedImage!
                                                                       .bytes!;
 
-                                                              // String imageName =
-                                                              //     selectedImage!.name;
-
-                                                              final SharedPreferences
-                                                                  prefs =
-                                                                  await SharedPreferences
-                                                                      .getInstance();
-
-                                                              final String?
-                                                                  companyName =
-                                                                  prefs.getString(
-                                                                      'companyName');
-
                                                               String
                                                                   base64Image =
                                                                   base64Encode(
@@ -626,8 +584,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                   .add(
                                                                 AddNewEmployee(
                                                                   companyName:
-                                                                      companyName ??
-                                                                          "No Company ",
+                                                                      companyNameRepo,
                                                                   personName: state
                                                                       .personName,
                                                                   userId: state
@@ -1056,15 +1013,10 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                       style: const TextStyle(
                                           color: AppColors.thinkRedColor),
                                     ),
-                                    onPressed: () async {
-                                      final SharedPreferences prefs =
-                                          await SharedPreferences.getInstance();
-
-                                      final String? companyName =
-                                          prefs.getString('companyName');
+                                    onPressed: () {
                                       context.read<AllEmployeesBloc>().add(
                                             DeletePersonByNameEvent(
-                                              companyName ?? '',
+                                              companyNameRepo,
                                               name,
                                             ),
                                           );
@@ -1250,15 +1202,10 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
               child: const Text('Cancel'),
             ),
             ElevatedButton(
-              onPressed: () async {
-                final SharedPreferences prefs =
-                    await SharedPreferences.getInstance();
-
-                final String? companyName = prefs.getString('companyName');
-
+              onPressed: () {
                 AllEmployeesBloc.get(context).add(
                   UpdateEmployeeEvent(
-                    companyName: companyName ?? '',
+                    companyName: companyNameRepo,
                     id: employee.sId ?? '',
 
                     // userId: state.userId,

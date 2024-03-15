@@ -5,8 +5,8 @@ import 'package:Investigator/core/enum/enum.dart';
 import 'package:Investigator/core/models/camera_details_model.dart';
 import 'package:Investigator/core/models/dashboard_models.dart';
 import 'package:Investigator/core/remote_provider/remote_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../authentication/authentication_repository.dart';
 import '../../../core/models/add_company_model.dart';
 import '../../../core/models/employee_model.dart';
 
@@ -140,12 +140,10 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
     emit(state.copyWith(submission: Submission.loading));
 
     try {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-      final String? companyName = prefs.getString('companyName');
-
+     String companyNameRepo =
+        AuthenticationRepository.instance.currentUser.companyName ?? "";
       final employeeModel = await RemoteProvider().getAllEmployeeNames(
-        companyName: companyName ?? '',
+        companyName: companyNameRepo ,
       );
 
       if (employeeModel.isNotEmpty) {
@@ -258,13 +256,12 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
   /// Delete person data by Name
   _onDeletePersonByNameEvent(
       DeletePersonByNameEvent event, Emitter<AllEmployeesState> emit) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    final String? companyName = prefs.getString('companyName');
+String companyNameRepo =
+        AuthenticationRepository.instance.currentUser.companyName ?? "";
     emit(state.copyWith(submission: Submission.loading));
     await RemoteProvider()
         .deleteDocumentByName(
-      companyName: companyName ?? '',
+      companyName: companyNameRepo,
       personName: event.personName,
     )
         .then((value) {

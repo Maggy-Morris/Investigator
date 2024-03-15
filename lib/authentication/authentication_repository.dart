@@ -58,7 +58,10 @@ class AuthenticationRepository {
         controller.add(user);
 
         logInWithEmailAndPassword(
-            email: username ?? "", password: password ?? "");
+          email: username ?? "",
+          password: password ?? "",
+          // companyName: comapnyName ?? "",
+        );
       } catch (e) {
         controller.add(UserData.empty);
       }
@@ -103,13 +106,19 @@ class AuthenticationRepository {
   Future<void> logInWithEmailAndPassword({
     required String email,
     required String password,
+    // required String companyName,
   }) async {
     try {
       await RemoteProvider().loginRemoteCredentials(email, password).then(
         (value) {
           if (value?.authentication != null) {
+            String companyName = value!.companyName ??
+                'UnKown'; // Adjust this according to your response structure
+
             sharedUser?.setString(userCacheKey, jsonEncode(value));
             sharedUser?.setString(usernameCacheKey, email);
+            sharedUser?.setString(companyNameCacheKey, companyName);
+
             sharedUser?.setString(passwordCacheKey, password);
             sharedUser?.setStringList(routesCacheKey, ["/"]);
 
@@ -138,7 +147,8 @@ class AuthenticationRepository {
     required String companyName,
   }) async {
     try {
-      final modelAuth = await RemoteProvider()
+      final modelAuth =
+       await RemoteProvider()
           .SignUpRemoteCredentials(email, password, companyName);
 
       print("kkkkkkkkkkkkkkkkkkkkkk" + modelAuth.toString());

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:Investigator/presentation/add_camera/screens/investigator_screen.dart';
 
 import 'package:Investigator/presentation/search/screens/search_screen.dart';
 // import 'package:Investigator/presentation/dashboard/screens/dashboard_screen.dart';
@@ -11,11 +10,12 @@ import 'core/widgets/no_animation_page.dart';
 import 'presentation/all_employees/screens/all_employees.dart';
 import 'presentation/all_employees/screens/camera_details.dart';
 import 'presentation/choose_your_company/choose_your_company_screen.dart';
+import 'presentation/investigator/screens/investigator_screen.dart';
 
 checkAuthority() {
   String userPermission =
       AuthenticationRepository.instance.currentUser.authentication ?? "";
-  
+
   if ((userPermission.isNotEmpty)) {
     return getRoutesAdmin();
   } else {
@@ -29,10 +29,10 @@ getRoutesAdmin() {
   Map<String, RouteSettings Function(RouteData)> adminRoutes = {
     '/': (route) => const NoAnimationPage(child: ChooseYourCompany()),
     // '/home': (route) => const NoAnimationPage(child: DashboardScreen()),
-    '/allEmployees': (route) =>
-        const NoAnimationPage(child: AllEmployeesScreen(
-          // data: []
-          )),
+    '/allEmployees': (route) => const NoAnimationPage(
+        child: AllEmployeesScreen(
+            // data: []
+            )),
     '/cameraDetails': (route) => NoAnimationPage(
             child: CameraDetails(
           cameraName: route.queryParameters["name"] ?? "",

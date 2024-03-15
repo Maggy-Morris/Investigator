@@ -12,12 +12,12 @@ import 'package:Investigator/core/utils/responsive.dart';
 import 'package:Investigator/core/widgets/sizedbox.dart';
 import 'package:Investigator/core/widgets/textformfield.dart';
 import 'package:Investigator/core/widgets/toast/toast.dart';
-import 'package:Investigator/presentation/add_camera/bloc/home_bloc.dart';
 import 'package:Investigator/presentation/standard_layout/screens/standard_layout.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../authentication/authentication_repository.dart';
 import '../../camera_controller/cubit/photo_app_cubit.dart';
 import '../../camera_controller/photo_app_logic.dart';
+import '../bloc/home_bloc.dart';
 
 class AddCameraScreen extends StatefulWidget {
   const AddCameraScreen({Key? key}) : super(key: key);
@@ -31,20 +31,9 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
   Widget? _image;
   CameraController? controller;
   XFile? imageFile;
-  XFile? videoFile;
   bool _isBackCamera = true;
-
-  // VoidCallback? videoPlayerListener;
-  // bool enableAudio = true;
-  // double _minAvailableZoom = 1.0;
-  // double _maxAvailableZoom = 1.0;
-  // double _currentScale = 1.0;
-  // double _baseScale = 1.0;
-  // // Counting pointers (number of user fingers on screen)
-  // int _pointers = 0;
-
-  // List<CameraDescription> _cameras = <CameraDescription>[];
-
+  String companyNameRepo =
+      AuthenticationRepository.instance.currentUser.companyName ?? "";
   @override
   Widget build(BuildContext context) {
     return StandardLayoutScreen(
@@ -115,6 +104,8 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                               FxBox.h16,
                               // Here to search for an Employee in the database
                               Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   SizedBox(
                                     height: 300,
@@ -157,19 +148,13 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                   String base64Image =
                                                       base64Encode(
                                                           imageFile.bytes!);
-                                                  final SharedPreferences
-                                                      prefs =
-                                                      await SharedPreferences
-                                                          .getInstance();
-                                                  final String? companyName =
-                                                      prefs.getString(
-                                                          'companyName');
+
                                                   // SearchByImageBloc.get(context).add(
-                                                  //   SearchForEmployee(
-                                                  //     companyName: companyName ?? " ",
-                                                  //     image: base64Image,
-                                                  //   ),
-                                                  // );
+                                                  //     SearchForEmployee(
+                                                  //       companyName: companyName ?? " ",
+                                                  //       image: base64Image,
+                                                  //     ),
+                                                  //   );
                                                 }
                                               },
                                               child: _image ??
@@ -180,6 +165,66 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                     // height: 200,
                                                     fit: BoxFit.cover,
                                                   ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 300,
+                                    width: 300,
+                                    child: Card(
+                                      elevation: 4,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: Stack(
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () async {
+                                                try {
+                                                  // Open the file picker to allow the user to select a video
+                                                  FilePickerResult? result =
+                                                      await FilePicker.platform
+                                                          .pickFiles(
+                                                    type: FileType.video,
+                                                    allowCompression:
+                                                        true, // Allow compressed video files
+                                                  );
+
+                                                  // Check if a file was selected
+                                                  if (result != null &&
+                                                      result.files.isNotEmpty) {
+                                                    // Get the bytes of the selected video file
+                                                    List<int> fileBytes = result
+                                                            .files
+                                                            .first
+                                                            .bytes ??
+                                                        [];
+
+                                                    // Convert the bytes to base64
+                                                    String base64Video =
+                                                        base64Encode(fileBytes);
+
+                                                    // Do something with the base64-encoded video, such as uploading it
+                                                    debugPrint(
+                                                        'Base64-encoded video: $base64Video');
+                                                  }
+                                                } catch (e) {
+                                                  debugPrint(
+                                                      'Error selecting video: $e');
+                                                  // Handle any errors that occur during file selection
+                                                }
+                                              },
+                                              child: Image.asset(
+                                                'assets/images/videoBG.png',
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                                fit: BoxFit.cover,
+                                              ),
                                             ),
                                           ],
                                         ),

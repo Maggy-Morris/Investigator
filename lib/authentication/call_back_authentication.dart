@@ -1,20 +1,27 @@
 class UserData {
   final String? authentication;
   final String? sId;
-  // final String? role;
   final bool? login;
+  final String? companyName;
+  // final String? role;
+  // final List<String>? companyName;
 
   const UserData({
     this.authentication,
     this.login,
     this.sId,
+    this.companyName,
     // this.role,
   });
 
   UserData.fromJson(Map<String, dynamic> json)
       : authentication = json['token'],
         login = json['logined'],
-        sId = json['_id'];
+        sId = json['_id'],
+        companyName = json['company_name'];
+
+  // companyName = json['companyName'].cast<String>();
+
   // role = json['role'];
 
   // name = json['name'].toString();
@@ -24,6 +31,7 @@ class UserData {
     data['token'] = authentication;
     data['logined'] = login;
     data['_id'] = sId;
+    data['company_name'] = companyName;
     // data['role'] = role;
     // data['name'] = name;
     return data;
@@ -33,6 +41,8 @@ class UserData {
     authentication: "",
     login: false,
     sId: "",
+    companyName: "",
+    // companyName: [],
     // role: "",
   );
 

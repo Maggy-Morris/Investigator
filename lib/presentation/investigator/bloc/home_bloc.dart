@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:Investigator/core/enum/enum.dart';
 // import 'package:Investigator/core/models/add_camera_model.dart';
 import 'package:Investigator/core/remote_provider/remote_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/models/add_company_model.dart';
 import '../../../core/models/employee_model.dart';
@@ -33,6 +32,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<AddCompanyName>(_onAddCompanyName);
 
     /// functionality Company delete employees Data
+    on<SearchForEmployeeByVideoEvent>(_onSearchForEmployeeByVideoEvent);
 
     // on<DeletePersonByNameEvent>(_onDeletePersonByNameEvent);
     on<DeletePersonByIdEvent>(_onDeletePersonByIdEvent);
@@ -129,6 +129,31 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     )
         .then((value) {
       if (value != EmployeeModel()) {
+        emit(HomeState().copyWith(submission: Submission.success));
+      } else {
+        emit(state.copyWith(submission: Submission.error));
+      }
+    });
+  }
+
+
+/////////////////////////////////////////////
+   
+   ///search by video and 
+   _onSearchForEmployeeByVideoEvent(
+      SearchForEmployeeByVideoEvent event, Emitter<HomeState> emit) async {
+    emit(state.copyWith(submission: Submission.loading));
+    await RemoteProvider()
+        .searchForpersonByVideo(
+      companyName: state.companyName,
+      video: state.video,
+      imageFile: state.imageFile,
+      personName: state.personName,
+      // image: state.image,
+    )
+        .then((value) {
+      
+      if (value != ()) {
         emit(HomeState().copyWith(submission: Submission.success));
       } else {
         emit(state.copyWith(submission: Submission.error));

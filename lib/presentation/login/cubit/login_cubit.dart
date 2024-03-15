@@ -40,6 +40,7 @@ class LoginCubit extends Cubit<LoginState> {
       await _authenticationRepository.logInWithEmailAndPassword(
         email: state.email.value,
         password: state.password.value,
+        
       );
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on LogInWithEmailAndPasswordFailureFirebase catch (e) {
