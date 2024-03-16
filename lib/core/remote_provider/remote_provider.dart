@@ -10,6 +10,8 @@ import 'package:Investigator/core/remote_provider/remote_data_source.dart';
 // import '../models/add_company_model.dart';
 import '../models/call_back_model.dart';
 import '../models/employee_model.dart';
+import '../models/search_by_image_model.dart';
+import '../models/sigup_model.dart';
 
 enum AppLifecycleStatus { online, offline }
 
@@ -28,8 +30,12 @@ class RemoteProvider {
       String email, String password) async {
     try {
       var loginCallBack = await RemoteDataSource().postWithFile(
-          endPoint: "/qdrant/login",
-          body: {"username": email, "password": password});
+        endPoint: "/qdrant/login",
+        body: {
+          "username": email,
+          "password": password,
+        },
+      );
 
       if (loginCallBack != null) {
         UserData callBackDetailID = UserData.fromJson(loginCallBack);
@@ -48,7 +54,7 @@ class RemoteProvider {
   }
 
   //SignUp API
-  Future<CallBackModel> SignUpRemoteCredentials(
+  Future<signupModel> SignUpRemoteCredentials(
     String email,
     String password,
     String companyName,
@@ -62,7 +68,7 @@ class RemoteProvider {
       });
 
       if (signUpCallBack.isNotEmpty) {
-        CallBackModel callBackList = CallBackModel.fromJson(signUpCallBack);
+        signupModel callBackList = signupModel.fromJson(signUpCallBack);
 
         // UserData callBackDetailID = UserData.fromJson(signUpCallBack);
 
@@ -75,11 +81,11 @@ class RemoteProvider {
         //   return null;
         // }
       } else {
-        return CallBackModel();
+        return signupModel();
       }
     } catch (e) {
       debugPrint(e.toString());
-      return CallBackModel();
+      return signupModel();
     }
   }
 
@@ -312,7 +318,7 @@ class RemoteProvider {
   }
 
   ///Search for person in the database by image
-  Future<CallBackModel> searchForpersonByImage({
+  Future<SearchByImageModel> searchForpersonByImage({
     required String companyName,
     // required PlatformFile? image,
     required String image,
@@ -329,37 +335,35 @@ class RemoteProvider {
       //Change this "Collection Created Successfully!"
 
       if (callBack.isNotEmpty) {
-        CallBackModel callBackList = CallBackModel.fromJson(callBack);
+        SearchByImageModel callBackList = SearchByImageModel.fromJson(callBack);
         return callBackList;
       } else {
-        return CallBackModel();
+        return SearchByImageModel();
       }
     } catch (e) {
-      return CallBackModel();
+      return SearchByImageModel();
     }
   }
 
-
-
-  ///Search for person in the database by Video 
+  ///Search for person in the database by Video
   Future<CallBackModel> searchForpersonByVideo({
     required String companyName,
     required PlatformFile? video,
-        required PlatformFile? imageFile,
+    required PlatformFile? imageFile,
 
     // required String image,
     required String personName,
   }) async {
     try {
-      Map<String, dynamic> callBack = await RemoteDataSource().postMultiPartFiles(
+      Map<String, dynamic> callBack =
+          await RemoteDataSource().postMultiPartFiles(
         endPoint: "/find_target",
         body: {
-          "collection_name":companyName,
+          "collection_name": companyName,
           // "image":image,
-          "traget_name":personName,
+          "traget_name": personName,
         },
-        files: [video! , imageFile!],
-
+        files: [video!, imageFile!],
       );
       if (callBack.isNotEmpty) {
         CallBackModel callBackList = CallBackModel.fromJson(callBack);

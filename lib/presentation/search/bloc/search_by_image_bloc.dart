@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/enum/enum.dart';
+import '../../../core/models/search_by_image_model.dart';
 import '../../../core/remote_provider/remote_provider.dart';
 
 part 'search_by_image_event.dart';
@@ -43,10 +44,13 @@ class SearchByImageBloc extends Bloc<SearchByImageEvent, SearchByImageState> {
       // if (state.cameraSelectedModels.isNotEmpty) {
       //   add(const ApplyModelEvent());
       // }
-      if (value != ()) {
-        emit(SearchByImageState().copyWith(submission: Submission.success));
+      if (value.targeted == true) {
+        emit(SearchByImageState().copyWith(
+            submission: Submission.success,
+            boxes: value.boxes,
+            result: value.result));
       } else {
-        emit(state.copyWith(submission: Submission.error));
+        emit(state.copyWith(submission: Submission.noDataFound));
       }
     });
   }

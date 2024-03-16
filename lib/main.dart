@@ -127,9 +127,10 @@ class AppView extends StatelessWidget {
   }
 
   final loggedOutRouteMap = RouteMap(
-    // onUnknownRoute: (path) {
-    //   return const Redirect("/");
-    // },
+    //Check this out
+    onUnknownRoute: (path) {
+      return const Redirect("/");
+    },
     routes: {
       '/': (route) => const NoAnimationPage(child: LoginPage()),
       // '/allEmployees': (route) =>

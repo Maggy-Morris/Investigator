@@ -10,6 +10,7 @@ import 'package:Investigator/presentation/login/widgets/custom_text.dart';
 // import 'package:svg_flutter/svg.dart';
 
 import '../../../core/resources/app_colors.dart';
+import '../../all_employees/screens/all_employees.dart';
 import '../cubit/signup_cubit.dart';
 
 class SignUpForm extends StatelessWidget {
@@ -24,6 +25,7 @@ class SignUpForm extends StatelessWidget {
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(
+                backgroundColor: Colors.red,
                 content: Text(state.errorMessage ?? 'Authentication Failure'),
               ),
             );
@@ -48,6 +50,7 @@ class SignUpForm extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             FxBox.h20,
                             Center(
@@ -68,13 +71,13 @@ class SignUpForm extends StatelessWidget {
                                 child: Column(
                                   children: [
                                     SizedBox(height: 80, child: _logoView()),
-                                    FxBox.h16,
+                                    // FxBox.h16,
                                     _bottomView(),
                                   ],
                                 ),
                               ),
                             ),
-                            FxBox.h20,
+                            // FxBox.h20,
                           ],
                         ),
                       ),
@@ -130,20 +133,20 @@ Widget _bottomView() {
                 fontSize: AppFontSize.s14,
                 fontWeight: FontWeight.bold)),
       ),
-      FxBox.h8,
+      // FxBox.h8,
       _EmailInput(),
-      FxBox.h16,
+      FxBox.h8,
       Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Text("password".tr(),
-            style: const TextStyle(
-                fontFamily: "Cairo",
-                fontSize: AppFontSize.s14,
-                fontWeight: FontWeight.bold
-                ),
-                ),
+        child: Text(
+          "password".tr(),
+          style: const TextStyle(
+              fontFamily: "Cairo",
+              fontSize: AppFontSize.s14,
+              fontWeight: FontWeight.bold),
+        ),
       ),
-      FxBox.h8,
+      // FxBox.h8,
       _PasswordInput(),
       FxBox.h8,
       Padding(
@@ -206,7 +209,12 @@ class _PasswordInput extends StatefulWidget {
   State<_PasswordInput> createState() => _PasswordInputState();
 }
 
-class companyNameInput extends StatelessWidget {
+class companyNameInput extends StatefulWidget {
+  @override
+  State<companyNameInput> createState() => _companyNameInputState();
+}
+
+class _companyNameInputState extends State<companyNameInput> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SignupCubit, SignupState>(
@@ -321,8 +329,10 @@ class _SignUpButton extends StatelessWidget {
                     backgroundColor: const Color(0xff1c1c1a),
                   ),
                   onPressed: state.status.isValidated
-                      ? () =>
-                          context.read<SignupCubit>().signUpWithCredentials()
+                      ? () {
+                          context.read<SignupCubit>().signUpWithCredentials();
+                         
+                        }
                       : null,
                   child: Text('Sign Up'.tr(),
                       style: const TextStyle(

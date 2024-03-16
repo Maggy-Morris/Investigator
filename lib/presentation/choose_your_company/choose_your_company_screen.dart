@@ -101,158 +101,158 @@ class ChooseYourCompany extends StatelessWidget {
                       ),
                     ),
                     /////////////////////////////////////
-                    Card(
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 50, horizontal: 400),
-                      color: AppColors.blueB.withOpacity(0.9),
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          children: [
-                            Text(
-                              "Add New Company".tr(),
-                              style: const TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w900,
-                                  color: Colors.white),
-                            ),
-                            FxBox.h24,
-                            if (Responsive.isWeb(context))
-                              Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            // _commonText("Company Name".tr()),
-                                            FxBox.h4,
+                    // Card(
+                    //   margin: const EdgeInsets.symmetric(
+                    //       vertical: 50, horizontal: 400),
+                    //   color: AppColors.blueB.withOpacity(0.9),
+                    //   elevation: 2,
+                    //   shape: RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.circular(15)),
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.all(20),
+                    //     child: Column(
+                    //       children: [
+                    //         Text(
+                    //           "Add New Company".tr(),
+                    //           style: const TextStyle(
+                    //               fontSize: 17,
+                    //               fontWeight: FontWeight.w900,
+                    //               color: Colors.white),
+                    //         ),
+                    //         FxBox.h24,
+                    //         if (Responsive.isWeb(context))
+                    //           Column(
+                    //             children: [
+                    //               Row(
+                    //                 children: [
+                    //                   Expanded(
+                    //                     child: Column(
+                    //                       crossAxisAlignment:
+                    //                           CrossAxisAlignment.start,
+                    //                       children: [
+                    //                         // _commonText("Company Name".tr()),
+                    //                         FxBox.h4,
 
-                                            _listBox(
-                                                controller:
-                                                    companyNameController,
-                                                hintText: "Company Name".tr(),
-                                                onChanged: (value) {
-                                                  saveCompanyName(value);
+                    //                         _listBox(
+                    //                             controller:
+                    //                                 companyNameController,
+                    //                             hintText: "Company Name".tr(),
+                    //                             onChanged: (value) {
+                    //                               saveCompanyName(value);
 
-                                                  HomeBloc.get(context).add(
-                                                      AddCompanyName(
-                                                          companyName: value));
+                    //                               HomeBloc.get(context).add(
+                    //                                   AddCompanyName(
+                    //                                       companyName: value));
 
-                                                  HomeBloc.get(context).add(
-                                                      CompnyNameFromSP(
-                                                          companyName: value));
-                                                }),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  FxBox.h60,
-                                  (state.submission == Submission.loading)
-                                      ? loadingIndicator()
-                                      : Center(
-                                          child: ElevatedButton.icon(
-                                              onPressed: () {
-                                                if (state.companyName.isEmpty) {
-                                                  FxToast.showErrorToast(
-                                                      context: context,
-                                                      message:
-                                                          "Enter Company Name");
-                                                  return;
-                                                }
-                                                HomeBloc.get(context).add(
-                                                    const AddCompanyEvent());
+                    //                               HomeBloc.get(context).add(
+                    //                                   CompnyNameFromSP(
+                    //                                       companyName: value));
+                    //                             }),
+                    //                       ],
+                    //                     ),
+                    //                   ),
+                    //                 ],
+                    //               ),
+                    //               FxBox.h60,
+                    //               (state.submission == Submission.loading)
+                    //                   ? loadingIndicator()
+                    //                   : Center(
+                    //                       child: ElevatedButton.icon(
+                    //                           onPressed: () {
+                    //                             if (state.companyName.isEmpty) {
+                    //                               FxToast.showErrorToast(
+                    //                                   context: context,
+                    //                                   message:
+                    //                                       "Enter Company Name");
+                    //                               return;
+                    //                             }
+                    //                             HomeBloc.get(context).add(
+                    //                                 const AddCompanyEvent());
 
-                                                Navigator.of(context)
-                                                    .push<void>(
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const AllEmployeesScreen(
-                                                            // data: state
-                                                            //     .employeeNamesList
+                    //                             Navigator.of(context)
+                    //                                 .push<void>(
+                    //                               MaterialPageRoute(
+                    //                                 builder: (context) =>
+                    //                                     const AllEmployeesScreen(
+                    //                                         // data: state
+                    //                                         //     .employeeNamesList
 
-                                                            ),
-                                                  ),
-                                                );
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10)),
-                                                backgroundColor:
-                                                    AppColors.green,
-                                              ),
-                                              label: Text(
-                                                "confirm".tr(),
-                                                style: const TextStyle(
-                                                    color: AppColors.white),
-                                              ),
-                                              icon: const Icon(
-                                                Icons.check_circle_outline,
-                                                color: AppColors.white,
-                                              )),
-                                        ),
-                                ],
-                              ),
-                            if (!Responsive.isWeb(context))
-                              Column(
-                                children: [
-                                  FxBox.h4,
-                                  _listBox(
-                                      hintText: "Company Name".tr(),
-                                      controller: companyNameController,
-                                      onChanged: (value) {
-                                        HomeBloc.get(context).add(
-                                            AddCompanyName(companyName: value));
-                                      }),
-                                  FxBox.h60,
-                                  (state.submission == Submission.loading)
-                                      ? loadingIndicator()
-                                      : Center(
-                                          child: ElevatedButton.icon(
-                                              onPressed: () {
-                                                HomeBloc.get(context).add(
-                                                    const AddCompanyEvent());
+                    //                                         ),
+                    //                               ),
+                    //                             );
+                    //                           },
+                    //                           style: ElevatedButton.styleFrom(
+                    //                             shape: RoundedRectangleBorder(
+                    //                                 borderRadius:
+                    //                                     BorderRadius.circular(
+                    //                                         10)),
+                    //                             backgroundColor:
+                    //                                 AppColors.green,
+                    //                           ),
+                    //                           label: Text(
+                    //                             "confirm".tr(),
+                    //                             style: const TextStyle(
+                    //                                 color: AppColors.white),
+                    //                           ),
+                    //                           icon: const Icon(
+                    //                             Icons.check_circle_outline,
+                    //                             color: AppColors.white,
+                    //                           )),
+                    //                     ),
+                    //             ],
+                    //           ),
+                    //         if (!Responsive.isWeb(context))
+                    //           Column(
+                    //             children: [
+                    //               FxBox.h4,
+                    //               _listBox(
+                    //                   hintText: "Company Name".tr(),
+                    //                   controller: companyNameController,
+                    //                   onChanged: (value) {
+                    //                     HomeBloc.get(context).add(
+                    //                         AddCompanyName(companyName: value));
+                    //                   }),
+                    //               FxBox.h60,
+                    //               (state.submission == Submission.loading)
+                    //                   ? loadingIndicator()
+                    //                   : Center(
+                    //                       child: ElevatedButton.icon(
+                    //                           onPressed: () {
+                    //                             HomeBloc.get(context).add(
+                    //                                 const AddCompanyEvent());
 
-                                                Navigator.of(context)
-                                                    .push<void>(
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const AllEmployeesScreen(),
-                                                  ),
-                                                );
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10)),
-                                                backgroundColor:
-                                                    AppColors.green,
-                                              ),
-                                              label: Text(
-                                                "confirm".tr(),
-                                                style: const TextStyle(
-                                                    color: AppColors.white),
-                                              ),
-                                              icon: const Icon(
-                                                Icons.check_circle_outline,
-                                                color: AppColors.white,
-                                              )),
-                                        ),
-                                ],
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    //                             Navigator.of(context)
+                    //                                 .push<void>(
+                    //                               MaterialPageRoute(
+                    //                                 builder: (context) =>
+                    //                                     const AllEmployeesScreen(),
+                    //                               ),
+                    //                             );
+                    //                           },
+                    //                           style: ElevatedButton.styleFrom(
+                    //                             shape: RoundedRectangleBorder(
+                    //                                 borderRadius:
+                    //                                     BorderRadius.circular(
+                    //                                         10)),
+                    //                             backgroundColor:
+                    //                                 AppColors.green,
+                    //                           ),
+                    //                           label: Text(
+                    //                             "confirm".tr(),
+                    //                             style: const TextStyle(
+                    //                                 color: AppColors.white),
+                    //                           ),
+                    //                           icon: const Icon(
+                    //                             Icons.check_circle_outline,
+                    //                             color: AppColors.white,
+                    //                           )),
+                    //                     ),
+                    //             ],
+                    //           ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ]),

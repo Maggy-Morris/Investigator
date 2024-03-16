@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:Investigator/core/widgets/toast/toast.dart';
 import 'package:flutter/foundation.dart';
 import 'package:Investigator/core/remote_provider/remote_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -122,7 +123,10 @@ class AuthenticationRepository {
             sharedUser?.setString(passwordCacheKey, password);
             sharedUser?.setStringList(routesCacheKey, ["/"]);
 
-            controller.add(value!);
+            controller.add(value);
+          } else if (value!.login == false) {
+            throw LogInWithEmailAndPasswordFailureFirebase.fromCode(
+                "email or password is incorrect");
           } else {
             controller.add(UserData.empty);
             logOut();
@@ -147,31 +151,28 @@ class AuthenticationRepository {
     required String companyName,
   }) async {
     try {
-      final modelAuth =
-       await RemoteProvider()
-          .SignUpRemoteCredentials(email, password, companyName);
+      // final modelAuth =
+      await RemoteProvider()
+          .SignUpRemoteCredentials(email, password, companyName)
+          .then(
+        (value) {
+          if (value.logined == "Signed up successfully!") {
+            // sharedUser?.setString(userCacheKey, jsonEncode(value));
+            // sharedUser?.setString(usernameCacheKey, email);
+            // sharedUser?.setString(passwordCacheKey, password);
+            sharedUser?.setStringList(routesCacheKey, ["/"]);
 
-      print("kkkkkkkkkkkkkkkkkkkkkk" + modelAuth.toString());
-
-      //  .then(
-
-      // (value) {
-      //   print("kkkkkkkkkkkkkkkkkkkkkk" + value.toString());
-      // if (value?.authentication != null) {
-      //   sharedUser?.setString(userCacheKey, jsonEncode(value));
-      //   sharedUser?.setString(usernameCacheKey, email);
-      //   sharedUser?.setString(passwordCacheKey, password);
-      //   sharedUser?.setStringList(routesCacheKey, ["/"]);
-
-      //   controller.add(value!);
-      // }
-      // else {
-      // controller.add(UserData.empty);
-      // logOut();
-      // return;
-      // }
-      // },
-      // );
+            // controller.add(value!);
+          } else if (value.logined == "E-mail is already  in use") {
+            throw SignUpWithEmailAndPasswordFailureFirebase.fromCode(
+                "E-mail is already  in use");
+          } else {
+            controller.add(UserData.empty);
+            logOut();
+            return;
+          }
+        },
+      );
     } catch (e) {
       if (e.toString().isNotEmpty) {
         throw SignUpWithEmailAndPasswordFailureFirebase.fromCode(e.toString());

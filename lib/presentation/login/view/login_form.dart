@@ -25,6 +25,7 @@ class LoginForm extends StatelessWidget {
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(
+                backgroundColor: Colors.red,
                 content: Text(state.errorMessage ?? 'Authentication Failure'),
               ),
             );
@@ -359,7 +360,7 @@ class _SignUpButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return TextButton(
-      key: const Key('loginForm_createAccount_flatButton'),
+      // key: const Key('loginForm_createAccount_flatButton'),
       onPressed: () {
         Navigator.of(context).push<void>(SignUpPage.route());
       },

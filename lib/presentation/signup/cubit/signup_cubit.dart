@@ -34,10 +34,9 @@ class SignupCubit extends Cubit<SignupState> {
   }
 
   void companyNameChanged(String value) {
-    dynamic companyName;
     emit(
       state.copyWith(
-        companyName: companyName,
+        companyName: value,
       ),
     );
   }
@@ -49,13 +48,13 @@ class SignupCubit extends Cubit<SignupState> {
       await _authenticationRepository.SignUpWithEmailAndPassword(
         email: state.email.value,
         password: state.password.value,
-        companyName: state.companyName,
+        companyName: state.companyName ?? "",
       );
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on SignUpWithEmailAndPasswordFailureFirebase catch (e) {
       emit(
         state.copyWith(
-          errorMessage: e.message,
+          errorMessage: "E-mail is already  in use",
           status: FormzStatus.submissionFailure,
         ),
       );

@@ -9,8 +9,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:Investigator/core/error/exceptions.dart';
 
 class RemoteDataSource {
-  static String baseURL = 'http://192.168.1.118:10000';
- 
+  static String baseURL = 'https://c083-41-45-104-81.ngrok-free.app/';
+
   Future<Map<String, dynamic>> post({
     required String endPoint,
     Object? body,
@@ -220,8 +220,6 @@ class RemoteDataSource {
       throw UnknownServerException();
     }
   }
-
-
 
   Future<dynamic> postMultiPartFile({
     required String endPoint,

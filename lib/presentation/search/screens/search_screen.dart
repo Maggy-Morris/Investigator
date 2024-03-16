@@ -38,7 +38,8 @@ class _SearchState extends State<Search> {
             if (state.submission == Submission.success) {
               FxToast.showSuccessToast(context: context);
             }
-            if (state.submission == Submission.error) {
+
+            if (state.submission == Submission.noDataFound) {
               FxToast.showErrorToast(context: context);
             }
           },
@@ -56,11 +57,10 @@ class _SearchState extends State<Search> {
                     padding: const EdgeInsets.all(20),
                     child: Column(
                       children: [
-                        // Text(
-                        //   "Search For Your Employee".tr(),
-                        //   style: const TextStyle(
-                        //       fontSize: 17, fontWeight: FontWeight.w600),
-                        // ),
+                        // (state.boxes == Submission.success)
+                        //     ? Text(
+                        //         "sssssssssss" + state.boxes!.first.toString())
+                        //     : Center(),
                         FxBox.h24,
                         if (Responsive.isWeb(context))
                           Column(
@@ -173,7 +173,7 @@ class _SearchState extends State<Search> {
                                           }
 
                                           SearchByImageBloc.get(context).add(
-                                            SearchForEmployeeEvent(),
+                                            const SearchForEmployeeEvent(),
                                           );
                                           // HomeBloc.get(context).add(
                                           //     const GetEmployeeNamesEvent());
@@ -291,6 +291,9 @@ class _SearchState extends State<Search> {
                                                 message: "pick your picture ");
                                             return;
                                           }
+                                          SearchByImageBloc.get(context).add(
+                                            const SearchForEmployeeEvent(),
+                                          );
 
                                           // HomeBloc.get(context).add(
                                           //     const GetEmployeeNamesEvent());

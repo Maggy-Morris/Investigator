@@ -13,25 +13,25 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-            AppColors.blue.withOpacity(0.3),
-            AppColors.blue.withOpacity(0.5),
-            AppColors.blue.withOpacity(0.3),
-            // Colors.white24,
-            // Colors.blueGrey.withOpacity(0.5),
-            // Colors.blueGrey.withOpacity(0.6),
-            // Colors.white24,
-          ]
-          )
-          ),
-      child: BlocProvider(
-        create: (_) => LoginCubit(context.read<AuthenticationRepository>()),
-        child: const LoginForm(),
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+              AppColors.blue.withOpacity(0.3),
+              AppColors.blue.withOpacity(0.5),
+              AppColors.blue.withOpacity(0.3),
+              // Colors.white24,
+              // Colors.blueGrey.withOpacity(0.5),
+              // Colors.blueGrey.withOpacity(0.6),
+              // Colors.white24,
+            ])),
+        child: BlocProvider(
+          create: (_) => LoginCubit(context.read<AuthenticationRepository>()),
+          child: const LoginForm(),
+        ),
       ),
     );
   }
