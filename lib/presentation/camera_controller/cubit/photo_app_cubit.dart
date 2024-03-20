@@ -3,9 +3,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:bloc/bloc.dart';
 import 'package:camera/camera.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 part 'photo_app_state.dart';
@@ -22,15 +23,15 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
 
   bool isStreaming = false;
 
-void startStream() {
-  if (!isStreaming) {
-    startPeriodicPictureCapture(const Duration(milliseconds: 250));
-    isStreaming = true;
-  } else {
-    stopPeriodicPictureCapture();
-    isStreaming = false;
+  void startStream() {
+    if (!isStreaming) {
+      startPeriodicPictureCapture(const Duration(milliseconds: 250));
+      isStreaming = true;
+    } else {
+      stopPeriodicPictureCapture();
+      isStreaming = false;
+    }
   }
-}
 
   void openCamera() async {
     final cameras = await availableCameras();
@@ -67,27 +68,27 @@ void startStream() {
         String base64String = base64Encode(bytes);
         // Handle the picture file here ( send via WebSocket)
 
-        // final _channel = WebSocketChannel.connect(
-        //   Uri.parse('ws://192.168.1.118:8765/socket.io/'),
-        // );
-        // Map<String, dynamic> data = {
-        //   'collection_name': 'maggy',
-        //   "image": base64String
-        // };
-        // String jsonData = jsonEncode(data);
-        // _channel.sink.add(jsonData);
+        final _channel = WebSocketChannel.connect(
+          Uri.parse('ws://192.168.1.118:8765/socket.io/'),
+        );
+        Map<String, dynamic> data = {
+          'collection_name': 'maggy',
+          "image": base64String
+        };
+        String jsonData = jsonEncode(data);
+        _channel.sink.add(jsonData);
 
-        // // Listen for response from the server
-        // _channel.stream.listen((dynamic response) {
-        //   print("Response from server: $response");
-        // }, onDone: () {
-        //   print("WebSocket connection closed.");
-        //   _channel.sink.close();
-        // }, onError: (error) {
-        //   print("WebSocket error: $error");
-        // });
+        // Listen for response from the server
+        _channel.stream.listen((dynamic response) {
+          debugPrint("Response from server: $response");
+        }, onDone: () {
+          debugPrint("WebSocket connection closed.");
+          _channel.sink.close();
+        }, onError: (error) {
+          debugPrint("WebSocket error: $error");
+        });
         // For demonstration, print the path of the captured picture
-        print('Captured picture: ${base64String}');
+        debugPrint('Captured picture: ${base64String}');
       }
     });
   }

@@ -1057,6 +1057,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
             text: name,
             fontSize: 18,
             fontWeight: FontWeight.w700,
+            
           ),
           FxBox.h8,
           ConstText.lightText(

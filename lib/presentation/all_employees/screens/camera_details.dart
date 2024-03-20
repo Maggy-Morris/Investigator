@@ -83,7 +83,7 @@ class _CameraDetailsState extends State<CameraDetails> {
                                 width: Responsive.isMobile(context)
                                     ? MediaQuery.of(context).size.width
                                     : MediaQuery.of(context).size.width * 0.2,
-                                child: Column(
+                                child: const Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     // _commonText("insertionDate".tr()),
@@ -185,7 +185,7 @@ class _CameraDetailsState extends State<CameraDetails> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width,
                         height: 100,
-                        child: Row(
+                        child: const Row(
                           children: [
                             // Flexible(
                             //   child: ElevatedButton(

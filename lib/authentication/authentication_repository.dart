@@ -157,9 +157,11 @@ class AuthenticationRepository {
           .then(
         (value) {
           if (value.logined == "Signed up successfully!") {
-            // sharedUser?.setString(userCacheKey, jsonEncode(value));
-            // sharedUser?.setString(usernameCacheKey, email);
-            // sharedUser?.setString(passwordCacheKey, password);
+            sharedUser?.setString(userCacheKey, jsonEncode(value));
+            sharedUser?.setString(usernameCacheKey, email);
+            sharedUser?.setString(passwordCacheKey, password);
+            sharedUser?.setString(companyNameCacheKey, companyName);
+
             sharedUser?.setStringList(routesCacheKey, ["/"]);
 
             // controller.add(value!);
@@ -186,6 +188,7 @@ class AuthenticationRepository {
     try {
       sharedUser?.clear();
       controller.add(UserData.empty);
+      
     } catch (_) {
       throw LogOutFailure();
     }

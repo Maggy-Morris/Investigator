@@ -1,8 +1,9 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/enum/enum.dart';
-import '../../../core/models/search_by_image_model.dart';
+import '../../../core/loader/loading_indicator.dart';
 import '../../../core/remote_provider/remote_provider.dart';
 
 part 'search_by_image_event.dart';
@@ -17,6 +18,7 @@ class SearchByImageBloc extends Bloc<SearchByImageEvent, SearchByImageState> {
 
     on<SearchForEmployee>(_onSearchForEmployee);
     on<SearchForEmployeeEvent>(_onSearchForEmployeeEvent);
+    on<ImageToSearchForEmployee>(_onImageToSearchForEmployee);
   }
 
   _onSearchForEmployee(
@@ -30,25 +32,30 @@ class SearchByImageBloc extends Bloc<SearchByImageEvent, SearchByImageState> {
     // });
   }
 
+  _onImageToSearchForEmployee(
+      ImageToSearchForEmployee event, Emitter<SearchByImageState> emit) async {
+    emit(state.copyWith(
+        imageWidget: event.imageWidget, submission: Submission.loading));
+    // Your logic here to fetch data and determine the imageWidget
+  }
+
   _onSearchForEmployeeEvent(
       SearchForEmployeeEvent event, Emitter<SearchByImageState> emit) async {
     emit(state.copyWith(submission: Submission.loading));
     await RemoteProvider()
         .searchForpersonByImage(
       companyName: state.companyName,
-      // imageName:state.imageName,
-      // image: state.files,
       image: state.image,
     )
         .then((value) {
-      // if (state.cameraSelectedModels.isNotEmpty) {
-      //   add(const ApplyModelEvent());
-      // }
       if (value.targeted == true) {
-        emit(SearchByImageState().copyWith(
+        emit(
+          SearchByImageState().copyWith(
             submission: Submission.success,
             boxes: value.boxes,
-            result: value.result));
+            result: value.result,
+          ),
+        );
       } else {
         emit(state.copyWith(submission: Submission.noDataFound));
       }

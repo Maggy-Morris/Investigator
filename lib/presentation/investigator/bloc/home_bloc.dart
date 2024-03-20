@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:Investigator/core/enum/enum.dart';
 // import 'package:Investigator/core/models/add_camera_model.dart';
@@ -24,7 +24,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<DeleteCompanyEvent>(_onDeleteCompanyEvent);
 
     // /// Add New Employee
-   
+
+    on<imageevent>(_onimageevent);
+    on<videoevent>(_onvideoevent);
+    on<getPersonName>(_ongetPersonName);
 
     /// functionality Company get employees Data
     // on<GetPersonByNameEvent>(_onGetPersonByNameEvent);
@@ -33,6 +36,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     /// functionality Company delete employees Data
     on<SearchForEmployeeByVideoEvent>(_onSearchForEmployeeByVideoEvent);
+    on<ImageToSearchForEmployee>(_onImageToSearchForEmployee);
 
     // on<DeletePersonByNameEvent>(_onDeletePersonByNameEvent);
     on<DeletePersonByIdEvent>(_onDeletePersonByIdEvent);
@@ -46,9 +50,33 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   //   add(const GetModelsName());
   // }
 
+
+
+  _onImageToSearchForEmployee(
+      ImageToSearchForEmployee event, Emitter<HomeState> emit) async {
+    emit(state.copyWith(
+        imageWidget: event.imageWidget, submission: Submission.loading));
+    // Your logic here to fetch data and determine the imageWidget
+  }
+
+
+  _ongetPersonName(getPersonName event, Emitter<HomeState> emit) async {
+    emit(state.copyWith(
+        personName: event.personName, submission: Submission.editing));
+  }
+
   _onAddCompanyName(AddCompanyName event, Emitter<HomeState> emit) async {
     emit(state.copyWith(
         companyName: event.companyName, submission: Submission.editing));
+  }
+
+  _onimageevent(imageevent event, Emitter<HomeState> emit) async {
+    emit(state.copyWith(
+        imageFile: event.imageFile, submission: Submission.editing));
+  }
+
+  _onvideoevent(videoevent event, Emitter<HomeState> emit) async {
+    emit(state.copyWith(video: event.video, submission: Submission.editing));
   }
 
   /// Add Company Handle
@@ -93,7 +121,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
 ////////////////////////////////////////////
- 
 
   /// Add GetPersonByIdHandle
   _onGetPersonByIdEvent(
@@ -116,8 +143,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     });
   }
 
- 
-
   /// Delete person data by Id
   _onDeletePersonByIdEvent(
       DeletePersonByIdEvent event, Emitter<HomeState> emit) async {
@@ -136,27 +161,25 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     });
   }
 
-
 /////////////////////////////////////////////
-   
-   ///search by video and 
-   _onSearchForEmployeeByVideoEvent(
+
+  ///search by video and
+  _onSearchForEmployeeByVideoEvent(
       SearchForEmployeeByVideoEvent event, Emitter<HomeState> emit) async {
     emit(state.copyWith(submission: Submission.loading));
     await RemoteProvider()
         .searchForpersonByVideo(
-      companyName: state.companyName,
       video: state.video,
-      imageFile: state.imageFile,
-      personName: state.personName,
+      image: state.imageFile,
+      // personName: state.personName,
       // image: state.image,
     )
         .then((value) {
-      
-      if (value != ()) {
-        emit(HomeState().copyWith(submission: Submission.success));
+      if (value.found != false) {
+        emit(HomeState()
+            .copyWith(submission: Submission.success, data: value.data));
       } else {
-        emit(state.copyWith(submission: Submission.error));
+        emit(state.copyWith(submission: Submission.noDataFound));
       }
     });
   }

@@ -9,13 +9,13 @@ class EmployeeModel {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add( Data.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -49,13 +49,13 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['email'] = this.email;
-    data['image_path'] = this.imagePath;
-    data['name'] = this.name;
-    data['phone'] = this.phone;
-    data['user_id'] = this.userId;
+    final Map<String, dynamic> data =  <String, dynamic>{};
+    data['_id'] = sId;
+    data['email'] = email;
+    data['image_path'] = imagePath;
+    data['name'] = name;
+    data['phone'] = phone;
+    data['user_id'] = userId;
     return data;
   }
 }

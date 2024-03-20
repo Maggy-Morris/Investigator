@@ -14,6 +14,17 @@ class SearchForEmployeeEvent extends SearchByImageEvent {
   List<Object?> get props => [];
 }
 
+
+class ImageToSearchForEmployee extends SearchByImageEvent {
+  final Widget imageWidget;
+
+  ImageToSearchForEmployee({required this.imageWidget});
+
+  @override
+  List<Object?> get props => [imageWidget];
+}
+
+
 class SearchForEmployee extends SearchByImageEvent {
   final String companyName;
   final String image;

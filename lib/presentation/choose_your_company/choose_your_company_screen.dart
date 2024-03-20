@@ -88,8 +88,8 @@ class ChooseYourCompany extends StatelessWidget {
                           child: Column(
                             children: [
                               Text(
-                                "$companyNameRepo",
-                                style: TextStyle(
+                                companyNameRepo,
+                                style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 18,
                                     fontWeight: FontWeight.w400),

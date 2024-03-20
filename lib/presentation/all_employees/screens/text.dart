@@ -38,6 +38,7 @@ class ConstText {
         color: color,
         fontWeight: fontWeight,
       ),
+      overflow: TextOverflow.ellipsis,
     );
   }
 
@@ -56,6 +57,7 @@ class ConstText {
         color: color,
         fontWeight: fontWeight,
       ),
+      overflow: TextOverflow.ellipsis,
     );
   }
 }

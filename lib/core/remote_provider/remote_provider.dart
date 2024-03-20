@@ -1,3 +1,4 @@
+import 'package:Investigator/core/models/search_by_video.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:Investigator/authentication/call_back_authentication.dart';
@@ -332,8 +333,6 @@ class RemoteProvider {
         },
       );
 
-      //Change this "Collection Created Successfully!"
-
       if (callBack.isNotEmpty) {
         SearchByImageModel callBackList = SearchByImageModel.fromJson(callBack);
         return callBackList;
@@ -346,33 +345,32 @@ class RemoteProvider {
   }
 
   ///Search for person in the database by Video
-  Future<CallBackModel> searchForpersonByVideo({
-    required String companyName,
+  Future<SearchByVideoAndImage> searchForpersonByVideo({
     required PlatformFile? video,
-    required PlatformFile? imageFile,
+    required PlatformFile? image,
 
     // required String image,
-    required String personName,
+    // required String personName,
   }) async {
     try {
       Map<String, dynamic> callBack =
           await RemoteDataSource().postMultiPartFiles(
         endPoint: "/find_target",
         body: {
-          "collection_name": companyName,
           // "image":image,
-          "traget_name": personName,
+          // "name": personName,
         },
-        files: [video!, imageFile!],
+        files: [video!, image!],
       );
       if (callBack.isNotEmpty) {
-        CallBackModel callBackList = CallBackModel.fromJson(callBack);
+        SearchByVideoAndImage callBackList =
+            SearchByVideoAndImage.fromJson(callBack);
         return callBackList;
       } else {
-        return CallBackModel();
+        return SearchByVideoAndImage();
       }
     } catch (e) {
-      return CallBackModel();
+      return SearchByVideoAndImage();
     }
   }
 

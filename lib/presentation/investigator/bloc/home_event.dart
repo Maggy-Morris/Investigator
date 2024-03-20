@@ -7,6 +7,15 @@ class HomeEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class ImageToSearchForEmployee extends HomeEvent {
+  final Widget imageWidget;
+
+  ImageToSearchForEmployee({required this.imageWidget});
+
+  @override
+  List<Object?> get props => [imageWidget];
+}
+
 class CompnyNameFromSP extends HomeEvent {
     final String companyName;
 
@@ -19,6 +28,44 @@ class CompnyNameFromSP extends HomeEvent {
   List<Object?> get props => [companyName];
 }
 
+
+class getPersonName extends HomeEvent {
+    final String personName;
+
+  const getPersonName(
+{required this.personName}
+
+  );
+
+  @override
+  List<Object?> get props => [personName];
+}
+
+class imageevent extends HomeEvent {
+    final PlatformFile imageFile;
+
+  const imageevent(
+{required this.imageFile}
+
+  );
+
+  @override
+  List<Object?> get props => [imageFile];
+}
+
+
+
+class videoevent extends HomeEvent {
+    final PlatformFile video;
+
+  const videoevent(
+{required this.video}
+
+  );
+
+  @override
+  List<Object?> get props => [video];
+}
 
 
 class SearchForEmployeeByVideoEvent extends HomeEvent {

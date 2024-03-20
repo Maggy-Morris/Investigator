@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:Investigator/core/models/dashboard_models.dart';
-import 'package:Investigator/core/remote_provider/remote_provider.dart';
 
 part 'dashboard_event.dart';
 

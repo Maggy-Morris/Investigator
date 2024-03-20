@@ -1,5 +1,5 @@
-import 'dart:convert';
-import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
@@ -13,6 +13,8 @@ import 'package:Investigator/core/widgets/sizedbox.dart';
 import 'package:Investigator/core/widgets/textformfield.dart';
 import 'package:Investigator/core/widgets/toast/toast.dart';
 import 'package:Investigator/presentation/standard_layout/screens/standard_layout.dart';
+import 'package:video_player/video_player.dart';
+import 'dart:html' as html;
 
 import '../../../authentication/authentication_repository.dart';
 import '../../camera_controller/cubit/photo_app_cubit.dart';
@@ -27,13 +29,26 @@ class AddCameraScreen extends StatefulWidget {
 }
 
 class _AddCameraScreenState extends State<AddCameraScreen> {
-  TextEditingController cameraNameController = TextEditingController();
-  Widget? _image;
+  TextEditingController nameController = TextEditingController();
+  // Widget? _image;
   CameraController? controller;
   XFile? imageFile;
-  bool _isBackCamera = true;
+
+  // bool _isBackCamera = true;
   String companyNameRepo =
       AuthenticationRepository.instance.currentUser.companyName ?? "";
+
+  //////////////////////////////////////////////////////
+  VideoPlayerController? _controller;
+  bool _loading = false;
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  /////////////////////////////////////////////////
   @override
   Widget build(BuildContext context) {
     return StandardLayoutScreen(
@@ -50,11 +65,12 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
         child: BlocListener<HomeBloc, HomeState>(
           listener: (context, state) {
             if (state.submission == Submission.success) {
-              cameraNameController.clear();
               FxToast.showSuccessToast(context: context);
             }
-            if (state.submission == Submission.error) {
-              FxToast.showErrorToast(context: context);
+            if (state.submission == Submission.noDataFound) {
+              FxToast.showWarningToast(
+                  context: context,
+                  warningMessage: "The person isn't in the the video .");
             }
           },
           child: BlocBuilder<HomeBloc, HomeState>(
@@ -75,32 +91,52 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                           style: const TextStyle(
                               fontSize: 17, fontWeight: FontWeight.w600),
                         ),
+
                         FxBox.h24,
                         if (Responsive.isWeb(context))
                           Column(
                             children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        _commonText("Person Name".tr()),
-                                        FxBox.h4,
-                                        _listBox(
-                                            controller: cameraNameController,
-                                            hintText: "Add Person Name".tr(),
-                                            onChanged: (value) {
-                                              // HomeBloc.get(context).add(
-                                              // AddCameraName(
-                                              //     cameraName: value));
-                                            }),
-                                      ],
-                                    ),
-                                  ),
-                                ],
+                              // loadingIndicator(),
+                              Text(
+                                // Use state data to show appropriate text
+                                state.submission == Submission.loading
+                                    ? 'Loading...'
+                                    : state.submission == Submission.success
+                                        ? 'Data: ${state.data!.join(", ")}' // Join the list elements with a comma
+                                        : state.submission ==
+                                                Submission.noDataFound
+                                            ? "The person didn't appear in the video "
+                                            : 'Pick Image and Video',
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
+                              // Row(
+                              //   children: [
+                              //     Expanded(
+                              //       child: Column(
+                              //         crossAxisAlignment:
+                              //             CrossAxisAlignment.start,
+                              //         children: [
+
+                              // _commonText("Person Name".tr()),
+                              // FxBox.h4,
+                              // _listBox(
+                              //     controller: nameController,
+                              //     hintText: "Add Person Name".tr(),
+                              //     onChanged: (value) {
+                              //       HomeBloc.get(context).add(
+                              //           getPersonName(
+                              //               personName: value));
+                              //     }),
+                              //         ],
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
+
                               FxBox.h16,
                               // Here to search for an Employee in the database
                               Row(
@@ -141,30 +177,38 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                           : loadingIndicator();
 
                                                   // Replace the image with the selected image
-                                                  setState(() {
-                                                    _image = image;
-                                                  });
 
-                                                  String base64Image =
-                                                      base64Encode(
-                                                          imageFile.bytes!);
+                                                  HomeBloc.get(context).add(
+                                                      ImageToSearchForEmployee(
+                                                          imageWidget: image));
 
-                                                  // SearchByImageBloc.get(context).add(
-                                                  //     SearchForEmployee(
-                                                  //       companyName: companyName ?? " ",
-                                                  //       image: base64Image,
-                                                  //     ),
-                                                  //   );
+                                                  // String base64Image =
+                                                  //     base64Encode(
+                                                  //         imageFile.bytes!);
+                                                  HomeBloc.get(context).add(
+                                                      imageevent(
+                                                          imageFile:
+                                                              imageFile));
+
+                                                  // HomeBloc.get(context).add(
+                                                  //   imageevent(
+                                                  //       imageFile: imageFile),
+                                                  // );
                                                 }
                                               },
-                                              child: _image ??
-                                                  Image.network(
-                                                    'https://images.pexels.com/photos/414171/pexels-photo-414171.jpeg',
-                                                    width: double.infinity,
-                                                    height: double.infinity,
-                                                    // height: 200,
-                                                    fit: BoxFit.cover,
-                                                  ),
+                                              child: Stack(
+                                                  fit: StackFit.expand,
+                                                  children: [
+                                                    state.imageWidget ??
+                                                        Image.asset(
+                                                          'assets/images/image-viewer.png',
+                                                          width:
+                                                              double.infinity,
+                                                          height:
+                                                              double.infinity,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                  ]),
                                             ),
                                           ],
                                         ),
@@ -185,45 +229,47 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                           children: [
                                             GestureDetector(
                                               onTap: () async {
-                                                try {
-                                                  // Open the file picker to allow the user to select a video
-                                                  FilePickerResult? result =
-                                                      await FilePicker.platform
-                                                          .pickFiles(
-                                                    type: FileType.video,
-                                                    allowCompression:
-                                                        true, // Allow compressed video files
-                                                  );
-
-                                                  // Check if a file was selected
-                                                  if (result != null &&
-                                                      result.files.isNotEmpty) {
-                                                    // Get the bytes of the selected video file
-                                                    List<int> fileBytes = result
-                                                            .files
-                                                            .first
-                                                            .bytes ??
-                                                        [];
-
-                                                    // Convert the bytes to base64
-                                                    String base64Video =
-                                                        base64Encode(fileBytes);
-
-                                                    // Do something with the base64-encoded video, such as uploading it
-                                                    debugPrint(
-                                                        'Base64-encoded video: $base64Video');
+                                                _pickVideo().then(
+                                                  
+                                                    (PlatformFile? videoFile) {
+                                                  if 
+                                                  (videoFile != null) {
+                                                    HomeBloc.get(context).add(
+                                                        videoevent(
+                                                            video: videoFile));
                                                   }
-                                                } catch (e) {
-                                                  debugPrint(
-                                                      'Error selecting video: $e');
-                                                  // Handle any errors that occur during file selection
-                                                }
-                                              },
-                                              child: Image.asset(
-                                                'assets/images/videoBG.png',
-                                                width: double.infinity,
-                                                height: double.infinity,
-                                                fit: BoxFit.cover,
+                                                });
+                                                // PlatformFile? videoFile =
+                                                //     await _pickVideo();
+                                                // if (videoFile != null) {
+                                                //   HomeBloc.get(context).add(
+                                                //       videoevent(
+                                                //           video: videoFile));
+                                                // }
+                                              }, // Call _pickVideo function when tapped
+                                              child: Stack(
+                                                fit: StackFit.expand,
+                                                children: [
+                                                  if (_loading)
+                                                    const Center(
+                                                      child:
+                                                          CircularProgressIndicator(), // Display circular progress indicator while loading
+                                                    )
+                                                  else if (_controller != null)
+                                                    AspectRatio(
+                                                      aspectRatio: _controller!
+                                                          .value.aspectRatio,
+                                                      child: VideoPlayer(
+                                                          _controller!),
+                                                    )
+                                                  else
+                                                    Image.asset(
+                                                      'assets/images/video-x-generic.png',
+                                                      width: double.infinity,
+                                                      height: double.infinity,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                ],
                                               ),
                                             ),
                                           ],
@@ -239,8 +285,8 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                               Center(
                                 child: ElevatedButton.icon(
                                     onPressed: () {
-                                      // HomeBloc.get(context)
-                                      //     .add(const AddCameraEvent());
+                                      HomeBloc.get(context).add(
+                                          const SearchForEmployeeByVideoEvent());
                                     },
                                     style: ElevatedButton.styleFrom(
                                       shape: RoundedRectangleBorder(
@@ -260,257 +306,6 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                               ),
                               FxBox.h16,
 
-                              // BlocProvider(
-                              //   create: (context) => PhotoAppCubit(),
-                              //   child:
-                              // BlocBuilder<PhotoAppCubit, PhotoAppState>(
-                              //   builder: (context, state) {
-                              //     state as SelectProfilePhotoState;
-                              //     return Column(
-                              //       children: [
-                              //         const SizedBox(
-                              //           height: 10,
-                              //         ),
-                              //         Center(
-                              //           child: Stack(
-                              //             children: [
-                              //               getAvatar(state.file),
-                              //               Positioned(
-                              //                 bottom: -10,
-                              //                 left: 80,
-                              //                 child: IconButton(
-                              //                     onPressed: () {
-                              //                       context
-                              //                           .read<PhotoAppCubit>()
-                              //                           .openCamera();
-                              //                     },
-                              //                     icon: const Icon(Icons
-                              //                         .photo_camera_rounded)),
-                              //               )
-                              //             ],
-                              //           ),
-                              //         ),
-                              //       ],
-                              //     );
-                              //   },
-                              // ),
-                              BlocBuilder<PhotoAppCubit, PhotoAppState>(
-                                builder: (context, state) {
-                                  if (state is SelectProfilePhotoState) {
-                                    return Column(
-                                      children: [
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Center(
-                                          child: Stack(
-                                            children: [
-                                              getAvatar(state.file),
-                                              Positioned(
-                                                bottom: -10,
-                                                left: 80,
-                                                child: IconButton(
-                                                  onPressed: () {
-                                                    context
-                                                        .read<PhotoAppCubit>()
-                                                        .openCamera();
-                                                  },
-                                                  icon: const Icon(Icons
-                                                      .photo_camera_rounded),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  } else if (state is CameraState) {
-                                    // Handle CameraState here, if needed
-                                    return CameraPreview(
-                                      state.controller,
-                                      child:
-                                          //  Scaffold(
-                                          //     backgroundColor: Colors.transparent,
-                                          //     body:
-                                          Stack(
-                                        fit: StackFit.expand,
-                                        alignment: Alignment.bottomCenter,
-                                        children: [
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              // Inside GestureDetector
-                                              GestureDetector(
-                                                onTap: () {
-                                                  context
-                                                      .read<PhotoAppCubit>()
-                                                      .startStream();
-                                                },
-                                                child: Container(
-                                                  height: 100,
-                                                  width: 70,
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: Colors.white,
-                                                  ),
-                                                  child: Stack(
-                                                    children: [
-                                                      Align(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        child: Text(
-                                                          context
-                                                                  .watch<
-                                                                      PhotoAppCubit>()
-                                                                  .isStreaming
-                                                              ? 'Stop Stream'
-                                                              : 'Start Stream',
-                                                          style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontSize: 12,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-
-                                              // GestureDetector(
-                                              //     onTap: () {
-                                              //       context
-                                              //           .read<
-                                              //               PhotoAppCubit>()
-                                              //           .startPeriodicPictureCapture(
-                                              //               const Duration(
-                                              //                   milliseconds:
-                                              //                       250));
-                                              //     },
-                                              //     child: Container(
-                                              //       height: 100,
-                                              //       width: 70,
-                                              //       decoration:
-                                              //           const BoxDecoration(
-                                              //         shape:
-                                              //             BoxShape.circle,
-                                              //         color: Colors.white,
-                                              //       ),
-                                              //       child: const Stack(
-                                              //         children: [
-                                              //           Align(
-                                              //             alignment:
-                                              //                 Alignment
-                                              //                     .center,
-                                              //             child: Text(
-                                              //               'Start Stream',
-                                              //               style:
-                                              //                   TextStyle(
-                                              //                 color: Colors
-                                              //                     .black,
-                                              //                 fontSize: 12,
-                                              //               ),
-                                              //             ),
-                                              //           ),
-                                              //         ],
-                                              //       ),
-                                              //     )),
-
-                                              const SizedBox(
-                                                width: 10,
-                                              ),
-                                              IconButton(
-                                                  color: Colors.white,
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          bottom: 25),
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      _isBackCamera =
-                                                          !_isBackCamera;
-                                                    });
-                                                    // context
-                                                    //     .read<
-                                                    //         PhotoAppCubit>()
-                                                    //     .switchCameraOptions(
-                                                    //       isBackCam:
-                                                    //           _isBackCamera,
-                                                    //       cameraController:
-                                                    //           state
-                                                    //               .controller,
-                                                    // );
-                                                  },
-                                                  icon: const Icon(
-                                                      Icons.cameraswitch))
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-
-                                      // ),
-                                    );
-                                    // Placeholder widget
-                                  } else if (state is PreviewState) {
-                                    return Material(
-                                      child: DecoratedBox(
-                                        decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                fit: BoxFit.cover,
-                                                image: FileImage(state.file!))),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            InkWell(
-                                              onTap: () {
-                                                context
-                                                    .read<PhotoAppCubit>()
-                                                    .openCamera();
-                                              },
-                                              child: Container(
-                                                height: 40,
-                                                width: 100,
-                                                color: Colors.white38,
-                                                child: const Icon(
-                                                    Icons.cancel_outlined),
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              width: 20,
-                                            ),
-                                            InkWell(
-                                              onTap: () {
-                                                context
-                                                    .read<PhotoAppCubit>()
-                                                    .selectPhoto(
-                                                        file: state.file!);
-                                              },
-                                              child: Container(
-                                                height: 40,
-                                                width: 60,
-                                                color: Colors.white38,
-                                                child: const Icon(
-                                                    Icons.check_outlined),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  } else {
-                                    return const Scaffold(
-                                      body: Center(
-                                        child: Text('Nothing to show'),
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
-
                               // ),
                             ],
                           ),
@@ -521,19 +316,163 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                               FxBox.h4,
                               _listBox(
                                   hintText: "Add Person Name".tr(),
-                                  controller: cameraNameController,
+                                  controller: nameController,
                                   onChanged: (value) {
-                                    // HomeBloc.get(context)
-                                    //     .add(AddCameraName(cameraName: value));
+                                    HomeBloc.get(context)
+                                        .add(getPersonName(personName: value));
                                   }),
+                              FxBox.h16,
+
+                              // Here to search for an Employee in the database
+                              Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  SizedBox(
+                                    height: 300,
+                                    width: 300,
+                                    child: Card(
+                                      elevation: 4,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: Stack(
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () async {
+                                                FilePickerResult? result =
+                                                    await FilePicker.platform
+                                                        .pickFiles(
+                                                  type: FileType.image,
+                                                );
+                                                if (result != null &&
+                                                    result.files.isNotEmpty) {
+                                                  // Use the selected image file
+                                                  final imageFile =
+                                                      result.files.first;
+                                                  // Load the image file as an image
+                                                  final image =
+                                                      imageFile.bytes != null
+                                                          ? Image.memory(
+                                                              imageFile.bytes!,
+                                                              fit: BoxFit.cover,
+                                                            )
+                                                          : loadingIndicator();
+                                                  // Replace the image with the selected image
+
+                                                  HomeBloc.get(context).add(
+                                                      ImageToSearchForEmployee(
+                                                          imageWidget: image));
+
+                                                  // String base64Image =
+                                                  //     base64Encode(
+                                                  //         imageFile.bytes!);
+                                                  HomeBloc.get(context).add(
+                                                      imageevent(
+                                                          imageFile:
+                                                              imageFile));
+
+                                                  // HomeBloc.get(context).add(
+                                                  //   imageevent(
+                                                  //       imageFile: imageFile),
+                                                  // );
+                                                }
+                                              },
+                                              child: Stack(
+                                                  fit: StackFit.expand,
+                                                  children: [
+                                                    state.imageWidget ??
+                                                        Image.asset(
+                                                          'assets/images/image-viewer.png',
+                                                          width:
+                                                              double.infinity,
+                                                          height:
+                                                              double.infinity,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                  ]),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+
+                                  SizedBox(
+                                    height: 300,
+                                    width: 300,
+                                    child: Card(
+                                      elevation: 4,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: Stack(
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () async {
+                                                _pickVideo().then(
+                                                    (PlatformFile? videoFile) {
+                                                  if (videoFile != null) {
+                                                    HomeBloc.get(context).add(
+                                                        videoevent(
+                                                            video: videoFile));
+                                                  }
+                                                });
+                                                // PlatformFile? videoFile =
+                                                //     await _pickVideo();
+                                                // if (videoFile != null) {
+                                                //   HomeBloc.get(context).add(
+                                                //       videoevent(
+                                                //           video: videoFile));
+                                                // }
+                                              }, // Call _pickVideo function when tapped
+                                              child: Stack(
+                                                fit: StackFit.expand,
+                                                children: [
+                                                  if (_loading)
+                                                    const Center(
+                                                      child:
+                                                          CircularProgressIndicator(), // Display circular progress indicator while loading
+                                                    )
+                                                  else if (_controller != null)
+                                                    AspectRatio(
+                                                      aspectRatio: _controller!
+                                                          .value.aspectRatio,
+                                                      child: VideoPlayer(
+                                                          _controller!),
+                                                    )
+                                                  else
+                                                    Image.asset(
+                                                      'assets/images/video-x-generic.png',
+                                                      width: double.infinity,
+                                                      height: double.infinity,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+
+                                  ///////////////////////////////
+                                ],
+                              ),
+
                               FxBox.h60,
                               (state.submission == Submission.loading)
                                   ? loadingIndicator()
                                   : Center(
                                       child: ElevatedButton.icon(
                                           onPressed: () {
-                                            // HomeBloc.get(context)
-                                            //     .add(const AddCameraEvent());
+                                            HomeBloc.get(context).add(
+                                                const SearchForEmployeeByVideoEvent());
                                           },
                                           style: ElevatedButton.styleFrom(
                                             shape: RoundedRectangleBorder(
@@ -588,270 +527,37 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
   }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-  ///
-  ///
+  Future<PlatformFile?> _pickVideo() async {
+    // setState(() {
+    //   _loading = true;
+    // });
 
-  CircleAvatar getAvatar(File? displayImage) {
-    if (displayImage == null) {
-      return const CircleAvatar(
-        backgroundColor: Colors.transparent,
-        radius: 65,
-        backgroundImage: AssetImage('assets/images/unnamed.png'),
-      );
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.video,
+    );
+
+
+    // setState(() {
+    //   _loading = false;
+    // });
+
+    if (result != null ) {
+      final videoFile = result.files.first;
+      final Uint8List videoBytes = videoFile.bytes!;
+      final blob = html.Blob([videoBytes]);
+      final url = html.Url.createObjectUrlFromBlob(blob);
+
+      _controller = VideoPlayerController.network(url)
+        ..initialize().then((_) {
+          // setState(() {});
+          _controller!.play();
+        });
+
+      return videoFile; // Return the picked video file
     } else {
-      return CircleAvatar(
-        radius: 65,
-        backgroundImage: FileImage(displayImage),
-      );
+      return null; // Return null if no file is picked
     }
   }
-
-  /// Display the preview from the camera (or a message if the preview is not available).
-//   Widget _cameraPreviewWidget() {
-//     final CameraController? cameraController = controller;
-
-//     if (cameraController == null || !cameraController.value.isInitialized) {
-//       return const Text(
-//         'Tap a camera',
-//         style: TextStyle(
-//           color: Colors.black,
-//           fontSize: 24.0,
-//           fontWeight: FontWeight.w900,
-//         ),
-//       );
-//     } else {
-//       return Expanded(
-//         child: Container(
-//           width: 500,
-//           height: 500,
-//           child: Listener(
-//             onPointerDown: (_) => _pointers++,
-//             onPointerUp: (_) => _pointers--,
-//             child: CameraPreview(
-//               controller!,
-//               child: LayoutBuilder(
-//                   builder: (BuildContext context, BoxConstraints constraints) {
-//                 return GestureDetector(
-//                   behavior: HitTestBehavior.opaque,
-//                   onScaleStart: _handleScaleStart,
-//                   onScaleUpdate: _handleScaleUpdate,
-//                   onTapDown: (TapDownDetails details) =>
-//                       onViewFinderTap(details, constraints),
-//                 );
-//               }),
-//             ),
-//           ),
-//         ),
-//       );
-//     }
-//   }
-
-//   void _handleScaleStart(ScaleStartDetails details) {
-//     _baseScale = _currentScale;
-//   }
-
-//   Future<void> _handleScaleUpdate(ScaleUpdateDetails details) async {
-//     // When there are not exactly two fingers on screen don't scale
-//     if (controller == null || _pointers != 2) {
-//       return;
-//     }
-
-//     _currentScale = (_baseScale * details.scale)
-//         .clamp(_minAvailableZoom, _maxAvailableZoom);
-
-//     await controller!.setZoomLevel(_currentScale);
-//   }
-
-//   /// Display a row of toggle to select the camera (or a message if no camera is available).
-//   Widget _cameraTogglesRowWidget() {
-//     final List<Widget> toggles = <Widget>[];
-
-//     void onChanged(CameraDescription? description) {
-//       if (description == null) {
-//         return;
-//       }
-
-//       onNewCameraSelected(description);
-//     }
-
-//     if (_cameras.isEmpty) {
-//       SchedulerBinding.instance!.addPostFrameCallback((_) async {
-//         showInSnackBar('No camera found.');
-//       });
-//       return const Text('None');
-//     } else {
-//       for (final CameraDescription cameraDescription in _cameras) {
-//         toggles.add(
-//           SizedBox(
-//             width: 90.0,
-//             child: RadioListTile<CameraDescription>(
-//               title: Icon(getCameraLensIcon(cameraDescription.lensDirection)),
-//               groupValue: controller?.description,
-//               value: cameraDescription,
-//               onChanged: onChanged,
-//             ),
-//           ),
-//         );
-//       }
-//     }
-
-//     return Row(children: toggles);
-//   }
-
-//   String timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
-
-//   void showInSnackBar(String message) {
-//     ScaffoldMessenger.of(context)
-//         .showSnackBar(SnackBar(content: Text(message)));
-//   }
-
-//   void onViewFinderTap(TapDownDetails details, BoxConstraints constraints) {
-//     if (controller == null) {
-//       return;
-//     }
-
-//     final CameraController cameraController = controller!;
-
-//     final Offset offset = Offset(
-//       details.localPosition.dx / constraints.maxWidth,
-//       details.localPosition.dy / constraints.maxHeight,
-//     );
-//     cameraController.setExposurePoint(offset);
-//     cameraController.setFocusPoint(offset);
-//   }
-
-//   Future<void> onNewCameraSelected(CameraDescription cameraDescription) async {
-//     if (controller != null) {
-//       return controller!.setDescription(cameraDescription);
-//     } else {
-//       return _initializeCameraController(cameraDescription);
-//     }
-//   }
-
-//   /// websocket connection
-//   Future<void> _initializeCameraController(
-//       CameraDescription cameraDescription) async {
-//     // Define the interval (e.g., 250 milliseconds for four times a second)
-//     const Duration interval = Duration(milliseconds: 250);
-
-//     // Start the timer
-//     Timer.periodic(interval, (Timer timer) {
-//       takePicture().then((XFile? file) async {
-//         if (file != null) {
-//           final Uint8List bytes = await file.readAsBytes();
-//           String base64String = base64Encode(bytes);
-//           // print(base64String);
-
-//           final _channel = WebSocketChannel.connect(
-//             Uri.parse('ws://192.168.1.118:8765/socket.io/'),
-//           );
-//           Map<String, dynamic> data = {
-//             'collection_name': 'maggy',
-//             "image": base64String
-//           };
-//           String jsonData = jsonEncode(data);
-//           _channel.sink.add(jsonData);
-
-//           // Listen for response from the server
-//           _channel.stream.listen((dynamic response) {
-//             print("Response from server: $response");
-//           }, onDone: () {
-//             print("WebSocket connection closed.");
-//             _channel.sink.close();
-//           }, onError: (error) {
-//             print("WebSocket error: $error");
-//           });
-//         }
-//       });
-//     });
-//     final CameraController cameraController = CameraController(
-//       cameraDescription,
-//       kIsWeb ? ResolutionPreset.max : ResolutionPreset.medium,
-//       enableAudio: enableAudio,
-//       imageFormatGroup: ImageFormatGroup.jpeg,
-//     );
-
-//     controller = cameraController;
-
-//     // If the controller is updated then update the UI.
-//     cameraController.addListener(() {
-//       if (mounted) {
-//         setState(() {});
-//       }
-//       if (cameraController.value.hasError) {
-//         showInSnackBar(
-//             'Camera error ${cameraController.value.errorDescription}');
-//       }
-//     });
-
-//     try {
-//       await cameraController.initialize();
-//       await Future.wait(<Future<Object?>>[
-//         cameraController
-//             .getMaxZoomLevel()
-//             .then((double value) => _maxAvailableZoom = value),
-//         cameraController
-//             .getMinZoomLevel()
-//             .then((double value) => _minAvailableZoom = value),
-//       ]);
-//     } on CameraException catch (e) {
-//       switch (e.code) {
-//         case 'CameraAccessDenied':
-//           showInSnackBar('You have denied camera access.');
-//         case 'CameraAccessDeniedWithoutPrompt':
-//           // iOS only
-//           showInSnackBar('Please go to Settings app to enable camera access.');
-//         case 'CameraAccessRestricted':
-//           // iOS only
-//           showInSnackBar('Camera access is restricted.');
-//         case 'AudioAccessDenied':
-//           showInSnackBar('You have denied audio access.');
-//         case 'AudioAccessDeniedWithoutPrompt':
-//           // iOS only
-//           showInSnackBar('Please go to Settings app to enable audio access.');
-//         case 'AudioAccessRestricted':
-//           // iOS only
-//           showInSnackBar('Audio access is restricted.');
-//         default:
-//           _showCameraException(e);
-//           break;
-//       }
-//     }
-
-//     if (mounted) {
-//       setState(() {});
-//     }
-//   }
-
-// /////////////////////////////////////////////////////////
-//   Future<XFile?> takePicture() async {
-//     final CameraController? cameraController = controller;
-//     if (cameraController == null || !cameraController.value.isInitialized) {
-//       showInSnackBar('Error: select a camera first.');
-//       return null;
-//     }
-
-//     if (cameraController.value.isTakingPicture) {
-//       // A capture is already pending, do nothing.
-//       return null;
-//     }
-
-//     try {
-//       final XFile file = await cameraController.takePicture();
-//       return file;
-//     } on CameraException catch (e) {
-//       _showCameraException(e);
-//       return null;
-//     }
-//   }
-
-//   void _showCameraException(CameraException e) {
-//     _logError(e.code, e.description);
-//     showInSnackBar('Error: ${e.code}\n${e.description}');
-//   }
-
-//   void _logError(String code, String? message) =>
-//       print('Error: $code\nError Message: $message');
 
 ////////////////////////////////////////////////////////////////////////////////
   Widget _listBox({
