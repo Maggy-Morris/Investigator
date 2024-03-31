@@ -59,7 +59,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
           ),
           BlocProvider(
             create: (context) => PhotoAppCubit(),
-            child: const PhotoAppLogic(),
+            // child: const PhotoAppLogic(),
           ),
         ],
         child: BlocListener<HomeBloc, HomeState>(
