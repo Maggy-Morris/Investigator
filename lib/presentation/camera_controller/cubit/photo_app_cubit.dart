@@ -2,15 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:camera/camera.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-
 import '../../../core/models/search_by_image_model.dart';
-
 part 'photo_app_state.dart';
 
 // class PhotoAppCubit extends Cubit<PhotoAppState> {
@@ -62,94 +59,94 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
     }
   }
 
-  Future<SearchByImageModel> startPeriodicPictureCapture(
-      Duration interval) async {
-    _periodicTimer = Timer.periodic(
-      interval,
-      (timer) async {
-        final XFile? file = await takePicture();
-        if (file != null) {
-          final Uint8List bytes = await file.readAsBytes();
-          String base64String = base64Encode(bytes);
-
-          final _channel = WebSocketChannel.connect(
-            Uri.parse('ws://192.168.0.139:8765/socket.io/'),
-          );
-          Map<String, dynamic> data = {
-            'collection_name': 'maggy',
-            "image": base64String
-          };
-          String jsonData = jsonEncode(data);
-          _channel.sink.add(jsonData);
-
-          // Listen for response from the server
-          _channel.stream.listen(
-            (dynamic response) {
-              if (response.isNotEmpty) {
-                SearchByImageModel callBackList =
-                    SearchByImageModel.fromJson(response);
-
-                debugPrint("Response from server: $response");
-                emit(CameraState(
-                    boxes: callBackList.boxes, result: callBackList.result));
-              }
-            },
-            onDone: () {
-              debugPrint("WebSocket connection closed.");
-              // You might want to handle this event as per your requirements
-            },
-            onError: (error) {
-              debugPrint("WebSocket error: $error");
-            },
-          );
-          debugPrint('Captured picture: ${base64String}');
-        }
-      },
-    );
-
-    return SearchByImageModel();
-  }
-
   // Future<SearchByImageModel> startPeriodicPictureCapture(
   //     Duration interval) async {
-  //   _periodicTimer = Timer.periodic(interval, (timer) async {
-  //     final XFile? file = await takePicture();
-  //     if (file != null) {
-  //       final Uint8List bytes = await file.readAsBytes();
-  //       String base64String = base64Encode(bytes);
-  //       // Handle the picture file here ( send via WebSocket)
+  //   _periodicTimer = Timer.periodic(
+  //     interval,
+  //     (timer) async {
+  //       final XFile? file = await takePicture();
+  //       if (file != null) {
+  //         final Uint8List bytes = await file.readAsBytes();
+  //         String base64String = base64Encode(bytes);
 
-  //       final _channel = WebSocketChannel.connect(
-  //         Uri.parse('ws://192.168.1.118:8765/socket.io/'),
-  //       );
-  //       Map<String, dynamic> data = {
-  //         'collection_name': 'maggy',
-  //         "image": base64String
-  //       };
-  //       String jsonData = jsonEncode(data);
-  //       _channel.sink.add(jsonData);
+  //         final _channel = WebSocketChannel.connect(
+  //           Uri.parse('ws://192.168.0.139:8765/socket.io/'),
+  //         );
+  //         Map<String, dynamic> data = {
+  //           'collection_name': 'maggy',
+  //           "image": base64String
+  //         };
+  //         String jsonData = jsonEncode(data);
+  //         _channel.sink.add(jsonData);
 
-  //       // Listen for response from the server
-  //       _channel.stream.listen((dynamic response) {
-  //         if (response.isNotEmpty) {
-  //           SearchByImageModel callBackList =
-  //               SearchByImageModel.fromJson(response);
+  //         // Listen for response from the server
+  //         _channel.stream.listen(
+  //           (dynamic response) {
+  //             if (response.isNotEmpty) {
+  //               SearchByImageModel callBackList =
+  //                   SearchByImageModel.fromJson(response);
 
-  //           debugPrint("Response from server: $response");
-  //           emit(CameraState(
-  //               boxes: callBackList.boxes, result: callBackList.result));
-  //         }
-  //       }, onDone: () {
-  //         debugPrint("WebSocket connection closed.");
-  //         _channel.sink.close();
-  //       }, onError: (error) {
-  //         debugPrint("WebSocket error: $error");
-  //       });
-  //     }
-  //   });
+  //               debugPrint("Response from server: $response");
+  //               // emit(CameraState(
+  //               //     boxes: callBackList.boxes, result: callBackList.result));
+  //             }
+  //           },
+  //           onDone: () {
+  //             debugPrint("WebSocket connection closed.");
+  //           },
+  //           onError: (error) {
+  //             debugPrint("WebSocket error: $error");
+  //           },
+  //         );
+  //         debugPrint('Captured picture: ${base64String}');
+  //       }
+  //     },
+  //   );
 
   //   return SearchByImageModel();
   // }
+
+  void startPeriodicPictureCapture(Duration interval) {
+    _periodicTimer = Timer.periodic(interval, (timer) async {
+      final XFile? file = await takePicture();
+      if (file != null) {
+        final Uint8List bytes = await file.readAsBytes();
+        String base64String = base64Encode(bytes);
+        // Handle the picture file here ( send via WebSocket)
+
+        final _channel = WebSocketChannel.connect(
+          Uri.parse('ws://192.168.0.139:8765/socket.io/'),
+        );
+        Map<String, dynamic> data = {
+          'collection_name': 'maggy',
+          "image": base64String
+        };
+        String jsonData = jsonEncode(data);
+        _channel.sink.add(jsonData);
+
+        // // Listen for response from the server
+        _channel.stream.listen((dynamic response) {
+          // if (response.isNotEmpty) {
+          //   SearchByImageModel callBackList =
+          //       SearchByImageModel.fromJson(response);
+
+          debugPrint("Response from server: $response");
+
+          // emit(CameraState(
+          //     boxes: callBackList.boxes, result: callBackList.result));
+          // }
+        }, onDone: () {
+          debugPrint("WebSocket connection closed.");
+          _channel.sink.close();
+        }, onError: (error) {
+          debugPrint("WebSocket error: $error");
+        });
+        // For demonstration, print the path of the captured picture
+        // debugPrint('Captured picture: ${base64String}');
+      }
+    });
+  }
+  //////////////////////////////////////////////////////
 
   void stopPeriodicPictureCapture() {
     _periodicTimer.cancel();

@@ -20,7 +20,7 @@ import '../../../core/enum/enum.dart';
 import '../../../core/loader/loading_indicator.dart';
 // import '../../camera_controller/cubit/photo_app_cubit.dart';
 import '../../camera_controller/cubit/photo_app_cubit.dart';
-import '../../camera_controller/photo_app_logic.dart';
+// import '../../camera_controller/photo_app_logic.dart';
 import '../bloc/search_by_image_bloc.dart';
 import 'face_painter.dart';
 
@@ -770,6 +770,9 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                   //     }
                   //   },
                   // ),
+
+
+
 
                   BlocBuilder<PhotoAppCubit, PhotoAppState>(
                     builder: (context, state) {
