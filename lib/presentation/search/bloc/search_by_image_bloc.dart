@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/enum/enum.dart';
-import '../../../core/loader/loading_indicator.dart';
 import '../../../core/remote_provider/remote_provider.dart';
 
 part 'search_by_image_event.dart';

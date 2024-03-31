@@ -157,12 +157,12 @@ class AuthenticationRepository {
           .then(
         (value) {
           if (value.logined == "Signed up successfully!") {
-            sharedUser?.setString(userCacheKey, jsonEncode(value));
-            sharedUser?.setString(usernameCacheKey, email);
-            sharedUser?.setString(passwordCacheKey, password);
-            sharedUser?.setString(companyNameCacheKey, companyName);
+            // sharedUser?.setString(userCacheKey, jsonEncode(value));
+            // sharedUser?.setString(usernameCacheKey, email);
+            // sharedUser?.setString(passwordCacheKey, password);
+            // sharedUser?.setString(companyNameCacheKey, companyName);
 
-            sharedUser?.setStringList(routesCacheKey, ["/"]);
+            // sharedUser?.setStringList(routesCacheKey, ["/"]);
 
             // controller.add(value!);
           } else if (value.logined == "E-mail is already  in use") {
@@ -171,6 +171,8 @@ class AuthenticationRepository {
           } else {
             controller.add(UserData.empty);
             logOut();
+                      
+
             return;
           }
         },
@@ -188,7 +190,6 @@ class AuthenticationRepository {
     try {
       sharedUser?.clear();
       controller.add(UserData.empty);
-      
     } catch (_) {
       throw LogOutFailure();
     }

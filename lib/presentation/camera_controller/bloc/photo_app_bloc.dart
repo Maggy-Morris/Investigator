@@ -11,35 +11,70 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../../../core/models/search_by_image_model.dart';
 
+part 'photo_app_event.dart';
 part 'photo_app_state.dart';
 
-// class PhotoAppCubit extends Cubit<PhotoAppState> {
-//   PhotoAppCubit() : super(PhotoAppInitial());
-// }
-
-class PhotoAppCubit extends Cubit<PhotoAppState> {
-  PhotoAppCubit() : super(const SelectProfilePhotoState());
+class PhotoAppBloc extends Bloc<PhotoAppEvent, PhotoAppState> {
+  static PhotoAppBloc get(context) => BlocProvider.of<PhotoAppBloc>(context);
 
   CameraController? controller;
   late Timer _periodicTimer;
 
   bool isStreaming = false;
 
-  void startStream() {
-    if (!isStreaming) {
-      startPeriodicPictureCapture(const Duration(milliseconds: 250));
-      isStreaming = true;
-    } else {
-      stopPeriodicPictureCapture();
-      isStreaming = false;
-    }
+  PhotoAppBloc() : super(PhotoAppState()) {
+    on<PhotoAppEvent>(_onPhotoAppEvent);
+
+    on<OpenCameraEvent>(_onOpenCameraEvent);
+    on<SwitchCameraOptions>(_onSwitchCameraOptions);
+    on<SelectPhoto>(_onSelectPhoto);
+
+    on<StartStreamEvent>(_onStartStreamEvent);
+
+    on<StopPeriodicPictureCapture>(_onStopPeriodicPictureCapture);
   }
 
-  void openCamera() async {
+  _onPhotoAppEvent(PhotoAppEvent event, Emitter<PhotoAppState> emit) {}
+
+  _onOpenCameraEvent(OpenCameraEvent event, Emitter<PhotoAppState> emit) async {
+// void openCamera() async {
     final cameras = await availableCameras();
     controller = CameraController(cameras.first, ResolutionPreset.high);
     await controller!.initialize();
     emit(CameraState(controller: controller!, camera: controller!.description));
+    // }
+  }
+
+  _onSelectPhoto(SelectPhoto event, Emitter<PhotoAppState> emit) {
+    emit(SelectProfilePhotoState(file: event.file));
+  }
+
+  _onStopPeriodicPictureCapture(
+      StopPeriodicPictureCapture event, Emitter<PhotoAppState> emit) {
+    _periodicTimer.cancel();
+  }
+
+  _onSwitchCameraOptions(
+      SwitchCameraOptions event, Emitter<PhotoAppState> emit) async {
+    //        void switchCameraOptions({
+    // })
+    // async {
+    if (controller == null || !controller!.value.isInitialized) {
+      return;
+    }
+
+    final cameras = await availableCameras();
+    final newCamera = event.isBackCam ? cameras.first : cameras.last;
+    final newController = CameraController(
+        newCamera, event.resolutionPreset ?? ResolutionPreset.high);
+
+    await newController.initialize();
+    controller!.dispose(); // Dispose the current controller
+    controller = newController;
+
+    emit(CameraState(
+        controller: newController, camera: newController.description));
+    // }
   }
 
   Future<XFile?> takePicture() async {
@@ -73,7 +108,7 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
           String base64String = base64Encode(bytes);
 
           final _channel = WebSocketChannel.connect(
-            Uri.parse('ws://192.168.0.139:8765/socket.io/'),
+            Uri.parse('ws://192.168.1.118:8765/socket.io/'),
           );
           Map<String, dynamic> data = {
             'collection_name': 'maggy',
@@ -110,73 +145,25 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
     return SearchByImageModel();
   }
 
-  // Future<SearchByImageModel> startPeriodicPictureCapture(
-  //     Duration interval) async {
-  //   _periodicTimer = Timer.periodic(interval, (timer) async {
-  //     final XFile? file = await takePicture();
-  //     if (file != null) {
-  //       final Uint8List bytes = await file.readAsBytes();
-  //       String base64String = base64Encode(bytes);
-  //       // Handle the picture file here ( send via WebSocket)
 
-  //       final _channel = WebSocketChannel.connect(
-  //         Uri.parse('ws://192.168.1.118:8765/socket.io/'),
-  //       );
-  //       Map<String, dynamic> data = {
-  //         'collection_name': 'maggy',
-  //         "image": base64String
-  //       };
-  //       String jsonData = jsonEncode(data);
-  //       _channel.sink.add(jsonData);
 
-  //       // Listen for response from the server
-  //       _channel.stream.listen((dynamic response) {
-  //         if (response.isNotEmpty) {
-  //           SearchByImageModel callBackList =
-  //               SearchByImageModel.fromJson(response);
 
-  //           debugPrint("Response from server: $response");
-  //           emit(CameraState(
-  //               boxes: callBackList.boxes, result: callBackList.result));
-  //         }
-  //       }, onDone: () {
-  //         debugPrint("WebSocket connection closed.");
-  //         _channel.sink.close();
-  //       }, onError: (error) {
-  //         debugPrint("WebSocket error: $error");
-  //       });
-  //     }
-  //   });
 
-  //   return SearchByImageModel();
-  // }
 
   void stopPeriodicPictureCapture() {
     _periodicTimer.cancel();
   }
 
-  void switchCameraOptions({
-    required bool isBackCam,
-    ResolutionPreset? resolutionPreset,
-  }) async {
-    if (controller == null || !controller!.value.isInitialized) {
-      return;
+  _onStartStreamEvent(StartStreamEvent event, Emitter<PhotoAppState> emit) {
+    if (!isStreaming) {
+      startPeriodicPictureCapture(const Duration(milliseconds: 250));
+      isStreaming = true;
+    } else {
+      stopPeriodicPictureCapture();
+      isStreaming = false;
     }
-
-    final cameras = await availableCameras();
-    final newCamera = isBackCam ? cameras.first : cameras.last;
-    final newController =
-        CameraController(newCamera, resolutionPreset ?? ResolutionPreset.high);
-
-    await newController.initialize();
-    controller!.dispose(); // Dispose the current controller
-    controller = newController;
-
-    emit(CameraState(
-        controller: newController, camera: newController.description));
   }
 
-  void selectPhoto({required File file}) {
-    emit(SelectProfilePhotoState(file: file));
-  }
+
+
 }

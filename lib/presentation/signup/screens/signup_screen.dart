@@ -9,7 +9,7 @@ import '../cubit/signup_cubit.dart';
 class SignUpPage extends StatelessWidget {
   static Route<dynamic> route() {
     return MaterialPageRoute<dynamic>(
-      builder: (_) => SignUpPage(),
+      builder: (_) => const SignUpPage(),
     );
   }
 
@@ -24,9 +24,9 @@ class SignUpPage extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-              AppColors.blue.withOpacity(0.3),
-              AppColors.blue.withOpacity(0.5),
-              AppColors.blue.withOpacity(0.3),
+              AppColors.black,
+              AppColors.black,
+              AppColors.black,
               // Colors.white24,
               // Colors.blueGrey.withOpacity(0.5),
               // Colors.blueGrey.withOpacity(0.6),

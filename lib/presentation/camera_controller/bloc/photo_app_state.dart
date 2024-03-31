@@ -1,9 +1,21 @@
-part of 'photo_app_cubit.dart';
+part of 'photo_app_bloc.dart';
+
+// sealed class PhotoAppState extends Equatable {
+//   const PhotoAppState();
+  
+//   @override
+//   List<Object> get props => [];
+// }
+
+// final class PhotoAppInitial extends PhotoAppState {}
+
 
 class PhotoAppState extends Equatable {
   final bool? isLoading;
   final bool? hasError;
   final String? errorMessage;
+
+  
 
   const PhotoAppState({
     this.errorMessage,

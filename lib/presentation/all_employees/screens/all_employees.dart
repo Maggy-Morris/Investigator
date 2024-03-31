@@ -18,9 +18,7 @@ import '../bloc/all_employess_bloc.dart';
 class AllEmployeesScreen extends StatefulWidget {
   static Route<dynamic> route(List<Data> data) {
     return MaterialPageRoute<dynamic>(
-      builder: (_) => const AllEmployeesScreen(
-          // data: data
-          ),
+      builder: (_) => const AllEmployeesScreen(),
     );
   }
 
@@ -748,174 +746,6 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                 onUpdate: () {
                                                   _showUpdateDialog(
                                                       context, employee);
-
-                                                  // Show dialog to fill in employee data for update
-                                                  // showDialog(
-                                                  //   context: context,
-                                                  //   builder: (ctx) {
-                                                  //     // return BlocProvider(
-                                                  //     //   create: (context) =>
-                                                  //     //       AllEmployeesBloc(),
-                                                  //     //   child: BlocBuilder<
-                                                  //     //       AllEmployeesBloc,
-                                                  //     //       AllEmployeesState>(
-                                                  //     //     builder:
-                                                  //     //         (context,
-                                                  //     //             state) {
-                                                  //     return AlertDialog(
-                                                  //       title: const Text(
-                                                  //           "Update Employee"),
-                                                  //       content:
-                                                  //           SingleChildScrollView(
-                                                  //         child: Column(
-                                                  //           mainAxisSize:
-                                                  //               MainAxisSize
-                                                  //                   .min,
-                                                  //           children: [
-                                                  //             TextFormField(
-                                                  //               initialValue:
-                                                  //                   employee
-                                                  //                       .name,
-                                                  //               // controller:
-                                                  //               //     employeeNameController,
-                                                  //               decoration: const InputDecoration(
-                                                  //                   labelText:
-                                                  //                       'Name'),
-                                                  //               onChanged:
-                                                  //                   (value) async {
-                                                  //                 AllEmployeesBloc.get(
-                                                  //                         context)
-                                                  //                     .add(
-                                                  //                   AddpersonName(
-                                                  //                       personName:
-                                                  //                           value),
-                                                  //                 );
-                                                  //               },
-                                                  //             ),
-                                                  //             FxBox.h24,
-                                                  //             TextFormField(
-                                                  //               initialValue:
-                                                  //                   employee
-                                                  //                       .userId,
-                                                  //               decoration: const InputDecoration(
-                                                  //                   labelText:
-                                                  //                       'UserId'),
-                                                  //               onChanged:
-                                                  //                   (value) async {
-                                                  //                 AllEmployeesBloc.get(
-                                                  //                         context)
-                                                  //                     .add(
-                                                  //                   AdduserId(
-                                                  //                     userId:
-                                                  //                         value,
-                                                  //                   ),
-                                                  //                 );
-                                                  //               },
-                                                  //             ),
-                                                  //             FxBox.h24,
-                                                  //             TextFormField(
-                                                  //               initialValue:
-                                                  //                   employee
-                                                  //                       .phone,
-                                                  //               decoration: const InputDecoration(
-                                                  //                   labelText:
-                                                  //                       'Phone Number'),
-                                                  //               onChanged:
-                                                  //                   (value) async {
-                                                  //                 AllEmployeesBloc.get(
-                                                  //                         context)
-                                                  //                     .add(
-                                                  //                   AddphoneNum(
-                                                  //                     phoneNum:
-                                                  //                         value,
-                                                  //                   ),
-                                                  //                 );
-                                                  //               },
-                                                  //             ),
-                                                  //             FxBox.h24,
-                                                  //             TextFormField(
-                                                  //               initialValue:
-                                                  //                   employee
-                                                  //                       .email,
-                                                  //               decoration: const InputDecoration(
-                                                  //                   labelText:
-                                                  //                       'Email'),
-                                                  //               onChanged:
-                                                  //                   (value) async {
-                                                  //                 AllEmployeesBloc.get(
-                                                  //                         context)
-                                                  //                     .add(
-                                                  //                   Addemail(
-                                                  //                     email:
-                                                  //                         value,
-                                                  //                   ),
-                                                  //                 );
-                                                  //               },
-                                                  //             ),
-                                                  //             FxBox.h24,
-                                                  //             FxBox.h24,
-                                                  //             SizedBox(
-                                                  //                 height:
-                                                  //                     100,
-                                                  //                 child:
-                                                  //                     // selectedImage!.bytes !=
-                                                  //                     //         null
-                                                  //                     //     ?
-                                                  //                     Image
-                                                  //                         .network(
-                                                  //                   "http://192.168.1.118:8000/${employee.imagePath}",
-                                                  //                   // Images.profileImage,
-                                                  //                   fit: BoxFit
-                                                  //                       .cover,
-                                                  //                 )
-                                                  //                 // : loadingIndicator() // Show circular progress indicator while loading
-                                                  //                 ),
-                                                  //           ],
-                                                  //         ),
-                                                  //       ),
-                                                  //       actions: [
-                                                  //         TextButton(
-                                                  //           onPressed: () {
-                                                  //             Navigator.of(
-                                                  //                     context)
-                                                  //                 .pop(); // Close the dialog
-                                                  //           },
-                                                  //           child: const Text(
-                                                  //               'Cancel'),
-                                                  //         ),
-                                                  //         ElevatedButton(
-                                                  //           onPressed: () {
-                                                  //             context
-                                                  //                 .read<
-                                                  //                     AllEmployeesBloc>()
-                                                  //                 .add(
-                                                  //                   UpdateEmployeeEvent(
-                                                  //                     id: employee.sId ??
-                                                  //                         '',
-                                                  //                     // userId:
-                                                  //                     //     state.userId,
-                                                  //                     // companyName:
-                                                  //                     //     state.companyName,
-                                                  //                     // email: state.email,
-                                                  //                     // personName: state.personName,
-                                                  //                     // phoneNum: state.phoneNum,
-                                                  //                   ),
-                                                  //                 );
-
-                                                  //             Navigator.of(
-                                                  //                     context)
-                                                  //                 .pop();
-                                                  //           },
-                                                  //           child: const Text(
-                                                  //               'Update'),
-                                                  //         ),
-                                                  //       ],
-                                                  //     );
-                                                  //     //     },
-                                                  //     //   ),
-                                                  //     // );
-                                                  //   },
-                                                  // );
                                                 },
                                               );
                                             },
@@ -973,7 +803,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(6.0),
                   child: Image.network(
-                    "http://192.168.1.118:8000/$imagesrc",
+                    "http://192.168.0.139:8000/$imagesrc",
                     // Images.profileImage,
                     fit: BoxFit.cover,
                   ),
@@ -1057,7 +887,6 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
             text: name,
             fontSize: 18,
             fontWeight: FontWeight.w700,
-            
           ),
           FxBox.h8,
           ConstText.lightText(

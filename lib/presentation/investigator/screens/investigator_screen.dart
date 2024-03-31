@@ -161,47 +161,51 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                     await FilePicker.platform
                                                         .pickFiles(
                                                   type: FileType.image,
-                                                );
-                                                if (result != null &&
-                                                    result.files.isNotEmpty) {
-                                                  // Use the selected image file
-                                                  final imageFile =
-                                                      result.files.first;
-                                                  // Load the image file as an image
-                                                  final image =
-                                                      imageFile.bytes != null
-                                                          ? Image.memory(
-                                                              imageFile.bytes!,
-                                                              fit: BoxFit.cover,
-                                                            )
-                                                          : loadingIndicator();
+                                                )
+                                                        .then((result) {
+                                                  if (result != null &&
+                                                      result.files.isNotEmpty) {
+                                                    // Use the selected image file
+                                                    final imageFile =
+                                                        result.files.first;
+                                                    // Load the image file as an image
+                                                    final image = imageFile
+                                                                .bytes !=
+                                                            null
+                                                        ? Image.memory(
+                                                            imageFile.bytes!,
+                                                            fit: BoxFit.cover,
+                                                          )
+                                                        : loadingIndicator();
 
-                                                  // Replace the image with the selected image
+                                                    // Replace the image with the selected image
 
-                                                  HomeBloc.get(context).add(
-                                                      ImageToSearchForEmployee(
-                                                          imageWidget: image));
+                                                    HomeBloc.get(context).add(
+                                                        ImageToSearchForEmployee(
+                                                            imageWidget:
+                                                                image));
 
-                                                  // String base64Image =
-                                                  //     base64Encode(
-                                                  //         imageFile.bytes!);
-                                                  HomeBloc.get(context).add(
-                                                      imageevent(
-                                                          imageFile:
-                                                              imageFile));
+                                                    // String base64Image =
+                                                    //     base64Encode(
+                                                    //         imageFile.bytes!);
+                                                    HomeBloc.get(context).add(
+                                                        imageevent(
+                                                            imageFile:
+                                                                imageFile));
 
-                                                  // HomeBloc.get(context).add(
-                                                  //   imageevent(
-                                                  //       imageFile: imageFile),
-                                                  // );
-                                                }
+                                                    // HomeBloc.get(context).add(
+                                                    //   imageevent(
+                                                    //       imageFile: imageFile),
+                                                    // );
+                                                  }
+                                                });
                                               },
                                               child: Stack(
                                                   fit: StackFit.expand,
                                                   children: [
                                                     state.imageWidget ??
                                                         Image.asset(
-                                                          'assets/images/image-viewer.png',
+                                                          'assets/images/imagepick.png',
                                                           width:
                                                               double.infinity,
                                                           height:
@@ -229,23 +233,16 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                           children: [
                                             GestureDetector(
                                               onTap: () async {
-                                                _pickVideo().then(
-                                                  
-                                                    (PlatformFile? videoFile) {
-                                                  if 
-                                                  (videoFile != null) {
-                                                    HomeBloc.get(context).add(
-                                                        videoevent(
-                                                            video: videoFile));
-                                                  }
-                                                });
-                                                // PlatformFile? videoFile =
-                                                //     await _pickVideo();
-                                                // if (videoFile != null) {
-                                                //   HomeBloc.get(context).add(
-                                                //       videoevent(
-                                                //           video: videoFile));
-                                                // }
+                                                await _pickVideo().then(
+                                                  (PlatformFile? videoFile) {
+                                                    if (videoFile != null) {
+                                                      HomeBloc.get(context).add(
+                                                          videoevent(
+                                                              video:
+                                                                  videoFile));
+                                                    }
+                                                  },
+                                                );
                                               }, // Call _pickVideo function when tapped
                                               child: Stack(
                                                 fit: StackFit.expand,
@@ -264,7 +261,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                     )
                                                   else
                                                     Image.asset(
-                                                      'assets/images/video-x-generic.png',
+                                                      'assets/images/iconVid.png',
                                                       width: double.infinity,
                                                       height: double.infinity,
                                                       fit: BoxFit.cover,
@@ -346,46 +343,51 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                     await FilePicker.platform
                                                         .pickFiles(
                                                   type: FileType.image,
-                                                );
-                                                if (result != null &&
-                                                    result.files.isNotEmpty) {
-                                                  // Use the selected image file
-                                                  final imageFile =
-                                                      result.files.first;
-                                                  // Load the image file as an image
-                                                  final image =
-                                                      imageFile.bytes != null
-                                                          ? Image.memory(
-                                                              imageFile.bytes!,
-                                                              fit: BoxFit.cover,
-                                                            )
-                                                          : loadingIndicator();
-                                                  // Replace the image with the selected image
+                                                )
+                                                        .then((result) {
+                                                  if (result != null &&
+                                                      result.files.isNotEmpty) {
+                                                    // Use the selected image file
+                                                    final imageFile =
+                                                        result.files.first;
+                                                    // Load the image file as an image
+                                                    final image = imageFile
+                                                                .bytes !=
+                                                            null
+                                                        ? Image.memory(
+                                                            imageFile.bytes!,
+                                                            fit: BoxFit.cover,
+                                                          )
+                                                        : loadingIndicator();
+                                                    // Replace the image with the selected image
 
-                                                  HomeBloc.get(context).add(
-                                                      ImageToSearchForEmployee(
-                                                          imageWidget: image));
+                                                    HomeBloc.get(context).add(
+                                                        ImageToSearchForEmployee(
+                                                            imageWidget:
+                                                                image));
 
-                                                  // String base64Image =
-                                                  //     base64Encode(
-                                                  //         imageFile.bytes!);
-                                                  HomeBloc.get(context).add(
-                                                      imageevent(
-                                                          imageFile:
-                                                              imageFile));
+                                                    // String base64Image =
+                                                    //     base64Encode(
+                                                    //         imageFile.bytes!);
+                                                    HomeBloc.get(context).add(
+                                                        imageevent(
+                                                            imageFile:
+                                                                imageFile));
 
-                                                  // HomeBloc.get(context).add(
-                                                  //   imageevent(
-                                                  //       imageFile: imageFile),
-                                                  // );
-                                                }
+                                                    // HomeBloc.get(context).add(
+                                                    //   imageevent(
+                                                    //       imageFile: imageFile),
+                                                    // );
+                                                  }
+                                                  return null;
+                                                });
                                               },
                                               child: Stack(
                                                   fit: StackFit.expand,
                                                   children: [
                                                     state.imageWidget ??
                                                         Image.asset(
-                                                          'assets/images/image-viewer.png',
+                                                          'assets/images/imagepick.png',
                                                           width:
                                                               double.infinity,
                                                           height:
@@ -528,20 +530,20 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<PlatformFile?> _pickVideo() async {
-    // setState(() {
-    //   _loading = true;
-    // });
+    // replace this later
+    setState(() {
+      _loading = true;
+    });
 
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.video,
     );
 
+    setState(() {
+      _loading = false;
+    });
 
-    // setState(() {
-    //   _loading = false;
-    // });
-
-    if (result != null ) {
+    if (result != null) {
       final videoFile = result.files.first;
       final Uint8List videoBytes = videoFile.bytes!;
       final blob = html.Blob([videoBytes]);

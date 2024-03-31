@@ -19,7 +19,7 @@ class _CameraScreenState extends State<CameraScreen> {
     return BlocBuilder<PhotoAppCubit, PhotoAppState>(builder: (context, state) {
       state as CameraState;
       return CameraPreview(
-        state.controller,
+        state.controller!,
         child: Scaffold(
             backgroundColor: Colors.transparent,
             body: Stack(

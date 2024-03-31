@@ -204,6 +204,9 @@ class StandardLayoutScreen extends StatelessWidget {
                                                           onPressed: () async {
                                                             Navigator.of(ctx)
                                                                 .pop();
+                                                            // Navigator.of(ctx)
+                                                            //     .pop();
+                                                            
                                                             await logout(
                                                                 context);
                                                           }),

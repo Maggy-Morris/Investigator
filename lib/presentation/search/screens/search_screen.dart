@@ -18,6 +18,7 @@ import 'package:Investigator/presentation/standard_layout/screens/standard_layou
 import '../../../authentication/authentication_repository.dart';
 import '../../../core/enum/enum.dart';
 import '../../../core/loader/loading_indicator.dart';
+// import '../../camera_controller/cubit/photo_app_cubit.dart';
 import '../../camera_controller/cubit/photo_app_cubit.dart';
 import '../../camera_controller/photo_app_logic.dart';
 import '../bloc/search_by_image_bloc.dart';
@@ -31,7 +32,7 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> with TickerProviderStateMixin {
-  // Widget? _image;
+  Widget? _image;
   PlatformFile? ima;
   String companyNameRepo =
       AuthenticationRepository.instance.currentUser.companyName ?? "";
@@ -44,11 +45,11 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
     tabController = TabController(length: 2, vsync: this);
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    tabController.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   tabController.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +61,6 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
           ),
           BlocProvider(
             create: (context) => PhotoAppCubit(),
-            child: const PhotoAppLogic(),
           ),
         ],
         // child: Scaffold(
@@ -145,55 +145,254 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                             .platform
                                                             .pickFiles(
                                                       type: FileType.image,
-                                                    );
-                                                    if (result != null &&
-                                                        result
-                                                            .files.isNotEmpty) {
-                                                      // Use the selected image file
-                                                      final imageFile =
-                                                          result.files.first;
-                                                      // Load the image file as an image
-                                                      final image = imageFile
-                                                                  .bytes !=
-                                                              null
-                                                          ? Image.memory(
-                                                              imageFile.bytes!,
-                                                              fit: BoxFit.cover,
-                                                            )
-                                                          : loadingIndicator();
+                                                    )
+                                                            .then((result) {
+                                                      if (result != null &&
+                                                          result.files
+                                                              .isNotEmpty) {
+                                                        final imageFile =
+                                                            result.files.first;
+                                                        final image = imageFile
+                                                                    .bytes !=
+                                                                null
+                                                            ? Image.memory(
+                                                                imageFile
+                                                                    .bytes!,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              )
+                                                            : loadingIndicator();
 
-                                                      SearchByImageBloc.get(
-                                                              context)
-                                                          .add(ImageToSearchForEmployee(
+                                                        SearchByImageBloc.get(
+                                                                context)
+                                                            .add(
+                                                          ImageToSearchForEmployee(
                                                               imageWidget:
-                                                                  image)); // Replace the image with the selected image
-                                                      // setState(() {
-                                                      //   _image = image;
-                                                      // });
+                                                                  image),
+                                                        );
 
-                                                      String base64Image =
-                                                          base64Encode(
-                                                              imageFile.bytes!);
+                                                        setState(() {
+                                                          _image = image;
+                                                        });
+                                                        String base64Image =
+                                                            base64Encode(
+                                                                imageFile
+                                                                    .bytes!);
 
-                                                      SearchByImageBloc.get(
-                                                              context)
-                                                          .add(
-                                                        SearchForEmployee(
-                                                          companyName:
-                                                              companyNameRepo,
-                                                          image: base64Image,
-                                                        ),
-                                                      );
-                                                    }
+                                                        SearchByImageBloc.get(
+                                                                context)
+                                                            .add(
+                                                          SearchForEmployee(
+                                                            companyName:
+                                                                companyNameRepo,
+                                                            image: base64Image,
+                                                          ),
+                                                        );
+                                                      }
+                                                      return null;
+                                                    });
+                                                  },
+                                                  child:
+                                                      //  state.imageWidget
+                                                      _image ??
+                                                          SizedBox(
+                                                            width: 400,
+                                                            height: 400,
+                                                            child: Image.asset(
+                                                              'assets/images/person-search.png',
+                                                              // width: double.infinity,
+                                                              // height: 200,
+                                                              fit: BoxFit.cover,
+                                                            ),
+                                                          ),
+                                                ),
+                                                Positioned(
+                                                  bottom: 0,
+                                                  left: 0,
+                                                  right: 0,
+                                                  child: Container(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                      vertical: 8,
+                                                      horizontal: 16,
+                                                    ),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .only(
+                                                        bottomLeft:
+                                                            Radius.circular(12),
+                                                        bottomRight:
+                                                            Radius.circular(12),
+                                                      ),
+                                                      color: Colors.black
+                                                          .withOpacity(0.6),
+                                                    ),
+                                                    child: Text(
+                                                      // Use state data to show appropriate text
+                                                      state.submission ==
+                                                              Submission.loading
+                                                          ? 'Loading...'
+                                                          : state.submission ==
+                                                                  Submission
+                                                                      .success
+                                                              ? '${state.result}'
+                                                              : state.submission ==
+                                                                      Submission
+                                                                          .noDataFound
+                                                                  ? 'Not in the Database'
+                                                                  : '',
+                                                      style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                CustomPaint(
+                                                  painter: RectanglePainter(
+                                                    //Remove map(box)
+                                                    (state.boxes ?? [])
+                                                        .map((box) => (box))
+                                                        .toList(),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+
+                                    //Confirm Button to send the image
+                                    FxBox.h24,
+                                    // BlocBuilder<SearchByImageBloc,
+                                    //     SearchByImageState>(
+                                    //   builder: (context, state) {
+                                    //     return
+
+                                    state.submission == Submission.loading
+                                        ? loadingIndicator()
+                                        : Center(
+                                            child: ElevatedButton.icon(
+                                              onPressed: () {
+                                                if (state.imageWidget == null) {
+                                                  FxToast.showErrorToast(
+                                                    context: context,
+                                                    message:
+                                                        "Pick your picture",
+                                                  );
+                                                  return;
+                                                }
+
+                                                SearchByImageBloc.get(context)
+                                                    .add(
+                                                  const SearchForEmployeeEvent(),
+                                                );
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                backgroundColor:
+                                                    AppColors.green,
+                                              ),
+                                              label: const Text(
+                                                "Confirm",
+                                                style: TextStyle(
+                                                    color: AppColors.white),
+                                              ),
+                                              icon: const Icon(
+                                                Icons.check_circle_outline,
+                                                color: AppColors.white,
+                                              ),
+                                            ),
+                                          ),
+                                    //   },
+                                    // ),
+                                  ],
+                                ),
+                              if (!Responsive.isWeb(context))
+                                Column(
+                                  children: [
+                                    // Here to search for an Employee in the database
+                                    BlocBuilder<SearchByImageBloc,
+                                        SearchByImageState>(
+                                      builder: (context, state) {
+                                        return Card(
+                                          elevation: 4,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            child: Stack(
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () async {
+                                                    FilePickerResult? result =
+                                                        await FilePicker
+                                                            .platform
+                                                            .pickFiles(
+                                                      type: FileType.image,
+                                                    )
+                                                            .then((result) {
+                                                      if (result != null &&
+                                                          result.files
+                                                              .isNotEmpty) {
+                                                        final imageFile =
+                                                            result.files.first;
+                                                        final image = imageFile
+                                                                    .bytes !=
+                                                                null
+                                                            ? Image.memory(
+                                                                imageFile
+                                                                    .bytes!,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              )
+                                                            : loadingIndicator();
+
+                                                        SearchByImageBloc.get(
+                                                                context)
+                                                            .add(
+                                                          ImageToSearchForEmployee(
+                                                              imageWidget:
+                                                                  image),
+                                                        );
+
+                                                        String base64Image =
+                                                            base64Encode(
+                                                                imageFile
+                                                                    .bytes!);
+
+                                                        SearchByImageBloc.get(
+                                                                context)
+                                                            .add(
+                                                          SearchForEmployee(
+                                                            companyName:
+                                                                companyNameRepo,
+                                                            image: base64Image,
+                                                          ),
+                                                        );
+                                                      }
+                                                      return null;
+                                                    });
                                                   },
                                                   child: state.imageWidget ??
                                                       Image.asset(
-                                                        'assets/images/image-viewer.png',
+                                                        'assets/images/person-search.png',
                                                         // width: double.infinity,
                                                         // height: 200,
                                                         fit: BoxFit.cover,
                                                       ),
                                                 ),
+
                                                 Positioned(
                                                   bottom: 0,
                                                   left: 0,
@@ -312,139 +511,90 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                       },
                                     ),
 
-                                    //Confirm Button to send the image
-                                    FxBox.h24,
-                                    // BlocBuilder<SearchByImageBloc,
-                                    //     SearchByImageState>(
-                                    //   builder: (context, state) {
-                                    //     return
+                                    // Card(
+                                    //   elevation: 4,
+                                    //   shape: RoundedRectangleBorder(
+                                    //     borderRadius: BorderRadius.circular(12),
+                                    //   ),
+                                    //   child: ClipRRect(
+                                    //     borderRadius: BorderRadius.circular(12),
+                                    //     child: Stack(
+                                    //       children: [
+                                    //         GestureDetector(
+                                    //           onTap: () async {
+                                    //             FilePickerResult? result =
+                                    //                 await FilePicker.platform
+                                    //                     .pickFiles(
+                                    //               type: FileType.image,
+                                    //             )
+                                    //                     .then((result) {
+                                    //               if (result != null &&
+                                    //                   result.files.isNotEmpty) {
+                                    //                 // Use the selected image file
+                                    //                 final imageFile =
+                                    //                     result.files.first;
+                                    //                 // Load the image file as an image
+                                    //                 final image = imageFile
+                                    //                             .bytes !=
+                                    //                         null
+                                    //                     ? Image.memory(
+                                    //                         imageFile.bytes!,
+                                    //                         fit: BoxFit.cover,
+                                    //                       )
+                                    //                     : loadingIndicator(); //
 
-                                    state.submission == Submission.loading
-                                        ? loadingIndicator()
-                                        : Center(
-                                            child: ElevatedButton.icon(
-                                              onPressed: () {
-                                                if (state.imageWidget == null) {
-                                                  FxToast.showErrorToast(
-                                                    context: context,
-                                                    message:
-                                                        "Pick your picture",
-                                                  );
-                                                  return;
-                                                }
-
-                                                SearchByImageBloc.get(context)
-                                                    .add(
-                                                  const SearchForEmployeeEvent(),
-                                                );
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                                backgroundColor:
-                                                    AppColors.green,
-                                              ),
-                                              label: const Text(
-                                                "Confirm",
-                                                style: TextStyle(
-                                                    color: AppColors.white),
-                                              ),
-                                              icon: const Icon(
-                                                Icons.check_circle_outline,
-                                                color: AppColors.white,
-                                              ),
-                                            ),
-                                          ),
-                                    //   },
+                                    //                 SearchByImageBloc.get(
+                                    //                         context)
+                                    //                     .add(
+                                    //                         ImageToSearchForEmployee(
+                                    //                             imageWidget:
+                                    //                                 image));
+                                    //               }
+                                    //               return;
+                                    //             });
+                                    //           },
+                                    //           child: state.imageWidget ??
+                                    //               Image.asset(
+                                    //                 'assets/images/person-search.png',
+                                    //                 // width: double.infinity,
+                                    //                 // height: 200,
+                                    //                 fit: BoxFit.cover,
+                                    //               ),
+                                    //         ),
+                                    //         Positioned(
+                                    //           bottom: 0,
+                                    //           left: 0,
+                                    //           right: 0,
+                                    //           child: Container(
+                                    //             padding:
+                                    //                 const EdgeInsets.symmetric(
+                                    //                     vertical: 8,
+                                    //                     horizontal: 16),
+                                    //             decoration: BoxDecoration(
+                                    //               borderRadius:
+                                    //                   const BorderRadius.only(
+                                    //                 bottomLeft:
+                                    //                     Radius.circular(12),
+                                    //                 bottomRight:
+                                    //                     Radius.circular(12),
+                                    //               ),
+                                    //               color: Colors.black
+                                    //                   .withOpacity(0.6),
+                                    //             ),
+                                    //             child: const Text(
+                                    //               'aaaaaaaaaaaaaa',
+                                    //               style: TextStyle(
+                                    //                 color: Colors.white,
+                                    //                 fontSize: 18,
+                                    //                 fontWeight: FontWeight.bold,
+                                    //               ),
+                                    //             ),
+                                    //           ),
+                                    //         ),
+                                    //       ],
+                                    //     ),
+                                    //   ),
                                     // ),
-                                  ],
-                                ),
-                              if (!Responsive.isWeb(context))
-                                Column(
-                                  children: [
-                                    Card(
-                                      elevation: 4,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(12),
-                                        child: Stack(
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () async {
-                                                FilePickerResult? result =
-                                                    await FilePicker.platform
-                                                        .pickFiles(
-                                                  type: FileType.image,
-                                                );
-                                                if (result != null &&
-                                                    result.files.isNotEmpty) {
-                                                  // Use the selected image file
-                                                  final imageFile =
-                                                      result.files.first;
-                                                  // Load the image file as an image
-                                                  final image = imageFile
-                                                              .bytes !=
-                                                          null
-                                                      ? Image.memory(
-                                                          imageFile.bytes!,
-                                                          fit: BoxFit.cover,
-                                                        )
-                                                      : loadingIndicator(); //
-
-                                                  SearchByImageBloc.get(context)
-                                                      .add(
-                                                          ImageToSearchForEmployee(
-                                                              imageWidget:
-                                                                  image));
-                                                  
-                                                }
-                                              },
-                                              child: state.imageWidget ??
-                                                  Image.asset(
-                                                    'assets/images/image-viewer.png',
-                                                    // width: double.infinity,
-                                                    // height: 200,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                            ),
-                                            Positioned(
-                                              bottom: 0,
-                                              left: 0,
-                                              right: 0,
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 8,
-                                                        horizontal: 16),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      const BorderRadius.only(
-                                                    bottomLeft:
-                                                        Radius.circular(12),
-                                                    bottomRight:
-                                                        Radius.circular(12),
-                                                  ),
-                                                  color: Colors.black
-                                                      .withOpacity(0.6),
-                                                ),
-                                                child: const Text(
-                                                  '',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
 
                                     //Confirm Button to send the image
                                     FxBox.h24,
@@ -464,9 +614,6 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                     .add(
                                                   const SearchForEmployeeEvent(),
                                                 );
-
-                                                // HomeBloc.get(context).add(
-                                                //     const GetEmployeeNamesEvent());
                                               },
                                               style: ElevatedButton.styleFrom(
                                                 shape: RoundedRectangleBorder(
@@ -499,6 +646,131 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                   ),
 
                   /////////////////////////////////////////////////////////////////////////////////////////////
+                  ///Live Stream Video
+                  // BlocBuilder<PhotoAppBloc, PhotoAppState>(
+                  //   builder: (context, state) {
+                  //     if (state is SelectProfilePhotoState) {
+                  //       return Column(
+                  //         children: [
+                  //           SizedBox(height: 10),
+                  //           Center(
+                  //             child: Stack(
+                  //               children: [
+                  //                 getAvatar(state.file),
+                  //                 Positioned(
+                  //                   bottom: -10,
+                  //                   left: 80,
+                  //                   child: IconButton(
+                  //                     onPressed: () {
+                  //                       BlocProvider.of<PhotoAppBloc>(context)
+                  //                           .add(OpenCameraEvent());
+                  //                     },
+                  //                     icon: Icon(Icons.photo_camera_rounded),
+                  //                   ),
+                  //                 ),
+                  //               ],
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       );
+                  //     } else if (state is CameraState) {
+                  //       return CameraPreview(
+                  //         state.controller!,
+                  //         child: Stack(
+                  //           fit: StackFit.expand,
+                  //           alignment: Alignment.bottomCenter,
+                  //           children: [
+                  //             Row(
+                  //               crossAxisAlignment: CrossAxisAlignment.end,
+                  //               mainAxisAlignment: MainAxisAlignment.center,
+                  //               children: [
+                  //                 GestureDetector(
+                  //                   onTap: () {
+                  //                     BlocProvider.of<PhotoAppBloc>(context)
+                  //                         .add(StartStreamEvent());
+                  //                   },
+                  //                   child: Container(
+                  //                     height: 100,
+                  //                     width: 70,
+                  //                     decoration: BoxDecoration(
+                  //                       shape: BoxShape.circle,
+                  //                       color: Colors.white,
+                  //                     ),
+                  //                     child: Stack(
+                  //                       children: [
+                  //                         // You can add child widgets if needed
+                  //                       ],
+                  //                     ),
+                  //                   ),
+                  //                 ),
+                  //                 SizedBox(width: 10),
+                  //                 IconButton(
+                  //                   color: Colors.white,
+                  //                   padding: EdgeInsets.only(bottom: 25),
+                  //                   onPressed: () {
+                  //                     BlocProvider.of<PhotoAppBloc>(context)
+                  //                         .add(SwitchCameraOptions(
+                  //                             isBackCam: !_isBackCamera));
+                  //                   },
+                  //                   icon: Icon(Icons.cameraswitch),
+                  //                 )
+                  //               ],
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       );
+                  //     } else if (state is PreviewState) {
+                  //       return Material(
+                  //         child: DecoratedBox(
+                  //           decoration: BoxDecoration(
+                  //             image: DecorationImage(
+                  //               fit: BoxFit.cover,
+                  //               image: FileImage(state.file!),
+                  //             ),
+                  //           ),
+                  //           child: Row(
+                  //             crossAxisAlignment: CrossAxisAlignment.end,
+                  //             mainAxisAlignment: MainAxisAlignment.center,
+                  //             children: [
+                  //               InkWell(
+                  //                 onTap: () {
+                  //                   BlocProvider.of<PhotoAppBloc>(context)
+                  //                       .add(OpenCameraEvent());
+                  //                 },
+                  //                 child: Container(
+                  //                   height: 40,
+                  //                   width: 100,
+                  //                   color: Colors.white38,
+                  //                   child: Icon(Icons.cancel_outlined),
+                  //                 ),
+                  //               ),
+                  //               SizedBox(width: 20),
+                  //               InkWell(
+                  //                 onTap: () {
+                  //                   BlocProvider.of<PhotoAppBloc>(context)
+                  //                       .add(SelectPhoto(file: state.file!));
+                  //                 },
+                  //                 child: Container(
+                  //                   height: 40,
+                  //                   width: 60,
+                  //                   color: Colors.white38,
+                  //                   child: Icon(Icons.check_outlined),
+                  //                 ),
+                  //               ),
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       );
+                  //     } else {
+                  //       return Scaffold(
+                  //         body: Center(
+                  //           child: Text('Nothing to show'),
+                  //         ),
+                  //       );
+                  //     }
+                  //   },
+                  // ),
+
                   BlocBuilder<PhotoAppCubit, PhotoAppState>(
                     builder: (context, state) {
                       if (state is SelectProfilePhotoState) {
@@ -516,12 +788,16 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                     left: 80,
                                     child: IconButton(
                                       onPressed: () {
+                                        // PhotoAppBloc.get(context).add(
+                                        //   OpenCameraEvent(),
+                                        // );
                                         context
                                             .read<PhotoAppCubit>()
                                             .openCamera();
                                       },
                                       icon: const Icon(
-                                          Icons.photo_camera_rounded),
+                                        Icons.photo_camera_rounded,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -532,7 +808,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                       } else if (state is CameraState) {
                         // Handle CameraState here, if needed
                         return CameraPreview(
-                          state.controller,
+                          state.controller!,
                           child:
                               //  Scaffold(
                               //     backgroundColor: Colors.transparent,
@@ -548,6 +824,9 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                   // Inside GestureDetector
                                   GestureDetector(
                                     onTap: () {
+                                      // PhotoAppBloc.get(context).add(
+                                      //   StartStreamEvent(),
+                                      // );
                                       context
                                           .read<PhotoAppCubit>()
                                           .startStream();
@@ -614,6 +893,10 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                               children: [
                                 InkWell(
                                   onTap: () {
+                                    // PhotoAppBloc.get(context).add(
+                                    //   OpenCameraEvent(),
+                                    // );
+
                                     context.read<PhotoAppCubit>().openCamera();
                                   },
                                   child: Container(
@@ -628,9 +911,9 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                 ),
                                 InkWell(
                                   onTap: () {
-                                    context
-                                        .read<PhotoAppCubit>()
-                                        .selectPhoto(file: state.file!);
+                                    // context
+                                    //     .read<PhotoAppCubit>()
+                                    //     .selectPhoto(file: state.file!);
                                   },
                                   child: Container(
                                     height: 40,
@@ -652,7 +935,8 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                       }
                     },
                   ),
-                  ////////////////////////////////////////////////////////////////////////////////////////////                      // Icon(YaruIcons.keyboard),
+
+                  // ////////////////////////////////////////////////////////////////////////////////////////////                      // Icon(YaruIcons.keyboard),
                 ],
               ),
             ),
@@ -666,20 +950,47 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  CircleAvatar getAvatar(File? displayImage) {
-    if (displayImage == null) {
-      return const CircleAvatar(
-        backgroundColor: Colors.transparent,
-        radius: 100,
-        backgroundImage: AssetImage('assets/images/camera-app.png'),
-      );
-    } else {
-      return CircleAvatar(
-        radius: 100,
-        backgroundImage: FileImage(displayImage),
-      );
-    }
+  Widget getAvatar(File? displayImage) {
+    return Container(
+      width: 300,
+      height: 300,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: Colors.grey[300]!, // Adjust border color as needed
+          width: 5, // Adjust border width as needed
+        ),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(
+            150), // Half of width/height for perfect circle
+        child: displayImage == null
+            ? Image.asset(
+                'assets/images/lens-removebg-preview.png',
+                fit: BoxFit.cover,
+              )
+            : Image.file(
+                displayImage,
+                fit: BoxFit.cover,
+              ),
+      ),
+    );
   }
+
+  // CircleAvatar getAvatar(File? displayImage) {
+  //   if (displayImage == null) {
+  //     return const CircleAvatar(
+  //       backgroundColor: Colors.transparent,
+  //       radius: 100,
+  //       backgroundImage: AssetImage('assets/images/camera-app.png'),
+  //     );
+  //   } else {
+  //     return CircleAvatar(
+  //       radius: 100,
+  //       backgroundImage: FileImage(displayImage),
+  //     );
+  //   }
+  // }
 
 ////////
 
