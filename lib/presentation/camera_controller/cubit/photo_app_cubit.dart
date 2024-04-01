@@ -82,7 +82,7 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
         // Listen for response from the server
         _channel.stream.listen((dynamic response) {
           if (response.isNotEmpty) {
-            debugPrint("Response from serverrrrrrrrrrr: $response");
+            debugPrint("Response from server: $response");
 
             SearchByImageModel callBackList = SearchByImageModel.fromJson(
                 jsonDecode(response) as Map<String, dynamic>);

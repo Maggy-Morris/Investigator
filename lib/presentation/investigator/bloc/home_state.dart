@@ -12,7 +12,7 @@ class HomeState extends Equatable {
   final String companyName;
   String personName;
   final String personId;
-  final List<double>? data;
+  final List<String>? data;
 
   HomeState({
         this.imageWidget,
@@ -39,7 +39,7 @@ class HomeState extends Equatable {
     String? personName,
     String? personId,
     Submission? submission,
-    List<double>? data,
+    List<String>? data,
   }) {
     return HomeState(
             imageWidget: imageWidget ?? this.imageWidget,

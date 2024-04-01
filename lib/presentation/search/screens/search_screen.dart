@@ -213,7 +213,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                   // Use state data to show appropriate text
                                                   state.submission ==
                                                           Submission.loading
-                                                      ? 'Loading...'
+                                                      ? 'Searching...'
                                                       : state.submission ==
                                                               Submission.success
                                                           ? '${state.result}'
@@ -232,7 +232,6 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                             ),
                                             CustomPaint(
                                               painter: RectanglePainter(
-                                                //Remove map(box)
                                                 (state.boxes ?? [])
                                                     .map((box) => (box))
                                                     .toList(),
@@ -365,7 +364,6 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                         fit: BoxFit.cover,
                                                       ),
                                                 ),
-
                                                 Positioned(
                                                   bottom: 0,
                                                   left: 0,
@@ -392,7 +390,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                       // Use state data to show appropriate text
                                                       state.submission ==
                                                               Submission.loading
-                                                          ? 'Loading...'
+                                                          ? 'Searching...'
                                                           : state.submission ==
                                                                   Submission
                                                                       .success
@@ -415,7 +413,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                   // Use state data to show appropriate text
                                                   state.submission ==
                                                           Submission.loading
-                                                      ? 'Loading...'
+                                                      ? 'Searching...'
                                                       : state.submission ==
                                                               Submission.success
                                                           ? '${state.boxes}'
@@ -430,48 +428,8 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
-                                                // CustomPaint(
-                                                //   painter: RectanglePainter(
-                                                //     [
-                                                //       [100, 100, 200, 100],
-                                                //       [200, 100, 200, 200],
-                                                //       [200, 200, 100, 200],
-                                                //       [100, 200, 100, 100],
-                                                //     ],
-                                                //   ),
-                                                // ),
-
-                                                // CustomPaint(
-                                                //   painter: RectanglePainter(
-                                                //     [
-                                                //       // First set of coordinates
-                                                //       [100, 100, 200, 200],
-                                                //       [150, 150, 250, 250],
-
-                                                //       // Second set of coordinates
-                                                //       // [300, 100, 400, 200],
-                                                //       // Third set of coordinates
-                                                //       // [200, 300, 300, 400],
-                                                //     ],
-                                                //   ),
-                                                // ),
-
-                                                // CustomPaint(
-                                                //   painter: RectanglePainter(
-                                                //     [
-                                                //       [
-                                                //         531.4962158203125,
-                                                //         116.31916046142578,
-                                                //         719.7256469726562,
-                                                //         366.0917434692383,
-                                                //       ],
-                                                //     ],
-                                                //   ),
-                                                // ),
-
                                                 CustomPaint(
                                                   painter: RectanglePainter(
-                                                    //Remove map(box)
                                                     (state.boxes ?? [])
                                                         .map((box) => (box))
                                                         .toList(),
@@ -541,9 +499,9 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                       if (state is SelectProfilePhotoState) {
                         return Column(
                           children: [
-                            const SizedBox(
-                              height: 10,
-                            ),
+                            // const SizedBox(
+                            //   height: 10,
+                            // ),
                             Center(
                               child: Stack(
                                 children: [
@@ -572,135 +530,146 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                         );
                       } else if (state is CameraState) {
                         // Handle CameraState here, if needed
-                        return CameraPreview(
-                          state.controller,
-                          child:
-                              //  Scaffold(
-                              //     backgroundColor: Colors.transparent,
-                              //     body:
-                              Stack(
-                            fit: StackFit.expand,
-                            alignment: Alignment.bottomCenter,
-                            children: [
-                              
-                              CustomPaint(
-                                painter: RectanglePainter(
-                                  //Remove map(box)
-                                  (state.boxes ?? [])
-                                      .map((box) => (box))
-                                      .toList(),
-                                ),
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisAlignment: MainAxisAlignment.center,
+                        return SizedBox(
+                          width: 500,
+                          height: 500,
+                          child: Stack(children: [
+                            CameraPreview(
+                              state.controller,
+                              child: Stack(
+                                fit: StackFit.expand,
+                                alignment: Alignment.bottomCenter,
                                 children: [
-                                  // Inside GestureDetector
-                                  GestureDetector(
-                                    onTap: () {
-                                      // PhotoAppBloc.get(context).add(
-                                      //   StartStreamEvent(),
-                                      // );
-                                      context
-                                          .read<PhotoAppCubit>()
-                                          .startStream();
-                                    },
-                                    child: Container(
-                                      height: 100,
-                                      width: 70,
-                                      decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.white,
-                                      ),
-                                      child: Stack(
-                                        children: [
-                                          Align(
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              context
-                                                      .watch<PhotoAppCubit>()
-                                                      .isStreaming
-                                                  ? 'Stop Stream'
-                                                  : 'Start Stream',
-                                              style: const TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 12,
-                                              ),
-                                            ),
+                                  // CustomPaint(
+                                  //   painter: RectanglePainter(
+                                  //     //Remove map(box)
+                                  //     (state.boxes ?? [])
+                                  //         .map((box) => (box))
+                                  //         .toList(),
+                                  //   ),
+                                  // ),
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      // Inside GestureDetector
+                                      GestureDetector(
+                                        onTap: () {
+                                          context
+                                              .read<PhotoAppCubit>()
+                                              .startStream();
+                                        },
+                                        child: Container(
+                                          height: 100,
+                                          width: 70,
+                                          decoration: const BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.white,
                                           ),
-                                        ],
+                                          child: Stack(
+                                            children: [
+                                              Align(
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  context
+                                                          .watch<
+                                                              PhotoAppCubit>()
+                                                          .isStreaming
+                                                      ? 'Stop Stream'
+                                                      : 'Start Stream',
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
 
-                                  const SizedBox(
-                                    width: 10,
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      IconButton(
+                                          color: Colors.white,
+                                          padding:
+                                              const EdgeInsets.only(bottom: 25),
+                                          onPressed: () {
+                                            setState(() {
+                                              _isBackCamera = !_isBackCamera;
+                                            });
+                                          },
+                                          icon: const Icon(Icons.cameraswitch))
+                                    ],
                                   ),
-                                  IconButton(
-                                      color: Colors.white,
-                                      padding:
-                                          const EdgeInsets.only(bottom: 25),
-                                      onPressed: () {
-                                        setState(() {
-                                          _isBackCamera = !_isBackCamera;
-                                        });
-                                      },
-                                      icon: const Icon(Icons.cameraswitch))
                                 ],
                               ),
-                            ],
-                          ),
 
-                          // ),
-                        );
-                        // Placeholder widget
-                      } else if (state is PreviewState) {
-                        return Material(
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: FileImage(state.file!))),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    // PhotoAppBloc.get(context).add(
-                                    //   OpenCameraEvent(),
-                                    // );
-
-                                    context.read<PhotoAppCubit>().openCamera();
-                                  },
-                                  child: Container(
-                                    height: 40,
-                                    width: 100,
-                                    color: Colors.white38,
-                                    child: const Icon(Icons.cancel_outlined),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 20,
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    // context
-                                    //     .read<PhotoAppCubit>()
-                                    //     .selectPhoto(file: state.file!);
-                                  },
-                                  child: Container(
-                                    height: 40,
-                                    width: 60,
-                                    color: Colors.white38,
-                                    child: const Icon(Icons.check_outlined),
-                                  ),
-                                ),
-                              ],
+                              // ),
                             ),
-                          ),
+                            CustomPaint(
+                              painter: RectanglePainter(
+                                (state.boxes ?? [])
+                                    .map((box) => (box))
+                                    .toList(),
+                              ),
+                            ),
+                          ]),
                         );
-                      } else {
+
+                        // Placeholder widget
+                      }
+
+                      // else if (state is PreviewState) {
+                      //   return Material(
+                      //     child: DecoratedBox(
+                      //       decoration: BoxDecoration(
+                      //           image: DecorationImage(
+                      //               fit: BoxFit.cover,
+                      //               image: FileImage(state.file!))),
+                      //       child: Row(
+                      //         crossAxisAlignment: CrossAxisAlignment.end,
+                      //         mainAxisAlignment: MainAxisAlignment.center,
+                      //         children: [
+                      //           InkWell(
+                      //             onTap: () {
+                      //               // PhotoAppBloc.get(context).add(
+                      //               //   OpenCameraEvent(),
+                      //               // );
+
+                      //               context.read<PhotoAppCubit>().openCamera();
+                      //             },
+                      //             child: Container(
+                      //               height: 40,
+                      //               width: 100,
+                      //               color: Colors.white38,
+                      //               child: const Icon(Icons.cancel_outlined),
+                      //             ),
+                      //           ),
+                      //           const SizedBox(
+                      //             width: 20,
+                      //           ),
+                      //           InkWell(
+                      //             onTap: () {
+                      //               // context
+                      //               //     .read<PhotoAppCubit>()
+                      //               //     .selectPhoto(file: state.file!);
+                      //             },
+                      //             child: Container(
+                      //               height: 40,
+                      //               width: 60,
+                      //               color: Colors.white38,
+                      //               child: const Icon(Icons.check_outlined),
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //   );
+
+                      // }
+                      else {
                         return const Scaffold(
                           body: Center(
                             child: Text('Nothing to show'),

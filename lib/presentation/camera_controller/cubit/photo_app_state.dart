@@ -148,15 +148,15 @@ class CameraState extends PhotoAppState {
 //   List<Object?> get props => [result,boxes,controller, camera, isLoading, errorMessage, hasError];
 // }
 
-class PreviewState extends PhotoAppState {
-  final File? file;
+// class PreviewState extends PhotoAppState {
+//   final File? file;
 
-  const PreviewState(
-      {required this.file,
-      super.isLoading,
-      super.errorMessage,
-      super.hasError});
+//   const PreviewState(
+//       {required this.file,
+//       super.isLoading,
+//       super.errorMessage,
+//       super.hasError});
 
-  @override
-  List<Object?> get props => [file, isLoading, errorMessage, hasError];
-}
+//   @override
+//   List<Object?> get props => [file, isLoading, errorMessage, hasError];
+// }

@@ -64,7 +64,7 @@ class LoginForm extends StatelessWidget {
                                 decoration: BoxDecoration(
                                   color: AppColors.blueB.withOpacity(0.9),
                                   border: Border.all(
-                                    color: AppColors.blueB.withOpacity(0.9),
+                                    color: AppColors.white.withOpacity(0.9),
                                   ),
                                   borderRadius: BorderRadius.circular(24),
                                 ),
@@ -87,33 +87,33 @@ class LoginForm extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Responsive.isWeb(context)
-                          ? Expanded(
-                              child: Column(
-                                children: [
-                                  Container(
-                                    constraints:
-                                        const BoxConstraints(maxHeight: 400),
-                                    child: Image.asset(
-                                      "assets/images/Detective.png",
-                                    ),
-                                    //     SvgPicture.asset(
-                                    //   "assets/images/A.svg",
-                                    // ),
-                                  ),
-                                  FxBox.h16,
-                                  // Center(
-                                  //   child: CustomText(
-                                  //     title: languageModel.authentication.signInHeader,
-                                  //     fontSize: 15,
-                                  //     fontWeight: FontWeight.w700,
-                                  //     textColor: ColorConst.lightFontColor,
-                                  //   ),
-                                  // ),
-                                ],
-                              ),
-                            )
-                          : Container(),
+                      // Responsive.isWeb(context)
+                      //     ? Expanded(
+                      //         child: Column(
+                      //           children: [
+                      //             // Container(
+                      //             //   constraints:
+                      //             //       const BoxConstraints(maxHeight: 400),
+                      //             //   child: Image.asset(
+                      //             //     "assets/images/Detective.png",
+                      //             //   ),
+                      //             //   //     SvgPicture.asset(
+                      //             //   //   "assets/images/A.svg",
+                      //             //   // ),
+                      //             // ),
+                      //             // FxBox.h16,
+                      //             // Center(
+                      //             //   child: CustomText(
+                      //             //     title: languageModel.authentication.signInHeader,
+                      //             //     fontSize: 15,
+                      //             //     fontWeight: FontWeight.w700,
+                      //             //     textColor: ColorConst.lightFontColor,
+                      //             //   ),
+                      //             // ),
+                      //           ],
+                      //         ),
+                      //       )
+                      //     : Container(),
                     ],
                   ),
                 ],

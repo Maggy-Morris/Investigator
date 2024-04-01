@@ -18,7 +18,6 @@ import 'dart:html' as html;
 
 import '../../../authentication/authentication_repository.dart';
 import '../../camera_controller/cubit/photo_app_cubit.dart';
-import '../../camera_controller/photo_app_logic.dart';
 import '../bloc/home_bloc.dart';
 
 class AddCameraScreen extends StatefulWidget {
@@ -30,7 +29,7 @@ class AddCameraScreen extends StatefulWidget {
 
 class _AddCameraScreenState extends State<AddCameraScreen> {
   TextEditingController nameController = TextEditingController();
-  // Widget? _image;
+  Widget? _image;
   CameraController? controller;
   XFile? imageFile;
 
@@ -59,7 +58,6 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
           ),
           BlocProvider(
             create: (context) => PhotoAppCubit(),
-            // child: const PhotoAppLogic(),
           ),
         ],
         child: BlocListener<HomeBloc, HomeState>(
@@ -96,13 +94,12 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                         if (Responsive.isWeb(context))
                           Column(
                             children: [
-                              // loadingIndicator(),
                               Text(
                                 // Use state data to show appropriate text
                                 state.submission == Submission.loading
                                     ? 'Searching...'
                                     : state.submission == Submission.success
-                                        ? 'Data: ${state.data!.join(", ")}' // Join the list elements with a comma
+                                        ? "Data:${state.data}" // Join the list elements with a comma
                                         : state.submission ==
                                                 Submission.noDataFound
                                             ? "This person didn't appear in the video "
@@ -113,6 +110,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
+
                               // Row(
                               //   children: [
                               //     Expanded(
@@ -179,31 +177,26 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                         : loadingIndicator();
 
                                                     // Replace the image with the selected image
-
+                                                    setState(() {
+                                                      _image = image;
+                                                    });
                                                     HomeBloc.get(context).add(
                                                         ImageToSearchForEmployee(
                                                             imageWidget:
                                                                 image));
 
-                                                    // String base64Image =
-                                                    //     base64Encode(
-                                                    //         imageFile.bytes!);
                                                     HomeBloc.get(context).add(
                                                         imageevent(
                                                             imageFile:
                                                                 imageFile));
-
-                                                    // HomeBloc.get(context).add(
-                                                    //   imageevent(
-                                                    //       imageFile: imageFile),
-                                                    // );
                                                   }
                                                 });
                                               },
                                               child: Stack(
                                                   fit: StackFit.expand,
                                                   children: [
-                                                    state.imageWidget ??
+                                                    // state.imageWidget
+                                                    _image ??
                                                         Image.asset(
                                                           'assets/images/imagepick.png',
                                                           width:
@@ -341,12 +334,12 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                           children: [
                                             GestureDetector(
                                               onTap: () async {
-                                                FilePickerResult? result =
-                                                    await FilePicker.platform
-                                                        .pickFiles(
+                                                // FilePickerResult? result =
+                                                await FilePicker.platform
+                                                    .pickFiles(
                                                   type: FileType.image,
                                                 )
-                                                        .then((result) {
+                                                    .then((result) {
                                                   if (result != null &&
                                                       result.files.isNotEmpty) {
                                                     // Use the selected image file
@@ -368,18 +361,10 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                             imageWidget:
                                                                 image));
 
-                                                    // String base64Image =
-                                                    //     base64Encode(
-                                                    //         imageFile.bytes!);
                                                     HomeBloc.get(context).add(
                                                         imageevent(
                                                             imageFile:
                                                                 imageFile));
-
-                                                    // HomeBloc.get(context).add(
-                                                    //   imageevent(
-                                                    //       imageFile: imageFile),
-                                                    // );
                                                   }
                                                   return null;
                                                 });

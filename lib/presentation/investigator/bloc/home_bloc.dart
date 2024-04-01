@@ -50,15 +50,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   //   add(const GetModelsName());
   // }
 
-
-
   _onImageToSearchForEmployee(
       ImageToSearchForEmployee event, Emitter<HomeState> emit) async {
     emit(state.copyWith(
         imageWidget: event.imageWidget, submission: Submission.loading));
     // Your logic here to fetch data and determine the imageWidget
   }
-
 
   _ongetPersonName(getPersonName event, Emitter<HomeState> emit) async {
     emit(state.copyWith(
@@ -176,8 +173,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     )
         .then((value) {
       if (value.found != false) {
-        emit(HomeState()
-            .copyWith(submission: Submission.success, data: value.data));
+        emit(state.copyWith(submission: Submission.success, data: value.data));
       } else {
         emit(state.copyWith(submission: Submission.noDataFound));
       }
