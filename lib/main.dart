@@ -17,7 +17,7 @@ import 'presentation/investigator/bloc/home_bloc.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  Bloc.observer = MyBlocObserver();
+  // Bloc.observer = MyBlocObserver();
 
   final AuthenticationRepository authenticationRepository =
       await AuthenticationRepository.getInstance();

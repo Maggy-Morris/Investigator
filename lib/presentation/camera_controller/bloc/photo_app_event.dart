@@ -1,52 +1,52 @@
-part of 'photo_app_bloc.dart';
+// part of 'photo_app_bloc.dart';
 
-class PhotoAppEvent extends Equatable {
-  const PhotoAppEvent();
+// class PhotoAppEvent extends Equatable {
+//   const PhotoAppEvent();
 
-  @override
-  List<Object?> get props => [];
-}
+//   @override
+//   List<Object?> get props => [];
+// }
 
-class OpenCameraEvent extends PhotoAppEvent {
-  const OpenCameraEvent();
+// class OpenCameraEvent extends PhotoAppEvent {
+//   const OpenCameraEvent();
 
-  @override
-  List<Object?> get props => [];
-}
+//   @override
+//   List<Object?> get props => [];
+// }
 
-class SwitchCameraOptions extends PhotoAppEvent {
-  final bool isBackCam;
-  final ResolutionPreset? resolutionPreset;
+// class SwitchCameraOptions extends PhotoAppEvent {
+//   final bool isBackCam;
+//   final ResolutionPreset? resolutionPreset;
 
-  const SwitchCameraOptions({
-    required this.isBackCam,
-    this.resolutionPreset,
-  });
+//   const SwitchCameraOptions({
+//     required this.isBackCam,
+//     this.resolutionPreset,
+//   });
 
-  @override
-  List<Object?> get props => [isBackCam, resolutionPreset];
-}
+//   @override
+//   List<Object?> get props => [isBackCam, resolutionPreset];
+// }
 
-class SelectPhoto extends PhotoAppEvent {
-  final File file;
+// class SelectPhoto extends PhotoAppEvent {
+//   final File file;
 
-  const SelectPhoto({required this.file});
+//   const SelectPhoto({required this.file});
 
-  @override
-  List<Object?> get props => [file];
-}
+//   @override
+//   List<Object?> get props => [file];
+// }
 
-class StopPeriodicPictureCapture extends PhotoAppEvent {
-  const StopPeriodicPictureCapture();
+// class StopPeriodicPictureCapture extends PhotoAppEvent {
+//   const StopPeriodicPictureCapture();
 
-  @override
-  List<Object?> get props => [];
-}
-class StartStreamEvent extends PhotoAppEvent {
-  const StartStreamEvent();
+//   @override
+//   List<Object?> get props => [];
+// }
+// class StartStreamEvent extends PhotoAppEvent {
+//   const StartStreamEvent();
 
-  @override
-  List<Object?> get props => [];
-}
+//   @override
+//   List<Object?> get props => [];
+// }
 
 

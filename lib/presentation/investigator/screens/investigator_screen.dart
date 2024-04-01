@@ -100,12 +100,12 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                               Text(
                                 // Use state data to show appropriate text
                                 state.submission == Submission.loading
-                                    ? 'Loading...'
+                                    ? 'Searching...'
                                     : state.submission == Submission.success
                                         ? 'Data: ${state.data!.join(", ")}' // Join the list elements with a comma
                                         : state.submission ==
                                                 Submission.noDataFound
-                                            ? "The person didn't appear in the video "
+                                            ? "This person didn't appear in the video "
                                             : 'Pick Image and Video',
                                 style: const TextStyle(
                                   color: Colors.black,
@@ -248,9 +248,9 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                 fit: StackFit.expand,
                                                 children: [
                                                   if (_loading)
-                                                    const Center(
+                                                    Center(
                                                       child:
-                                                          CircularProgressIndicator(), // Display circular progress indicator while loading
+                                                          loadingIndicator(), // Display circular progress indicator while loading
                                                     )
                                                   else if (_controller != null)
                                                     AspectRatio(
@@ -278,29 +278,31 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                               ),
 
                               FxBox.h16,
+                              state.submission == Submission.loading
+                                  ? loadingIndicator()
+                                  : Center(
+                                      child: ElevatedButton.icon(
+                                          onPressed: () {
+                                            HomeBloc.get(context).add(
+                                                const SearchForEmployeeByVideoEvent());
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            backgroundColor: AppColors.green,
+                                          ),
+                                          label: Text(
+                                            "confirm".tr(),
+                                            style: const TextStyle(
+                                                color: AppColors.white),
+                                          ),
+                                          icon: const Icon(
+                                            Icons.check_circle_outline,
+                                            color: AppColors.white,
+                                          )),
+                                    ),
 
-                              Center(
-                                child: ElevatedButton.icon(
-                                    onPressed: () {
-                                      HomeBloc.get(context).add(
-                                          const SearchForEmployeeByVideoEvent());
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      backgroundColor: AppColors.green,
-                                    ),
-                                    label: Text(
-                                      "confirm".tr(),
-                                      style: const TextStyle(
-                                          color: AppColors.white),
-                                    ),
-                                    icon: const Icon(
-                                      Icons.check_circle_outline,
-                                      color: AppColors.white,
-                                    )),
-                              ),
                               FxBox.h16,
 
                               // ),

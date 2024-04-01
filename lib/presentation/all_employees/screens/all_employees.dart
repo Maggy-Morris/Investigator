@@ -803,7 +803,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(6.0),
                   child: Image.network(
-                    "http://192.168.0.139:8000/$imagesrc",
+                    "http://192.168.1.118:8000/$imagesrc",
                     // Images.profileImage,
                     fit: BoxFit.cover,
                   ),

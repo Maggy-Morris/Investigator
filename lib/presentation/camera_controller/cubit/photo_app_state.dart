@@ -55,12 +55,12 @@ class SelectProfilePhotoState extends PhotoAppState {
 
 class CameraState extends PhotoAppState {
   final CameraDescription? camera;
-  final CameraController? controller;
+  final CameraController controller;
   final List<List<double>>? boxes;
   final List<String>? result;
 
   const CameraState({
-    this.controller,
+    required this.controller,
     this.camera,
     this.boxes,
     this.result,
