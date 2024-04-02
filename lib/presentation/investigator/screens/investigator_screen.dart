@@ -531,7 +531,6 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
 
       _controller = VideoPlayerController.network(url)
         ..initialize().then((_) {
-          // setState(() {});
           _controller!.play();
         });
 

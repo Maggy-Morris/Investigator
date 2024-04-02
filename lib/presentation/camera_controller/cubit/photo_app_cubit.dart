@@ -37,19 +37,19 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
 
   void openCamera() async {
     final cameras = await availableCameras();
-    controller = CameraController(cameras.first, ResolutionPreset.high);
-    await controller!.initialize();
-    emit(CameraState(controller: controller, camera: controller?.description));
+    controller = CameraController(cameras.first, ResolutionPreset.medium);
+    await controller.initialize();
+    emit(CameraState(controller: controller, camera: controller.description));
   }
 
   Future<XFile?> takePicture() async {
-    if (controller == null || !controller!.value.isInitialized) {
+    if (controller == null || !controller.value.isInitialized) {
       // Camera is not initialized
       return null;
     }
 
     try {
-      final XFile? file = await controller?.takePicture();
+      final XFile file = await controller.takePicture();
       // final Uint8List bytes = await file.readAsBytes();
       // String base64String = base64Encode(bytes);
 
@@ -57,7 +57,7 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
       return file;
     } catch (e) {
       // Error while taking picture
-      print('Error taking picture: $e');
+      debugPrint('Error taking picture: $e');
       return null;
     }
   }
@@ -114,7 +114,7 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
     required bool isBackCam,
     ResolutionPreset? resolutionPreset,
   }) async {
-    if (controller == null || !controller!.value.isInitialized) {
+    if (controller == null || !controller.value.isInitialized) {
       return;
     }
 
@@ -124,7 +124,7 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
         CameraController(newCamera, resolutionPreset ?? ResolutionPreset.high);
 
     await newController.initialize();
-    controller!.dispose(); // Dispose the current controller
+    controller.dispose(); // Dispose the current controller
     controller = newController;
 
     emit(CameraState(
@@ -135,45 +135,3 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
     emit(SelectProfilePhotoState(file: file));
   }
 }
-
-
-
-
-
-
-
-
-
-
-// late WebSocket dataSubscription;
-
-//   updateStream() async {
-//     dataSubscription =
-//         await WebSocket.connect("ws://192.168.1.118:8765/socket.io/");
-
-//     dataSubscription.listen((data) {
-//       onStreamDataChanged(data);
-//     });
-//   }
-
-//   Future<void> onStreamDataChanged(data) async {
-//     if (data.isNotEmpty) {
-//       // _channel.stream.timeout(Duration(milliseconds: 100),
-//       //     onTimeout: (sink) {
-//       //   // SearchByImageModel callBackList =
-//       //   //     SearchByImageModel.fromJson(response);
-//       //   // emit(
-//       //   //   CameraState(
-//       //   //       boxes: callBackList.boxes, result: callBackList.result),
-//       //   // );
-//       //   debugPrint("Response from server: $response");
-//       // });
-//       debugPrint("Response from serverrrrrrrrrrr: $data");
-
-//       SearchByImageModel callBackList = SearchByImageModel.fromJson(data);
-//       // emit(
-//       //   CameraState(
-//       //       boxes: callBackList.boxes, result: callBackList.result),
-//       // );
-//     }
-//   }

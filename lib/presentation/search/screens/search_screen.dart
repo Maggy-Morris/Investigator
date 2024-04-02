@@ -67,7 +67,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
           title: YaruDialogTitleBar(
             isClosable: false,
             title: SizedBox(
-              width: 500,
+              // width: 500,
               child: YaruTabBar(
                 tabController: tabController,
                 tabs: const [
@@ -86,7 +86,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
           children: [
             SizedBox(
               width: 1100,
-              height: 600,
+              height: 700,
               child: TabBarView(
                 controller: tabController,
                 children: [
@@ -760,7 +760,6 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                     left: 80,
                                     child: IconButton(
                                       onPressed: () {
-                                       
                                         context
                                             .read<PhotoAppCubit>()
                                             .openCamera();
@@ -776,102 +775,139 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                           ],
                         );
                       } else if (state is CameraState) {
-                        return Stack(
-                          
-                          children: [
-                          CameraPreview(
-                            state.controller,
-                            child: Stack(
-                              fit: StackFit.expand,
-                              alignment: Alignment.bottomCenter,
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        context
-                                            .read<PhotoAppCubit>()
-                                            .startStream();
-                                      },
-                                      child: Container(
-                                        height: 100,
-                                        width: 70,
-                                        decoration: const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.white,
-                                        ),
-                                        child: Stack(
-                                          children: [
-                                            Align(
-                                              alignment: Alignment.center,
+                        return Expanded(
+                          // aspectRatio: state.controller.value.aspectRatio,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Stack(children: [
+                                Container(
+                                  width: 720,
+                                  height: 480,
+                                  child: AspectRatio(
+                                    aspectRatio:
+                                        state.controller.value.aspectRatio,
+                                    child: CameraPreview(
+                                      state.controller,
+                                      child: Stack(
+                                        // fit: StackFit.expand,
+                                        alignment: Alignment.bottomCenter,
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 8.0,
+                                                        vertical: 20),
+                                                child: ElevatedButton(
+                                                  style: ButtonStyle(
+                                                      backgroundColor:
+                                                          MaterialStateProperty
+                                                              .all<
+                                                                      Color>(
+                                                                  AppColors
+                                                                      .babyBlue),
+                                                      shape: MaterialStateProperty
+                                                          .all<
+                                                              RoundedRectangleBorder>(
+                                                        RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(50),
+                                                        ),
+                                                      )),
+                                                  onPressed: () {
+                                                    context
+                                                        .read<PhotoAppCubit>()
+                                                        .startStream();
+                                                  },
+                                                  child: Text(
+                                                    context
+                                                            .watch<
+                                                                PhotoAppCubit>()
+                                                            .isStreaming
+                                                        ? 'Stop Stream'
+                                                        : 'Start Stream',
+                                                    style: const TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ),
+                                              ),
+                                              IconButton(
+                                                  color: Colors.white,
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 25),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      _isBackCamera =
+                                                          !_isBackCamera;
+                                                    });
+                                                  },
+                                                  icon: const Icon(
+                                                      Icons.cameraswitch))
+                                            ],
+                                          ),
+                                          Positioned(
+                                            top: 0,
+                                            left: 0,
+                                            right: 0,
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                vertical: 8,
+                                                horizontal: 16,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(12),
+                                                  bottomRight:
+                                                      Radius.circular(12),
+                                                ),
+                                                color: Colors.black
+                                                    .withOpacity(0.6),
+                                              ),
                                               child: Text(
-                                                context
-                                                        .watch<PhotoAppCubit>()
-                                                        .isStreaming
-                                                    ? 'Stop Stream'
-                                                    : 'Start Stream',
+                                                "Data : ${state.result}",
                                                 style: const TextStyle(
                                                   color: Colors.black,
-                                                  fontSize: 12,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
                                                 ),
                                               ),
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    IconButton(
-                                        color: Colors.white,
-                                        padding:
-                                            const EdgeInsets.only(bottom: 25),
-                                        onPressed: () {
-                                          setState(() {
-                                            _isBackCamera = !_isBackCamera;
-                                          });
-                                        },
-                                        icon: const Icon(Icons.cameraswitch))
-                                  ],
+                                  ),
                                 ),
-                              ],
-                            ),
-                          ),
-                          CustomPaint(
-                            painter: RectanglePainter(
-                              (state.boxes ?? []).map((box) => (box)).toList(),
-                            ),
-                          ),
-                          Positioned(
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 8,
-                                horizontal: 16,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(12),
-                                  bottomRight: Radius.circular(12),
+                                // Transform.scale(
+                                //   scale: state.controller.value.aspectRatio,
+                                //   child:
+                                CustomPaint(
+                                  painter: RectanglePainter(
+                                    (state.boxes ?? [])
+                                        .map((box) => (box))
+                                        .toList(),
+                                  ),
                                 ),
-                                color: Colors.black.withOpacity(0.6),
-                              ),
-                              child: Text(
-                                "Data : ${state.result}",
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
+                                // ),
+                              ]),
+                            ],
                           ),
-                        ]);
+                        );
                       } else {
                         return const Scaffold(
                           body: Center(
@@ -882,7 +918,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                     },
                   ),
 
-                  // ////////////////////////////////////////////////////////////////////////////////////////////                      // Icon(YaruIcons.keyboard),
+                  // ////////////////////////////////////////////////////////////////////////////
                 ],
               ),
             ),
