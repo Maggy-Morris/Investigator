@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:Investigator/core/remote_provider/remote_data_source.dart';
 import 'package:camera/camera.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -70,7 +71,7 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
         // Handle the picture file here ( send via WebSocket)
 
         final _channel = WebSocketChannel.connect(
-          Uri.parse('ws://192.168.1.118:8765/socket.io/'),
+          Uri.parse('ws:${RemoteDataSource.baseUrlWithoutPort}8765/socket.io/'),
         );
         Map<String, dynamic> data = {
           'collection_name': companyNameRepo,

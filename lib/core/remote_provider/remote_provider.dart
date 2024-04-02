@@ -9,10 +9,13 @@ import 'package:Investigator/core/models/camera_details_model.dart';
 import 'package:Investigator/core/remote_provider/remote_data_source.dart';
 
 // import '../models/add_company_model.dart';
+import '../models/add_person_model.dart';
 import '../models/call_back_model.dart';
+import '../models/delete_model.dart';
 import '../models/employee_model.dart';
 import '../models/search_by_image_model.dart';
 import '../models/sigup_model.dart';
+import '../models/update_model.dart';
 
 enum AppLifecycleStatus { online, offline }
 
@@ -114,7 +117,7 @@ class RemoteProvider {
   }
 
   /// Add New Person with image as stream of bytes
-  Future<CallBackModel> addNewPersonToACompany({
+  Future<AddPersonModel> addNewPersonToACompany({
     required String companyName,
     required String personName,
     // required PlatformFile? image,
@@ -139,20 +142,20 @@ class RemoteProvider {
       //Change this "Collection Created Successfully!"
 
       if (callBack.isNotEmpty) {
-        CallBackModel callBackList = CallBackModel.fromJson(callBack);
-        return callBackList;
+        AddPersonModel addPersonModel = AddPersonModel.fromJson(callBack);
+        return addPersonModel;
       } else {
-        return CallBackModel();
+        return AddPersonModel();
       }
     } catch (e) {
-      return CallBackModel();
+      return AddPersonModel();
     }
   }
 
   ///edit Employee data
 
   /// Add New Person with image as stream of bytes
-  Future<CallBackModel> UpdateEmployeeData({
+  Future<UpdateModel> UpdateEmployeeData({
     required String companyName,
     required String personName,
     required String email,
@@ -178,13 +181,13 @@ class RemoteProvider {
       //Change this "Collection Created Successfully!"
 
       if (callBack.isNotEmpty) {
-        CallBackModel callBackList = CallBackModel.fromJson(callBack);
-        return callBackList;
+        UpdateModel updateModel = UpdateModel.fromJson(callBack);
+        return updateModel;
       } else {
-        return CallBackModel();
+        return UpdateModel();
       }
     } catch (e) {
-      return CallBackModel();
+      return UpdateModel();
     }
   }
 
@@ -281,21 +284,21 @@ class RemoteProvider {
     }
   }
 
-  Future<EmployeeModel> deleteDocumentByName(
+  Future<DeleteModel> deleteDocumentByName(
       {required String companyName, required String personName}) async {
     try {
       var callBack = await RemoteDataSource().post(
           endPoint: "/qdrant/delete_document_by_name",
           body: {"collection_name": companyName, "target_name": personName});
       if (callBack.isNotEmpty) {
-        EmployeeModel employeeModel = EmployeeModel.fromJson(callBack);
-        return employeeModel;
+        DeleteModel deleteModel = DeleteModel.fromJson(callBack);
+        return deleteModel;
       } else {
-        return EmployeeModel();
+        return DeleteModel();
       }
     } catch (e) {
       debugPrint(e.toString());
-      return EmployeeModel();
+      return DeleteModel();
     }
   }
 

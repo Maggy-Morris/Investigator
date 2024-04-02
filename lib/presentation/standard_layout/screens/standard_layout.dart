@@ -206,7 +206,7 @@ class StandardLayoutScreen extends StatelessWidget {
                                                                 .pop();
                                                             // Navigator.of(ctx)
                                                             //     .pop();
-                                                            
+
                                                             await logout(
                                                                 context);
                                                           }),
@@ -289,8 +289,7 @@ class StandardLayoutScreen extends StatelessWidget {
                                         .onEditPageNavigationNumber(index);
 
                                     if (index == 0) {
-                                      Routemaster.of(context)
-                                          .push('/allEmployees');
+                                      Routemaster.of(context).push('/');
                                       // Routemaster.of(context).push('/home');
                                     } else if (index == 1) {
                                       Routemaster.of(context).push('/search');

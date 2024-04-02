@@ -66,6 +66,17 @@ class GetEmployeeNamesEvent extends AllEmployeesEvent {
   @override
   List<Object?> get props => [];
 }
+class imageevent extends AllEmployeesEvent {
+    final PlatformFile imageFile;
+
+  const imageevent(
+{required this.imageFile}
+
+  );
+
+  @override
+  List<Object?> get props => [imageFile];
+}
 
 // delete person data by name
 class DeletePersonByNameEvent extends AllEmployeesEvent {
@@ -166,51 +177,4 @@ class CameraInitializeDate extends AllEmployeesEvent {
 
   @override
   List<Object?> get props => [];
-}
-
-class CameraDetailsEvent extends AllEmployeesEvent {
-  final String cameraName;
-
-  const CameraDetailsEvent({required this.cameraName});
-
-  @override
-  List<Object?> get props => [cameraName];
-}
-
-class GetModelsChartsData extends AllEmployeesEvent {
-  final List<String> modelsList;
-  final String cameraName;
-
-  const GetModelsChartsData(
-      {required this.modelsList, required this.cameraName});
-
-  @override
-  List<Object?> get props => [modelsList, cameraName];
-}
-
-class CameraAddDay extends AllEmployeesEvent {
-  final String selectedDay;
-
-  const CameraAddDay({required this.selectedDay});
-
-  @override
-  List<Object?> get props => [selectedDay];
-}
-
-class CameraAddMonth extends AllEmployeesEvent {
-  final String selectedMonth;
-
-  const CameraAddMonth({required this.selectedMonth});
-
-  @override
-  List<Object?> get props => [selectedMonth];
-}
-
-class CameraAddYear extends AllEmployeesEvent {
-  final String selectedYear;
-
-  const CameraAddYear({required this.selectedYear});
-
-  @override
-  List<Object?> get props => [selectedYear];
 }

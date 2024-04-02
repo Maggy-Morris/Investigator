@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 class RectanglePainter extends CustomPainter {
@@ -22,6 +20,10 @@ class RectanglePainter extends CustomPainter {
         final top = coord[1];
         final right = coord[2];
         final bottom = coord[3];
+        // final top = coord[0];
+        // final left = coord[1];
+        // final bottom = coord[2];
+        // final right = coord[3];
 
         final topLeft = Offset(left, top);
         final topRight = Offset(right, top);

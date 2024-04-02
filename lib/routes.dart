@@ -27,16 +27,15 @@ checkAuthority() {
 ///
 getRoutesAdmin() {
   Map<String, RouteSettings Function(RouteData)> adminRoutes = {
-    '/': (route) => const NoAnimationPage(child: ChooseYourCompany()),
+    // '/': (route) => const NoAnimationPage(child: ChooseYourCompany()),
     // '/home': (route) => const NoAnimationPage(child: DashboardScreen()),
-    '/allEmployees': (route) => const NoAnimationPage(
-        child: AllEmployeesScreen(
-            // data: []
-            )),
-    '/cameraDetails': (route) => NoAnimationPage(
-            child: CameraDetails(
-          cameraName: route.queryParameters["name"] ?? "",
-        )),
+    '/': (route) => const NoAnimationPage(
+          child: AllEmployeesScreen(),
+        ),
+    // '/cameraDetails': (route) => NoAnimationPage(
+    //         child: CameraDetails(
+    //       cameraName: route.queryParameters["name"] ?? "",
+    //     )),
     '/investigator': (route) => const NoAnimationPage(child: AddCameraScreen()),
     '/search': (route) => const NoAnimationPage(child: Search()),
   };

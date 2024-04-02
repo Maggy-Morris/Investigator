@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:Investigator/core/enum/enum.dart';
@@ -40,15 +41,24 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
     on<Addemail>(_onAddemail);
     on<AdduserId>(_onAdduserId);
 
+        on<imageevent>(_onimageevent);
+
+
 //edit
 
     on<UpdateEmployeeEvent>(_onUpdateEmployeeEvent);
 
     /// Date
-    on<CameraInitializeDate>(_onCameraInitializeDate);
     // on<CameraAddDay>(_onCameraAddDay);
     // on<CameraAddMonth>(_onCameraAddMonth);
     // on<CameraAddYear>(_onCameraAddYear);
+  }
+
+
+
+  _onimageevent(imageevent event, Emitter<AllEmployeesState> emit) async {
+    emit(state.copyWith(
+        imageFile: event.imageFile, submission: Submission.editing));
   }
 
   _onAllEmployeesEvent(
@@ -140,15 +150,15 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
     emit(state.copyWith(submission: Submission.loading));
 
     try {
-     String companyNameRepo =
-        AuthenticationRepository.instance.currentUser.companyName ?? "";
+      String companyNameRepo =
+          AuthenticationRepository.instance.currentUser.companyName ?? "";
       final employeeModel = await RemoteProvider().getAllEmployeeNames(
-        companyName: companyNameRepo ,
+        companyName: companyNameRepo,
       );
 
       if (employeeModel.isNotEmpty) {
         emit(state.copyWith(
-          submission: Submission.success,
+          // submission: Submission.success,
           employeeNamesList: employeeModel,
         ));
       } else {
@@ -190,16 +200,19 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
       AddNewEmployeeEvent event, Emitter<AllEmployeesState> emit) async {
     emit(state.copyWith(submission: Submission.loading));
     try {
+      String companyNameRepo =
+          AuthenticationRepository.instance.currentUser.companyName ?? "";
       final result = await RemoteProvider().addNewPersonToACompany(
-        companyName: state.companyName,
+        companyName: companyNameRepo,
         personName: state.personName,
         phoneNum: state.phoneNum,
         email: state.email,
         userId: state.userId,
         image: state.image,
       );
-      if (result != AddCompanyModel()) {
+      if (result.success == true) {
         emit(state.copyWith(submission: Submission.success));
+        add(const GetEmployeeNamesEvent());
       } else {
         emit(state.copyWith(submission: Submission.error));
       }
@@ -221,12 +234,13 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
         userId: state.userId,
         id: event.id,
       );
-      if (result != AddCompanyModel()) {
+      if (result.updated == true) {
         emit(state.copyWith(
           submission: Submission.success,
 
           // employeeNamesList:
         ));
+        add(const GetEmployeeNamesEvent());
       } else {
         emit(state.copyWith(submission: Submission.error));
       }
@@ -234,13 +248,6 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
       debugPrint(e.toString());
       emit(state.copyWith(submission: Submission.error));
     }
-  }
-
-  _onCameraInitializeDate(
-      CameraInitializeDate event, Emitter<AllEmployeesState> emit) {
-    add(CameraAddDay(selectedDay: DateTime.now().day.toString()));
-    add(CameraAddMonth(selectedMonth: DateTime.now().month.toString()));
-    add(CameraAddYear(selectedYear: DateTime.now().year.toString()));
   }
 
   // _onCameraAddDay(CameraAddDay event, Emitter<AllEmployeesState> emit) {
@@ -256,7 +263,7 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
   /// Delete person data by Name
   _onDeletePersonByNameEvent(
       DeletePersonByNameEvent event, Emitter<AllEmployeesState> emit) async {
-String companyNameRepo =
+    String companyNameRepo =
         AuthenticationRepository.instance.currentUser.companyName ?? "";
     emit(state.copyWith(submission: Submission.loading));
     await RemoteProvider()
@@ -266,7 +273,7 @@ String companyNameRepo =
     )
         .then((value) {
       /// this to update the state once i deleted a person
-      if (value != EmployeeModel()) {
+      if (value.data != "No documents found for deletion.") {
         // Remove the deleted employee from the state
         final updatedList = state.employeeNamesList
             .where((employee) => employee.name != event.personName)

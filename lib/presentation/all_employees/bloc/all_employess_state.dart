@@ -12,17 +12,14 @@ class AllEmployeesState extends Equatable {
   final String userId;
   final String profession;
   bool isSearching;
+  final PlatformFile? imageFile;
 
-  // final List<String> allCameras;
-  // final List<GetAllCameraDetails> camerasDetails;
-  // final List<GetAllCameraDetails> singleCameraDetails;
-  // final List<List<GetAllCameraCountPerHour>> camerasCountsPerHour;
-  // final String selectedDay;
-  // final String selectedMonth;
-  // final String selectedYear;
+ 
   final Submission submission;
 
   AllEmployeesState({
+        this.imageFile,
+
     this.id = '',
     this.phoneNum = "",
     this.email = "",
@@ -44,6 +41,8 @@ class AllEmployeesState extends Equatable {
   });
 
   AllEmployeesState copyWith({
+        PlatformFile? imageFile,
+
     String? id,
     String? phoneNum,
     String? email,
@@ -64,6 +63,8 @@ class AllEmployeesState extends Equatable {
     // String? selectedYear,
   }) {
     return AllEmployeesState(
+            imageFile: imageFile ?? this.imageFile,
+
       id: id ?? this.id,
       userId: userId ?? this.userId,
       email: email ?? this.email,
@@ -88,11 +89,13 @@ class AllEmployeesState extends Equatable {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         id,
         isSearching,
         image,
         submission,
+                imageFile,
+
         // singleCameraDetails,
         // selectedDay,
         // selectedMonth,

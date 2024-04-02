@@ -411,21 +411,14 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                             video: videoFile));
                                                   }
                                                 });
-                                                // PlatformFile? videoFile =
-                                                //     await _pickVideo();
-                                                // if (videoFile != null) {
-                                                //   HomeBloc.get(context).add(
-                                                //       videoevent(
-                                                //           video: videoFile));
-                                                // }
                                               }, // Call _pickVideo function when tapped
                                               child: Stack(
                                                 fit: StackFit.expand,
                                                 children: [
                                                   if (_loading)
-                                                    const Center(
+                                                    Center(
                                                       child:
-                                                          CircularProgressIndicator(), // Display circular progress indicator while loading
+                                                          loadingIndicator(), // Display circular progress indicator while loading
                                                     )
                                                   else if (_controller != null)
                                                     AspectRatio(
@@ -436,7 +429,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                     )
                                                   else
                                                     Image.asset(
-                                                      'assets/images/video-x-generic.png',
+                                                      'assets/images/iconVid.png',
                                                       width: double.infinity,
                                                       height: double.infinity,
                                                       fit: BoxFit.cover,

@@ -26,7 +26,7 @@ class _CameraDetailsState extends State<CameraDetails> {
     return StandardLayoutScreen(
       body: BlocProvider(
         create: (context) => AllEmployeesBloc()
-          ..add(CameraDetailsEvent(cameraName: widget.cameraName))
+          // ..add(CameraDetailsEvent(cameraName: widget.cameraName))
           ..add(const CameraInitializeDate()),
         child: BlocListener<AllEmployeesBloc, AllEmployeesState>(
           listener: (context, state) {},
@@ -175,8 +175,6 @@ class _CameraDetailsState extends State<CameraDetails> {
                             //     ),
                             //   ),
                             // ),
-                        
-                        
                           ],
                         ),
                       ),
@@ -261,8 +259,6 @@ class _CameraDetailsState extends State<CameraDetails> {
                             //     child: Text(state.selectedYear),
                             //   ),
                             // ),
-                         
-                         
                           ],
                         ),
                       ),
@@ -338,10 +334,8 @@ class _CameraDetailsState extends State<CameraDetails> {
   //   //     markerSettings: const MarkerSettings(isVisible: true),
   //   //   );
   //   // });
-  
-  
-  // }
 
+  // }
 
   Widget _commonText(String text) {
     return Padding(

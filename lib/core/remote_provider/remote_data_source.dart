@@ -10,7 +10,7 @@ import 'package:Investigator/core/error/exceptions.dart';
 
 class RemoteDataSource {
   static String baseURL = 'http://192.168.1.118:10000';
-
+  static String baseUrlWithoutPort = "//192.168.1.118:";
   Future<Map<String, dynamic>> post({
     required String endPoint,
     Object? body,
