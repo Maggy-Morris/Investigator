@@ -62,7 +62,7 @@ class LoginForm extends StatelessWidget {
                                     ? const EdgeInsets.all(32)
                                     : const EdgeInsets.all(40),
                                 decoration: BoxDecoration(
-                                  color: AppColors.blueB.withOpacity(0.9),
+                                  color: AppColors.grey.withOpacity(0.5),
                                   border: Border.all(
                                     color: AppColors.white.withOpacity(0.9),
                                   ),
@@ -87,33 +87,33 @@ class LoginForm extends StatelessWidget {
                           ],
                         ),
                       ),
-                      // Responsive.isWeb(context)
-                      //     ? Expanded(
-                      //         child: Column(
-                      //           children: [
-                      //             // Container(
-                      //             //   constraints:
-                      //             //       const BoxConstraints(maxHeight: 400),
-                      //             //   child: Image.asset(
-                      //             //     "assets/images/Detective.png",
-                      //             //   ),
-                      //             //   //     SvgPicture.asset(
-                      //             //   //   "assets/images/A.svg",
-                      //             //   // ),
-                      //             // ),
-                      //             // FxBox.h16,
-                      //             // Center(
-                      //             //   child: CustomText(
-                      //             //     title: languageModel.authentication.signInHeader,
-                      //             //     fontSize: 15,
-                      //             //     fontWeight: FontWeight.w700,
-                      //             //     textColor: ColorConst.lightFontColor,
-                      //             //   ),
-                      //             // ),
-                      //           ],
-                      //         ),
-                      //       )
-                      //     : Container(),
+                      Responsive.isWeb(context)
+                          ? Expanded(
+                              child: Column(
+                                children: [
+                                  // Container(
+                                  //   constraints:
+                                  //       const BoxConstraints(maxHeight: 400),
+                                  //   child: Image.asset(
+                                  //     "assets/images/Detective.png",
+                                  //   ),
+                                  //   //     SvgPicture.asset(
+                                  //   //   "assets/images/A.svg",
+                                  //   // ),
+                                  // ),
+                                  // FxBox.h16,
+                                  // Center(
+                                  //   child: CustomText(
+                                  //     title: languageModel.authentication.signInHeader,
+                                  //     fontSize: 15,
+                                  //     fontWeight: FontWeight.w700,
+                                  //     textColor: ColorConst.lightFontColor,
+                                  //   ),
+                                  // ),
+                                ],
+                              ),
+                            )
+                          : Container(),
                     ],
                   ),
                 ],
@@ -318,7 +318,7 @@ class _LoginButton extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    backgroundColor: const Color(0xff1c1c1a),
+                    backgroundColor: Theme.of(context).primaryColor,
                   ),
                   onPressed: state.status.isValidated
                       ? () => context.read<LoginCubit>().logInWithCredentials()

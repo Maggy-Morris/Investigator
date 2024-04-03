@@ -61,10 +61,14 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
         child: SimpleDialog(
           // contentPadding:
           //     EdgeInsets.symmetric(vertical: 200, horizontal: 100),
-          backgroundColor: AppColors.white,
+          backgroundColor: AppColors.backGround,
           shadowColor: AppColors.white,
           titlePadding: EdgeInsets.zero,
           title: YaruDialogTitleBar(
+            foregroundColor: AppColors.grey3,
+            backgroundColor: AppColors.grey,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
             isClosable: false,
             title: SizedBox(
               // width: 500,
@@ -88,6 +92,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
               width: 1100,
               height: 700,
               child: TabBarView(
+                // clipBehavior: Clip.antiAliasWithSaveLayer,
                 controller: tabController,
                 children: [
                   BlocListener<SearchByImageBloc, SearchByImageState>(
@@ -275,7 +280,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                       BorderRadius.circular(10),
                                                 ),
                                                 backgroundColor:
-                                                    AppColors.green,
+                                                    AppColors.buttonBlue,
                                               ),
                                               label: const Text(
                                                 "Confirm",
@@ -595,7 +600,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                         BorderRadius.circular(
                                                             10)),
                                                 backgroundColor:
-                                                    AppColors.green,
+                                                    AppColors.buttonBlue,
                                               ),
                                               label: Text(
                                                 "confirm".tr(),

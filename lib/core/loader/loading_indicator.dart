@@ -6,7 +6,7 @@ import 'spining_lines_loader.dart';
 Widget loadingIndicator({Color? color}){
   return Center(
     child: SpinningLinesLoader(
-      color: color ?? AppColors.green,
+      color: color ?? AppColors.buttonBlue,
       duration: const Duration(milliseconds: 3000),
       itemCount: 3,
       size: 50,

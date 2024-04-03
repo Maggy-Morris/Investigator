@@ -63,9 +63,9 @@ class SignUpForm extends StatelessWidget {
                                     ? const EdgeInsets.all(32)
                                     : const EdgeInsets.all(40),
                                 decoration: BoxDecoration(
-                                  color: AppColors.blueB.withOpacity(0.9),
+                                  color: AppColors.grey.withOpacity(0.5),
                                   border: Border.all(
-                                    color: AppColors.blueB.withOpacity(0.9),
+                                    color: AppColors.white.withOpacity(0.9),
                                   ),
                                   borderRadius: BorderRadius.circular(24),
                                 ),
@@ -82,22 +82,22 @@ class SignUpForm extends StatelessWidget {
                           ],
                         ),
                       ),
-                      // Responsive.isWeb(context)
-                      // ? Expanded(
-                      //     child: Column(
-                      //       children: [
-                      //         Container(
-                      //           constraints:
-                      //               const BoxConstraints(maxHeight: 400),
-                      //           child: SvgPicture.asset(
-                      //             "assets/images/Admin_Kit_Text.svg",
-                      //           ),
-                      //         ),
-                      //         FxBox.h16,
-                      //       ],
-                      //     ),
-                      //   )
-                      // : Container(),
+                      Responsive.isWeb(context)
+                          ? Expanded(
+                              child: Column(
+                                children: [
+                                  // Container(
+                                  //   constraints:
+                                  //       const BoxConstraints(maxHeight: 400),
+                                  //   child: SvgPicture.asset(
+                                  //     "assets/images/Admin_Kit_Text.svg",
+                                  //   ),
+                                  // ),
+                                  FxBox.h16,
+                                ],
+                              ),
+                            )
+                          : Container(),
                     ],
                   ),
                 ],
@@ -314,7 +314,7 @@ class _SignUpButton extends StatelessWidget {
       builder: (context, state) {
         return state.status.isSubmissionInProgress
             ? loadingIndicator(
-                color: AppColors.blueBlack,
+                color: Theme.of(context).primaryColor,
               )
             : SizedBox(
                 width: Responsive.isWeb(context)
@@ -327,7 +327,7 @@ class _SignUpButton extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    backgroundColor: const Color(0xff1c1c1a),
+                    backgroundColor: Theme.of(context).primaryColor,
                   ),
                   onPressed: state.status.isValidated
                       ? () {

@@ -78,7 +78,8 @@ class StandardLayoutScreen extends StatelessWidget {
                                         ? NavigationRailLabelType.selected
                                         : NavigationRailLabelType.none,
                                     backgroundColor: AppColors.blueB,
-                                    indicatorColor: AppColors.blueBlack,
+                                    indicatorColor:
+                                        AppColors.grey.withOpacity(0.3),
                                     selectedLabelTextStyle: const TextStyle(
                                       fontFamily: "Cairo",
                                       fontSize: AppFontSize.s20,
@@ -158,7 +159,7 @@ class StandardLayoutScreen extends StatelessWidget {
                                             .onEditExtend(!state.extend),
                                     logo: Image.asset(
                                       'assets/images/logo.png',
-                                      color: AppColors.blueBlack,
+                                      color: AppColors.white,
                                     ),
                                   ),
                                   selectedIndex: state.selectedPage,
@@ -215,7 +216,7 @@ class StandardLayoutScreen extends StatelessWidget {
                                                             "no".tr(),
                                                             style: const TextStyle(
                                                                 color: AppColors
-                                                                    .blueBlack),
+                                                                    .green),
                                                           ),
                                                           onPressed: () =>
                                                               Navigator.of(ctx)
@@ -586,7 +587,7 @@ class StandardLayoutScreen extends StatelessWidget {
             ),
             Expanded(
                 child: Scaffold(
-                    backgroundColor: AppColors.babyBlue,
+                    backgroundColor: AppColors.grey2,
                     appBar: mainAppBar(
                       leading: leading,
                       title: title,

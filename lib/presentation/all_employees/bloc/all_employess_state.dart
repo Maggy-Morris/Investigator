@@ -6,6 +6,8 @@ class AllEmployeesState extends Equatable {
   String personName;
   final String image;
   final String id;
+  int pageIndex;
+  int count;
 
   final String phoneNum;
   final String email;
@@ -14,12 +16,12 @@ class AllEmployeesState extends Equatable {
   bool isSearching;
   final PlatformFile? imageFile;
 
- 
   final Submission submission;
 
   AllEmployeesState({
-        this.imageFile,
-
+    this.pageIndex = 0,
+    this.count = 0,
+    this.imageFile,
     this.id = '',
     this.phoneNum = "",
     this.email = "",
@@ -31,18 +33,13 @@ class AllEmployeesState extends Equatable {
     this.companyName = "",
     this.employeeNamesList = const [],
     this.submission = Submission.initial,
-    // this.singleCameraDetails = const [],
-    // this.camerasDetails = const [],
-    // this.allCameras = const [],
-    // this.camerasCountsPerHour = const [],
-    // this.selectedDay = "",
-    // this.selectedMonth = "",
-    // this.selectedYear = "",
+   
   });
 
   AllEmployeesState copyWith({
-        PlatformFile? imageFile,
-
+    PlatformFile? imageFile,
+    int? pageIndex,
+    int? count,
     String? id,
     String? phoneNum,
     String? email,
@@ -54,17 +51,12 @@ class AllEmployeesState extends Equatable {
     String? companyName,
     String? personName,
     Submission? submission,
-    // List<String>? allCameras,
-    // List<GetAllCameraDetails>? camerasDetails,
-    // List<GetAllCameraDetails>? singleCameraDetails,
-    // List<List<GetAllCameraCountPerHour>>? camerasCountsPerHour,
-    // String? selectedDay,
-    // String? selectedMonth,
-    // String? selectedYear,
+  
   }) {
     return AllEmployeesState(
-            imageFile: imageFile ?? this.imageFile,
-
+      count: count ?? this.count,
+      imageFile: imageFile ?? this.imageFile,
+      pageIndex: pageIndex ?? this.pageIndex,
       id: id ?? this.id,
       userId: userId ?? this.userId,
       email: email ?? this.email,
@@ -78,13 +70,7 @@ class AllEmployeesState extends Equatable {
       companyName: companyName ?? this.companyName,
       personName: personName ?? this.personName,
       submission: submission ?? this.submission,
-      // singleCameraDetails: singleCameraDetails ?? this.singleCameraDetails,
-      // allCameras: allCameras ?? this.allCameras,
-      // camerasDetails: camerasDetails ?? this.camerasDetails,
-      // camerasCountsPerHour: camerasCountsPerHour ?? this.camerasCountsPerHour,
-      // selectedYear: selectedYear ?? this.selectedYear,
-      // selectedMonth: selectedMonth ?? this.selectedMonth,
-      // selectedDay: selectedDay ?? this.selectedDay,
+      
     );
   }
 
@@ -94,15 +80,11 @@ class AllEmployeesState extends Equatable {
         isSearching,
         image,
         submission,
-                imageFile,
+        imageFile,
+        pageIndex,
+        count,
 
-        // singleCameraDetails,
-        // selectedDay,
-        // selectedMonth,
-        // selectedYear,
-        // allCameras,
-        // camerasDetails,
-        // camerasCountsPerHour,
+        
         personName,
         companyName,
         employeeNamesList,

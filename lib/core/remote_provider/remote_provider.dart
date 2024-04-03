@@ -216,13 +216,15 @@ class RemoteProvider {
 
   /// Get all EmployeeNames
 
-  Future<List<Data>> getAllEmployeeNames({
+  Future<EmployeeModel> getAllEmployeeNames({
     required String companyName,
+    required int page_number,
   }) async {
     try {
       Map<String, dynamic> callBack = await RemoteDataSource()
           .post(endPoint: "/qdrant/retrieve_it_all", body: {
         "collection_name": companyName,
+        "page_number": page_number,
       });
 
       if (callBack.isNotEmpty) {
@@ -233,13 +235,13 @@ class RemoteProvider {
         // List<Data> employeeDataList =
         //     dataList.map((data) => Data.fromJson(data)).toList();
 
-        return general.data ?? [];
+        return general;
       } else {
-        return [];
+        return EmployeeModel();
       }
     } catch (e) {
       debugPrint(e.toString());
-      return [];
+      return EmployeeModel();
     }
   }
 

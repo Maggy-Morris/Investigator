@@ -219,7 +219,7 @@ RouteMap _buildRouteMap(BuildContext context) {
 // void main() async {
 //   WidgetsFlutterBinding.ensureInitialized();
 
-//   Bloc.observer = MyBlocObserver();
+//   // Bloc.observer = MyBlocObserver();
 
 //   final AuthenticationRepository authenticationRepository =
 //       await AuthenticationRepository.getInstance();
@@ -298,6 +298,7 @@ RouteMap _buildRouteMap(BuildContext context) {
 //             child: MaterialApp.router(
 //               // title: "Intelligence".tr(),
 //               title: "Investigator",
+              
 //               debugShowCheckedModeBanner: false,
 //               localizationsDelegates: context.localizationDelegates,
 //               supportedLocales: context.supportedLocales,
@@ -341,10 +342,9 @@ RouteMap _buildRouteMap(BuildContext context) {
 //     // '/investigator': (route) => const NoAnimationPage(child: AddCameraScreen()),
 //     // '/search': (route) => const NoAnimationPage(child: Search()),
 //     routes: {
-//       '/': (route) => const NoAnimationPage(child: ChooseYourCompany()),
+//       // '/': (route) => const NoAnimationPage(child: ChooseYourCompany()),
 //       // '/home': (route) => const NoAnimationPage(child: DashboardScreen()),
-//       '/allEmployees': (route) =>
-//           const NoAnimationPage(child: AllEmployeesScreen()),
+//       '/': (route) => const NoAnimationPage(child: AllEmployeesScreen()),
 //       '/cameraDetails': (route) => NoAnimationPage(
 //               child: CameraDetails(
 //             cameraName: route.queryParameters["name"] ?? "",

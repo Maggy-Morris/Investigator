@@ -1,24 +1,28 @@
-import 'package:equatable/equatable.dart';
-
 class EmployeeModel {
+  int? count;
   List<Data>? data;
+  int? nPages;
 
-  EmployeeModel({this.data});
+  EmployeeModel({this.count, this.data, this.nPages});
 
   EmployeeModel.fromJson(Map<String, dynamic> json) {
+    count = json['count'];
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
         data!.add( Data.fromJson(v));
       });
     }
+    nPages = json['n_pages'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final Map<String, dynamic> data =  Map<String, dynamic>();
+    data['count'] = count;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
+    data['n_pages'] = nPages;
     return data;
   }
 }
@@ -49,9 +53,9 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
+    final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_id'] = sId;
-    data['email'] = email;
+    data['email'] =email;
     data['image_path'] = imagePath;
     data['name'] = name;
     data['phone'] = phone;

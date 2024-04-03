@@ -75,7 +75,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
             builder: (context, state) {
               return Card(
                 margin: const EdgeInsets.all(20),
-                color: AppColors.white,
+                color: AppColors.backGround,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15)),
@@ -87,7 +87,9 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                         Text(
                           "Search for your Employee".tr(),
                           style: const TextStyle(
-                              fontSize: 17, fontWeight: FontWeight.w600),
+                              fontSize: 17,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.white),
                         ),
 
                         FxBox.h24,
@@ -105,7 +107,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                             ? "This person didn't appear in the video "
                                             : 'Pick Image and Video',
                                 style: const TextStyle(
-                                  color: Colors.black,
+                                  color: AppColors.white,
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -283,7 +285,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(10)),
-                                            backgroundColor: AppColors.green,
+                                            backgroundColor: AppColors.buttonBlue,
                                           ),
                                           label: Text(
                                             "confirm".tr(),
@@ -460,7 +462,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(10)),
-                                            backgroundColor: AppColors.green,
+                                            backgroundColor: AppColors.buttonBlue,
                                           ),
                                           label: Text(
                                             "confirm".tr(),

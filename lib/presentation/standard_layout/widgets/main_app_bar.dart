@@ -18,9 +18,10 @@ AppBar mainAppBar(
     List<Widget>? actions}) {
   return AppBar(
     scrolledUnderElevation: 0.0,
+
     title: Text(
       (title?.isNotEmpty ?? false) ? title ?? "Investigator" : "Investigator",
-      style: const TextStyle(color: AppColors.blueBlack, fontFamily: "Cairo"),
+      style: const TextStyle(color: AppColors.white, fontFamily: "Cairo"),
     ),
     automaticallyImplyLeading: false,
     leading: leading,
@@ -36,7 +37,7 @@ AppBar mainAppBar(
     //   ),
     // ),
     // backgroundColor: Colors.blueGrey[300],
-    backgroundColor: AppColors.white,
+    backgroundColor: AppColors.backGround,
     elevation: 0,
   );
 }

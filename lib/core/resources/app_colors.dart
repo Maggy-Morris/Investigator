@@ -5,17 +5,23 @@ class AppColors {
   static const Color primaryColorDark = Color(0xFFF1F1F5);
   static const Color white = Color(0xFFFFFFFF);
   static const Color black = Color(0xFF000000);
-  static const Color blueB = Color.fromARGB(255, 7, 35, 75);
+  // static const Color blueB = Color.fromARGB(255, 7, 35, 75);
+  static const Color blueB = Color.fromARGB(255, 22, 22, 22);
+
+  static const Color backGround = Color.fromARGB(255, 22, 22, 22);
 
   static const Color green = Colors.green;
+  static const Color mediumBlue = Color.fromARGB(255, 71, 136, 197);
+  static const Color buttonBlue = Color.fromARGB(255, 81, 169, 175);
+
   static const Color scaffoldBackGround = Color(0xffCCE5E3);
   // static const Color primaryColorLight = Color(0xFFB2EBF2);
   static const Color thinkRedColor = Color(0xFFDD0E1D);
 
-  static const Color mediumBlue = Color(0xFF145DA0);
-
   ///
-  static const Color grey2 = Color.fromARGB(255, 37, 36, 36);
+  static const Color grey2 = Color(0xFF3c3c3c);
+
+  static const Color grey3 = Color(0xFFa4b2bc);
 
   static const Color grey = Color(0xFF51555B);
   static const Color blueBlack = Color(0xFF223C60);

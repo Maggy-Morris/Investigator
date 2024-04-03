@@ -110,7 +110,7 @@ class _AddCameraScreenState extends State<DashboardScreen> {
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(10)),
-                                          backgroundColor: AppColors.green,
+                                          backgroundColor: AppColors.buttonBlue,
                                         ),
                                         label: Text(
                                           "confirm".tr(),
@@ -149,7 +149,7 @@ class _AddCameraScreenState extends State<DashboardScreen> {
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(10)),
-                                          backgroundColor: AppColors.green,
+                                          backgroundColor: AppColors.buttonBlue,
                                         ),
                                         label: Text(
                                           "confirm".tr(),

@@ -7,6 +7,15 @@ class AllEmployeesEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class EditPageNumber extends AllEmployeesEvent {
+  final int pageIndex;
+
+  const EditPageNumber({required this.pageIndex});
+
+  @override
+  List<Object> get props => [pageIndex];
+}
+
 class CameraMainDataEvent extends AllEmployeesEvent {
   const CameraMainDataEvent();
 
