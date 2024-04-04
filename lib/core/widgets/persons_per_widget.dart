@@ -51,7 +51,6 @@
 //   }
 // }
 
-
 //   // return BlocBuilder<PeopleBloc,
 //   //     PeopleState>(
 //   //   builder: (context, state) {
@@ -105,3 +104,73 @@
 //   //     }
 //   //   },
 //   // );
+
+import 'package:flutter/material.dart';
+import 'package:Investigator/core/models/employee_model.dart';
+import 'package:Investigator/core/resources/app_colors.dart';
+
+class CustomPagination extends StatefulWidget {
+  // final List<Data> persons;
+  final int pageCount; // Changed this to int directly
+  final Function(int pageIndex) onPageChanged;
+
+  CustomPagination({
+    // required this.persons,
+    required this.pageCount, // Updated this to directly accept an int value
+    required this.onPageChanged,
+  });
+
+  @override
+  _CustomPaginationState createState() => _CustomPaginationState();
+}
+
+class _CustomPaginationState extends State<CustomPagination> {
+  int currentPage = 1;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        // Your main content here
+        // Display your list of data using widget.persons
+
+        // Pagination controls
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(widget.pageCount, (index) {
+              final pageNumber = index + 1;
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    currentPage = pageNumber;
+                  });
+                  widget.onPageChanged(currentPage);
+                },
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    color: currentPage == pageNumber
+                        ? AppColors.blueBlack
+                        : Colors.grey.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: Text(
+                    pageNumber.toString(),
+                    style: TextStyle(
+                      color: currentPage == pageNumber
+                          ? Colors.white
+                          : Colors.black,
+                    ),
+                  ),
+                ),
+              );
+            }),
+          ),
+        ),
+      ],
+    );
+  }
+}

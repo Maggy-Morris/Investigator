@@ -4,6 +4,7 @@ import 'package:Investigator/core/loader/loading_indicator.dart';
 import 'package:Investigator/core/models/employee_model.dart';
 import 'package:Investigator/core/remote_provider/remote_data_source.dart';
 import 'package:Investigator/core/resources/app_colors.dart';
+import 'package:Investigator/core/widgets/customTextField.dart';
 import 'package:Investigator/presentation/all_employees/screens/text.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
@@ -126,7 +127,8 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                               );
                                             } else {
                                               AllEmployeesBloc.get(context).add(
-                                                  const GetEmployeeNamesEvent());
+                                                  const EditPageNumber(
+                                                      pageIndex: 1));
                                             }
                                           },
                                         ),
@@ -168,13 +170,8 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                     mainAxisSize:
                                                         MainAxisSize.min,
                                                     children: [
-                                                      TextFormField(
-                                                        // controller:
-                                                        //     employeeNameController,
-                                                        decoration:
-                                                            const InputDecoration(
-                                                                labelText:
-                                                                    'Name'),
+                                                      buildTextFormField(
+                                                        labelText: 'Name',
                                                         onChanged:
                                                             (valuee) async {
                                                           AllEmployeesBloc.get(
@@ -188,13 +185,8 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                         },
                                                       ),
                                                       FxBox.h24,
-                                                      TextFormField(
-                                                        // controller:
-                                                        //     employeeNameController,
-                                                        decoration:
-                                                            const InputDecoration(
-                                                                labelText:
-                                                                    'UserId'),
+                                                      buildTextFormField(
+                                                        labelText: 'UserId',
                                                         onChanged:
                                                             (value) async {
                                                           AllEmployeesBloc.get(
@@ -207,13 +199,10 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                         },
                                                       ),
                                                       FxBox.h24,
-                                                      TextFormField(
-                                                        // controller:
-                                                        //     employeeNameController,
-                                                        decoration:
-                                                            const InputDecoration(
-                                                                labelText:
-                                                                    'Phone Number'),
+
+                                                      buildTextFormField(
+                                                        labelText:
+                                                            'Phone Number',
                                                         onChanged:
                                                             (value) async {
                                                           AllEmployeesBloc.get(
@@ -226,13 +215,8 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                         },
                                                       ),
                                                       FxBox.h24,
-                                                      TextFormField(
-                                                        // controller:
-                                                        //     employeeNameController,
-                                                        decoration:
-                                                            const InputDecoration(
-                                                                labelText:
-                                                                    'Email'),
+                                                      buildTextFormField(
+                                                        labelText: 'Email',
                                                         onChanged:
                                                             (value) async {
                                                           AllEmployeesBloc.get(
@@ -353,15 +337,26 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                   ),
                                                   ElevatedButton(
                                                     onPressed: () {
+                                                      if (state.personName
+                                                              .isEmpty &&
+                                                          state
+                                                              .userId.isEmpty &&
+                                                          state.email.isEmpty &&
+                                                          state.image.isEmpty &&
+                                                          state.phoneNum
+                                                              .isEmpty) {
+                                                        FxToast.showErrorToast(
+                                                          context: context,
+                                                          message:
+                                                              "Please Fill all the fields ",
+                                                        );
+                                                        return;
+                                                      }
                                                       AllEmployeesBloc.get(
                                                               context)
                                                           .add(
                                                               const AddNewEmployeeEvent());
 
-                                                      AllEmployeesBloc.get(
-                                                              context)
-                                                          .add(
-                                                              const GetEmployeeNamesEvent());
                                                       employeeNameController
                                                           .clear();
                                                       setState(() {
@@ -404,8 +399,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                             child: Column(
                               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                // Add Employee Button
-
+                                ///search field
                                 Form(
                                   child: SizedBox(
                                     height: 40,
@@ -418,16 +412,35 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                           borderRadius:
                                               BorderRadius.circular(20),
                                         ),
+                                        fillColor: Colors
+                                            .white, // Set the fill color to white
+                                        filled: true, //
+
+                                        ///search Toggle
                                         suffixIcon: IconButton(
-                                          icon: const Icon(Icons.search),
-                                          onPressed: () {
-                                            AllEmployeesBloc.get(context).add(
-                                              GetPersonByNameEvent(
-                                                companyName: companyNameRepo,
-                                                personName:
-                                                    _searchController.text,
-                                              ),
-                                            );
+                                          icon: state.isSearching
+                                              ? Icon(Icons.close)
+                                              : Icon(Icons.search),
+                                          onPressed: () async {
+                                            state.isSearching = !state
+                                                .isSearching; // Toggle the search state
+                                            if (!state.isSearching) {
+                                              _searchController.clear();
+                                            }
+
+                                            if (state.isSearching) {
+                                              AllEmployeesBloc.get(context).add(
+                                                GetPersonByNameEvent(
+                                                  companyName: companyNameRepo,
+                                                  personName:
+                                                      _searchController.text,
+                                                ),
+                                              );
+                                            } else {
+                                              AllEmployeesBloc.get(context).add(
+                                                  const EditPageNumber(
+                                                      pageIndex: 1));
+                                            }
                                           },
                                         ),
                                       ),
@@ -465,13 +478,8 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                     mainAxisSize:
                                                         MainAxisSize.min,
                                                     children: [
-                                                      TextFormField(
-                                                        // controller:
-                                                        //     employeeNameController,
-                                                        decoration:
-                                                            const InputDecoration(
-                                                                labelText:
-                                                                    'Name'),
+                                                      buildTextFormField(
+                                                        labelText: 'Name',
                                                         onChanged:
                                                             (valuee) async {
                                                           AllEmployeesBloc.get(
@@ -485,13 +493,8 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                         },
                                                       ),
                                                       FxBox.h24,
-                                                      TextFormField(
-                                                        // controller:
-                                                        //     employeeNameController,
-                                                        decoration:
-                                                            const InputDecoration(
-                                                                labelText:
-                                                                    'UserId'),
+                                                      buildTextFormField(
+                                                        labelText: 'UserId',
                                                         onChanged:
                                                             (value) async {
                                                           AllEmployeesBloc.get(
@@ -504,13 +507,9 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                         },
                                                       ),
                                                       FxBox.h24,
-                                                      TextFormField(
-                                                        // controller:
-                                                        //     employeeNameController,
-                                                        decoration:
-                                                            const InputDecoration(
-                                                                labelText:
-                                                                    'Phone Number'),
+                                                      buildTextFormField(
+                                                        labelText:
+                                                            'Phone Number',
                                                         onChanged:
                                                             (value) async {
                                                           AllEmployeesBloc.get(
@@ -523,13 +522,9 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                         },
                                                       ),
                                                       FxBox.h24,
-                                                      TextFormField(
-                                                        // controller:
-                                                        //     employeeNameController,
-                                                        decoration:
-                                                            const InputDecoration(
-                                                                labelText:
-                                                                    'Email'),
+
+                                                      buildTextFormField(
+                                                        labelText: 'Email',
                                                         onChanged:
                                                             (value) async {
                                                           AllEmployeesBloc.get(
@@ -771,6 +766,22 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                           child: SingleChildScrollView(
                             child: Column(
                               children: [
+                                // Display the pagination controls
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 15.0),
+                                  child: CustomPagination(
+                                    // persons: state
+                                    //     .employeeNamesList, // Pass the list of data
+                                    pageCount:
+                                        state.pageIndex, // Pass the page count
+                                    onPageChanged: (int index) async {
+                                      // Your logic to update UI or fetch data for the selected page
+                                      AllEmployeesBloc.get(context).add(
+                                          EditPageNumber(pageIndex: index));
+                                    },
+                                  ),
+                                ),
+                                // Display the list of data
                                 SizedBox(
                                   width: MediaQuery.of(context).size.width,
                                   child: (state.submission ==
@@ -789,10 +800,6 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                               const NeverScrollableScrollPhysics(),
                                           itemCount:
                                               state.employeeNamesList.length,
-                                          //         .length <
-                                          //     20
-                                          // ? state.employeeNamesList.length
-                                          // : 20,
                                           gridDelegate: Responsive.isMobile(
                                                   context)
                                               ? const SliverGridDelegateWithFixedCrossAxisCount(
@@ -858,6 +865,99 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                             ),
                           ),
                         ),
+
+                        // Padding(
+                        //   padding: const EdgeInsets.all(10.0),
+                        //   child: SingleChildScrollView(
+                        //     child: Column(
+                        //       children: [
+                        //         SizedBox(
+                        //           width: MediaQuery.of(context).size.width,
+                        //           child: (state.submission ==
+                        //                   Submission.noDataFound)
+                        //               ? const Center(
+                        //                   child: Text(
+                        //                   "No data found Yet!",
+                        //                   style: TextStyle(
+                        //                       color: AppColors.blueB,
+                        //                       fontSize: 25,
+                        //                       fontWeight: FontWeight.w600),
+                        //                 ))
+                        //               : GridView.builder(
+                        //                   shrinkWrap: true,
+                        //                   physics:
+                        //                       const NeverScrollableScrollPhysics(),
+                        //                   itemCount:
+                        //                       state.employeeNamesList.length,
+                        //                   //         .length <
+                        //                   //     20
+                        //                   // ? state.employeeNamesList.length
+                        //                   // : 20,
+                        //                   gridDelegate: Responsive.isMobile(
+                        //                           context)
+                        //                       ? const SliverGridDelegateWithFixedCrossAxisCount(
+                        //                           crossAxisCount: 1,
+                        //                           crossAxisSpacing: 45,
+                        //                           mainAxisSpacing: 45,
+                        //                           mainAxisExtent: 350,
+                        //                         )
+                        //                       : Responsive.isTablet(context)
+                        //                           ? const SliverGridDelegateWithFixedCrossAxisCount(
+                        //                               crossAxisCount: 2,
+                        //                               crossAxisSpacing: 45,
+                        //                               mainAxisSpacing: 45,
+                        //                               mainAxisExtent: 350,
+                        //                             )
+                        //                           : MediaQuery.of(context)
+                        //                                       .size
+                        //                                       .width <
+                        //                                   1500
+                        //                               ? SliverGridDelegateWithMaxCrossAxisExtent(
+                        //                                   maxCrossAxisExtent:
+                        //                                       MediaQuery.of(
+                        //                                                   context)
+                        //                                               .size
+                        //                                               .width *
+                        //                                           0.24,
+                        //                                   crossAxisSpacing: 45,
+                        //                                   mainAxisSpacing: 45,
+                        //                                   mainAxisExtent: 350,
+                        //                                 )
+                        //                               : SliverGridDelegateWithMaxCrossAxisExtent(
+                        //                                   maxCrossAxisExtent:
+                        //                                       MediaQuery.of(
+                        //                                                   context)
+                        //                                               .size
+                        //                                               .width *
+                        //                                           0.24,
+                        //                                   crossAxisSpacing: 45,
+                        //                                   mainAxisSpacing: 45,
+                        //                                   mainAxisExtent: 350,
+                        //                                 ),
+                        //                   itemBuilder: (context, index) {
+                        //                     final employee =
+                        //                         state.employeeNamesList[index];
+                        //                     return _contactUi(
+                        //                       id: employee.sId ?? '',
+                        //                       name: employee.name ?? '',
+                        //                       profession: 'Software Developer',
+                        //                       imagesrc:
+                        //                           employee.imagePath ?? '',
+                        //                       phoneNum: employee.phone ?? '',
+                        //                       email: employee.email ?? '',
+                        //                       userId: employee.userId ?? '',
+                        //                       onUpdate: () {
+                        //                         _showUpdateDialog(
+                        //                             context, employee);
+                        //                       },
+                        //                     );
+                        //                   },
+                        //                 ),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
 
                         //   },
                         // ),
@@ -993,6 +1093,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
           ),
           FxBox.h24,
           ConstText.lightText(
+            color: Colors.white,
             text: name,
             fontSize: 18,
             fontWeight: FontWeight.w700,
@@ -1001,16 +1102,30 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
           ConstText.lightText(
             text: userId,
             fontSize: 14,
-            color: Colors.black,
+            color: Colors.white,
             fontWeight: FontWeight.w400,
           ),
           FxBox.h24,
           _iconWithText(
-              icon: const Icon(Icons.badge_outlined), text: profession),
+              icon: const Icon(
+                Icons.badge_outlined,
+                color: Colors.white,
+              ),
+              text: profession),
           FxBox.h28,
-          _iconWithText(icon: const Icon(Icons.contact_phone), text: phoneNum),
+          _iconWithText(
+              icon: const Icon(
+                Icons.contact_phone,
+                color: Colors.white,
+              ),
+              text: phoneNum),
           FxBox.h28,
-          _iconWithText(icon: const Icon(Icons.email), text: email),
+          _iconWithText(
+              icon: const Icon(
+                Icons.email,
+                color: Colors.white,
+              ),
+              text: email),
           // FxBox.h24,
         ],
       ),
@@ -1026,6 +1141,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
         icon,
         FxBox.w16,
         ConstText.lightText(
+          color: Colors.white,
           text: text,
           fontSize: 14,
           fontWeight: FontWeight.w400,

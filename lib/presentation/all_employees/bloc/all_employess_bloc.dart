@@ -159,7 +159,8 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
     try {
       final employeeModel = await RemoteProvider().getAllEmployeeNames(
         companyName: companyNameRepo,
-        page_number: state.pageIndex,
+        pageNumber:
+            state.pageIndex == 0 ? state.pageIndex + 1 : state.pageIndex,
       );
 
       if (employeeModel.data!.isNotEmpty) {

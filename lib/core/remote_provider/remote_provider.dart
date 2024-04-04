@@ -218,13 +218,13 @@ class RemoteProvider {
 
   Future<EmployeeModel> getAllEmployeeNames({
     required String companyName,
-    required int page_number,
+    required int pageNumber,
   }) async {
     try {
       Map<String, dynamic> callBack = await RemoteDataSource()
           .post(endPoint: "/qdrant/retrieve_it_all", body: {
         "collection_name": companyName,
-        "page_number": page_number,
+        "page_number": pageNumber,
       });
 
       if (callBack.isNotEmpty) {

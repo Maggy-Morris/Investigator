@@ -305,7 +305,7 @@ class _LoginButton extends StatelessWidget {
       builder: (context, state) {
         return state.status.isSubmissionInProgress
             ? loadingIndicator(
-                color: AppColors.blueBlack,
+                color: Theme.of(context).primaryColor,
               )
             : SizedBox(
                 width: Responsive.isWeb(context)

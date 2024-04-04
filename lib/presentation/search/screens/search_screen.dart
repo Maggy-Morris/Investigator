@@ -440,7 +440,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                               children: [
                                                 GestureDetector(
                                                   onTap: () async {
-                                                    FilePickerResult? result =
+                                                    // FilePickerResult? result =
                                                         await FilePicker
                                                             .platform
                                                             .pickFiles(
@@ -978,7 +978,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
       width: 300,
       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 18),
       decoration: BoxDecoration(
-          color: AppColors.babyBlue,
+          color: AppColors.grey.withOpacity(0.3),
           // const Color.fromARGB(255, 143, 188, 211),
           borderRadius: BorderRadius.circular(12.0)),
       child: Column(
@@ -1085,22 +1085,37 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
           ConstText.lightText(
             text: name,
             fontSize: 18,
+            color: Colors.white,
             fontWeight: FontWeight.w700,
           ),
           FxBox.h8,
           ConstText.lightText(
             text: userId,
             fontSize: 14,
-            color: Colors.black,
+            color: Colors.white,
             fontWeight: FontWeight.w400,
           ),
           FxBox.h24,
           _iconWithText(
-              icon: const Icon(Icons.badge_outlined), text: profession),
+              icon: const Icon(
+                Icons.badge_outlined,
+                color: Colors.white,
+              ),
+              text: profession),
           FxBox.h28,
-          _iconWithText(icon: const Icon(Icons.contact_phone), text: phoneNum),
+          _iconWithText(
+              icon: const Icon(
+                Icons.contact_phone,
+                color: Colors.white,
+              ),
+              text: phoneNum),
           FxBox.h28,
-          _iconWithText(icon: const Icon(Icons.email), text: email),
+          _iconWithText(
+              icon: const Icon(
+                Icons.email,
+                color: Colors.white,
+              ),
+              text: email),
           // FxBox.h24,
         ],
       ),
