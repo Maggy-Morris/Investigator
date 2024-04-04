@@ -7,6 +7,7 @@ class AllEmployeesState extends Equatable {
   final String image;
   final String id;
   int pageIndex;
+  int pageCount;
   int count;
 
   final String phoneNum;
@@ -19,6 +20,8 @@ class AllEmployeesState extends Equatable {
   final Submission submission;
 
   AllEmployeesState({
+      this.pageCount= 0,
+
     this.pageIndex = 0,
     this.count = 0,
     this.imageFile,
@@ -38,6 +41,8 @@ class AllEmployeesState extends Equatable {
 
   AllEmployeesState copyWith({
     PlatformFile? imageFile,
+    int? pageCount,
+
     int? pageIndex,
     int? count,
     String? id,
@@ -54,6 +59,7 @@ class AllEmployeesState extends Equatable {
   
   }) {
     return AllEmployeesState(
+      pageCount :pageCount ?? this.pageCount,
       count: count ?? this.count,
       imageFile: imageFile ?? this.imageFile,
       pageIndex: pageIndex ?? this.pageIndex,
@@ -76,6 +82,7 @@ class AllEmployeesState extends Equatable {
 
   @override
   List<Object?> get props => [
+    pageCount,
         id,
         isSearching,
         image,

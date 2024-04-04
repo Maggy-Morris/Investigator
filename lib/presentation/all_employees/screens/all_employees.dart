@@ -337,14 +337,13 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                   ),
                                                   ElevatedButton(
                                                     onPressed: () {
-                                                      if (state.personName
-                                                              .isEmpty &&
-                                                          state
-                                                              .userId.isEmpty &&
-                                                          state.email.isEmpty &&
-                                                          state.image.isEmpty &&
-                                                          state.phoneNum
-                                                              .isEmpty) {
+                                                      if (state.personName ==
+                                                              "" &&
+                                                          state.userId == "" &&
+                                                          state.email == "" &&
+                                                          state.image == "" &&
+                                                          state.phoneNum ==
+                                                              "") {
                                                         FxToast.showErrorToast(
                                                           context: context,
                                                           message:
@@ -699,68 +698,6 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                             ),
                           ),
                         FxBox.h24,
-
-                        ///show the employees data
-                        // BlocBuilder<AllEmployeesBloc, AllEmployeesState>(
-                        //   builder: (context, state) {
-                        //     return
-                        // return BlocBuilder<AllEmployeesBloc,
-                        //     AllEmployeesState>(
-                        //   builder: (context, state) {
-                        //     var hits = state.employeeNamesList;
-                        //
-                        //     if (hits.isNotEmpty) {
-                        //       return Container(
-                        //         padding: const EdgeInsets.only(
-                        //             right: 10, bottom: 30),
-                        //         child: SfDataPagerTheme(
-                        //           data: SfDataPagerThemeData(
-                        //             itemColor: Colors.white,
-                        //             selectedItemColor:
-                        //             AppColors.thinkRedColor,
-                        //             itemBorderRadius:
-                        //             BorderRadius.circular(15),
-                        //           ),
-                        //           child: SfDataPager(
-                        //               controller: DataPagerController(),
-                        //               lastPageItemVisible: false,
-                        //               pageCount: (((state.count) / state.take)
-                        //                   .ceil())
-                        //                   .toDouble(),
-                        //               direction: Axis.horizontal,
-                        //               visibleItemsCount:
-                        //               isDisplayDesktop(context) ? 15 : 5,
-                        //               onPageNavigationStart:
-                        //                   (int pageIndex) async {
-                        //                 PeopleBloc.get(context).add(EditPageNumber(pageIndex));
-                        //               },
-                        //               // availableRowsPerPage: const [
-                        //               //   100,
-                        //               //   500,
-                        //               //   1000,
-                        //               //   2000,
-                        //               //   5000,
-                        //               //   9000,
-                        //               // ],
-                        //               // onRowsPerPageChanged:
-                        //               //     (int? rowsPerPage) async {
-                        //               //   ThinkMainScreenPlusCubit.get(context)
-                        //               //       .onEditTake(rowsPerPage ?? 100);
-                        //               // },
-                        //               delegate: DataPagerDelegate(),
-                        //               onPageNavigationEnd:
-                        //                   (int pageIndex) async {}),
-                        //         ),
-                        //       );
-                        //     } else {
-                        //       return Container();
-                        //     }
-                        //   },
-                        // );
-                        // personsPager(
-                        //     persons: state.employeeNamesList,
-                        //     totalSize: state.count,
-                        //     context: context),
                         Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: SingleChildScrollView(
@@ -773,7 +710,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                     // persons: state
                                     //     .employeeNamesList, // Pass the list of data
                                     pageCount:
-                                        state.pageIndex, // Pass the page count
+                                        state.pageCount, // Pass the page count
                                     onPageChanged: (int index) async {
                                       // Your logic to update UI or fetch data for the selected page
                                       AllEmployeesBloc.get(context).add(
@@ -865,102 +802,6 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                             ),
                           ),
                         ),
-
-                        // Padding(
-                        //   padding: const EdgeInsets.all(10.0),
-                        //   child: SingleChildScrollView(
-                        //     child: Column(
-                        //       children: [
-                        //         SizedBox(
-                        //           width: MediaQuery.of(context).size.width,
-                        //           child: (state.submission ==
-                        //                   Submission.noDataFound)
-                        //               ? const Center(
-                        //                   child: Text(
-                        //                   "No data found Yet!",
-                        //                   style: TextStyle(
-                        //                       color: AppColors.blueB,
-                        //                       fontSize: 25,
-                        //                       fontWeight: FontWeight.w600),
-                        //                 ))
-                        //               : GridView.builder(
-                        //                   shrinkWrap: true,
-                        //                   physics:
-                        //                       const NeverScrollableScrollPhysics(),
-                        //                   itemCount:
-                        //                       state.employeeNamesList.length,
-                        //                   //         .length <
-                        //                   //     20
-                        //                   // ? state.employeeNamesList.length
-                        //                   // : 20,
-                        //                   gridDelegate: Responsive.isMobile(
-                        //                           context)
-                        //                       ? const SliverGridDelegateWithFixedCrossAxisCount(
-                        //                           crossAxisCount: 1,
-                        //                           crossAxisSpacing: 45,
-                        //                           mainAxisSpacing: 45,
-                        //                           mainAxisExtent: 350,
-                        //                         )
-                        //                       : Responsive.isTablet(context)
-                        //                           ? const SliverGridDelegateWithFixedCrossAxisCount(
-                        //                               crossAxisCount: 2,
-                        //                               crossAxisSpacing: 45,
-                        //                               mainAxisSpacing: 45,
-                        //                               mainAxisExtent: 350,
-                        //                             )
-                        //                           : MediaQuery.of(context)
-                        //                                       .size
-                        //                                       .width <
-                        //                                   1500
-                        //                               ? SliverGridDelegateWithMaxCrossAxisExtent(
-                        //                                   maxCrossAxisExtent:
-                        //                                       MediaQuery.of(
-                        //                                                   context)
-                        //                                               .size
-                        //                                               .width *
-                        //                                           0.24,
-                        //                                   crossAxisSpacing: 45,
-                        //                                   mainAxisSpacing: 45,
-                        //                                   mainAxisExtent: 350,
-                        //                                 )
-                        //                               : SliverGridDelegateWithMaxCrossAxisExtent(
-                        //                                   maxCrossAxisExtent:
-                        //                                       MediaQuery.of(
-                        //                                                   context)
-                        //                                               .size
-                        //                                               .width *
-                        //                                           0.24,
-                        //                                   crossAxisSpacing: 45,
-                        //                                   mainAxisSpacing: 45,
-                        //                                   mainAxisExtent: 350,
-                        //                                 ),
-                        //                   itemBuilder: (context, index) {
-                        //                     final employee =
-                        //                         state.employeeNamesList[index];
-                        //                     return _contactUi(
-                        //                       id: employee.sId ?? '',
-                        //                       name: employee.name ?? '',
-                        //                       profession: 'Software Developer',
-                        //                       imagesrc:
-                        //                           employee.imagePath ?? '',
-                        //                       phoneNum: employee.phone ?? '',
-                        //                       email: employee.email ?? '',
-                        //                       userId: employee.userId ?? '',
-                        //                       onUpdate: () {
-                        //                         _showUpdateDialog(
-                        //                             context, employee);
-                        //                       },
-                        //                     );
-                        //                   },
-                        //                 ),
-                        //         ),
-                        //       ],
-                        //     ),
-                        //   ),
-                        // ),
-
-                        //   },
-                        // ),
                       ],
                     ),
                   ),

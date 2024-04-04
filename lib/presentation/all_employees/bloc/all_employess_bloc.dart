@@ -163,11 +163,16 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
             state.pageIndex == 0 ? state.pageIndex + 1 : state.pageIndex,
       );
 
+      if (state.pageCount == 0) {
+        emit(state.copyWith(
+          pageCount: employeeModel.nPages,
+        ));
+      }
+
       if (employeeModel.data!.isNotEmpty) {
         emit(state.copyWith(
           // submission: Submission.success,
           employeeNamesList: employeeModel.data,
-          pageIndex: employeeModel.nPages,
           count: employeeModel.count,
         ));
       } else {
