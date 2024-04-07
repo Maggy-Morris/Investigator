@@ -19,6 +19,7 @@ import 'dart:html' as html;
 
 import '../../../authentication/authentication_repository.dart';
 import '../../../core/remote_provider/remote_data_source.dart';
+import '../../../core/widgets/fullscreenImage.dart';
 import '../../camera_controller/cubit/photo_app_cubit.dart';
 import '../bloc/home_bloc.dart';
 
@@ -354,9 +355,12 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                 itemBuilder: (context, index) {
                                                   final image =
                                                       state.snapShots[index];
+
+                                                  final data_time =
+                                                      state.data[index];
                                                   return imagesListWidget(
-                                                    image64: image,
-                                                  );
+                                                      image64: image,
+                                                      text: data_time);
                                                 },
                                               ),
                                       ),
@@ -579,21 +583,46 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
 
   Widget imagesListWidget({
     required String image64,
-    // required String imagesrc,
+    required String text,
   }) {
     return Container(
       width: 300,
       padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
       decoration: BoxDecoration(
-        color: AppColors.grey.withOpacity(0.3),
-        // const Color.fromARGB(255, 143, 188, 211),
+        color: Colors.grey.withOpacity(0.3),
         borderRadius: BorderRadius.circular(12.0),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(6.0),
-        child: Image.memory(
-          _decodeBase64Image(base64Image: image64),
-          fit: BoxFit.cover,
+        child: Stack(
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => FullScreenImageFromMemory(
+                            text: text, imageUrl: image64)));
+              },
+              child: Image.memory(
+                _decodeBase64Image(base64Image: image64),
+                width: double.infinity,
+                height: double.infinity,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.all(8),
+              color: Colors.black.withOpacity(0.5),
+              child: Text(
+                text,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -604,3 +633,33 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
     return Uint8List.fromList(bytes);
   }
 }
+
+
+
+
+// Stack(
+//         fit: StackFit.expand,
+//         children: [
+//         ClipRRect(
+//           borderRadius: BorderRadius.circular(6.0),
+//           child: Image.memory(
+//             _decodeBase64Image(base64Image: image64),
+//             fit: BoxFit.cover,
+//           ),
+//         ),
+//         Positioned(
+//           bottom: 0,
+//           left: 0,
+//           child: Container(
+//             padding: EdgeInsets.all(8),
+//             color: Colors.black.withOpacity(0.5),
+//             child: Text(
+//               'Your Texttttttttttttttttttttttttttttttttttttt',
+//               style: TextStyle(
+//                 color: Colors.white,
+//                 fontSize: 16,
+//               ),
+//             ),
+//           ),
+//         ),
+//       ])
