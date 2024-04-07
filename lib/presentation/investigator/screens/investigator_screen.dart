@@ -113,29 +113,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                 ),
                               ),
 
-                              // Row(
-                              //   children: [
-                              //     Expanded(
-                              //       child: Column(
-                              //         crossAxisAlignment:
-                              //             CrossAxisAlignment.start,
-                              //         children: [
-
-                              // _commonText("Person Name".tr()),
-                              // FxBox.h4,
-                              // _listBox(
-                              //     controller: nameController,
-                              //     hintText: "Add Person Name".tr(),
-                              //     onChanged: (value) {
-                              //       HomeBloc.get(context).add(
-                              //           getPersonName(
-                              //               personName: value));
-                              //     }),
-                              //         ],
-                              //       ),
-                              //     ),
-                              //   ],
-                              // ),
+                           
 
                               FxBox.h16,
                               // Here to search for an Employee in the database
@@ -157,7 +135,6 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                           children: [
                                             GestureDetector(
                                               onTap: () async {
-                                                FilePickerResult? result =
                                                     await FilePicker.platform
                                                         .pickFiles(
                                                   type: FileType.image,
@@ -476,28 +453,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                     ),
                             ],
                           ),
-                        // FxBox.h4,
-                        // Column(
-                        //   mainAxisAlignment: MainAxisAlignment.end,
-                        //   children: <Widget>[
-                        //     SizedBox(
-                        //       height: 200,
-                        //       width: 200,
-                        //       child: Center(
-                        //         child: _cameraPreviewWidget(),
-                        //       ),
-                        //       // ),
-                        //     ),
-                        //     Padding(
-                        //       padding: const EdgeInsets.all(5.0),
-                        //       child: Row(
-                        //         children: <Widget>[
-                        //           _cameraTogglesRowWidget(),
-                        //         ],
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
+                        
                       ],
                     ),
                   ),

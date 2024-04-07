@@ -7,6 +7,16 @@ class AllEmployeesEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class ImageWidget extends AllEmployeesEvent {
+  final Widget imageWidget;
+
+  ImageWidget({required this.imageWidget});
+
+  @override
+  List<Object?> get props => [imageWidget];
+}
+
+
 class EditPageNumber extends AllEmployeesEvent {
   final int pageIndex;
 

@@ -56,6 +56,12 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
     // on<CameraAddYear>(_onCameraAddYear);
   }
 
+  _onImageWidget(ImageWidget event, Emitter<AllEmployeesState> emit) async {
+    emit(state.copyWith(
+        imageWidget: event.imageWidget, submission: Submission.loading));
+    // Your logic here to fetch data and determine the imageWidget
+  }
+
   _onEditPageNumber(
       EditPageNumber event, Emitter<AllEmployeesState> emit) async {
     emit(state.copyWith(
@@ -225,10 +231,12 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
         image: state.image,
       );
       if (result.success == true) {
-        emit(state.copyWith(submission: Submission.success));
-        add(const GetEmployeeNamesEvent());
+        emit(state.copyWith(
+            submission: Submission.success, responseMessage: result.message));
+        // add(const GetEmployeeNamesEvent());
       } else {
-        emit(state.copyWith(submission: Submission.error));
+        emit(state.copyWith(
+            submission: Submission.error, responseMessage: result.message));
       }
     } catch (e) {
       debugPrint(e.toString());

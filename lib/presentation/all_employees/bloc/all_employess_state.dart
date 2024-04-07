@@ -8,7 +8,10 @@ class AllEmployeesState extends Equatable {
   final String id;
   int pageIndex;
   int pageCount;
+  final Widget? imageWidget;
+
   int count;
+  final String responseMessage;
 
   final String phoneNum;
   final String email;
@@ -20,8 +23,9 @@ class AllEmployeesState extends Equatable {
   final Submission submission;
 
   AllEmployeesState({
-      this.pageCount= 0,
-
+    this.imageWidget,
+    this.responseMessage = "",
+    this.pageCount = 0,
     this.pageIndex = 0,
     this.count = 0,
     this.imageFile,
@@ -36,13 +40,13 @@ class AllEmployeesState extends Equatable {
     this.companyName = "",
     this.employeeNamesList = const [],
     this.submission = Submission.initial,
-   
   });
 
   AllEmployeesState copyWith({
+    Widget? imageWidget,
+    String? responseMessage,
     PlatformFile? imageFile,
     int? pageCount,
-
     int? pageIndex,
     int? count,
     String? id,
@@ -56,10 +60,13 @@ class AllEmployeesState extends Equatable {
     String? companyName,
     String? personName,
     Submission? submission,
-  
   }) {
     return AllEmployeesState(
-      pageCount :pageCount ?? this.pageCount,
+      imageWidget: imageWidget ?? this.imageWidget,
+
+      responseMessage: responseMessage ?? this.responseMessage,
+
+      pageCount: pageCount ?? this.pageCount,
       count: count ?? this.count,
       imageFile: imageFile ?? this.imageFile,
       pageIndex: pageIndex ?? this.pageIndex,
@@ -76,13 +83,14 @@ class AllEmployeesState extends Equatable {
       companyName: companyName ?? this.companyName,
       personName: personName ?? this.personName,
       submission: submission ?? this.submission,
-      
     );
   }
 
   @override
   List<Object?> get props => [
-    pageCount,
+        imageWidget,
+        responseMessage,
+        pageCount,
         id,
         isSearching,
         image,
@@ -90,8 +98,6 @@ class AllEmployeesState extends Equatable {
         imageFile,
         pageIndex,
         count,
-
-        
         personName,
         companyName,
         employeeNamesList,
