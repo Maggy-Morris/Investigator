@@ -644,12 +644,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                           const NeverScrollableScrollPhysics(),
                                                       itemCount: state
                                                                   .employeeNamesList
-                                                                  .length <
-                                                              20
-                                                          ? state
-                                                              .employeeNamesList
-                                                              .length
-                                                          : 20,
+                                                                  .length ,
                                                       gridDelegate: Responsive
                                                               .isMobile(context)
                                                           ? const SliverGridDelegateWithFixedCrossAxisCount(
@@ -736,6 +731,9 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                         ),
                                       ),
                                     ),
+                                  
+                                  
+                                  
                                   ],
                                 ),
                             ],

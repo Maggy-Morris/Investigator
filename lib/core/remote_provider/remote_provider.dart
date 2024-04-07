@@ -370,6 +370,7 @@ class RemoteProvider {
       if (callBack.isNotEmpty) {
         SearchByVideoAndImage callBackList =
             SearchByVideoAndImage.fromJson(callBack);
+
         return callBackList;
       } else {
         return SearchByVideoAndImage();

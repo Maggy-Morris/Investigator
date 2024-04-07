@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
@@ -17,6 +18,7 @@ import 'package:video_player/video_player.dart';
 import 'dart:html' as html;
 
 import '../../../authentication/authentication_repository.dart';
+import '../../../core/remote_provider/remote_data_source.dart';
 import '../../camera_controller/cubit/photo_app_cubit.dart';
 import '../bloc/home_bloc.dart';
 
@@ -275,7 +277,93 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
 
                               FxBox.h16,
 
-                              
+                              ///employee Data
+
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: (state.submission ==
+                                                Submission.noDataFound)
+                                            ? const Center(
+                                                child: Text(
+                                                "No data found Yet!",
+                                                style: TextStyle(
+                                                    color: AppColors.blueB,
+                                                    fontSize: 25,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ))
+                                            : GridView.builder(
+                                                shrinkWrap: true,
+                                                physics:
+                                                    const NeverScrollableScrollPhysics(),
+                                                itemCount:
+                                                    state.snapShots.length,
+                                                gridDelegate: Responsive
+                                                        .isMobile(context)
+                                                    ? const SliverGridDelegateWithFixedCrossAxisCount(
+                                                        crossAxisCount: 1,
+                                                        crossAxisSpacing: 45,
+                                                        mainAxisSpacing: 45,
+                                                        mainAxisExtent: 350,
+                                                      )
+                                                    : Responsive.isTablet(
+                                                            context)
+                                                        ? const SliverGridDelegateWithFixedCrossAxisCount(
+                                                            crossAxisCount: 2,
+                                                            crossAxisSpacing:
+                                                                45,
+                                                            mainAxisSpacing: 45,
+                                                            mainAxisExtent: 350,
+                                                          )
+                                                        : MediaQuery.of(context)
+                                                                    .size
+                                                                    .width <
+                                                                1500
+                                                            ? SliverGridDelegateWithMaxCrossAxisExtent(
+                                                                maxCrossAxisExtent:
+                                                                    MediaQuery.of(context)
+                                                                            .size
+                                                                            .width *
+                                                                        0.24,
+                                                                crossAxisSpacing:
+                                                                    45,
+                                                                mainAxisSpacing:
+                                                                    45,
+                                                                mainAxisExtent:
+                                                                    350,
+                                                              )
+                                                            : SliverGridDelegateWithMaxCrossAxisExtent(
+                                                                maxCrossAxisExtent:
+                                                                    MediaQuery.of(context)
+                                                                            .size
+                                                                            .width *
+                                                                        0.24,
+                                                                crossAxisSpacing:
+                                                                    45,
+                                                                mainAxisSpacing:
+                                                                    45,
+                                                                mainAxisExtent:
+                                                                    350,
+                                                              ),
+                                                itemBuilder: (context, index) {
+                                                  final image =
+                                                      state.snapShots[index];
+                                                  return imagesListWidget(
+                                                    image64: image,
+                                                  );
+                                                },
+                                              ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
 
                               // ),
                             ],
@@ -488,45 +576,31 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
   }
 
 ////////////////////////////////////////////////////////////////////////////////
-  Widget _listBox({
-    required String hintText,
-    required void Function(String)? onChanged,
-    required TextEditingController? controller,
-    bool? enabled,
-  }) {
-    return CustomTextField(
-      border: const OutlineInputBorder(),
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 12,
-        vertical: 6,
-      ),
-      controller: controller,
-      filled: true,
-      enabled: enabled ?? true,
-      fillColor: Colors.grey.shade200,
-      enabledBorder:
-          OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      disabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(style: BorderStyle.none)),
-      focusedBorder:
-          OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      hintText: hintText,
-      onChanged: onChanged,
-    );
-  }
 
-  Widget _commonText(String text) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: Responsive.isMobile(context) ? 8.0 : 0.0,
+  Widget imagesListWidget({
+    required String image64,
+    // required String imagesrc,
+  }) {
+    return Container(
+      width: 300,
+      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+      decoration: BoxDecoration(
+        color: AppColors.grey.withOpacity(0.3),
+        // const Color.fromARGB(255, 143, 188, 211),
+        borderRadius: BorderRadius.circular(12.0),
       ),
-      child: Text(
-        text,
-        style: const TextStyle(
-          fontWeight: FontWeight.w600,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(6.0),
+        child: Image.memory(
+          _decodeBase64Image(base64Image: image64),
+          fit: BoxFit.cover,
         ),
       ),
     );
+  }
+
+  Uint8List _decodeBase64Image({required String base64Image}) {
+    final bytes = base64.decode(base64Image);
+    return Uint8List.fromList(bytes);
   }
 }

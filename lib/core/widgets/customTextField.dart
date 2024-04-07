@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 TextFormField buildTextFormField({
   required String labelText,
   required Function(String) onChanged,
-
 }) {
   return TextFormField(
+    style: const TextStyle(color: Colors.white),
     decoration: InputDecoration(
-      
       labelText: labelText,
     ),
     onChanged: onChanged,

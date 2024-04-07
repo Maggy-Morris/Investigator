@@ -12,8 +12,8 @@ class RemoteDataSource {
   // static String baseURL = 'http://127.0.0.1:10000';
   // static String baseUrlWithoutPort = "//127.0.0.1:";
 
-  static String baseURL = 'http://192.168.1.135:10000';
-  static String baseUrlWithoutPort = "//192.168.1.135:";
+  static String baseURL = 'http://192.168.1.66:10000';
+  static String baseUrlWithoutPort = "//192.168.1.66:";
   Future<Map<String, dynamic>> post({
     required String endPoint,
     Object? body,

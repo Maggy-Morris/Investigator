@@ -173,7 +173,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     )
         .then((value) {
       if (value.found != false) {
-        emit(state.copyWith(submission: Submission.success, data: value.data));
+        emit(state.copyWith(
+          submission: Submission.success,
+          data: value.data,
+          snapShots: value.snapshot_list,
+        ));
       } else {
         emit(state.copyWith(submission: Submission.noDataFound));
       }
