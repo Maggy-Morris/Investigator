@@ -91,7 +91,6 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                               fontWeight: FontWeight.w600,
                               color: AppColors.white),
                         ),
-
                         FxBox.h24,
                         if (Responsive.isWeb(context))
                           Column(
@@ -113,8 +112,6 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                 ),
                               ),
 
-                           
-
                               FxBox.h16,
                               // Here to search for an Employee in the database
                               Row(
@@ -135,11 +132,11 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                           children: [
                                             GestureDetector(
                                               onTap: () async {
-                                                    await FilePicker.platform
-                                                        .pickFiles(
+                                                await FilePicker.platform
+                                                    .pickFiles(
                                                   type: FileType.image,
                                                 )
-                                                        .then((result) {
+                                                    .then((result) {
                                                   if (result != null &&
                                                       result.files.isNotEmpty) {
                                                     // Use the selected image file
@@ -262,7 +259,8 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(10)),
-                                            backgroundColor: AppColors.buttonBlue,
+                                            backgroundColor:
+                                                AppColors.buttonBlue,
                                           ),
                                           label: Text(
                                             "confirm".tr(),
@@ -277,23 +275,14 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
 
                               FxBox.h16,
 
+                              
+
                               // ),
                             ],
                           ),
                         if (!Responsive.isWeb(context))
                           Column(
                             children: [
-                              _commonText("Person name".tr()),
-                              FxBox.h4,
-                              _listBox(
-                                  hintText: "Add Person Name".tr(),
-                                  controller: nameController,
-                                  onChanged: (value) {
-                                    HomeBloc.get(context)
-                                        .add(getPersonName(personName: value));
-                                  }),
-                              FxBox.h16,
-
                               // Here to search for an Employee in the database
                               Column(
                                 mainAxisAlignment:
@@ -439,7 +428,8 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(10)),
-                                            backgroundColor: AppColors.buttonBlue,
+                                            backgroundColor:
+                                                AppColors.buttonBlue,
                                           ),
                                           label: Text(
                                             "confirm".tr(),
@@ -453,7 +443,6 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                     ),
                             ],
                           ),
-                        
                       ],
                     ),
                   ),

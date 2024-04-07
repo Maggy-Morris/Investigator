@@ -19,6 +19,7 @@ import '../../../core/enum/enum.dart';
 import '../../../core/loader/loading_indicator.dart';
 import '../../../core/models/search_by_image_model.dart';
 import '../../../core/remote_provider/remote_data_source.dart';
+import '../../../core/widgets/fullscreenImage.dart';
 import '../../all_employees/screens/text.dart';
 import '../../camera_controller/cubit/photo_app_cubit.dart';
 // import '../../camera_controller/photo_app_logic.dart';
@@ -441,12 +442,11 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                 GestureDetector(
                                                   onTap: () async {
                                                     // FilePickerResult? result =
-                                                        await FilePicker
-                                                            .platform
-                                                            .pickFiles(
+                                                    await FilePicker.platform
+                                                        .pickFiles(
                                                       type: FileType.image,
                                                     )
-                                                            .then((result) {
+                                                        .then((result) {
                                                       if (result != null &&
                                                           result.files
                                                               .isNotEmpty) {
@@ -996,12 +996,25 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(6.0),
                 ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(6.0),
-                  child: Image.network(
-                    "http:${RemoteDataSource.baseUrlWithoutPort}8000/$imagesrc",
-                    // Images.profileImage,
-                    fit: BoxFit.cover,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FullScreenImage(
+                            text: name,
+                            imageUrl:
+                                "http:${RemoteDataSource.baseUrlWithoutPort}8000/$imagesrc"),
+                      ),
+                    );
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(6.0),
+                    child: Image.network(
+                      "http:${RemoteDataSource.baseUrlWithoutPort}8000/$imagesrc",
+                      // Images.profileImage,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),

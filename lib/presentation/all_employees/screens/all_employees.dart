@@ -15,6 +15,7 @@ import 'package:Investigator/core/widgets/sizedbox.dart';
 import 'package:Investigator/presentation/standard_layout/screens/standard_layout.dart';
 import '../../../authentication/authentication_repository.dart';
 import '../../../core/enum/enum.dart';
+import '../../../core/widgets/fullscreenImage.dart';
 import '../../../core/widgets/persons_per_widget.dart';
 import '../../../core/widgets/toast/toast.dart';
 import '../bloc/all_employess_bloc.dart';
@@ -910,12 +911,25 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(6.0),
                 ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(6.0),
-                  child: Image.network(
-                    "http:${RemoteDataSource.baseUrlWithoutPort}8000/$imagesrc",
-                    // Images.profileImage,
-                    fit: BoxFit.cover,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FullScreenImage(
+                            text: name,
+                            imageUrl:
+                                "http:${RemoteDataSource.baseUrlWithoutPort}8000/$imagesrc"),
+                      ),
+                    );
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(6.0),
+                    child: Image.network(
+                      "http:${RemoteDataSource.baseUrlWithoutPort}8000/$imagesrc",
+                      // Images.profileImage,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
