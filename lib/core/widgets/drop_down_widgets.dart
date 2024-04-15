@@ -22,7 +22,7 @@ Widget multiSelectGenericDropdown<T>({
     items: itemsList,
     itemAsString: itemAsString,
     onChanged: onChanged,
-    selectedItems: selectedItem??[],
+    selectedItems: selectedItem ?? [],
     enabled: isEnabled,
     clearButtonProps: ClearButtonProps(
         color: AppColors.thinkRedColor,
@@ -36,7 +36,7 @@ Widget multiSelectGenericDropdown<T>({
     dropdownDecoratorProps: DropDownDecoratorProps(
       dropdownSearchDecoration: InputDecoration(
         hintText: titleName,
-        label:(titleName?.isNotEmpty??false)? Text(titleName??""):null,
+        label: (titleName?.isNotEmpty ?? false) ? Text(titleName ?? "") : null,
         isDense: false,
         hintStyle: const TextStyle(color: Color(0x30171725)),
         contentPadding: const EdgeInsets.all(10),
@@ -44,7 +44,7 @@ Widget multiSelectGenericDropdown<T>({
         errorText: (isRequired) ? 'Required' : null,
         prefixIcon: iconWidget,
         filled: filled,
-        fillColor: Colors.grey.shade200,
+        fillColor: AppColors.babyBlue,
         border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: const BorderSide(style: painting.BorderStyle.none)),
@@ -56,7 +56,8 @@ Widget multiSelectGenericDropdown<T>({
             borderSide: const BorderSide(style: painting.BorderStyle.none)),
         disabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(style: painting.BorderStyle.none,color:  Colors.black12)),
+            borderSide: const BorderSide(
+                style: painting.BorderStyle.none, color: Colors.black12)),
       ),
     ),
     popupProps: PopupPropsMultiSelection.menu(
@@ -78,7 +79,7 @@ Widget multiSelectGenericDropdown<T>({
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.all(10),
           filled: true,
-          fillColor: Colors.grey.shade200,
+          fillColor: Colors.grey,
           isDense: true,
           suffixIcon: const Icon(Icons.search, color: AppColors.thinkRedColor),
           border: OutlineInputBorder(
@@ -101,7 +102,7 @@ Widget singleSelectGenericDropdown<T>({
   required bool isRequired,
   String? titleName,
   bool showSearch = false,
-  List<T> itemsList =const [],
+  List<T> itemsList = const [],
   // GlobalKey<DropdownSearchState<DropDownModel>>? formKey,
   void Function(T?)? onChanged,
   Widget? iconWidget,
@@ -132,7 +133,7 @@ Widget singleSelectGenericDropdown<T>({
     dropdownDecoratorProps: DropDownDecoratorProps(
       dropdownSearchDecoration: InputDecoration(
         hintText: titleName,
-        label:(titleName?.isNotEmpty??false)? Text(titleName??""):null,
+        label: (titleName?.isNotEmpty ?? false) ? Text(titleName ?? "") : null,
         isDense: false,
         hintStyle: const TextStyle(color: Color(0x30171725)),
         contentPadding: const EdgeInsets.all(10),
@@ -152,7 +153,8 @@ Widget singleSelectGenericDropdown<T>({
             borderSide: const BorderSide(style: painting.BorderStyle.none)),
         disabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(style: painting.BorderStyle.none,color:  Colors.black12)),
+            borderSide: const BorderSide(
+                style: painting.BorderStyle.none, color: Colors.black12)),
       ),
     ),
     popupProps: PopupPropsMultiSelection.menu(

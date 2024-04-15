@@ -7,8 +7,10 @@ TextFormField buildTextFormField({
   return TextFormField(
     style: const TextStyle(color: Colors.white),
     decoration: InputDecoration(
-      labelText: labelText,
-    ),
+        labelText: labelText,
+        labelStyle: TextStyle(
+          color: Colors.white,
+        )),
     onChanged: onChanged,
     validator: (value) {
       if (value == null) {

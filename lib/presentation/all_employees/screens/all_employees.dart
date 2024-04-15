@@ -15,6 +15,7 @@ import 'package:Investigator/core/widgets/sizedbox.dart';
 import 'package:Investigator/presentation/standard_layout/screens/standard_layout.dart';
 import '../../../authentication/authentication_repository.dart';
 import '../../../core/enum/enum.dart';
+import '../../../core/widgets/drop_down_widgets.dart';
 import '../../../core/widgets/fullscreenImage.dart';
 import '../../../core/widgets/persons_per_widget.dart';
 import '../../../core/widgets/toast/toast.dart';
@@ -43,6 +44,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
   List<String> checkboxItems =
       AuthenticationRepository.instance.currentUser.roomsNames ?? [];
   Map<String, bool> checkboxMap = {};
+  bool _val = false;
 
 // for (String item in checkboxItems) {
 //   checkboxMap[item] = false; // Set the initial value to false
@@ -125,7 +127,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                         filled: true, //
                                         prefixIcon: state.isSearching
                                             ? IconButton(
-                                                icon: Icon(Icons.search),
+                                                icon: const Icon(Icons.search),
                                                 onPressed: () {
                                                   AllEmployeesBloc.get(context)
                                                       .add(
@@ -144,8 +146,8 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                         ///search Toggle
                                         suffixIcon: IconButton(
                                           icon: state.isSearching
-                                              ? Icon(Icons.close)
-                                              : Icon(Icons.search),
+                                              ? const Icon(Icons.close)
+                                              : const Icon(Icons.search),
                                           onPressed: () async {
                                             state.isSearching = !state
                                                 .isSearching; // Toggle the search state
@@ -186,6 +188,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                   //  Color.fromARGB(255, 143, 188, 211),
                                   onPressed: () {
                                     // Show dialog to fill in employee data
+
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
@@ -220,10 +223,14 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                 AllEmployeesState>(
                                               builder: (context, state) {
                                                 return AlertDialog(
-                                                  title: const Text(
-                                                    "Add Employee",
-                                                    // style: TextStyle(
-                                                    //     color: AppColors.white),
+                                                  title: const SizedBox(
+                                                    width: 500,
+                                                    child: Text(
+                                                      "Add Employee",
+                                                      style: TextStyle(
+                                                          color:
+                                                              AppColors.white),
+                                                    ),
                                                   ),
                                                   content:
                                                       SingleChildScrollView(
@@ -409,21 +416,40 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                 CrossAxisAlignment
                                                                     .start,
                                                             children: [
-                                                              const Text(
-                                                                'BlackListed:',
-                                                                style: TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w900,
-                                                                    color: AppColors
-                                                                        .thinkRedColor,
-                                                                    fontSize:
-                                                                        20.0),
+                                                              const Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceBetween,
+                                                                children: [
+                                                                  Text(
+                                                                    'BlackListed:',
+                                                                    style: TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w900,
+                                                                        color: AppColors
+                                                                            .white,
+                                                                        fontSize:
+                                                                            20.0),
+                                                                  ),
+                                                                  Icon(
+                                                                    Icons
+                                                                        .warning_amber_outlined,
+                                                                    color: Colors
+                                                                        .amber,
+                                                                    size: 35,
+                                                                  )
+                                                                ],
                                                               ),
                                                               RadioListTile(
-                                                                title:
-                                                                    const Text(
-                                                                        'True'),
+                                                                activeColor:
+                                                                    Colors
+                                                                        .white,
+                                                                title: const Text(
+                                                                    'True',
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .white)),
                                                                 value: 'True',
                                                                 groupValue: state
                                                                     .selectedOption,
@@ -438,9 +464,14 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                 },
                                                               ),
                                                               RadioListTile(
-                                                                title:
-                                                                    const Text(
-                                                                        'False'),
+                                                                activeColor:
+                                                                    Colors
+                                                                        .white,
+                                                                title: const Text(
+                                                                    'False',
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .white)),
                                                                 value: 'False',
                                                                 groupValue: state
                                                                     .selectedOption,
@@ -454,68 +485,34 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                           true));
                                                                 },
                                                               ),
+                                                              FxBox.h24,
                                                               if (state
                                                                   .showTextField)
-                                                                // Column(
-                                                                //   children: [
-                                                                //     const Text(
-                                                                //       'Rooms Authorized to Enter:',
-                                                                //       style: TextStyle(
-                                                                //           fontSize:
-                                                                //               20.0),
-                                                                //     ),
-
-                                                                Padding(
-                                                                    padding:
-                                                                        const EdgeInsets
-                                                                            .all(
-                                                                            10.0),
-                                                                    child: SizedBox(
-                                                                      width:
-                                                                          MediaQuery.of(context).size.width,
-                                                                      child:
-                                                                          ListView.builder(
-                                                                        itemCount: checkboxItems.length,
-                                                                        itemBuilder: (BuildContext context, int index) {
-                                                                          final option = checkboxItems[index];
-                                                                          return CheckboxListTile(
-                                                                            title: Text(option),
-                                                                    
-                                                                            value: state.check, // Example value, change as needed
-                                                                            onChanged: (value) {
-                                                                              AllEmployeesBloc.get(context).add(Check(check: value ?? false));
-                                                                              AllEmployeesBloc.get(context).add(checkBox(room_NMs: [
-                                                                                option
-                                                                              ]));
-                                                                    
-                                                                              // Handle checkbox state change
-                                                                            },
-                                                                          );
-                                                                        },
-                                                                      ),
-                                                                    ))
-
-                                                              // for (var item
-                                                              //     in checkboxItems)
-                                                              //   CheckboxListTile(
-                                                              //     title: Text(
-                                                              //         item),
-
-                                                              //     value: state
-                                                              //         .check, // Example value, change as needed
-                                                              //     onChanged:
-                                                              //         (value) {
-                                                              //       AllEmployeesBloc.get(context)
-                                                              //           .add(Check(check: value ?? false));
-                                                              //       AllEmployeesBloc.get(context).add(
-                                                              //           checkBox(room_NMs: [
-                                                              //         item
-                                                              //       ]));
-
-                                                              //       // Handle checkbox state change
-                                                              //     },
-                                                              //   ),
-                                                              // )
+                                                                multiSelectGenericDropdown(
+                                                                  showSearch:
+                                                                      true,
+                                                                  isEnabled:
+                                                                      true,
+                                                                  isRequired:
+                                                                      false,
+                                                                  filled: true,
+                                                                  // selectedItem:
+                                                                  //     null,
+                                                                  titleName:
+                                                                      "Room Access Management",
+                                                                  onChanged:
+                                                                      (value) {
+                                                                   
+                                                                    AllEmployeesBloc.get(
+                                                                            context)
+                                                                        .add(checkBox(
+                                                                            room_NMs:
+                                                                                value!));
+                                                                  
+                                                                  },
+                                                                  itemsList:
+                                                                      checkboxItems,
+                                                                ),
                                                             ],
                                                           ),
                                                         ),
@@ -620,8 +617,8 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                         ///search Toggle
                                         suffixIcon: IconButton(
                                           icon: state.isSearching
-                                              ? Icon(Icons.close)
-                                              : Icon(Icons.search),
+                                              ? const Icon(Icons.close)
+                                              : const Icon(Icons.search),
                                           onPressed: () async {
                                             state.isSearching = !state
                                                 .isSearching; // Toggle the search state
@@ -994,7 +991,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                       ? const Icon(
                                                           Icons
                                                               .warning_amber_outlined,
-                                                          color: Colors.red,
+                                                          color: Colors.amber,
                                                           size: 50,
                                                         )
                                                       : null,
@@ -1073,14 +1070,14 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                         builder: (context) => FullScreenImage(
                             text: name,
                             imageUrl:
-                                "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/datasets/Image_Database/$imagesrc"),
+                                "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/$imagesrc"),
                       ),
                     );
                   },
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(6.0),
                     child: Image.network(
-                      "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/datasets/Image_Database/$imagesrc",
+                      "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/$imagesrc",
                       // Images.profileImage,
                       fit: BoxFit.cover,
                     ),
@@ -1228,12 +1225,13 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
       context: context,
       builder: (ctx) {
         return AlertDialog(
-          title: const Text("Update Employee"),
+          title: const SizedBox(width: 500, child: Text("Update Employee")),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextFormField(
+                  style: const TextStyle(color: Colors.white),
                   initialValue: employee.name,
                   decoration: const InputDecoration(labelText: 'Name'),
                   onChanged: (value) async {
@@ -1252,6 +1250,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                 ),
                 FxBox.h24,
                 TextFormField(
+                  style: const TextStyle(color: Colors.white),
                   initialValue: employee.userId,
                   decoration: const InputDecoration(labelText: 'UserId'),
                   onChanged: (value) async {
@@ -1272,6 +1271,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                 ),
                 FxBox.h24,
                 TextFormField(
+                  style: const TextStyle(color: Colors.white),
                   initialValue: employee.phone,
                   decoration: const InputDecoration(labelText: 'Phone Number'),
                   onChanged: (value) async {
@@ -1292,6 +1292,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                 ),
                 FxBox.h24,
                 TextFormField(
+                  style: const TextStyle(color: Colors.white),
                   initialValue: employee.email,
                   decoration: const InputDecoration(labelText: 'Email'),
                   onChanged: (value) async {
@@ -1315,7 +1316,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                 SizedBox(
                   height: 100,
                   child: Image.network(
-                    "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/datasets/Image_Database/${employee.imagePath}",
+                    "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/${employee.imagePath}",
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -1327,7 +1328,12 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: const Text('Cancel'),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              ),
             ),
             ElevatedButton(
               onPressed: () {
@@ -1350,92 +1356,3 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
     );
   }
 }
-
-// class RadioButtonList extends StatefulWidget {
-//   @override
-//   _RadioButtonListState createState() => _RadioButtonListState();
-// }
-
-// class _RadioButtonListState extends State<RadioButtonList> {
-//   bool _isTrueSelected = true; // Default to true
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Radio Button List'),
-//       ),
-//       body: Padding(
-//         padding: EdgeInsets.all(16.0),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             Text(
-//               'Choose an option:',
-//               style: TextStyle(fontSize: 18.0),
-//             ),
-//             Row(
-//               children: [
-//                 Radio(
-//                   value: true,
-//                   groupValue: _isTrueSelected,
-//                   onChanged: (value) {
-//                     setState(() {
-//                       _isTrueSelected = value as bool;
-//                     });
-//                   },
-//                 ),
-//                 Text('True'),
-//                 Radio(
-//                   value: false,
-//                   groupValue: _isTrueSelected,
-//                   onChanged: (value) {
-//                     setState(() {
-//                       _isTrueSelected = value as bool;
-//                     });
-//                   },
-//                 ),
-//                 Text('False'),
-//               ],
-//             ),
-//             SizedBox(height: 20.0),
-//             if (_isTrueSelected)
-//               ElevatedButton(
-//                 onPressed: () {
-//                   // Call specific function for true
-//                   _specificFunctionForTrue();
-//                 },
-//                 child: Text('Perform Specific Function'),
-//               )
-//             else
-//               Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   Text(
-//                     'Select items:',
-//                     style: TextStyle(fontSize: 18.0),
-//                   ),
-//                   CheckboxListTile(
-//                     title: Text('Option 1'),
-//                     value: false,
-//                     onChanged: (value) {},
-//                   ),
-//                   CheckboxListTile(
-//                     title: Text('Option 2'),
-//                     value: false,
-//                     onChanged: (value) {},
-//                   ),
-//                   // Add more CheckboxListTile widgets as needed
-//                 ],
-//               ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-
-//   void _specificFunctionForTrue() {
-//     // Implement your specific function for true here
-//     print('Performing specific function...');
-//   }
-// }

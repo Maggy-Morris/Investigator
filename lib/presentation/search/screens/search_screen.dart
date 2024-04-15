@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:yaru/yaru.dart';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -19,6 +20,7 @@ import '../../../core/enum/enum.dart';
 import '../../../core/loader/loading_indicator.dart';
 import '../../../core/models/search_by_image_model.dart';
 import '../../../core/remote_provider/remote_data_source.dart';
+import '../../../core/widgets/drop_down_widgets.dart';
 import '../../../core/widgets/fullscreenImage.dart';
 import '../../all_employees/screens/text.dart';
 import '../../camera_controller/cubit/photo_app_cubit.dart';
@@ -40,7 +42,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
       AuthenticationRepository.instance.currentUser.companyName?.first ?? "";
   late TabController tabController;
   bool _isBackCamera = true;
-   List<String> checkboxItems =
+  List<String> checkboxItems =
       AuthenticationRepository.instance.currentUser.roomsNames ?? [];
 
   @override
@@ -398,7 +400,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                                       Icons
                                                                           .warning_amber_outlined,
                                                                       color: Colors
-                                                                          .red,
+                                                                          .amber,
                                                                       size: 50,
                                                                     )
                                                                   : null,
@@ -729,7 +731,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                                       Icons
                                                                           .warning_amber_outlined,
                                                                       color: Colors
-                                                                          .red,
+                                                                          .amber,
                                                                       size: 50,
                                                                     )
                                                                   : null,
@@ -776,212 +778,353 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                   /////////////////////////////////////////////////////////////////////////////////////////////
                   ///Live Stream Video
 
-                  BlocBuilder<PhotoAppCubit, PhotoAppState>(
-                    builder: (context, state) {
-                      if (state is SelectProfilePhotoState) {
-                        return Column(
-                          children: [
-                            Text('RRRRRRRRRRRRRRRRR'),
-                            // const SizedBox(
-                            //   height: 10,
-                            // ),
-                            ////////////////////////////////////////////////////////////////////////////////////
-                            ///
-// ListView.builder(
-//   itemCount: checkboxItems.length,
-//   itemBuilder: (BuildContext context, int index) {
-//     final option = checkboxItems[index];
-//     return RadioListTile<String>(
-//       title: Text(option),
-//       value: option,
-//       groupValue: state.selectedOption,
-//       onChanged: (value) {
-//         context.read<SearchByImageBloc>().add(RadioButtonChanged(
-//           selectedOption: value ?? "",
-//         ));
-//       },
-//     );
-//   },
-// ),
-
-
-                            // RadioListTile(
-                            //   title: const Text('True'),
-                            //   value: 'True',
-                            //   groupValue: state.selectedOption,
-                            //   onChanged: (value) {
-                            //     context
-                            //         .read<SearchByImageBloc>()
-                            //         .add(RadioButtonChanged(
-                            //           selectedOption: value ?? "",
-                            //         ));
-                            //   },
-                            // ),
-                            Center(
-                              child: Stack(
+                  BlocListener<PhotoAppCubit, PhotoAppState>(
+                    listener: (context, state) {
+                      // if (state.submission == Submission.loading) {
+                      //   loadingIndicator();
+                      // }
+                    },
+                    child: BlocBuilder<PhotoAppCubit, PhotoAppState>(
+                      builder: (context, state) {
+                        if (state is SelectProfilePhotoState) {
+                          return Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  getAvatar(state.file),
-                                  Positioned(
-                                    bottom: -10,
-                                    left: 80,
-                                    child: IconButton(
-                                      onPressed: () {
-                                        context
-                                            .read<PhotoAppCubit>()
-                                            .openCamera();
-                                      },
-                                      icon: const Icon(
-                                        Icons.photo_camera_rounded,
+                                  Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: SizedBox(
+                                      width: 250,
+                                      child:
+                                          singleSelectGenericDropdown<String>(
+                                        titleName: "Select A Room",
+                                        isEnabled: true,
+                                        isRequired: false,
+                                        filled: true,
+                                        showSearch: true,
+                                        onChanged: (value) {
+                                          if (value?.isNotEmpty ?? false) {
+                                            context
+                                                .read<SearchByImageBloc>()
+                                                .add(
+                                                  RadioButtonChanged(
+                                                      selectedOption:
+                                                          value ?? ""),
+                                                );
+
+                                            context
+                                                .read<PhotoAppCubit>()
+                                                .openCamera(
+                                                    roomChoosen: value ?? '');
+                                          }
+                                        },
+                                        itemsList: checkboxItems,
                                       ),
                                     ),
+
+                                    // DropdownButton<String>(
+                                    //   value: state
+                                    //       .selectedOption, // Assuming state.selectedOption is of type String
+                                    //   onChanged: (String? value) {
+                                    //     context.read<SearchByImageBloc>().add(
+                                    //           RadioButtonChanged(
+                                    //               selectedOption: value ?? ""),
+                                    //         );
+
+                                    //     context
+                                    //         .read<PhotoAppCubit>()
+                                    //         .openCamera(
+                                    //             roomChoosen: value ?? '');
+                                    //   },
+                                    //   icon: const Icon(Icons.arrow_drop_down,
+                                    //       color: Colors
+                                    //           .white), // Add dropdown icon
+                                    //   iconSize:
+                                    //       24, // Adjust icon size as needed
+                                    //   underline: Container(
+                                    //     // Customize underline
+                                    //     height: 2,
+                                    //     color: Colors.white,
+                                    //   ),
+                                    //   style: const TextStyle(
+                                    //       color: Colors.black,
+                                    //       fontSize: 16), // Customize text style
+                                    //   hint: Text(
+                                    //     // Add hint text
+                                    //     state.selectedOption == null
+                                    //         ? "Select Your Room"
+                                    //         : state.selectedOption ?? "",
+                                    //     style: const TextStyle(
+                                    //         color: Colors.white),
+                                    //   ),
+
+                                    //   items: checkboxItems
+                                    //       .map<DropdownMenuItem<String>>(
+                                    //     (String option) {
+                                    //       return DropdownMenuItem<String>(
+                                    //         value: option,
+                                    //         child: Text(
+                                    //           option,
+                                    //           style: const TextStyle(
+                                    //               color: Colors
+                                    //                   .black), // Customize dropdown item text color
+                                    //         ),
+                                    //       );
+                                    //     },
+                                    //   ).toList(),
+                                    //   dropdownColor: Colors
+                                    //       .white, // Set the background color of the dropdown menu
+                                    // ),
                                   ),
                                 ],
                               ),
-                            ),
-                          ],
-                        );
-                      } else if (state is CameraState) {
-                        return Expanded(
-                          // aspectRatio: state.controller.value.aspectRatio,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Stack(children: [
-                                Container(
-                                  width: 720,
-                                  height: 480,
-                                  child: AspectRatio(
-                                    aspectRatio:
-                                        state.controller.value.aspectRatio,
-                                    child: CameraPreview(
-                                      state.controller,
-                                      child: Stack(
-                                        // fit: StackFit.expand,
-                                        alignment: Alignment.bottomCenter,
-                                        children: [
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Padding(
+
+                              // BlocProvider(
+                              //   create: (context) => SearchByImageBloc(),
+                              //   child: BlocBuilder<SearchByImageBloc,
+                              //       SearchByImageState>(
+                              //     builder: (context, state) {
+                              //       return SizedBox(
+                              //         height: 200,
+                              //         width: 200,
+                              //         child: ListView.builder(
+                              //           itemCount: checkboxItems.length,
+                              //           itemBuilder:
+                              //               (BuildContext context, int index) {
+                              //             final option = checkboxItems[index];
+                              //             return RadioListTile<String>(
+                              //               activeColor: Colors.white,
+                              //               title: Text(
+                              //                 option,
+                              //                 style: const TextStyle(
+                              //                     color: Colors.white),
+                              //               ),
+                              //               value: option,
+                              //               groupValue: state.selectedOption,
+                              //               onChanged: (value) {
+                              //                 context
+                              //                     .read<SearchByImageBloc>()
+                              //                     .add(RadioButtonChanged(
+                              //                       selectedOption: value ?? "",
+                              //                     ));
+                              //                 loadingIndicator();
+                              //                 context
+                              //                     .read<PhotoAppCubit>()
+                              //                     .openCamera(
+                              //                         roomChoosen: value ?? '');
+                              //               },
+                              //             );
+                              //           },
+                              //         ),
+                              //       );
+                              //     },
+                              //   ),
+                              // ),
+
+                              Center(
+                                child: Stack(
+                                  children: [
+                                    getAvatar(state.file),
+                                    // Positioned(
+                                    //   bottom: -10,
+                                    //   left: 80,
+                                    //   child: IconButton(
+                                    //     onPressed: () {
+                                    //       // context
+                                    //       //     .read<PhotoAppCubit>()
+                                    //       //     .openCamera(roomChoosen: );
+                                    //     },
+                                    //     icon: const Icon(
+                                    //       Icons.photo_camera_rounded,
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          );
+                        } else if (state is CameraState) {
+                          if (state.submission == Submission.loading) {
+                            EasyLoading.show(status: 'loading...');
+                          }
+
+                          return Expanded(
+                            // aspectRatio: state.controller.value.aspectRatio,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Stack(children: [
+                                  Container(
+                                    width: 720,
+                                    height: 480,
+                                    child: AspectRatio(
+                                      aspectRatio:
+                                          state.controller.value.aspectRatio,
+                                      child: CameraPreview(
+                                        state.controller,
+                                        child: Stack(
+                                          // fit: StackFit.expand,
+                                          alignment: Alignment.bottomCenter,
+                                          children: [
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 8.0,
+                                                      vertical: 20),
+                                                  child: ElevatedButton(
+                                                    style: ButtonStyle(
+                                                        backgroundColor:
+                                                            MaterialStateProperty
+                                                                .all<Color>(
+                                                                    AppColors
+                                                                        .babyBlue),
+                                                        shape: MaterialStateProperty
+                                                            .all<
+                                                                RoundedRectangleBorder>(
+                                                          RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        50),
+                                                          ),
+                                                        )),
+                                                    onPressed: () {
+                                                      context
+                                                          .read<PhotoAppCubit>()
+                                                          .startStream();
+                                                    },
+                                                    child: Text(
+                                                      context
+                                                              .watch<
+                                                                  PhotoAppCubit>()
+                                                              .isStreaming
+                                                          ? 'Stop Stream'
+                                                          : 'Start Stream',
+                                                      style: const TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                  ),
+                                                ),
+                                                IconButton(
+                                                    color: Colors.white,
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            bottom: 25),
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        _isBackCamera =
+                                                            !_isBackCamera;
+                                                      });
+                                                    },
+                                                    icon: const Icon(
+                                                        Icons.cameraswitch))
+                                              ],
+                                            ),
+                                            Positioned(
+                                              top: 0,
+                                              left: 0,
+                                              right: 0,
+                                              child: Container(
                                                 padding:
                                                     const EdgeInsets.symmetric(
-                                                        horizontal: 8.0,
-                                                        vertical: 20),
-                                                child: ElevatedButton(
-                                                  style: ButtonStyle(
-                                                      backgroundColor:
-                                                          MaterialStateProperty
-                                                              .all<
-                                                                      Color>(
-                                                                  AppColors
-                                                                      .babyBlue),
-                                                      shape: MaterialStateProperty
-                                                          .all<
-                                                              RoundedRectangleBorder>(
-                                                        RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(50),
-                                                        ),
-                                                      )),
-                                                  onPressed: () {
-                                                    context
-                                                        .read<PhotoAppCubit>()
-                                                        .startStream();
-                                                  },
-                                                  child: Text(
-                                                    context
-                                                            .watch<
-                                                                PhotoAppCubit>()
-                                                            .isStreaming
-                                                        ? 'Stop Stream'
-                                                        : 'Start Stream',
-                                                    style: const TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.bold),
+                                                  vertical: 8,
+                                                  horizontal: 16,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      const BorderRadius.only(
+                                                    bottomLeft:
+                                                        Radius.circular(12),
+                                                    bottomRight:
+                                                        Radius.circular(12),
+                                                  ),
+                                                  color: Colors.black
+                                                      .withOpacity(0.6),
+                                                ),
+                                                child: Text(
+                                                  "Data : ${state.result}",
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
                                               ),
-                                              IconButton(
-                                                  color: Colors.white,
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          bottom: 25),
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      _isBackCamera =
-                                                          !_isBackCamera;
-                                                    });
-                                                  },
-                                                  icon: const Icon(
-                                                      Icons.cameraswitch))
-                                            ],
-                                          ),
-                                          Positioned(
-                                            top: 0,
-                                            left: 0,
-                                            right: 0,
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                vertical: 8,
-                                                horizontal: 16,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    const BorderRadius.only(
-                                                  bottomLeft:
-                                                      Radius.circular(12),
-                                                  bottomRight:
-                                                      Radius.circular(12),
-                                                ),
-                                                color: Colors.black
-                                                    .withOpacity(0.6),
-                                              ),
-                                              child: Text(
-                                                "Data : ${state.result}",
-                                                style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
                                             ),
-                                          ),
-                                        ],
+                                            state.blacklisted == true
+                                                ? const Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.end,
+                                                    children: [
+                                                        Tooltip(
+                                                          message:
+                                                              "BlackListed Person",
+                                                          child: Icon(
+                                                            Icons.warning,
+                                                            color: Colors.amber,
+                                                            size: 60,
+                                                          ),
+                                                        ),
+                                                      ])
+                                                : const SizedBox(),
+                                            state.security_breach == true
+                                                ? const Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.end,
+                                                    children: [
+                                                        Tooltip(
+                                                          message:
+                                                              "Security Breach Unauhorized person",
+                                                          child: Icon(
+                                                            Icons.warning,
+                                                            color: Colors.red,
+                                                            size: 50,
+                                                          ),
+                                                        ),
+                                                      ])
+                                                : const SizedBox(),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                // Transform.scale(
-                                //   scale: state.controller.value.aspectRatio,
-                                //   child:
-                                CustomPaint(
-                                  painter: RectanglePainter(
-                                    (state.boxes ?? [])
-                                        .map((box) => (box))
-                                        .toList(),
+                                  // Transform.scale(
+                                  //   scale: state.controller.value.aspectRatio,
+                                  //   child:
+
+                                  CustomPaint(
+                                    painter: RectanglePainter(
+                                      (state.boxes ?? [])
+                                          .map((box) => (box))
+                                          .toList(),
+                                    ),
                                   ),
-                                ),
-                                // ),
-                              ]),
-                            ],
-                          ),
-                        );
-                      } else {
-                        return const Scaffold(
-                          body: Center(
-                            child: Text('Nothing to show'),
-                          ),
-                        );
-                      }
-                    },
+                                  // ),
+                                ]),
+                              ],
+                            ),
+                          );
+                        } else {
+                          return const Scaffold(
+                            body: Center(
+                              child: Text('Nothing to show'),
+                            ),
+                          );
+                        }
+                      },
+                    ),
                   ),
 
                   // ////////////////////////////////////////////////////////////////////////////
@@ -1067,14 +1210,14 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                         builder: (context) => FullScreenImage(
                             text: name,
                             imageUrl:
-                                "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/datasets/Image_Database/$imagesrc"),
+                                "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/$imagesrc"),
                       ),
                     );
                   },
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(6.0),
                     child: Image.network(
-                      "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/datasets/Image_Database/$imagesrc",
+                      "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/$imagesrc",
                       // Images.profileImage,
                       fit: BoxFit.cover,
                     ),
@@ -1209,6 +1352,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
         FxBox.w16,
         ConstText.lightText(
           text: text,
+          color: Colors.white,
           fontSize: 14,
           fontWeight: FontWeight.w400,
         ),
@@ -1221,12 +1365,13 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
       context: context,
       builder: (ctx) {
         return AlertDialog(
-          title: const Text("Update Employee"),
+          title: SizedBox(width: 500, child: const Text("Update Employee")),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextFormField(
+                  style: const TextStyle(color: Colors.white),
                   initialValue: employee.name,
                   decoration: const InputDecoration(labelText: 'Name'),
                   onChanged: (value) async {
@@ -1245,6 +1390,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                 ),
                 FxBox.h24,
                 TextFormField(
+                  style: const TextStyle(color: Colors.white),
                   initialValue: employee.userId,
                   decoration: const InputDecoration(labelText: 'UserId'),
                   onChanged: (value) async {
@@ -1265,6 +1411,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                 ),
                 FxBox.h24,
                 TextFormField(
+                  style: const TextStyle(color: Colors.white),
                   initialValue: employee.phone,
                   decoration: const InputDecoration(labelText: 'Phone Number'),
                   onChanged: (value) async {
@@ -1285,6 +1432,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                 ),
                 FxBox.h24,
                 TextFormField(
+                  style: const TextStyle(color: Colors.white),
                   initialValue: employee.email,
                   decoration: const InputDecoration(labelText: 'Email'),
                   onChanged: (value) async {
@@ -1308,7 +1456,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                 SizedBox(
                   height: 100,
                   child: Image.network(
-                    "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/datasets/Image_Database/${employee.imagePath}",
+                    "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/${employee.imagePath}",
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -1320,7 +1468,10 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: const Text('Cancel'),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: Colors.red),
+              ),
             ),
             ElevatedButton(
               onPressed: () {

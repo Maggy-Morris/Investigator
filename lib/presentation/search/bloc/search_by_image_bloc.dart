@@ -180,6 +180,7 @@ class SearchByImageBloc extends Bloc<SearchByImageEvent, SearchByImageState> {
     emit(
       state.copyWith(
         selectedOption: event.selectedOption,
+        submission: Submission.loading,
         // showTextField: event.showTextField,
       ),
     );

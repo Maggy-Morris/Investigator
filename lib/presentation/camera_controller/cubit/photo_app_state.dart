@@ -4,25 +4,34 @@ class PhotoAppState extends Equatable {
   final bool? isLoading;
   final bool? hasError;
   final String? errorMessage;
-  final String? selectedOption;
+  final String? roomChoosen;
+
+
+  // final String? selectedOption;
 
   const PhotoAppState({
+    this.roomChoosen,
     this.errorMessage,
     this.isLoading,
     this.hasError,
-    this.selectedOption,
+    // this.selectedOption,
   });
 
   PhotoAppState copyWith({
+    
     // String? selectedOption,
     // List<List<double>>? boxes,
+
     List<String>? result,
     String? errorMessage,
     bool? hasError,
     bool? isLoading,
   }) {
     return PhotoAppState(
-      selectedOption : selectedOption ?? this.selectedOption,
+
+      roomChoosen: roomChoosen ?? this.roomChoosen,
+
+      // selectedOption : selectedOption ?? this.selectedOption,
       isLoading: isLoading ?? this.isLoading,
       hasError: hasError ?? this.hasError,
       errorMessage: errorMessage ?? this.errorMessage,
@@ -31,7 +40,9 @@ class PhotoAppState extends Equatable {
 
   @override
   List<Object?> get props => [
-    // selectedOption,
+        roomChoosen,
+
+        // selectedOption,
         isLoading,
         errorMessage,
         hasError,
@@ -46,8 +57,10 @@ class InitialState extends PhotoAppState {
 
 class SelectProfilePhotoState extends PhotoAppState {
   final File? file;
+  final String? selectedOption;
 
   const SelectProfilePhotoState({
+    this.selectedOption,
     this.file,
     super.isLoading,
     super.errorMessage,
@@ -55,16 +68,26 @@ class SelectProfilePhotoState extends PhotoAppState {
   });
 
   @override
-  List<Object?> get props => [file, isLoading, errorMessage, hasError];
+  List<Object?> get props =>
+      [selectedOption, file, isLoading, errorMessage, hasError];
 }
 
 class CameraState extends PhotoAppState {
+  final String? roomChoosen;
+  final Submission submission;
+
   final CameraDescription? camera;
   final CameraController controller;
   final List<List<double>>? boxes;
   final List<String>? result;
-
+  final bool? blacklisted;
+  final bool? security_breach;
   const CameraState({
+        this.submission = Submission.initial,
+
+    this.roomChoosen,
+    this.blacklisted,
+    this.security_breach,
     required this.controller,
     this.camera,
     this.boxes,
@@ -78,6 +101,11 @@ class CameraState extends PhotoAppState {
 
   @override
   CameraState copyWith({
+        Submission? submission,
+
+    String? roomChoosen,
+    bool? blacklisted,
+    bool? security_breach,
     CameraController? controller,
     CameraDescription? camera,
     List<List<double>>? boxes,
@@ -87,6 +115,11 @@ class CameraState extends PhotoAppState {
     bool? isLoading,
   }) {
     return CameraState(
+            submission: submission ?? this.submission,
+
+      roomChoosen: roomChoosen ?? this.roomChoosen,
+      blacklisted: blacklisted ?? this.blacklisted,
+      security_breach: security_breach ?? this.security_breach,
       controller: controller ?? this.controller,
       camera: camera ?? this.camera,
       result: result ?? this.result,
@@ -99,6 +132,11 @@ class CameraState extends PhotoAppState {
 
   @override
   List<Object?> get props => [
+            submission,
+
+        roomChoosen,
+        blacklisted,
+        security_breach,
         result,
         boxes,
         controller,

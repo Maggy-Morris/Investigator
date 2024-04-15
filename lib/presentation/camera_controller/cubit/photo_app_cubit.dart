@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:Investigator/core/models/search_in_stream.dart';
 import 'package:Investigator/core/remote_provider/remote_data_source.dart';
 import 'package:camera/camera.dart';
 import 'package:equatable/equatable.dart';
@@ -9,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../../../authentication/authentication_repository.dart';
-import '../../../core/models/search_by_image_model.dart';
+import '../../../core/enum/enum.dart';
 part 'photo_app_state.dart';
 
 // class PhotoAppCubit extends Cubit<PhotoAppState> {
@@ -35,11 +36,16 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
     }
   }
 
-  void openCamera() async {
+  void openCamera({required String roomChoosen}) async {
     final cameras = await availableCameras();
     controller = CameraController(cameras.first, ResolutionPreset.medium);
     await controller.initialize();
-    emit(CameraState(controller: controller, camera: controller.description));
+    emit(CameraState(
+        controller: controller,
+        camera: controller.description,
+        roomChoosen: roomChoosen
+        
+        ));
   }
 
   Future<XFile?> takePicture() async {
@@ -71,13 +77,15 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
         // Handle the picture file here ( send via WebSocket)
 
         final _channel = WebSocketChannel.connect(
+          // Uri.parse('ws://192.168.1.114:8765/socket.io/'),
+
           Uri.parse('ws:${RemoteDataSource.baseUrlWithoutPort}8765/socket.io/'),
         );
         Map<String, dynamic> data = {
           'collection_name': companyNameRepo,
           "image": base64String,
           'username': AuthenticationRepository.instance.currentUser.username,
-          
+          'current_room': state.roomChoosen,
         };
         String jsonData = jsonEncode(data);
         _channel.sink.add(jsonData);
@@ -87,13 +95,16 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
           if (response.isNotEmpty) {
             debugPrint("Response from server: $response");
 
-            SearchByImageModel callBackList = SearchByImageModel.fromJson(
+            SearchInStreamModel callBackList = SearchInStreamModel.fromJson(
                 jsonDecode(response) as Map<String, dynamic>);
             emit(
               CameraState(
-                  controller: controller,
-                  boxes: callBackList.boxes,
-                  result: callBackList.result),
+                controller: controller,
+                boxes: callBackList.boxes,
+                result: callBackList.result,
+                blacklisted: callBackList.blacklisted,
+                security_breach: callBackList.security_breach,
+              ),
             );
           }
         }, onDone: () {
@@ -135,5 +146,9 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
 
   void selectPhoto({required File file}) {
     emit(SelectProfilePhotoState(file: file));
+  }
+
+  void selectedRoom({required String roomChoosen}) {
+    emit(PhotoAppState(roomChoosen: roomChoosen));
   }
 }

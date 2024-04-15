@@ -57,7 +57,7 @@ class SearchByImageState extends Equatable {
     Submission? submission,
   }) {
     return SearchByImageState(
-      selectedOption : selectedOption ?? this.selectedOption,
+      selectedOption: selectedOption ?? this.selectedOption,
       id: id ?? this.id,
       userId: userId ?? this.userId,
       email: email ?? this.email,
@@ -80,7 +80,7 @@ class SearchByImageState extends Equatable {
 
   @override
   List<Object?> get props => [
-    selectedOption,
+        selectedOption,
         imageWidget,
         result,
         boxes,
