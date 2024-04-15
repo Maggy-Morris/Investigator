@@ -14,7 +14,7 @@ import 'presentation/investigator/screens/investigator_screen.dart';
 
 checkAuthority() {
   String userPermission =
-      AuthenticationRepository.instance.currentUser.authentication ?? "";
+      AuthenticationRepository.instance.currentUser.token ?? "";
 
   if ((userPermission.isNotEmpty)) {
     return getRoutesAdmin();

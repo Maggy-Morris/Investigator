@@ -17,6 +17,7 @@ class AuthenticationRepository {
   static const usernameCacheKey = '__username_cache_key__';
   static const passwordCacheKey = '__password_cache_key__';
   static const companyNameCacheKey = '__companyName_cache_key__';
+  static const roomsNamesCacheKey = '__roomsNames_cache_key__';
 
   static const routesCacheKey = '__routes_cache_key__';
 
@@ -54,7 +55,10 @@ class AuthenticationRepository {
         String? username = sharedUser?.getString(usernameCacheKey);
         String? password = sharedUser?.getString(passwordCacheKey);
         String? comapnyName = sharedUser?.getString(companyNameCacheKey);
-
+        String? roomsNamesString = sharedUser?.getString(roomsNamesCacheKey);
+        List<String>? roomsNames = roomsNamesString != null
+            ? List<String>.from(jsonDecode(roomsNamesString))
+            : null;
         var user = UserData.fromJson(userMap as Map<String, dynamic>);
         controller.add(user);
 
@@ -89,6 +93,15 @@ class AuthenticationRepository {
       String? username = sharedUser?.getString(usernameCacheKey);
       String? password = sharedUser?.getString(passwordCacheKey);
       String? companyName = sharedUser?.getString(companyNameCacheKey);
+      String? roomsNamesString = sharedUser?.getString(roomsNamesCacheKey);
+      // Decode the JSON string back to a list of strings
+      if (roomsNamesString != null) {
+        List<String>? roomsNames =
+            List<String>.from(jsonDecode(roomsNamesString));
+      }
+      // List<String>? roomsNames = roomsNamesString != null
+      //     ? List<String>.from(jsonDecode(roomsNamesString))
+      //     : null;
 
       UserData? user = UserData.fromJson(
         jsonDecode(data ?? "") as Map<String, dynamic>,
@@ -112,19 +125,24 @@ class AuthenticationRepository {
     try {
       await RemoteProvider().loginRemoteCredentials(email, password).then(
         (value) {
-          if (value?.authentication != null) {
-            String companyName = value!.companyName ??
-                'UnKown'; // Adjust this according to your response structure
-
+          if (value?.token != null) {
+            String companyName = value!.companyName?.first ??
+                ""; // Adjust this according to your response structure
+            List<String>? roomNames = value.roomsNames;
             sharedUser?.setString(userCacheKey, jsonEncode(value));
             sharedUser?.setString(usernameCacheKey, email);
             sharedUser?.setString(companyNameCacheKey, companyName);
-
+            // sharedUser?.setString(roomsNamesCacheKey, roomNames);
+            if (roomNames != null) {
+              // Convert list of strings to JSON string before saving
+              String roomNamesJson = jsonEncode(roomNames);
+              sharedUser?.setString(roomsNamesCacheKey, roomNamesJson);
+            }
             sharedUser?.setString(passwordCacheKey, password);
             sharedUser?.setStringList(routesCacheKey, ["/"]);
 
             controller.add(value);
-          } else if (value!.login == false) {
+          } else if (value!.logined == false) {
             throw LogInWithEmailAndPasswordFailureFirebase.fromCode(
                 "email or password is incorrect");
           } else {
@@ -149,11 +167,14 @@ class AuthenticationRepository {
     required String email,
     required String password,
     required String companyName,
+    required List<String> roomNames,
+    required int roomsNumber,
   }) async {
     try {
       // final modelAuth =
       await RemoteProvider()
-          .SignUpRemoteCredentials(email, password, companyName)
+          .SignUpRemoteCredentials(
+              email, password, companyName, roomsNumber, roomNames)
           .then(
         (value) {
           if (value.logined == "Signed up successfully!") {
@@ -171,7 +192,6 @@ class AuthenticationRepository {
           } else {
             controller.add(UserData.empty);
             logOut();
-                      
 
             return;
           }

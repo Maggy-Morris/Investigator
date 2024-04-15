@@ -34,7 +34,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   void _onUserChanged(AppUserChanged event, Emitter<AppState> emit) async{
     // String username = event.user.username ?? "";
-    String authentication = event.user.authentication ?? "";
+    String authentication = event.user.token ?? "";
     // if (kDebugMode) {
     //   print("=====>> $name");
     // }
@@ -44,7 +44,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       emit(state.copyWith(status: AppStatus.unauthenticated));
     }else{
       emit(
-        (event.user.authentication?.isNotEmpty??false)
+        (event.user.token?.isNotEmpty??false)
             ? state.copyWith(user: event.user,status: AppStatus.authenticated)
             : const AppState.unauthenticated(),
       );

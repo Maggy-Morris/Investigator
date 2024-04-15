@@ -10,14 +10,14 @@ class EmployeeModel {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
-        data!.add( Data.fromJson(v));
+        data!.add(Data.fromJson(v));
       });
     }
     nPages = json['n_pages'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['count'] = count;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
@@ -34,16 +34,20 @@ class Data {
   String? name;
   String? phone;
   String? userId;
+  String? blackListed;
 
-  Data(
-      {this.sId,
-      this.email,
-      this.imagePath,
-      this.name,
-      this.phone,
-      this.userId});
+  Data({
+    this.sId,
+    this.email,
+    this.imagePath,
+    this.name,
+    this.phone,
+    this.userId,
+    this.blackListed,
+  });
 
   Data.fromJson(Map<String, dynamic> json) {
+    blackListed = json['blacklisted'];
     sId = json['_id'];
     email = json['email'];
     imagePath = json['image_path'];
@@ -54,8 +58,9 @@ class Data {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['blacklisted'] = blackListed;
     data['_id'] = sId;
-    data['email'] =email;
+    data['email'] = email;
     data['image_path'] = imagePath;
     data['name'] = name;
     data['phone'] = phone;

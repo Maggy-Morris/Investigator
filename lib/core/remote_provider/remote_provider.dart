@@ -62,6 +62,8 @@ class RemoteProvider {
     String email,
     String password,
     String companyName,
+    int roomsNumber,
+    List<String> roomNames,
   ) async {
     try {
       Map<String, dynamic> signUpCallBack =
@@ -69,6 +71,8 @@ class RemoteProvider {
         "username": email,
         "password": password,
         "company_name": companyName,
+        "n_rooms": roomsNumber,
+        "rooms_names": roomNames,
       });
 
       if (signUpCallBack.isNotEmpty) {
@@ -125,20 +129,28 @@ class RemoteProvider {
     required String email,
     required String phoneNum,
     required String userId,
+    required String blackListed,
+    List<String>? roomNamesChoosen,
   }) async {
     try {
+      Map<String, dynamic> body = {
+        "blacklisted": blackListed,
+        "collection_name": companyName,
+        "target_name": personName,
+        "image": image,
+        "email": email,
+        "phone": phoneNum,
+        "user_id": userId,
+      };
+
+      // Conditionally include roomNamesChoosen in the body if it's not empty
+      if (roomNamesChoosen != null) {
+        body["IAM"] = roomNamesChoosen;
+      }
       Map<String, dynamic> callBack = await RemoteDataSource().post(
         endPoint: "/add_a_new_person",
-        body: {
-          "collection_name": companyName,
-          "target_name": personName,
-          "image": image,
-          "email": email,
-          "phone": phoneNum,
-          "user_id": userId,
-        },
+        body: body,
       );
-
       //Change this "Collection Created Successfully!"
 
       if (callBack.isNotEmpty) {
@@ -326,6 +338,7 @@ class RemoteProvider {
   ///Search for person in the database by image
   Future<SearchByImageModel> searchForpersonByImage({
     required String companyName,
+    required String username,
     // required PlatformFile? image,
     required String image,
   }) async {
@@ -335,6 +348,7 @@ class RemoteProvider {
         body: {
           "collection_name": companyName,
           "image": image,
+          "username": username,
         },
       );
 
@@ -353,8 +367,7 @@ class RemoteProvider {
   Future<SearchByVideoAndImage> searchForpersonByVideo({
     required PlatformFile? video,
     required PlatformFile? image,
-
-    // required String image,
+    required String similarityScore,
     // required String personName,
   }) async {
     try {
@@ -362,10 +375,13 @@ class RemoteProvider {
           await RemoteDataSource().postMultiPartFiles(
         endPoint: "/find_target",
         body: {
-          // "image":image,
-          // "name": personName,
+          "similarity_score": similarityScore,
+          "name": "personName",
         },
-        files: [video!, image!],
+        files: [
+          video!,
+          image!,
+        ],
       );
       if (callBack.isNotEmpty) {
         SearchByVideoAndImage callBackList =
@@ -444,28 +460,28 @@ class RemoteProvider {
   // }
 
   /// Add camera
-  Future<AddCameraModel> addCamera({
-    required String cameraName,
-    required String sourceType,
-    required String sourceData,
-  }) async {
-    try {
-      Map<String, dynamic> callBack =
-          await RemoteDataSource().postWithFile(endPoint: "/addCamera", body: {
-        "cameraName": cameraName,
-        "sourceType": sourceType,
-        "source": sourceData,
-      });
-      if (callBack.isNotEmpty) {
-        AddCameraModel callBackList = AddCameraModel.fromJson(callBack);
-        return callBackList;
-      } else {
-        return AddCameraModel();
-      }
-    } catch (e) {
-      return AddCameraModel();
-    }
-  }
+  // Future<AddCameraModel> addCamera({
+  //   required String cameraName,
+  //   required String sourceType,
+  //   required String sourceData,
+  // }) async {
+  //   try {
+  //     Map<String, dynamic> callBack =
+  //         await RemoteDataSource().postWithFile(endPoint: "/addCamera", body: {
+  //       "cameraName": cameraName,
+  //       "sourceType": sourceType,
+  //       "source": sourceData,
+  //     });
+  //     if (callBack.isNotEmpty) {
+  //       AddCameraModel callBackList = AddCameraModel.fromJson(callBack);
+  //       return callBackList;
+  //     } else {
+  //       return AddCameraModel();
+  //     }
+  //   } catch (e) {
+  //     return AddCameraModel();
+  //   }
+  // }
 
   ///  Apply Model
   // Future<ApplyModelModel> applyModelToCamera({
@@ -556,22 +572,22 @@ class RemoteProvider {
   //   }
   // }
 
-  Future<GetAllCameraDetails> getAllCamerasDetails(
-      {required String cameraName}) async {
-    try {
-      var callBack = await RemoteDataSource().postWithFile(
-          endPoint: "/getallmodelsincam", body: {"cameraname": cameraName});
+//   Future<GetAllCameraDetails> getAllCamerasDetails(
+//       {required String cameraName}) async {
+//     try {
+//       var callBack = await RemoteDataSource().postWithFile(
+//           endPoint: "/getallmodelsincam", body: {"cameraname": cameraName});
 
-      if (callBack.isNotEmpty) {
-        GetAllCameraDetails countsModel =
-            GetAllCameraDetails.fromJson(callBack);
-        return countsModel;
-      } else {
-        return GetAllCameraDetails();
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-      return GetAllCameraDetails();
-    }
-  }
+//       if (callBack.isNotEmpty) {
+//         GetAllCameraDetails countsModel =
+//             GetAllCameraDetails.fromJson(callBack);
+//         return countsModel;
+//       } else {
+//         return GetAllCameraDetails();
+//       }
+//     } catch (e) {
+//       debugPrint(e.toString());
+//       return GetAllCameraDetails();
+//     }
+//   }
 }
