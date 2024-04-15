@@ -6,6 +6,32 @@ class AllEmployeesEvent extends Equatable {
   @override
   List<Object?> get props => [];
 }
+class RadioButtonChanged extends AllEmployeesEvent {
+  final String selectedOption;
+  final bool showTextField;
+
+  const RadioButtonChanged(
+      {required this.selectedOption, required this.showTextField});
+}
+
+class Check extends AllEmployeesEvent {
+  final bool check;
+
+  const Check({required this.check});
+
+  @override
+  List<Object?> get props => [check];
+}
+class checkBox extends AllEmployeesEvent {
+  final List<String> room_NMs;
+
+  const checkBox({required this.room_NMs});
+
+  @override
+  List<Object?> get props => [room_NMs];
+}
+
+
 
 class ImageWidget extends AllEmployeesEvent {
   final Widget imageWidget;
@@ -15,6 +41,7 @@ class ImageWidget extends AllEmployeesEvent {
   @override
   List<Object?> get props => [imageWidget];
 }
+
 
 
 class EditPageNumber extends AllEmployeesEvent {

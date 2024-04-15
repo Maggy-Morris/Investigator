@@ -13,10 +13,10 @@ class SearchByImageModel {
               (box as List).map<double>((value) => value.toDouble()).toList())
           .toList();
     }
-    if (json['data'] != null) {
+    if (json['data'] != []) {
       data = <Dataa>[];
       json['data'].forEach((v) {
-        data!.add(Dataa.fromJson(v));
+        data?.add(Dataa.fromJson(v));
       });
     }
 
@@ -43,9 +43,11 @@ class Dataa {
   String? name;
   String? phone;
   String? userId;
+  String? blackListed;
 
   Dataa(
       {this.sId,
+      this.blackListed,
       this.email,
       this.imagePath,
       this.name,
@@ -53,6 +55,7 @@ class Dataa {
       this.userId});
 
   Dataa.fromJson(Map<String, dynamic> json) {
+    blackListed = json['blacklisted'];
     sId = json['_id'];
     email = json['email'];
     imagePath = json['image_path'];
@@ -63,6 +66,7 @@ class Dataa {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['blacklisted'] = blackListed;
     data['_id'] = sId;
     data['email'] = email;
     data['image_path'] = imagePath;

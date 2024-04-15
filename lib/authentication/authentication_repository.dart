@@ -98,7 +98,7 @@ class AuthenticationRepository {
       if (roomsNamesString != null) {
         List<String>? roomsNames =
             List<String>.from(jsonDecode(roomsNamesString));
-      }
+      };
       // List<String>? roomsNames = roomsNamesString != null
       //     ? List<String>.from(jsonDecode(roomsNamesString))
       //     : null;

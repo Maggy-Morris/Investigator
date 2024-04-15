@@ -39,7 +39,15 @@ class AllEmployeesScreen extends StatefulWidget {
 class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
   PlatformFile? selectedImage;
   String companyNameRepo =
-      AuthenticationRepository.instance.currentUser.companyName ?? "";
+      AuthenticationRepository.instance.currentUser.companyName?.first ?? "";
+  List<String> checkboxItems =
+      AuthenticationRepository.instance.currentUser.roomsNames ?? [];
+  Map<String, bool> checkboxMap = {};
+
+// for (String item in checkboxItems) {
+//   checkboxMap[item] = false; // Set the initial value to false
+// }
+  //////////////
 
   TextEditingController employeeNameController = TextEditingController();
   final TextEditingController _searchController = TextEditingController();
@@ -379,6 +387,136 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                             style: TextStyle(
                                                                 color: Colors
                                                                     .black),
+                                                          ),
+                                                        ),
+                                                        //////////////////////////////////////
+
+                                                        // BlocProvider(
+                                                        //   create: (context) =>
+                                                        //       RadioButtonBloc(),
+                                                        //   child: BlocBuilder<
+                                                        //       RadioButtonBloc,
+                                                        //       RadioButtonState>(
+                                                        //     builder: (context,
+                                                        //         state) {
+                                                        //       return
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(16.0),
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              const Text(
+                                                                'BlackListed:',
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w900,
+                                                                    color: AppColors
+                                                                        .thinkRedColor,
+                                                                    fontSize:
+                                                                        20.0),
+                                                              ),
+                                                              RadioListTile(
+                                                                title:
+                                                                    const Text(
+                                                                        'True'),
+                                                                value: 'True',
+                                                                groupValue: state
+                                                                    .selectedOption,
+                                                                onChanged:
+                                                                    (value) {
+                                                                  context.read<AllEmployeesBloc>().add(RadioButtonChanged(
+                                                                      selectedOption:
+                                                                          value ??
+                                                                              "",
+                                                                      showTextField:
+                                                                          false));
+                                                                },
+                                                              ),
+                                                              RadioListTile(
+                                                                title:
+                                                                    const Text(
+                                                                        'False'),
+                                                                value: 'False',
+                                                                groupValue: state
+                                                                    .selectedOption,
+                                                                onChanged:
+                                                                    (value) {
+                                                                  context.read<AllEmployeesBloc>().add(RadioButtonChanged(
+                                                                      selectedOption:
+                                                                          value ??
+                                                                              "",
+                                                                      showTextField:
+                                                                          true));
+                                                                },
+                                                              ),
+                                                              if (state
+                                                                  .showTextField)
+                                                                // Column(
+                                                                //   children: [
+                                                                //     const Text(
+                                                                //       'Rooms Authorized to Enter:',
+                                                                //       style: TextStyle(
+                                                                //           fontSize:
+                                                                //               20.0),
+                                                                //     ),
+
+                                                                Padding(
+                                                                    padding:
+                                                                        const EdgeInsets
+                                                                            .all(
+                                                                            10.0),
+                                                                    child: SizedBox(
+                                                                      width:
+                                                                          MediaQuery.of(context).size.width,
+                                                                      child:
+                                                                          ListView.builder(
+                                                                        itemCount: checkboxItems.length,
+                                                                        itemBuilder: (BuildContext context, int index) {
+                                                                          final option = checkboxItems[index];
+                                                                          return CheckboxListTile(
+                                                                            title: Text(option),
+                                                                    
+                                                                            value: state.check, // Example value, change as needed
+                                                                            onChanged: (value) {
+                                                                              AllEmployeesBloc.get(context).add(Check(check: value ?? false));
+                                                                              AllEmployeesBloc.get(context).add(checkBox(room_NMs: [
+                                                                                option
+                                                                              ]));
+                                                                    
+                                                                              // Handle checkbox state change
+                                                                            },
+                                                                          );
+                                                                        },
+                                                                      ),
+                                                                    ))
+
+                                                              // for (var item
+                                                              //     in checkboxItems)
+                                                              //   CheckboxListTile(
+                                                              //     title: Text(
+                                                              //         item),
+
+                                                              //     value: state
+                                                              //         .check, // Example value, change as needed
+                                                              //     onChanged:
+                                                              //         (value) {
+                                                              //       AllEmployeesBloc.get(context)
+                                                              //           .add(Check(check: value ?? false));
+                                                              //       AllEmployeesBloc.get(context).add(
+                                                              //           checkBox(room_NMs: [
+                                                              //         item
+                                                              //       ]));
+
+                                                              //       // Handle checkbox state change
+                                                              //     },
+                                                              //   ),
+                                                              // )
+                                                            ],
                                                           ),
                                                         ),
                                                       ],
@@ -846,6 +984,20 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                             final employee =
                                                 state.employeeNamesList[index];
                                             return _contactUi(
+                                              message:
+                                                  employee.blackListed == 'True'
+                                                      ? "Blacklisted person"
+                                                      : '',
+                                              // Conditional display based on whether the employee is blacklisted
+                                              Icoon:
+                                                  employee.blackListed == 'True'
+                                                      ? const Icon(
+                                                          Icons
+                                                              .warning_amber_outlined,
+                                                          color: Colors.red,
+                                                          size: 50,
+                                                        )
+                                                      : null,
                                               id: employee.sId ?? '',
                                               name: employee.name ?? '',
                                               profession: 'Software Developer',
@@ -866,8 +1018,6 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                             ),
                           ),
                         ),
-                      
-                      
                       ],
                     ),
                   ),
@@ -888,6 +1038,8 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
     required String userId,
     required String imagesrc,
     required String id,
+    String? message,
+    Icon? Icoon,
     required Function onUpdate,
   }) {
     return Container(
@@ -921,20 +1073,21 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                         builder: (context) => FullScreenImage(
                             text: name,
                             imageUrl:
-                                "http:${RemoteDataSource.baseUrlWithoutPort}8000/$imagesrc"),
+                                "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/datasets/Image_Database/$imagesrc"),
                       ),
                     );
                   },
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(6.0),
                     child: Image.network(
-                      "http:${RemoteDataSource.baseUrlWithoutPort}8000/$imagesrc",
+                      "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/datasets/Image_Database/$imagesrc",
                       // Images.profileImage,
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
               ),
+              Tooltip(message: message, child: Icoon),
               BlocProvider(
                 create: (context) => AllEmployeesBloc(),
                 child: BlocBuilder<AllEmployeesBloc, AllEmployeesState>(
@@ -1162,7 +1315,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                 SizedBox(
                   height: 100,
                   child: Image.network(
-                    "http:${RemoteDataSource.baseUrlWithoutPort}8000/${employee.imagePath}",
+                    "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/datasets/Image_Database/${employee.imagePath}",
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -1197,3 +1350,92 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
     );
   }
 }
+
+// class RadioButtonList extends StatefulWidget {
+//   @override
+//   _RadioButtonListState createState() => _RadioButtonListState();
+// }
+
+// class _RadioButtonListState extends State<RadioButtonList> {
+//   bool _isTrueSelected = true; // Default to true
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Radio Button List'),
+//       ),
+//       body: Padding(
+//         padding: EdgeInsets.all(16.0),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             Text(
+//               'Choose an option:',
+//               style: TextStyle(fontSize: 18.0),
+//             ),
+//             Row(
+//               children: [
+//                 Radio(
+//                   value: true,
+//                   groupValue: _isTrueSelected,
+//                   onChanged: (value) {
+//                     setState(() {
+//                       _isTrueSelected = value as bool;
+//                     });
+//                   },
+//                 ),
+//                 Text('True'),
+//                 Radio(
+//                   value: false,
+//                   groupValue: _isTrueSelected,
+//                   onChanged: (value) {
+//                     setState(() {
+//                       _isTrueSelected = value as bool;
+//                     });
+//                   },
+//                 ),
+//                 Text('False'),
+//               ],
+//             ),
+//             SizedBox(height: 20.0),
+//             if (_isTrueSelected)
+//               ElevatedButton(
+//                 onPressed: () {
+//                   // Call specific function for true
+//                   _specificFunctionForTrue();
+//                 },
+//                 child: Text('Perform Specific Function'),
+//               )
+//             else
+//               Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   Text(
+//                     'Select items:',
+//                     style: TextStyle(fontSize: 18.0),
+//                   ),
+//                   CheckboxListTile(
+//                     title: Text('Option 1'),
+//                     value: false,
+//                     onChanged: (value) {},
+//                   ),
+//                   CheckboxListTile(
+//                     title: Text('Option 2'),
+//                     value: false,
+//                     onChanged: (value) {},
+//                   ),
+//                   // Add more CheckboxListTile widgets as needed
+//                 ],
+//               ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+
+//   void _specificFunctionForTrue() {
+//     // Implement your specific function for true here
+//     print('Performing specific function...');
+//   }
+// }

@@ -25,6 +25,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     // /// Add New Employee
 
+    on<GetAccuracy>(_onGetAccuracy);
+
     on<imageevent>(_onimageevent);
     on<videoevent>(_onvideoevent);
     on<getPersonName>(_ongetPersonName);
@@ -60,6 +62,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   _ongetPersonName(getPersonName event, Emitter<HomeState> emit) async {
     emit(state.copyWith(
         personName: event.personName, submission: Submission.editing));
+  }
+
+  _onGetAccuracy(GetAccuracy event, Emitter<HomeState> emit) async {
+    emit(state.copyWith(
+        accuracy: event.accuracy, submission: Submission.editing));
   }
 
   _onAddCompanyName(AddCompanyName event, Emitter<HomeState> emit) async {
@@ -166,20 +173,25 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(state.copyWith(submission: Submission.loading));
     await RemoteProvider()
         .searchForpersonByVideo(
+      similarityScore: state.accuracy,
       video: state.video,
       image: state.imageFile,
       // personName: state.personName,
       // image: state.image,
     )
         .then((value) {
-      if (value.found != false) {
+      if (value.found == true) {
         emit(state.copyWith(
           submission: Submission.success,
           data: value.data,
           snapShots: value.snapshot_list,
         ));
-      } else {
-        emit(state.copyWith(submission: Submission.noDataFound));
+      } else if (value.found == false) {
+        emit(state.copyWith(
+          data: [],
+          snapShots: [],
+          submission: Submission.noDataFound,
+        ));
       }
     });
   }

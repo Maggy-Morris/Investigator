@@ -29,7 +29,7 @@ class ChooseYourCompany extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String companyNameRepo =
-        AuthenticationRepository.instance.currentUser.companyName ?? "";
+      AuthenticationRepository.instance.currentUser.companyName?.first ?? "";
     TextEditingController companyNameController = TextEditingController();
 
     return BlocProvider(

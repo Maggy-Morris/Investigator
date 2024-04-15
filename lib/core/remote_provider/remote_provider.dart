@@ -371,23 +371,20 @@ class RemoteProvider {
     // required String personName,
   }) async {
     try {
-      Map<String, dynamic> callBack =
+      Map<String, String> body = {
+        "similarity_score": similarityScore,
+        "name": "personName",
+      };
+
+      Map<String, dynamic>? callBack =
           await RemoteDataSource().postMultiPartFiles(
         endPoint: "/find_target",
-        body: {
-          "similarity_score": similarityScore,
-          "name": "personName",
-        },
-        files: [
-          video!,
-          image!,
-        ],
+        body: body,
+        files: [video!, image!],
       );
-      if (callBack.isNotEmpty) {
-        SearchByVideoAndImage callBackList =
-            SearchByVideoAndImage.fromJson(callBack);
 
-        return callBackList;
+      if (callBack != null && callBack.isNotEmpty) {
+        return SearchByVideoAndImage.fromJson(callBack);
       } else {
         return SearchByVideoAndImage();
       }
@@ -395,6 +392,39 @@ class RemoteProvider {
       return SearchByVideoAndImage();
     }
   }
+
+  // Future<SearchByVideoAndImage> searchForpersonByVideo({
+  //   required PlatformFile? video,
+  //   required PlatformFile? image,
+  //   required String similarityScore,
+  //   // required String personName,
+  // }) async {
+  //   try {
+  //     Map<String, dynamic> callBack =
+  //         await RemoteDataSource().postMultiPartFiles(
+  //       endPoint: "/find_target",
+  //       body: {
+  //         "similarity_score": similarityScore,
+  //         "name": "personName",
+  //       },
+
+  //       files: [
+  //         video!,
+  //         image!,
+  //       ],
+  //     );
+  //     if (callBack.isNotEmpty) {
+  //       SearchByVideoAndImage callBackList =
+  //           SearchByVideoAndImage.fromJson(callBack);
+
+  //       return callBackList;
+  //     } else {
+  //       return SearchByVideoAndImage();
+  //     }
+  //   } catch (e) {
+  //     return SearchByVideoAndImage();
+  //   }
+  // }
 
   // Future<List<String>> getAllCamerasNames() async {
   //   try {

@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:Investigator/authentication/auth_bloc/app_bloc.dart';
 import 'package:Investigator/authentication/authentication_repository.dart';
-import 'package:Investigator/bloc_observer.dart';
+// import 'package:Investigator/bloc_observer.dart';
 import 'package:Investigator/core/widgets/no_animation_page.dart';
 import 'package:Investigator/presentation/login/view/login_page.dart';
 import 'package:Investigator/presentation/standard_layout/bloc/standard_layout_cubit.dart';

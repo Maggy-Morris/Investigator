@@ -1,6 +1,8 @@
 part of 'search_by_image_bloc.dart';
 
 class SearchByImageState extends Equatable {
+  final String selectedOption;
+
   List<List<double>>? boxes;
   List<String>? result;
   final Widget? imageWidget;
@@ -20,6 +22,7 @@ class SearchByImageState extends Equatable {
   bool isSearching;
 
   SearchByImageState({
+    this.selectedOption = "",
     this.id = '',
     this.phoneNum = "",
     this.email = "",
@@ -37,6 +40,7 @@ class SearchByImageState extends Equatable {
   });
 
   SearchByImageState copyWith({
+    String? selectedOption,
     String? id,
     String? phoneNum,
     String? email,
@@ -53,6 +57,7 @@ class SearchByImageState extends Equatable {
     Submission? submission,
   }) {
     return SearchByImageState(
+      selectedOption : selectedOption ?? this.selectedOption,
       id: id ?? this.id,
       userId: userId ?? this.userId,
       email: email ?? this.email,
@@ -75,6 +80,7 @@ class SearchByImageState extends Equatable {
 
   @override
   List<Object?> get props => [
+    selectedOption,
         imageWidget,
         result,
         boxes,

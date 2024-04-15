@@ -17,7 +17,7 @@ part 'all_employess_state.dart';
 
 class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
   String companyNameRepo =
-      AuthenticationRepository.instance.currentUser.companyName ?? "";
+      AuthenticationRepository.instance.currentUser.companyName?.first ?? "";
   static AllEmployeesBloc get(context) =>
       BlocProvider.of<AllEmployeesBloc>(context);
 
@@ -45,10 +45,13 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
 
     on<imageevent>(_onimageevent);
     on<EditPageNumber>(_onEditPageNumber);
+    on<checkBox>(_oncheckBox);
+    on<Check>(_onCheck);
 
 //edit
 
     on<UpdateEmployeeEvent>(_onUpdateEmployeeEvent);
+    on<RadioButtonChanged>(_onRadioButtonChanged);
 
     /// Date
     // on<CameraAddDay>(_onCameraAddDay);
@@ -60,6 +63,15 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
     emit(state.copyWith(
         imageWidget: event.imageWidget, submission: Submission.loading));
     // Your logic here to fetch data and determine the imageWidget
+  }
+
+  _onCheck(Check event, Emitter<AllEmployeesState> emit) async {
+    emit(state.copyWith(check: event.check, submission: Submission.editing));
+  }
+
+  _oncheckBox(checkBox event, Emitter<AllEmployeesState> emit) async {
+    emit(state.copyWith(
+        roomNAMS: event.room_NMs, submission: Submission.editing));
   }
 
   _onEditPageNumber(
@@ -174,7 +186,7 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
           pageCount: employeeModel.nPages,
         ));
       }
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       if (employeeModel.data!.isNotEmpty) {
         emit(state.copyWith(
           // submission: Submission.success,
@@ -183,7 +195,7 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
         ));
       } else {
         emit(state.copyWith(
-          submission: Submission.noDataFound,
+          // submission: Submission.noDataFound,
           employeeNamesList: [],
         ));
       }
@@ -220,16 +232,15 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
       AddNewEmployeeEvent event, Emitter<AllEmployeesState> emit) async {
     emit(state.copyWith(submission: Submission.loading));
     try {
-      String companyNameRepo =
-          AuthenticationRepository.instance.currentUser.companyName ?? "";
       final result = await RemoteProvider().addNewPersonToACompany(
-        companyName: companyNameRepo,
-        personName: state.personName,
-        phoneNum: state.phoneNum,
-        email: state.email,
-        userId: state.userId,
-        image: state.image,
-      );
+          companyName: companyNameRepo,
+          personName: state.personName,
+          phoneNum: state.phoneNum,
+          email: state.email,
+          userId: state.userId,
+          image: state.image,
+          blackListed: state.selectedOption,
+          roomNamesChoosen: state.roomNAMS);
       if (result.success == true) {
         emit(state.copyWith(
             submission: Submission.success, responseMessage: result.message));
@@ -344,5 +355,16 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
         ));
       }
     });
+  }
+
+//RadioButton
+  _onRadioButtonChanged(
+      RadioButtonChanged event, Emitter<AllEmployeesState> emit) async {
+    emit(
+      state.copyWith(
+        selectedOption: event.selectedOption,
+        showTextField: event.showTextField,
+      ),
+    );
   }
 }

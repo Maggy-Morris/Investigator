@@ -7,6 +7,17 @@ class SearchByImageEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class RadioButtonChanged extends SearchByImageEvent {
+  final String selectedOption;
+  // final bool showTextField;
+
+  const RadioButtonChanged(
+      {required this.selectedOption, 
+      // required this.showTextField
+      });
+}
+
+
 class AddpersonName extends SearchByImageEvent {
   final String personName;
 

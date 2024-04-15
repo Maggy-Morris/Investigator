@@ -4,21 +4,25 @@ class PhotoAppState extends Equatable {
   final bool? isLoading;
   final bool? hasError;
   final String? errorMessage;
+  final String? selectedOption;
 
   const PhotoAppState({
     this.errorMessage,
     this.isLoading,
     this.hasError,
+    this.selectedOption,
   });
 
   PhotoAppState copyWith({
-    List<List<double>>? boxes,
+    // String? selectedOption,
+    // List<List<double>>? boxes,
     List<String>? result,
     String? errorMessage,
     bool? hasError,
     bool? isLoading,
   }) {
     return PhotoAppState(
+      selectedOption : selectedOption ?? this.selectedOption,
       isLoading: isLoading ?? this.isLoading,
       hasError: hasError ?? this.hasError,
       errorMessage: errorMessage ?? this.errorMessage,
@@ -27,6 +31,7 @@ class PhotoAppState extends Equatable {
 
   @override
   List<Object?> get props => [
+    // selectedOption,
         isLoading,
         errorMessage,
         hasError,

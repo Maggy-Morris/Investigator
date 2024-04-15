@@ -7,7 +7,7 @@ class HomeState extends Equatable {
   final PlatformFile? imageFile;
   final Widget? imageWidget;
   List<String> snapShots;
-
+  final String accuracy;
   final Submission submission;
 
   final String companyName;
@@ -16,6 +16,7 @@ class HomeState extends Equatable {
   final List<String> data;
 
   HomeState({
+    this.accuracy = '',
     this.imageWidget,
     this.snapShots = const [],
     this.data = const [],
@@ -30,6 +31,7 @@ class HomeState extends Equatable {
   });
 
   HomeState copyWith({
+     String? accuracy,
     List<String>? snapShots,
     Widget? imageWidget,
     PlatformFile? video,
@@ -43,6 +45,7 @@ class HomeState extends Equatable {
     List<String>? data,
   }) {
     return HomeState(
+        accuracy :   accuracy ?? this.accuracy,
       snapShots: snapShots ?? this.snapShots,
       imageWidget: imageWidget ?? this.imageWidget,
       data: data ?? this.data,
@@ -59,6 +62,7 @@ class HomeState extends Equatable {
 
   @override
   List<Object?> get props => [
+    accuracy,
         snapShots,
         imageWidget,
         data,

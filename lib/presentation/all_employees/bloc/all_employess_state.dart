@@ -9,6 +9,11 @@ class AllEmployeesState extends Equatable {
   int pageIndex;
   int pageCount;
   final Widget? imageWidget;
+  final String selectedOption;
+  final bool showTextField;
+  final bool check;
+
+  List<String> roomNAMS;
 
   int count;
   final String responseMessage;
@@ -23,6 +28,10 @@ class AllEmployeesState extends Equatable {
   final Submission submission;
 
   AllEmployeesState({
+    this.check = false,
+    this.roomNAMS = const [],
+    this.selectedOption = "",
+    this.showTextField = false,
     this.imageWidget,
     this.responseMessage = "",
     this.pageCount = 0,
@@ -43,6 +52,11 @@ class AllEmployeesState extends Equatable {
   });
 
   AllEmployeesState copyWith({
+    
+    bool? check,
+    List<String>? roomNAMS,
+    String? selectedOption,
+    bool? showTextField,
     Widget? imageWidget,
     String? responseMessage,
     PlatformFile? imageFile,
@@ -62,8 +76,11 @@ class AllEmployeesState extends Equatable {
     Submission? submission,
   }) {
     return AllEmployeesState(
+      roomNAMS: roomNAMS ?? this.roomNAMS,
+      selectedOption: selectedOption ?? this.selectedOption,
+      showTextField: showTextField ?? this.showTextField,
       imageWidget: imageWidget ?? this.imageWidget,
-
+      check: check ?? this.check,
       responseMessage: responseMessage ?? this.responseMessage,
 
       pageCount: pageCount ?? this.pageCount,
@@ -88,6 +105,10 @@ class AllEmployeesState extends Equatable {
 
   @override
   List<Object?> get props => [
+        check,
+        roomNAMS,
+        selectedOption,
+        showTextField,
         imageWidget,
         responseMessage,
         pageCount,

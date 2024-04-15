@@ -17,56 +17,49 @@ class ImageToSearchForEmployee extends HomeEvent {
 }
 
 class CompnyNameFromSP extends HomeEvent {
-    final String companyName;
+  final String companyName;
 
-  const CompnyNameFromSP(
-{required this.companyName}
-
-  );
+  const CompnyNameFromSP({required this.companyName});
 
   @override
   List<Object?> get props => [companyName];
 }
 
+class GetAccuracy extends HomeEvent {
+  final String accuracy;
+
+  const GetAccuracy({required this.accuracy});
+
+  @override
+  List<Object?> get props => [accuracy];
+}
 
 class getPersonName extends HomeEvent {
-    final String personName;
+  final String personName;
 
-  const getPersonName(
-{required this.personName}
-
-  );
+  const getPersonName({required this.personName});
 
   @override
   List<Object?> get props => [personName];
 }
 
 class imageevent extends HomeEvent {
-    final PlatformFile imageFile;
+  final PlatformFile imageFile;
 
-  const imageevent(
-{required this.imageFile}
-
-  );
+  const imageevent({required this.imageFile});
 
   @override
   List<Object?> get props => [imageFile];
 }
 
-
-
 class videoevent extends HomeEvent {
-    final PlatformFile video;
+  final PlatformFile video;
 
-  const videoevent(
-{required this.video}
-
-  );
+  const videoevent({required this.video});
 
   @override
   List<Object?> get props => [video];
 }
-
 
 class SearchForEmployeeByVideoEvent extends HomeEvent {
   const SearchForEmployeeByVideoEvent();
@@ -74,7 +67,6 @@ class SearchForEmployeeByVideoEvent extends HomeEvent {
   @override
   List<Object?> get props => [];
 }
-
 
 ///
 
@@ -159,7 +151,7 @@ class AddNewEmployee extends HomeEvent {
 
   AddNewEmployee(
       {
-        // this.files,
+      // this.files,
       // this.imageName,
 
       required this.personName,
@@ -168,8 +160,8 @@ class AddNewEmployee extends HomeEvent {
 
   @override
   List<Object?> get props => [
-        companyName, personName, 
-        // files, 
+        companyName, personName,
+        // files,
         image,
         // imageName
       ];

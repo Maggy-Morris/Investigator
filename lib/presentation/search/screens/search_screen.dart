@@ -37,9 +37,11 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
   Widget? _image;
   PlatformFile? ima;
   String companyNameRepo =
-      AuthenticationRepository.instance.currentUser.companyName ?? "";
+      AuthenticationRepository.instance.currentUser.companyName?.first ?? "";
   late TabController tabController;
   bool _isBackCamera = true;
+   List<String> checkboxItems =
+      AuthenticationRepository.instance.currentUser.roomsNames ?? [];
 
   @override
   void initState() {
@@ -68,8 +70,10 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
           title: YaruDialogTitleBar(
             foregroundColor: AppColors.grey3,
             backgroundColor: AppColors.grey,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25))),
             isClosable: false,
             title: SizedBox(
               // width: 500,
@@ -324,13 +328,8 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                       physics:
                                                           const NeverScrollableScrollPhysics(),
                                                       itemCount: state
-                                                                  .employeeNamesList
-                                                                  .length <
-                                                              20
-                                                          ? state
-                                                              .employeeNamesList
-                                                              .length
-                                                          : 20,
+                                                          .employeeNamesList
+                                                          .length,
                                                       gridDelegate: Responsive
                                                               .isMobile(context)
                                                           ? const SliverGridDelegateWithFixedCrossAxisCount(
@@ -386,6 +385,23 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                                 .employeeNamesList[
                                                             index];
                                                         return _contactUi(
+                                                          message: employee
+                                                                      .blackListed ==
+                                                                  'True'
+                                                              ? "Blacklisted person"
+                                                              : '',
+                                                          // Conditional display based on whether the employee is blacklisted
+                                                          Icoon:
+                                                              employee.blackListed ==
+                                                                      'True'
+                                                                  ? const Icon(
+                                                                      Icons
+                                                                          .warning_amber_outlined,
+                                                                      color: Colors
+                                                                          .red,
+                                                                      size: 50,
+                                                                    )
+                                                                  : null,
                                                           id: employee.sId ??
                                                               '',
                                                           name: employee.name ??
@@ -643,8 +659,8 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                       physics:
                                                           const NeverScrollableScrollPhysics(),
                                                       itemCount: state
-                                                                  .employeeNamesList
-                                                                  .length ,
+                                                          .employeeNamesList
+                                                          .length,
                                                       gridDelegate: Responsive
                                                               .isMobile(context)
                                                           ? const SliverGridDelegateWithFixedCrossAxisCount(
@@ -700,6 +716,23 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                                 .employeeNamesList[
                                                             index];
                                                         return _contactUi(
+                                                          message: employee
+                                                                      .blackListed ==
+                                                                  'True'
+                                                              ? "Blacklisted person"
+                                                              : '',
+                                                          // Conditional display based on whether the employee is blacklisted
+                                                          Icoon:
+                                                              employee.blackListed ==
+                                                                      'True'
+                                                                  ? const Icon(
+                                                                      Icons
+                                                                          .warning_amber_outlined,
+                                                                      color: Colors
+                                                                          .red,
+                                                                      size: 50,
+                                                                    )
+                                                                  : null,
                                                           id: employee.sId ??
                                                               '',
                                                           name: employee.name ??
@@ -731,9 +764,6 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                         ),
                                       ),
                                     ),
-                                  
-                                  
-                                  
                                   ],
                                 ),
                             ],
@@ -751,8 +781,41 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                       if (state is SelectProfilePhotoState) {
                         return Column(
                           children: [
+                            Text('RRRRRRRRRRRRRRRRR'),
                             // const SizedBox(
                             //   height: 10,
+                            // ),
+                            ////////////////////////////////////////////////////////////////////////////////////
+                            ///
+// ListView.builder(
+//   itemCount: checkboxItems.length,
+//   itemBuilder: (BuildContext context, int index) {
+//     final option = checkboxItems[index];
+//     return RadioListTile<String>(
+//       title: Text(option),
+//       value: option,
+//       groupValue: state.selectedOption,
+//       onChanged: (value) {
+//         context.read<SearchByImageBloc>().add(RadioButtonChanged(
+//           selectedOption: value ?? "",
+//         ));
+//       },
+//     );
+//   },
+// ),
+
+
+                            // RadioListTile(
+                            //   title: const Text('True'),
+                            //   value: 'True',
+                            //   groupValue: state.selectedOption,
+                            //   onChanged: (value) {
+                            //     context
+                            //         .read<SearchByImageBloc>()
+                            //         .add(RadioButtonChanged(
+                            //           selectedOption: value ?? "",
+                            //         ));
+                            //   },
                             // ),
                             Center(
                               child: Stack(
@@ -971,6 +1034,8 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
     required String imagesrc,
     required String id,
     required Function onUpdate,
+    String? message,
+    Icon? Icoon,
   }) {
     return Container(
       width: 300,
@@ -1002,20 +1067,21 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                         builder: (context) => FullScreenImage(
                             text: name,
                             imageUrl:
-                                "http:${RemoteDataSource.baseUrlWithoutPort}8000/$imagesrc"),
+                                "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/datasets/Image_Database/$imagesrc"),
                       ),
                     );
                   },
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(6.0),
                     child: Image.network(
-                      "http:${RemoteDataSource.baseUrlWithoutPort}8000/$imagesrc",
+                      "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/datasets/Image_Database/$imagesrc",
                       // Images.profileImage,
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
               ),
+              Tooltip(message: message, child: Icoon),
               BlocProvider(
                 create: (context) => SearchByImageBloc(),
                 child: BlocBuilder<SearchByImageBloc, SearchByImageState>(
@@ -1242,7 +1308,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                 SizedBox(
                   height: 100,
                   child: Image.network(
-                    "http:${RemoteDataSource.baseUrlWithoutPort}8000/${employee.imagePath}",
+                    "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/datasets/Image_Database/${employee.imagePath}",
                     fit: BoxFit.cover,
                   ),
                 ),

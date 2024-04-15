@@ -19,7 +19,7 @@ part 'photo_app_state.dart';
 class PhotoAppCubit extends Cubit<PhotoAppState> {
   PhotoAppCubit() : super(const SelectProfilePhotoState());
   String companyNameRepo =
-      AuthenticationRepository.instance.currentUser.companyName ?? "";
+      AuthenticationRepository.instance.currentUser.companyName?.first ?? "";
   late CameraController controller;
   late Timer _periodicTimer;
 
@@ -75,7 +75,9 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
         );
         Map<String, dynamic> data = {
           'collection_name': companyNameRepo,
-          "image": base64String
+          "image": base64String,
+          'username': AuthenticationRepository.instance.currentUser.username,
+          
         };
         String jsonData = jsonEncode(data);
         _channel.sink.add(jsonData);

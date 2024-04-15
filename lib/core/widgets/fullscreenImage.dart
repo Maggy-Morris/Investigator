@@ -50,7 +50,7 @@ class FullScreenImageFromMemory extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.grey2,
       appBar: AppBar(
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
             color: Colors.white), // Set back button color to white
 
         backgroundColor: AppColors.backGround,

@@ -9,11 +9,17 @@ import 'package:file_picker/file_picker.dart';
 import 'package:Investigator/core/error/exceptions.dart';
 
 class RemoteDataSource {
-  // static String baseURL = 'http://127.0.0.1:10000';
-  // static String baseUrlWithoutPort = "//127.0.0.1:";
+  // static String baseURL = 'http://localhost:10000';
+  // static String baseUrlWithoutPort = "//localhost:";
+  // static String baseUrlWithoutPortForImages = "//localhost:";
 
-  static String baseURL = 'http://192.168.1.66:10000';
-  static String baseUrlWithoutPort = "//192.168.1.66:";
+  // static String baseURL = 'http://172.10.1.2:10000';
+  // static String baseUrlWithoutPort = "//172.10.1.2:";
+  // static String baseUrlWithoutPortForImages = "//172.10.1.2:";
+  static String baseURL = 'http://192.168.1.114:10000';
+  static String baseUrlWithoutPort = "//192.168.1.114:";
+  static String baseUrlWithoutPortForImages = "//192.168.1.114:";
+
   Future<Map<String, dynamic>> post({
     required String endPoint,
     Object? body,
@@ -33,7 +39,7 @@ class RemoteDataSource {
     Map<String, String> header = {
       'Content-Type': 'application/json; charset=UTF-8',
       'Authorization':
-          'Bearer ${AuthenticationRepository.instance.currentUser.authentication}'
+          'Bearer ${AuthenticationRepository.instance.currentUser.token}'
     };
 
     if (kDebugMode) {
@@ -65,7 +71,7 @@ class RemoteDataSource {
     Map<String, String> header = {
       'Content-Type': 'application/json; charset=UTF-8',
       'Authorization':
-          'Bearer ${AuthenticationRepository.instance.currentUser.authentication}'
+          'Bearer ${AuthenticationRepository.instance.currentUser.token}'
     };
 
     if (kDebugMode) {
@@ -96,7 +102,7 @@ class RemoteDataSource {
     Map<String, String> header = {
       'Content-Type': 'application/json; charset=UTF-8',
       'Authorization':
-          'Bearer ${AuthenticationRepository.instance.currentUser.authentication}'
+          'Bearer ${AuthenticationRepository.instance.currentUser.token}'
     };
 
     if (kDebugMode) {
@@ -129,7 +135,7 @@ class RemoteDataSource {
     Map<String, String> header = {
       'Content-Type': 'application/json',
       'Authorization':
-          'Bearer ${AuthenticationRepository.instance.currentUser.authentication}'
+          'Bearer ${AuthenticationRepository.instance.currentUser.token}'
     };
 
     response = await http.get(uri, headers: header);
@@ -157,7 +163,7 @@ class RemoteDataSource {
     Map<String, String> header = {
       'Content-Type': 'application/json; charset=UTF-8',
       'Authorization':
-          'Bearer ${AuthenticationRepository.instance.currentUser.authentication}'
+          'Bearer ${AuthenticationRepository.instance.currentUser.token}'
     };
 
     if (kDebugMode) {
@@ -192,7 +198,7 @@ class RemoteDataSource {
     Map<String, String> header = {
       'Content-Type': 'application/json',
       'Authorization':
-          'Bearer ${AuthenticationRepository.instance.currentUser.authentication}'
+          'Bearer ${AuthenticationRepository.instance.currentUser.token}'
     };
 
     response = http.MultipartRequest("POST", uri);
@@ -220,7 +226,7 @@ class RemoteDataSource {
       throw RequestErrorException(
           responseMessage: jsonDecode(result.body)['message']);
     } else {
-      throw UnknownServerException();
+      // throw UnknownServerException();
     }
   }
 
@@ -243,7 +249,7 @@ class RemoteDataSource {
     Map<String, String> header = {
       'Content-Type': 'application/json',
       'Authorization':
-          'Bearer ${AuthenticationRepository.instance.currentUser.authentication}'
+          'Bearer ${AuthenticationRepository.instance.currentUser.token}'
     };
 
     response = http.MultipartRequest("POST", uri);
@@ -292,7 +298,7 @@ class RemoteDataSource {
     Map<String, String> header = {
       'Content-Type': 'multipart/form-data; charset=UTF-8',
       'Authorization':
-          'Bearer ${AuthenticationRepository.instance.currentUser.authentication}'
+          'Bearer ${AuthenticationRepository.instance.currentUser.token}'
     };
 
     response = http.MultipartRequest("POST", uri);
@@ -346,7 +352,7 @@ class RemoteDataSource {
     Map<String, String> header = {
       'Content-Type': 'multipart/form-data; charset=UTF-8',
       'Authorization':
-          'Bearer ${AuthenticationRepository.instance.currentUser.authentication}'
+          'Bearer ${AuthenticationRepository.instance.currentUser.token}'
     };
 
     response = http.MultipartRequest("POST", uri);

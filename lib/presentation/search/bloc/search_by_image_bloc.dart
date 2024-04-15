@@ -32,6 +32,7 @@ class SearchByImageBloc extends Bloc<SearchByImageEvent, SearchByImageState> {
     on<AdduserId>(_onAdduserId);
 
 //edit
+    on<RadioButtonChanged>(_onRadioButtonChanged);
 
     on<UpdateEmployeeEvent>(_onUpdateEmployeeEvent);
   }
@@ -88,7 +89,7 @@ class SearchByImageBloc extends Bloc<SearchByImageEvent, SearchByImageState> {
   _onDeletePersonByNameEvent(
       DeletePersonByNameEvent event, Emitter<SearchByImageState> emit) async {
     String companyNameRepo =
-        AuthenticationRepository.instance.currentUser.companyName ?? "";
+        AuthenticationRepository.instance.currentUser.companyName?.first ?? "";
     emit(state.copyWith(submission: Submission.loading));
     await RemoteProvider()
         .deleteDocumentByName(
@@ -154,6 +155,7 @@ class SearchByImageBloc extends Bloc<SearchByImageEvent, SearchByImageState> {
     emit(state.copyWith(submission: Submission.loading));
     await RemoteProvider()
         .searchForpersonByImage(
+      username: AuthenticationRepository.instance.currentUser.username ?? '',
       companyName: state.companyName,
       image: state.image,
     )
@@ -171,5 +173,15 @@ class SearchByImageBloc extends Bloc<SearchByImageEvent, SearchByImageState> {
         emit(state.copyWith(submission: Submission.noDataFound));
       }
     });
+  }
+  //RadioButton
+  _onRadioButtonChanged(
+      RadioButtonChanged event, Emitter<SearchByImageState> emit) async {
+    emit(
+      state.copyWith(
+        selectedOption: event.selectedOption,
+        // showTextField: event.showTextField,
+      ),
+    );
   }
 }
