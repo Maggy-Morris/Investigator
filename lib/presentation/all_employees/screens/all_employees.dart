@@ -502,13 +502,11 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                       "Room Access Management",
                                                                   onChanged:
                                                                       (value) {
-                                                                   
                                                                     AllEmployeesBloc.get(
                                                                             context)
                                                                         .add(checkBox(
                                                                             room_NMs:
                                                                                 value!));
-                                                                  
                                                                   },
                                                                   itemsList:
                                                                       checkboxItems,
@@ -1135,7 +1133,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                       child: Text(
                                         "no".tr(),
                                         style: const TextStyle(
-                                            color: AppColors.blueBlack),
+                                            color: AppColors.green),
                                       ),
                                       onPressed: () => Navigator.of(ctx).pop()),
                                 ],

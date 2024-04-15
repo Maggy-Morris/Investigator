@@ -877,6 +877,25 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                     //       .white, // Set the background color of the dropdown menu
                                     // ),
                                   ),
+                                  // Tooltip(
+                                  //   message:
+                                  //       "Check This If You Want To Look For A Security Breach",
+                                  //   child: Checkbox(
+                                  //       focusColor: Colors.white,
+                                  //       checkColor: Colors.white,
+                                  //       // fillColor: MaterialStateProperty.resolveWith(getColor),
+                                  //       value: true,
+                                  //       onChanged: (bool? value) {
+                                  //         context
+                                  //             .read<PhotoAppCubit>()
+                                  //             .security_breach(
+                                  //                 isChosen: value ?? false);
+
+                                  //         // setState(() {
+                                  //         //   isChecked = value!;
+                                  //         // });
+                                  //       }),
+                                  // )
                                 ],
                               ),
 

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'core/resources/app_colors.dart';
 
 final theme = ThemeData(
+  unselectedWidgetColor: Colors.white,
+  scrollbarTheme: ScrollbarThemeData(),
   // textTheme: GoogleFonts.openSansTextTheme(),
   useMaterial3: true,
   fontFamily: 'Cairo',

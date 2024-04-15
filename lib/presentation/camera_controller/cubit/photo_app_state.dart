@@ -5,11 +5,12 @@ class PhotoAppState extends Equatable {
   final bool? hasError;
   final String? errorMessage;
   final String? roomChoosen;
-
+  final bool? isChosen;
 
   // final String? selectedOption;
 
   const PhotoAppState({
+    this.isChosen,
     this.roomChoosen,
     this.errorMessage,
     this.isLoading,
@@ -18,7 +19,7 @@ class PhotoAppState extends Equatable {
   });
 
   PhotoAppState copyWith({
-    
+    // bool? isChosen,
     // String? selectedOption,
     // List<List<double>>? boxes,
 
@@ -28,7 +29,7 @@ class PhotoAppState extends Equatable {
     bool? isLoading,
   }) {
     return PhotoAppState(
-
+      isChosen: isChosen ?? this.isChosen,
       roomChoosen: roomChoosen ?? this.roomChoosen,
 
       // selectedOption : selectedOption ?? this.selectedOption,
@@ -41,7 +42,7 @@ class PhotoAppState extends Equatable {
   @override
   List<Object?> get props => [
         roomChoosen,
-
+        isChosen,
         // selectedOption,
         isLoading,
         errorMessage,
@@ -83,8 +84,7 @@ class CameraState extends PhotoAppState {
   final bool? blacklisted;
   final bool? security_breach;
   const CameraState({
-        this.submission = Submission.initial,
-
+    this.submission = Submission.initial,
     this.roomChoosen,
     this.blacklisted,
     this.security_breach,
@@ -101,8 +101,7 @@ class CameraState extends PhotoAppState {
 
   @override
   CameraState copyWith({
-        Submission? submission,
-
+    Submission? submission,
     String? roomChoosen,
     bool? blacklisted,
     bool? security_breach,
@@ -115,8 +114,7 @@ class CameraState extends PhotoAppState {
     bool? isLoading,
   }) {
     return CameraState(
-            submission: submission ?? this.submission,
-
+      submission: submission ?? this.submission,
       roomChoosen: roomChoosen ?? this.roomChoosen,
       blacklisted: blacklisted ?? this.blacklisted,
       security_breach: security_breach ?? this.security_breach,
@@ -132,8 +130,7 @@ class CameraState extends PhotoAppState {
 
   @override
   List<Object?> get props => [
-            submission,
-
+        submission,
         roomChoosen,
         blacklisted,
         security_breach,

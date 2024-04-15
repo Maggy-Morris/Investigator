@@ -300,9 +300,9 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
             .where((employee) => employee.name != event.personName)
             .toList();
         emit(state.copyWith(
-          submission: Submission.success,
-          employeeNamesList: updatedList,
-        ));
+            submission: Submission.success,
+            employeeNamesList: updatedList,
+            responseMessage: value.data));
       } else if (value.data!.isEmpty) {
         emit(state.copyWith(
           submission: Submission.noDataFound,

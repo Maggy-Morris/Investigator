@@ -111,36 +111,19 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                         if (Responsive.isWeb(context))
                           Column(
                             children: [
-                              // Text(
-                              //   // Use state data to show appropriate text
-                              //   state.submission == Submission.loading
-                              //       ? 'Searching...'
-                              //       : state.submission == Submission.success
-                              //           ? "Data:${state.data}" // Join the list elements with a comma
-                              //           : state.submission ==
-                              //                   Submission.noDataFound
-                              //               ? "This person didn't appear in the video "
-                              //               : 'Pick Image and Video',
-                              //   style: const TextStyle(
-                              //     color: AppColors.white,
-                              //     fontSize: 18,
-                              //     fontWeight: FontWeight.bold,
-                              //   ),
-                              // ),
-
                               Center(
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 50.0, vertical: 20),
                                   child: SfRangeSliderTheme(
                                     data: SfRangeSliderThemeData(
-                                      activeTrackColor: Colors.amber,
+                                      activeTrackColor: Colors.white,
                                       activeLabelStyle: const TextStyle(
-                                          color: Colors.red,
+                                          color: Colors.white,
                                           fontSize: 12,
                                           fontStyle: FontStyle.italic),
                                       inactiveLabelStyle: const TextStyle(
-                                          color: Color.fromARGB(255, 165, 3, 3),
+                                          color: Colors.white,
                                           fontSize: 12,
                                           fontStyle: FontStyle.italic),
                                     ),
@@ -163,6 +146,46 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                           _value = newValue;
                                         });
                                       },
+//                                       labelFormatterCallback: (dynamic value, String formattedValue) {
+//   // Map numeric values to custom string labels
+//   switch (value.toInt()) {
+//     case 0:
+//       return TextSpan(
+//         text: 'Low',
+//         style: SfRangeSliderTheme.of(context).activeLabelStyle,
+//       ).toStaticList();
+//     case 20:
+//       return TextSpan(
+//         text: 'Medium',
+//         style: SfRangeSliderTheme.of(context).activeLabelStyle,
+//       ).toStaticList();
+//     case 40:
+//       return TextSpan(
+//         text: 'High',
+//         style: SfRangeSliderTheme.of(context)?.activeLabelStyle,
+//       ).toStaticList();
+//     case 60:
+//       return TextSpan(
+//         text: 'Very High',
+//         style: SfRangeSliderTheme.of(context)?.activeLabelStyle,
+//       ).toStaticList();
+//     case 80:
+//       return TextSpan(
+//         text: 'Extreme',
+//         style: SfRangeSliderTheme.of(context)?.activeLabelStyle,
+//       ).toStaticList();
+//     case 100:
+//       return TextSpan(
+//         text: 'Identical',
+//         style: SfRangeSliderTheme.of(context)?.activeLabelStyle,
+//       ).toStaticList();
+//     default:
+//       return TextSpan(
+//         text: '',
+//         style: SfRangeSliderTheme.of(context)?.activeLabelStyle,
+//       ).toStaticList(); // Return empty string for other values
+//   }
+// },
                                       labelFormatterCallback: (dynamic value,
                                           String formattedValue) {
                                         // Map numeric values to custom string labels

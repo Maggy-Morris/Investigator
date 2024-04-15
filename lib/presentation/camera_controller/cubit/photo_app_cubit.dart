@@ -39,13 +39,12 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
   void openCamera({required String roomChoosen}) async {
     final cameras = await availableCameras();
     controller = CameraController(cameras.first, ResolutionPreset.medium);
+
     await controller.initialize();
     emit(CameraState(
         controller: controller,
         camera: controller.description,
-        roomChoosen: roomChoosen
-        
-        ));
+        roomChoosen: roomChoosen));
   }
 
   Future<XFile?> takePicture() async {
@@ -86,6 +85,7 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
           "image": base64String,
           'username': AuthenticationRepository.instance.currentUser.username,
           'current_room': state.roomChoosen,
+          "breach_checker": true,
         };
         String jsonData = jsonEncode(data);
         _channel.sink.add(jsonData);
@@ -148,7 +148,8 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
     emit(SelectProfilePhotoState(file: file));
   }
 
-  void selectedRoom({required String roomChoosen}) {
-    emit(PhotoAppState(roomChoosen: roomChoosen));
+  bool security_breach({required bool isChosen}) {
+    return isChosen;
+    // emit(PhotoAppState(isChosen: isChosen));
   }
 }
