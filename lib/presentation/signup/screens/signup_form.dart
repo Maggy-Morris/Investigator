@@ -82,22 +82,22 @@ class SignUpForm extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Responsive.isWeb(context)
-                          ? Expanded(
-                              child: Column(
-                                children: [
-                                  // Container(
-                                  //   constraints:
-                                  //       const BoxConstraints(maxHeight: 400),
-                                  //   child: SvgPicture.asset(
-                                  //     "assets/images/Admin_Kit_Text.svg",
-                                  //   ),
-                                  // ),
-                                  FxBox.h16,
-                                ],
-                              ),
-                            )
-                          : Container(),
+                      // Responsive.isWeb(context)
+                      //     ? Expanded(
+                      //         child: Column(
+                      //           children: [
+                      //             // Container(
+                      //             //   constraints:
+                      //             //       const BoxConstraints(maxHeight: 400),
+                      //             //   child: SvgPicture.asset(
+                      //             //     "assets/images/Admin_Kit_Text.svg",
+                      //             //   ),
+                      //             // ),
+                      //             FxBox.h16,
+                      //           ],
+                      //         ),
+                      //       )
+                      //     : Container(),
                     ],
                   ),
                 ],
@@ -130,6 +130,7 @@ Widget _bottomView() {
         padding: const EdgeInsets.all(8.0),
         child: Text("Email".tr(),
             style: const TextStyle(
+                color: Colors.black,
                 fontFamily: "Cairo",
                 fontSize: AppFontSize.s14,
                 fontWeight: FontWeight.bold)),
@@ -142,6 +143,7 @@ Widget _bottomView() {
         child: Text(
           "password".tr(),
           style: const TextStyle(
+              color: Colors.black,
               fontFamily: "Cairo",
               fontSize: AppFontSize.s14,
               fontWeight: FontWeight.bold),
@@ -154,6 +156,7 @@ Widget _bottomView() {
         padding: const EdgeInsets.all(8.0),
         child: Text("Company Name".tr(),
             style: const TextStyle(
+                color: Colors.black,
                 fontFamily: "Cairo",
                 fontSize: AppFontSize.s14,
                 fontWeight: FontWeight.bold)),
@@ -192,7 +195,10 @@ class DropDwon extends StatelessWidget {
                 items: List.generate(101, (index) {
                   return DropdownMenuItem<int>(
                     value: index,
-                    child: Text('${index}'),
+                    child: Text(
+                      '${index}',
+                      style: TextStyle(color: Colors.black),
+                    ),
                   );
                 }),
               ),
@@ -205,6 +211,7 @@ class DropDwon extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 15.0),
                             child: TextField(
+                              style: TextStyle(color: Colors.black),
                               decoration: InputDecoration(
                                 labelText: 'Room Number ${index + 1}',
                                 border: OutlineInputBorder(
@@ -253,6 +260,7 @@ class _EmailInput extends StatelessWidget {
         return SizedBox(
           width: MediaQuery.of(context).size.width,
           child: TextFormField(
+            style: TextStyle(color: Colors.black),
             cursorColor: Colors.black,
             key: const Key('loginForm_emailInput_textField'),
             onChanged: (email) =>
@@ -302,6 +310,7 @@ class _companyNameInputState extends State<companyNameInput> {
         return SizedBox(
           width: MediaQuery.of(context).size.width,
           child: TextFormField(
+            style: TextStyle(color: Colors.black),
             cursorColor: Colors.black,
             // key: const Key('loginForm_emailInput_textField'),
             onChanged: (companyName) =>
@@ -343,6 +352,7 @@ class _PasswordInputState extends State<_PasswordInput> {
         return SizedBox(
           width: MediaQuery.of(context).size.width,
           child: TextField(
+            style: TextStyle(color: Colors.black),
             cursorColor: Colors.black,
             obscureText: visible,
             obscuringCharacter: "•",

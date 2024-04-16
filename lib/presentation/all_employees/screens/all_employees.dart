@@ -115,6 +115,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                     height: 40,
                                     width: 300,
                                     child: TextFormField(
+                                      style: TextStyle(color: Colors.black),
                                       controller: _searchController,
                                       decoration: InputDecoration(
                                         labelText: 'Search For Employee'.tr(),
@@ -436,7 +437,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                     Icons
                                                                         .warning_amber_outlined,
                                                                     color: Colors
-                                                                        .amber,
+                                                                        .red,
                                                                     size: 35,
                                                                   )
                                                                 ],
@@ -601,6 +602,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                     height: 40,
                                     width: 300,
                                     child: TextFormField(
+                                      style: TextStyle(color: Colors.black),
                                       controller: _searchController,
                                       decoration: InputDecoration(
                                         labelText: 'Search For Employee'.tr(),
@@ -989,7 +991,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                       ? const Icon(
                                                           Icons
                                                               .warning_amber_outlined,
-                                                          color: Colors.amber,
+                                                          color: Colors.red,
                                                           size: 50,
                                                         )
                                                       : null,
@@ -1105,7 +1107,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                 ),
                                 icon: const Icon(
                                   Icons.warning,
-                                  color: Colors.amber,
+                                  color: Colors.red,
                                 ),
                                 title: Text(
                                   "Are you sure you want to remove this person from the organization?"

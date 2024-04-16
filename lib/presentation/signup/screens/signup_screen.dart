@@ -24,9 +24,9 @@ class SignUpPage extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-              AppColors.backGround,
-              AppColors.backGround,
-              AppColors.backGround,
+              AppColors.grey3,
+              AppColors.grey,
+              AppColors.grey2,
               // Colors.white24,
               // Colors.blueGrey.withOpacity(0.5),
               // Colors.blueGrey.withOpacity(0.6),

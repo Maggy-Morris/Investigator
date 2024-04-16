@@ -37,9 +37,9 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
   Widget? _image;
   CameraController? controller;
   XFile? imageFile;
-  final double _min = 0;
+  final double _min = 10;
   final double _max = 100;
-  double _value = 0.0;
+  double _value = 10;
   // bool _isBackCamera = true;
   String companyNameRepo =
       AuthenticationRepository.instance.currentUser.companyName?.first ?? "";
@@ -134,7 +134,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                       min: _min,
                                       max: _max,
                                       value: _value,
-                                      interval: 20, // Assuming interval is 1
+                                      interval: 18, // Assuming interval is 1
                                       showTicks: true,
                                       showLabels: true,
 
@@ -190,15 +190,15 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                           String formattedValue) {
                                         // Map numeric values to custom string labels
                                         switch (value.toInt()) {
-                                          case 0:
+                                          case 10:
                                             return 'Low';
-                                          case 20:
+                                          case 28:
                                             return 'Medium';
-                                          case 40:
+                                          case 46:
                                             return 'High';
-                                          case 60:
+                                          case 64:
                                             return 'Very High';
-                                          case 80:
+                                          case 82:
                                             return 'Extreme';
                                           case 100:
                                             return 'Identical';

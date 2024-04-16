@@ -42,6 +42,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
       AuthenticationRepository.instance.currentUser.companyName?.first ?? "";
   late TabController tabController;
   bool _isBackCamera = true;
+  bool? isChecked;
   List<String> checkboxItems =
       AuthenticationRepository.instance.currentUser.roomsNames ?? [];
 
@@ -400,7 +401,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                                       Icons
                                                                           .warning_amber_outlined,
                                                                       color: Colors
-                                                                          .amber,
+                                                                          .red,
                                                                       size: 50,
                                                                     )
                                                                   : null,
@@ -731,7 +732,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                                       Icons
                                                                           .warning_amber_outlined,
                                                                       color: Colors
-                                                                          .amber,
+                                                                          .red,
                                                                       size: 50,
                                                                     )
                                                                   : null,
@@ -778,15 +779,272 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                   /////////////////////////////////////////////////////////////////////////////////////////////
                   ///Live Stream Video
 
+                  // BlocListener<PhotoAppCubit, PhotoAppState>(
+                  //   listener: (context, state) {},
+                  //   child: BlocBuilder<PhotoAppCubit, PhotoAppState>(
+                  //     builder: (context, state) {
+                  //       if (state is SelectProfilePhotoState) {
+                  //         return Column(
+                  //           children: [
+                  //             Row(
+                  //               mainAxisAlignment: MainAxisAlignment.start,
+                  //               children: [
+                  //                 Padding(
+                  //                   padding: const EdgeInsets.all(15.0),
+                  //                   child: SizedBox(
+                  //                     width: 250,
+                  //                     child:
+                  //                         singleSelectGenericDropdown<String>(
+                  //                       titleName: "Select A Room",
+                  //                       isEnabled: true,
+                  //                       isRequired: false,
+                  //                       filled: true,
+                  //                       showSearch: true,
+                  //                       onChanged: (value) {
+                  //                         if (value?.isNotEmpty ?? false) {
+                  //                           context
+                  //                               .read<SearchByImageBloc>()
+                  //                               .add(
+                  //                                 RadioButtonChanged(
+                  //                                     selectedOption:
+                  //                                         value ?? ""),
+                  //                               );
+
+                  //                           context
+                  //                               .read<PhotoAppCubit>()
+                  //                               .openCamera(
+                  //                                   roomChoosen: value ?? '');
+                  //                         }
+                  //                       },
+                  //                       itemsList: checkboxItems,
+                  //                     ),
+                  //                   ),
+                  //                 ),
+                  //                 Row(
+                  //                   children: [
+                  //                     Checkbox(
+                  //                       value: isChecked,
+                  //                       onChanged: (bool? value) {
+                  //                         context
+                  //                             .read<PhotoAppCubit>()
+                  //                             .toggleSecurityBreach(
+                  //                                 value ?? false);
+
+                  //                         setState(() {
+                  //                           isChecked = value ?? false;
+                  //                         });
+                  //                       },
+                  //                     ),
+                  //                     const Text(
+                  //                       'Security Breach',
+                  //                       style: TextStyle(
+                  //                         fontSize: 16,
+                  //                         // You can adjust the style of the text as needed
+                  //                       ),
+                  //                     ),
+                  //                   ],
+                  //                 )
+                  //               ],
+                  //             ),
+                  //             Center(
+                  //               child: Stack(
+                  //                 children: [
+                  //                   getAvatar(state.file),
+                  //                 ],
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         );
+                  //       } else if (state is CameraState) {
+                  //         if (state.submission == Submission.loading) {
+                  //           EasyLoading.show(status: 'loading...');
+                  //         }
+
+                  //         return Expanded(
+                  //           // aspectRatio: state.controller.value.aspectRatio,
+                  //           child: Column(
+                  //             mainAxisAlignment: MainAxisAlignment.start,
+                  //             crossAxisAlignment: CrossAxisAlignment.center,
+                  //             children: [
+                  //               Stack(children: [
+                  //                 Container(
+                  //                   width: 720,
+                  //                   height: 480,
+                  //                   child: AspectRatio(
+                  //                     aspectRatio:
+                  //                         state.controller.value.aspectRatio,
+                  //                     child: CameraPreview(
+                  //                       state.controller,
+                  //                       child: Stack(
+                  //                         // fit: StackFit.expand,
+                  //                         alignment: Alignment.bottomCenter,
+                  //                         children: [
+                  //                           Row(
+                  //                             crossAxisAlignment:
+                  //                                 CrossAxisAlignment.end,
+                  //                             mainAxisAlignment:
+                  //                                 MainAxisAlignment.center,
+                  //                             children: [
+                  //                               Padding(
+                  //                                 padding: const EdgeInsets
+                  //                                     .symmetric(
+                  //                                     horizontal: 8.0,
+                  //                                     vertical: 20),
+                  //                                 child: ElevatedButton(
+                  //                                   style: ButtonStyle(
+                  //                                       backgroundColor:
+                  //                                           MaterialStateProperty
+                  //                                               .all<Color>(
+                  //                                                   AppColors
+                  //                                                       .babyBlue),
+                  //                                       shape: MaterialStateProperty
+                  //                                           .all<
+                  //                                               RoundedRectangleBorder>(
+                  //                                         RoundedRectangleBorder(
+                  //                                           borderRadius:
+                  //                                               BorderRadius
+                  //                                                   .circular(
+                  //                                                       50),
+                  //                                         ),
+                  //                                       )),
+                  //                                   onPressed: () {
+                  //                                     context
+                  //                                         .read<PhotoAppCubit>()
+                  //                                         .startStream();
+                  //                                   },
+                  //                                   child: Text(
+                  //                                     context
+                  //                                             .watch<
+                  //                                                 PhotoAppCubit>()
+                  //                                             .isStreaming
+                  //                                         ? 'Stop Stream'
+                  //                                         : 'Start Stream',
+                  //                                     style: const TextStyle(
+                  //                                         color: Colors.black,
+                  //                                         fontSize: 12,
+                  //                                         fontWeight:
+                  //                                             FontWeight.bold),
+                  //                                   ),
+                  //                                 ),
+                  //                               ),
+                  //                               IconButton(
+                  //                                   color: Colors.white,
+                  //                                   padding:
+                  //                                       const EdgeInsets.only(
+                  //                                           bottom: 25),
+                  //                                   onPressed: () {
+                  //                                     setState(() {
+                  //                                       _isBackCamera =
+                  //                                           !_isBackCamera;
+                  //                                     });
+                  //                                   },
+                  //                                   icon: const Icon(
+                  //                                       Icons.cameraswitch))
+                  //                             ],
+                  //                           ),
+                  //                           Positioned(
+                  //                             top: 0,
+                  //                             left: 0,
+                  //                             right: 0,
+                  //                             child: Container(
+                  //                               padding:
+                  //                                   const EdgeInsets.symmetric(
+                  //                                 vertical: 8,
+                  //                                 horizontal: 16,
+                  //                               ),
+                  //                               decoration: BoxDecoration(
+                  //                                 borderRadius:
+                  //                                     const BorderRadius.only(
+                  //                                   bottomLeft:
+                  //                                       Radius.circular(12),
+                  //                                   bottomRight:
+                  //                                       Radius.circular(12),
+                  //                                 ),
+                  //                                 color: Colors.black
+                  //                                     .withOpacity(0.6),
+                  //                               ),
+                  //                               child: Text(
+                  //                                 "Data : ${state.result}",
+                  //                                 style: const TextStyle(
+                  //                                   color: Colors.black,
+                  //                                   fontSize: 18,
+                  //                                   fontWeight: FontWeight.bold,
+                  //                                 ),
+                  //                               ),
+                  //                             ),
+                  //                           ),
+                  //                           state.blacklisted == true
+                  //                               ? const Column(
+                  //                                   crossAxisAlignment:
+                  //                                       CrossAxisAlignment.end,
+                  //                                   children: [
+                  //                                       Tooltip(
+                  //                                         message:
+                  //                                             "BlackListed Person",
+                  //                                         child: Icon(
+                  //                                           Icons.warning,
+                  //                                           color: Colors.red,
+                  //                                           size: 60,
+                  //                                         ),
+                  //                                       ),
+                  //                                     ])
+                  //                               : const SizedBox(),
+                  //                           state.security_breach == true
+                  //                               ? const Column(
+                  //                                   crossAxisAlignment:
+                  //                                       CrossAxisAlignment.end,
+                  //                                   children: [
+                  //                                       Tooltip(
+                  //                                         message:
+                  //                                             "Security Breach Unauhorized person",
+                  //                                         child: Icon(
+                  //                                           Icons.warning,
+                  //                                           color: Colors.amber,
+                  //                                           size: 50,
+                  //                                         ),
+                  //                                       ),
+                  //                                     ])
+                  //                               : const SizedBox(),
+                  //                         ],
+                  //                       ),
+                  //                     ),
+                  //                   ),
+                  //                 ),
+                  //                 // Transform.scale(
+                  //                 //   scale: state.controller.value.aspectRatio,
+                  //                 //   child:
+
+                  //                 CustomPaint(
+                  //                   painter: RectanglePainter(
+                  //                     (state.boxes ?? [])
+                  //                         .map((box) => (box))
+                  //                         .toList(),
+                  //                   ),
+                  //                 ),
+                  //                 // ),
+                  //               ]),
+                  //             ],
+                  //           ),
+                  //         );
+                  //       } else {
+                  //         return const Scaffold(
+                  //           body: Center(
+                  //             child: Text('Nothing to show'),
+                  //           ),
+                  //         );
+                  //       }
+                  //     },
+                  //   ),
+                  // ),
+
+                  // ////////////////////////////////////////////////////////////////////////////
                   BlocListener<PhotoAppCubit, PhotoAppState>(
                     listener: (context, state) {
-                      // if (state.submission == Submission.loading) {
-                      //   loadingIndicator();
-                      // }
+                      // Handle any state changes if needed
                     },
                     child: BlocBuilder<PhotoAppCubit, PhotoAppState>(
                       builder: (context, state) {
-                        if (state is SelectProfilePhotoState) {
+                        if (state.isChosen == false) {
                           return Column(
                             children: [
                               Row(
@@ -815,162 +1073,81 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
 
                                             context
                                                 .read<PhotoAppCubit>()
-                                                .openCamera(
-                                                    roomChoosen: value ?? '');
+                                                .roomChoosen(value ?? "");
                                           }
                                         },
                                         itemsList: checkboxItems,
                                       ),
                                     ),
-
-                                    // DropdownButton<String>(
-                                    //   value: state
-                                    //       .selectedOption, // Assuming state.selectedOption is of type String
-                                    //   onChanged: (String? value) {
-                                    //     context.read<SearchByImageBloc>().add(
-                                    //           RadioButtonChanged(
-                                    //               selectedOption: value ?? ""),
-                                    //         );
-
-                                    //     context
-                                    //         .read<PhotoAppCubit>()
-                                    //         .openCamera(
-                                    //             roomChoosen: value ?? '');
-                                    //   },
-                                    //   icon: const Icon(Icons.arrow_drop_down,
-                                    //       color: Colors
-                                    //           .white), // Add dropdown icon
-                                    //   iconSize:
-                                    //       24, // Adjust icon size as needed
-                                    //   underline: Container(
-                                    //     // Customize underline
-                                    //     height: 2,
-                                    //     color: Colors.white,
-                                    //   ),
-                                    //   style: const TextStyle(
-                                    //       color: Colors.black,
-                                    //       fontSize: 16), // Customize text style
-                                    //   hint: Text(
-                                    //     // Add hint text
-                                    //     state.selectedOption == null
-                                    //         ? "Select Your Room"
-                                    //         : state.selectedOption ?? "",
-                                    //     style: const TextStyle(
-                                    //         color: Colors.white),
-                                    //   ),
-
-                                    //   items: checkboxItems
-                                    //       .map<DropdownMenuItem<String>>(
-                                    //     (String option) {
-                                    //       return DropdownMenuItem<String>(
-                                    //         value: option,
-                                    //         child: Text(
-                                    //           option,
-                                    //           style: const TextStyle(
-                                    //               color: Colors
-                                    //                   .black), // Customize dropdown item text color
-                                    //         ),
-                                    //       );
-                                    //     },
-                                    //   ).toList(),
-                                    //   dropdownColor: Colors
-                                    //       .white, // Set the background color of the dropdown menu
-                                    // ),
                                   ),
-                                  // Tooltip(
-                                  //   message:
-                                  //       "Check This If You Want To Look For A Security Breach",
-                                  //   child: Checkbox(
-                                  //       focusColor: Colors.white,
-                                  //       checkColor: Colors.white,
-                                  //       // fillColor: MaterialStateProperty.resolveWith(getColor),
-                                  //       value: true,
-                                  //       onChanged: (bool? value) {
-                                  //         context
-                                  //             .read<PhotoAppCubit>()
-                                  //             .security_breach(
-                                  //                 isChosen: value ?? false);
-
-                                  //         // setState(() {
-                                  //         //   isChecked = value!;
-                                  //         // });
-                                  //       }),
-                                  // )
+                                  Row(
+                                    children: [
+                                      Checkbox(
+                                        checkColor: Colors.white,
+                                        focusColor: Colors.white,
+                                        hoverColor: Colors.white,
+                                        value: state.securityBreachChecked,
+                                        onChanged: (bool? value) {
+                                          context
+                                              .read<PhotoAppCubit>()
+                                              .toggleSecurityBreach(
+                                                  value ?? false);
+                                        },
+                                      ),
+                                      const Text(
+                                        'Security Breach',
+                                        style: TextStyle(
+                                            fontSize: 16, color: Colors.white
+                                            // You can adjust the style of the text as needed
+                                            ),
+                                      ),
+                                    ],
+                                  )
                                 ],
                               ),
-
-                              // BlocProvider(
-                              //   create: (context) => SearchByImageBloc(),
-                              //   child: BlocBuilder<SearchByImageBloc,
-                              //       SearchByImageState>(
-                              //     builder: (context, state) {
-                              //       return SizedBox(
-                              //         height: 200,
-                              //         width: 200,
-                              //         child: ListView.builder(
-                              //           itemCount: checkboxItems.length,
-                              //           itemBuilder:
-                              //               (BuildContext context, int index) {
-                              //             final option = checkboxItems[index];
-                              //             return RadioListTile<String>(
-                              //               activeColor: Colors.white,
-                              //               title: Text(
-                              //                 option,
-                              //                 style: const TextStyle(
-                              //                     color: Colors.white),
-                              //               ),
-                              //               value: option,
-                              //               groupValue: state.selectedOption,
-                              //               onChanged: (value) {
-                              //                 context
-                              //                     .read<SearchByImageBloc>()
-                              //                     .add(RadioButtonChanged(
-                              //                       selectedOption: value ?? "",
-                              //                     ));
-                              //                 loadingIndicator();
-                              //                 context
-                              //                     .read<PhotoAppCubit>()
-                              //                     .openCamera(
-                              //                         roomChoosen: value ?? '');
-                              //               },
-                              //             );
-                              //           },
-                              //         ),
-                              //       );
-                              //     },
-                              //   ),
-                              // ),
-
                               Center(
                                 child: Stack(
                                   children: [
-                                    getAvatar(state.file),
+                                    // getAvatar(state.file),
                                     // Positioned(
-                                    //   bottom: -10,
-                                    //   left: 80,
-                                    //   child: IconButton(
-                                    //     onPressed: () {
-                                    //       // context
-                                    //       //     .read<PhotoAppCubit>()
-                                    //       //     .openCamera(roomChoosen: );
-                                    //     },
-                                    //     icon: const Icon(
-                                    //       Icons.photo_camera_rounded,
-                                    //     ),
-                                    //   ),
+                                    // bottom: -15,
+                                    // left: 80,
+                                    // child:
+                                    IconButton(
+                                      onPressed: () {
+                                        if (state.roomChoosen == null) {
+                                          FxToast.showErrorToast(
+                                            context: context,
+                                            message: "Pick your room first",
+                                          );
+                                          return;
+                                        }
+                                        context
+                                            .read<PhotoAppCubit>()
+                                            .isChosenChanged(
+                                              true,
+                                            );
+                                        context
+                                            .read<PhotoAppCubit>()
+                                            .openCamera(
+                                                roomChoosen:
+                                                    state.roomChoosen ?? '',
+                                                security: state
+                                                    .securityBreachChecked);
+                                      },
+                                      icon: const Icon(
+                                          Icons.photo_camera_rounded,
+                                          size: 300,
+                                          color: AppColors.babyBlue),
+                                    ),
                                     // ),
                                   ],
                                 ),
                               ),
                             ],
                           );
-                        } else if (state is CameraState) {
-                          if (state.submission == Submission.loading) {
-                            EasyLoading.show(status: 'loading...');
-                          }
-
+                        } else {
                           return Expanded(
-                            // aspectRatio: state.controller.value.aspectRatio,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -981,11 +1158,11 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                     height: 480,
                                     child: AspectRatio(
                                       aspectRatio:
-                                          state.controller.value.aspectRatio,
+                                          // state.controller?.value.aspectRatio ??
+                                          16 / 10.7,
                                       child: CameraPreview(
-                                        state.controller,
+                                        state.controller!,
                                         child: Stack(
-                                          // fit: StackFit.expand,
                                           alignment: Alignment.bottomCenter,
                                           children: [
                                             Row(
@@ -1036,19 +1213,22 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                     ),
                                                   ),
                                                 ),
-                                                IconButton(
-                                                    color: Colors.white,
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            bottom: 25),
-                                                    onPressed: () {
-                                                      setState(() {
-                                                        _isBackCamera =
-                                                            !_isBackCamera;
-                                                      });
-                                                    },
-                                                    icon: const Icon(
-                                                        Icons.cameraswitch))
+                                                // IconButton(
+                                                //     color: Colors.white,
+                                                //     padding:
+                                                //         const EdgeInsets.only(
+                                                //             bottom: 25),
+                                                //     onPressed: () {
+                                                //       setState(() {
+                                                //         _isBackCamera =
+                                                //             !_isBackCamera;
+                                                //       });
+                                                //     },
+                                                //     icon: const Icon(
+                                                //       Icons.cameraswitch,
+                                                //       size: 25,
+                                                //       color: Colors.white,
+                                                //     ))
                                               ],
                                             ),
                                             Positioned(
@@ -1092,23 +1272,23 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                               "BlackListed Person",
                                                           child: Icon(
                                                             Icons.warning,
-                                                            color: Colors.amber,
+                                                            color: Colors.red,
                                                             size: 60,
                                                           ),
                                                         ),
                                                       ])
                                                 : const SizedBox(),
-                                            state.security_breach == true
+                                            state.securityBreach == true
                                                 ? const Column(
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment.end,
                                                     children: [
                                                         Tooltip(
                                                           message:
-                                                              "Security Breach Unauhorized person",
+                                                              "Security Breach Unauthorized person",
                                                           child: Icon(
                                                             Icons.warning,
-                                                            color: Colors.red,
+                                                            color: Colors.amber,
                                                             size: 50,
                                                           ),
                                                         ),
@@ -1119,10 +1299,6 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                       ),
                                     ),
                                   ),
-                                  // Transform.scale(
-                                  //   scale: state.controller.value.aspectRatio,
-                                  //   child:
-
                                   CustomPaint(
                                     painter: RectanglePainter(
                                       (state.boxes ?? [])
@@ -1130,23 +1306,33 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                           .toList(),
                                     ),
                                   ),
-                                  // ),
+                                  Positioned(
+                                    top: 0,
+                                    // left: 0,
+                                    right: 0,
+                                    child: IconButton(
+                                      onPressed: () {
+                                        context
+                                            .read<PhotoAppCubit>()
+                                            .isChosenChanged(
+                                              false,
+                                            );
+                                      },
+                                      icon: Icon(
+                                        Icons.close,
+                                        size: 50,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  ),
                                 ]),
                               ],
-                            ),
-                          );
-                        } else {
-                          return const Scaffold(
-                            body: Center(
-                              child: Text('Nothing to show'),
                             ),
                           );
                         }
                       },
                     ),
                   ),
-
-                  // ////////////////////////////////////////////////////////////////////////////
                 ],
               ),
             ),
@@ -1163,7 +1349,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
   Widget getAvatar(File? displayImage) {
     return Container(
       width: 300,
-      height: 300,
+      height: 350,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
@@ -1266,7 +1452,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                 ),
                                 icon: const Icon(
                                   Icons.warning,
-                                  color: Colors.amber,
+                                  color: Colors.red,
                                 ),
                                 title: Text(
                                   "Are you sure you want to remove this person from the organization?"

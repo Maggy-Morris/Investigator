@@ -210,6 +210,7 @@ class _EmailInput extends StatelessWidget {
         return SizedBox(
           width: MediaQuery.of(context).size.width,
           child: TextFormField(
+            style: TextStyle(color: Colors.black),
             cursorColor: Colors.black,
             key: const Key('loginForm_emailInput_textField'),
             onChanged: (email) =>
@@ -256,6 +257,7 @@ class _PasswordInputState extends State<_PasswordInput> {
         return SizedBox(
           width: MediaQuery.of(context).size.width,
           child: TextField(
+            style: TextStyle(color: Colors.black),
             cursorColor: Colors.black,
             obscureText: visible,
             obscuringCharacter: "•",
