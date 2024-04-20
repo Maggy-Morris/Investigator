@@ -63,7 +63,7 @@ class SignUpForm extends StatelessWidget {
                                     ? const EdgeInsets.all(32)
                                     : const EdgeInsets.all(40),
                                 decoration: BoxDecoration(
-                                  color: AppColors.grey.withOpacity(0.5),
+                                  color: AppColors.grey5,
                                   border: Border.all(
                                     color: AppColors.white.withOpacity(0.9),
                                   ),
@@ -124,13 +124,13 @@ Widget _bottomView() {
     //mainAxisSize: MainAxisSize.min,
     children: [
       FxBox.h16,
-      headerView("Sign Up".tr(), "", false),
+      headerView("Sign Up".tr(), "", true),
       FxBox.h28,
       Padding(
         padding: const EdgeInsets.all(8.0),
         child: Text("Email".tr(),
             style: const TextStyle(
-                color: Colors.black,
+                color: Colors.white,
                 fontFamily: "Cairo",
                 fontSize: AppFontSize.s14,
                 fontWeight: FontWeight.bold)),
