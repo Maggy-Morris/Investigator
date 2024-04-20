@@ -114,7 +114,11 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                 // clipBehavior: Clip.antiAliasWithSaveLayer,
                 controller: tabController,
                 children: [
-                  BlocListener<SearchByImageBloc, SearchByImageState>(
+                  BlocBuilder<PhotoAppCubit, PhotoAppState>(
+  builder: (context, state) {
+    context.read<PhotoAppCubit>().stopCamera();
+    context.read<PhotoAppCubit>().isChosenChanged(false);
+    return BlocListener<SearchByImageBloc, SearchByImageState>(
                     listener: (context, state) {
                       if (state.submission == Submission.success) {
                         FxToast.showSuccessToast(context: context);
@@ -807,7 +811,9 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                         );
                       },
                     ),
-                  ),
+                  );
+  },
+),
 
                   /////////////////////////////////////////////////////////////////////////////////////////////
                   ///Live Stream Video
