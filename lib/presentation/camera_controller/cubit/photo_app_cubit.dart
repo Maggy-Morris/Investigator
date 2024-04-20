@@ -13,15 +13,27 @@
 // import '../../../core/enum/enum.dart';
 // part 'photo_app_state.dart';
 
-// // class PhotoAppCubit extends Cubit<PhotoAppState> {
-// //   PhotoAppCubit() : super(PhotoAppInitial());
-// // }
-
 // class PhotoAppCubit extends Cubit<PhotoAppState> {
-//   PhotoAppCubit() : super(const SelectProfilePhotoState());
+//   PhotoAppCubit()
+//       : super(
+//           PhotoAppState(
+//             isLoading: false,
+//             hasError: false,
+//             isChosen: false,
+//             securityBreachChecked: false,
+//             submission: Submission.initial,
+//             controller: CameraController(
+//                 const CameraDescription(
+//                     name: "",
+//                     lensDirection: CameraLensDirection.front,
+//                     sensorOrientation: 0),
+//                 ResolutionPreset.medium),
+//           ),
+//         );
+
 //   String companyNameRepo =
 //       AuthenticationRepository.instance.currentUser.companyName?.first ?? "";
-//   late CameraController controller;
+//   // late CameraController controller;
 //   late Timer _periodicTimer;
 
 //   bool isStreaming = false;
@@ -38,33 +50,51 @@
 //     }
 //   }
 
-//   void openCamera({required String roomChoosen}) async {
+//   double get aspectRatio {
+//     if ( state.controller != null &&
+//         state.controller!.value.isInitialized &&
+//         state.controller!.value.previewSize != null &&
+//         state.controller!.value.previewSize?.width != null &&
+//          state.controller!.value.previewSize?.height != null) {
+//       final previewSize =  state.controller!.value.previewSize!;
+//       return previewSize.width / previewSize.height;
+//     } else {
+//       // Return a default aspect ratio or handle the null case gracefully
+//       return 16 / 9; // Default widescreen aspect ratio
+//     }
+//   }
+
+//   void openCamera({required String roomChoosen, required bool security}) async {
 //     final cameras = await availableCameras();
-//     controller = CameraController(cameras.first, ResolutionPreset.medium);
+//     var controller = CameraController(cameras.first, ResolutionPreset.medium);
 
 //     await controller.initialize();
 
-//     emit(CameraState(
+//     emit(
+//       state.copyWith(
 //         controller: controller,
-//         camera: controller.description,
 //         roomChoosen: roomChoosen,
-//         securityBreachChecked: isSecurityBreachChecked));
+//         securityBreachChecked: security,
+//       ),
+//     );
 //   }
 
 //   Future<XFile?> takePicture() async {
-//     if (controller == null || !controller.value.isInitialized) {
+//     if (state.controller == null || !state.controller!.value.isInitialized) {
 //       // Camera is not initialized
 //       return null;
 //     }
 
 //     try {
-//       final XFile file = await controller.takePicture();
+//       final XFile file = await state.controller!.takePicture();
 //       // final Uint8List bytes = await file.readAsBytes();
 //       // String base64String = base64Encode(bytes);
 
 //       // print("GGGGGGGGGGGG" + base64String);
 //       return file;
-//     } catch (e) {
+//     }
+//     catch (e)
+//     {
 //       // Error while taking picture
 //       debugPrint('Error taking picture: $e');
 //       return null;
@@ -72,7 +102,7 @@
 //   }
 
 //   void startPeriodicPictureCapture(Duration interval, String? roomChoosen) {
-//     _periodicTimer = Timer.periodic(Duration(seconds: 1), (timer) async {
+//     _periodicTimer = Timer.periodic(const Duration(seconds: 1), (timer) async {
 //       final XFile? file = await takePicture();
 //       if (file != null) {
 //         final Uint8List bytes = await file.readAsBytes();
@@ -88,8 +118,9 @@
 //           'collection_name': companyNameRepo,
 //           "image": base64String,
 //           'username': AuthenticationRepository.instance.currentUser.username,
-//           'current_room': roomChoosen,
-//           "breach_checker": true,
+//           'current_room': state.roomChoosen,
+//           "breach_checker": state.securityBreachChecked,
+//           "similarity_score": state.sliderValue ?? "0.35",
 //         };
 //         String jsonData = jsonEncode(data);
 //         _channel.sink.add(jsonData);
@@ -101,15 +132,15 @@
 
 //             SearchInStreamModel callBackList = SearchInStreamModel.fromJson(
 //                 jsonDecode(response) as Map<String, dynamic>);
-//             emit(
-//               CameraState(
-//                 controller: controller,
-//                 boxes: callBackList.boxes,
-//                 result: callBackList.result,
-//                 blacklisted: callBackList.blacklisted,
-//                 security_breach: callBackList.security_breach,
-//               ),
-//             );
+//             emit(state.copyWith(
+//               controller: state.controller,
+//               boxes: callBackList.boxes,
+//               result: callBackList.result,
+//               blacklisted: callBackList.blacklisted,
+//               securityBreach: callBackList.security_breach,
+//               textAccuracy: callBackList.textAccuracy,
+//               blacklisted_list_checks: callBackList.blacklisted_list_checks,
+//             ));
 //           }
 //         }, onDone: () {
 //           debugPrint("WebSocket connection closed.");
@@ -127,39 +158,77 @@
 //     _periodicTimer.cancel();
 //   }
 
-//   void switchCameraOptions({
-//     required bool isBackCam,
-//     ResolutionPreset? resolutionPreset,
-//   }) async {
-//     if (controller == null || !controller.value.isInitialized) {
-//       return;
-//     }
+//   // void switchCameraOptions({
+//   //   required bool isBackCam,
+//   //   ResolutionPreset? resolutionPreset,
+//   // }) async {
+//   //   if (state.controller == null || !state.controller!.value.isInitialized) {
+//   //     return;
+//   //   }
 
-//     final cameras = await availableCameras();
-//     final newCamera = isBackCam ? cameras.first : cameras.last;
-//     final newController =
-//         CameraController(newCamera, resolutionPreset ?? ResolutionPreset.high);
+//   //   final cameras = await availableCameras();
+//   //   final newCamera = isBackCam ? cameras.first : cameras.last;
+//   //   final newController =
+//   //       CameraController(newCamera, resolutionPreset ?? ResolutionPreset.high);
 
-//     await newController.initialize();
-//     controller.dispose(); // Dispose the current controller
-//     controller = newController;
+//   //   await newController.initialize();
+//   //    state.controller!.dispose(); // Dispose the current controller
+//   //   // controller = newController;
 
-//     emit(CameraState(
-//         controller: newController, camera: newController.description));
-//   }
+//   //   emit(
+//   //     state.copyWith(
+//   //       controller: newController,
+//   //       camera: newController.description,
+//   //     ),
+//   //   );
+//   // }
 
 //   void selectPhoto({required File file}) {
-//     emit(SelectProfilePhotoState(file: file));
+//     emit(
+//       state.copyWith(
+//         file: file,
+//         isChosen: true,
+//       ),
+//     );
+//   }
+
+//   void sliderControl({required String sliderVal}) {
+//     emit(
+//       state.copyWith(
+//         sliderValue: sliderVal,
+//       ),
+//     );
+//   }
+
+//   Future<void> stopCamera() async {
+//     if (state.controller!.value.isInitialized) {
+//       await  state.controller!.dispose();
+//     }
 //   }
 
 //   void toggleSecurityBreach(bool value) {
-//     isSecurityBreachChecked = value; // Update the checkbox state
-//     emit(CameraState(
-//         controller: controller,
-//         // camera: controller.description,
-//         // roomChoosen: state.roomChoosen,
-//         securityBreachChecked:
-//             isSecurityBreachChecked)); // Emit the updated state
+//     emit(
+//       state.copyWith(
+//         securityBreachChecked: value,
+//       ),
+//     );
+//   }
+
+//   void isChosenChanged(bool value) {
+//     // isChosen = value; // Update the checkbox state
+//     emit(
+//       state.copyWith(
+//         isChosen: value,
+//       ),
+//     );
+//   }
+
+//   void roomChoosen(String value) {
+//     emit(
+//       state.copyWith(
+//         roomChoosen: value,
+//       ),
+//     );
 //   }
 // }
 
@@ -187,16 +256,17 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
           securityBreachChecked: false,
           submission: Submission.initial,
           controller: CameraController(
-              const CameraDescription(
-                  name: "",
-                  lensDirection: CameraLensDirection.front,
-                  sensorOrientation: 0),
-              ResolutionPreset.medium),
+            const CameraDescription(
+                name: "",
+                lensDirection: CameraLensDirection.front,
+                sensorOrientation: 0),
+            ResolutionPreset.medium,
+          ),
         ));
 
   String companyNameRepo =
       AuthenticationRepository.instance.currentUser.companyName?.first ?? "";
-  late CameraController controller;
+  // late CameraController controller;
   late Timer _periodicTimer;
 
   bool isStreaming = false;
@@ -214,12 +284,12 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
   }
 
   double get aspectRatio {
-    if (controller != null &&
-        controller.value.isInitialized &&
-        controller.value.previewSize != null &&
-        controller.value.previewSize?.width != null &&
-        controller.value.previewSize?.height != null) {
-      final previewSize = controller.value.previewSize!;
+    if (state.controller != null &&
+        (state.controller?.value.isInitialized ?? false) &&
+        state.controller?.value.previewSize != null &&
+        state.controller?.value.previewSize?.width != null &&
+        state.controller?.value.previewSize?.height != null) {
+      final previewSize = state.controller!.value.previewSize!;
       return previewSize.width / previewSize.height;
     } else {
       // Return a default aspect ratio or handle the null case gracefully
@@ -229,7 +299,7 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
 
   void openCamera({required String roomChoosen, required bool security}) async {
     final cameras = await availableCameras();
-    controller = CameraController(cameras.first, ResolutionPreset.medium);
+    var controller = CameraController(cameras.first, ResolutionPreset.medium);
 
     await controller.initialize();
 
@@ -241,13 +311,14 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
   }
 
   Future<XFile?> takePicture() async {
-    if (controller == null || !controller.value.isInitialized) {
+    if (state.controller == null ||
+        !(state.controller?.value.isInitialized ?? true)) {
       // Camera is not initialized
       return null;
     }
 
     try {
-      final XFile file = await controller.takePicture();
+      final XFile file = await state.controller!.takePicture();
       // final Uint8List bytes = await file.readAsBytes();
       // String base64String = base64Encode(bytes);
 
@@ -261,7 +332,7 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
   }
 
   void startPeriodicPictureCapture(Duration interval, String? roomChoosen) {
-    _periodicTimer = Timer.periodic(Duration(seconds: 1), (timer) async {
+    _periodicTimer = Timer.periodic(const Duration(seconds: 1), (timer) async {
       final XFile? file = await takePicture();
       if (file != null) {
         final Uint8List bytes = await file.readAsBytes();
@@ -292,7 +363,7 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
             SearchInStreamModel callBackList = SearchInStreamModel.fromJson(
                 jsonDecode(response) as Map<String, dynamic>);
             emit(state.copyWith(
-              controller: controller,
+              controller: state.controller,
               boxes: callBackList.boxes,
               result: callBackList.result,
               blacklisted: callBackList.blacklisted,
@@ -321,7 +392,8 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
     required bool isBackCam,
     ResolutionPreset? resolutionPreset,
   }) async {
-    if (controller == null || !controller.value.isInitialized) {
+    if (state.controller == null ||
+        !(state.controller?.value.isInitialized ?? true)) {
       return;
     }
 
@@ -331,8 +403,8 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
         CameraController(newCamera, resolutionPreset ?? ResolutionPreset.high);
 
     await newController.initialize();
-    controller.dispose(); // Dispose the current controller
-    controller = newController;
+    state.controller?.dispose(); // Dispose the current controller
+    // controller = newController;
 
     emit(state.copyWith(
       controller: newController,
@@ -354,8 +426,8 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
   }
 
   Future<void> stopCamera() async {
-    if (controller.value.isInitialized) {
-      await controller.dispose();
+    if (state.controller?.value.isInitialized ?? false) {
+      await state.controller?.dispose();
     }
   }
 
