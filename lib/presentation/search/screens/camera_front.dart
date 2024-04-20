@@ -1,4 +1,3 @@
-
 import 'dart:html';
 
 import 'package:camera/camera.dart';
@@ -112,67 +111,23 @@ class _CameraViewState extends State<CameraView> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          AspectRatio(aspectRatio: 16 / 9, child: CameraPreview(controller!)),
-          Material(
-            child: DropdownButton<CameraDescription>(
-              value: cameraDescription,
-              icon: const Icon(Icons.arrow_downward),
-              iconSize: 24,
-              elevation: 16,
-              onChanged: (CameraDescription? newValue) async {
-                if (controller != null) {
-                  await controller!.dispose();
-                }
-                setState(() {
-                  controller = null;
-                  cameraDescription = newValue!;
-                });
-
-                initCam(newValue!);
-              },
-              items: widget.cameras
-                  .map<DropdownMenuItem<CameraDescription>>((value) {
-                return DropdownMenuItem<CameraDescription>(
-                  value: value,
-                  child: Text('${value.name}: ${value.lensDirection}'),
-                );
-              }).toList(),
-            ),
+          AspectRatio(
+            aspectRatio: 16 / 10.7,
+            child: CameraPreview(controller!),
           ),
           ElevatedButton(
             onPressed: controller == null
                 ? null
                 : () async {
-              await controller!.startVideoRecording();
-              await Future.delayed(Duration(seconds: 5));
-              final file = await controller!.stopVideoRecording();
-              final bytes = await file.readAsBytes();
-              final uri = Uri.dataFromBytes(bytes,
-                  mimeType: 'video/webm;codecs=vp8');
+                    final file = await controller!.takePicture();
+                    final bytes = await file.readAsBytes();
 
-              final link = AnchorElement(href: uri.toString());
-              link.download = 'recording.webm';
-              link.click();
-              link.remove();
-            },
-            child: Text('Record 5 second video.'),
-          ),
-          ElevatedButton(
-            onPressed: controller == null
-                ? null
-                : () async {
-              final file = await controller!.takePicture();
-              final bytes = await file.readAsBytes();
-
-              final link = AnchorElement(
-                  href: Uri.dataFromBytes(bytes, mimeType: 'image/png')
-                      .toString());
-
-              link.download = 'picture.png';
-              link.click();
-              link.remove();
-            },
-            child: Text('Take picture.'),
+                    // Pop the current screen and pass the captured image back
+                    
+                    // Navigator.pop(context, bytes);
+                    // print(bytes);
+                  },
+            child: const Text('Take picture.'),
           )
         ],
       ),

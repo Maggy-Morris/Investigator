@@ -187,7 +187,7 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
           securityBreachChecked: false,
           submission: Submission.initial,
           controller: CameraController(
-              CameraDescription(
+              const CameraDescription(
                   name: "",
                   lensDirection: CameraLensDirection.front,
                   sensorOrientation: 0),
@@ -279,6 +279,7 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
           'username': AuthenticationRepository.instance.currentUser.username,
           'current_room': state.roomChoosen,
           "breach_checker": state.securityBreachChecked,
+          "similarity_score": state.sliderValue ?? "0.35",
         };
         String jsonData = jsonEncode(data);
         _channel.sink.add(jsonData);
@@ -296,6 +297,8 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
               result: callBackList.result,
               blacklisted: callBackList.blacklisted,
               securityBreach: callBackList.security_breach,
+              textAccuracy: callBackList.textAccuracy,
+              blacklisted_list_checks: callBackList.blacklisted_list_checks,
             ));
           }
         }, onDone: () {
@@ -342,6 +345,18 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
       file: file,
       isChosen: true,
     ));
+  }
+
+  void sliderControl({required String sliderVal}) {
+    emit(state.copyWith(
+      sliderValue: sliderVal,
+    ));
+  }
+
+  Future<void> stopCamera() async {
+    if (controller.value.isInitialized) {
+      await controller.dispose();
+    }
   }
 
   void toggleSecurityBreach(bool value) {

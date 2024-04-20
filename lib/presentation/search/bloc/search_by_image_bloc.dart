@@ -167,6 +167,10 @@ class SearchByImageBloc extends Bloc<SearchByImageEvent, SearchByImageState> {
             boxes: value.boxes,
             result: value.result,
             employeeNamesList: value.data,
+            textAccuracy:value.textAccuracy,
+            blacklis:value.blacklis,
+
+            
           ),
         );
       } else {

@@ -354,6 +354,7 @@ class RemoteProvider {
 
       if (callBack.isNotEmpty) {
         SearchByImageModel callBackList = SearchByImageModel.fromJson(callBack);
+        print(callBack);
         return callBackList;
       } else {
         return SearchByImageModel();

@@ -1,6 +1,9 @@
 class SearchInStreamModel {
   List<List<double>>? boxes;
+  List<String>? textAccuracy;
   List<String>? result;
+  List<String>? blacklisted_list_checks;
+
   bool? targeted;
   List<Dataa>? data;
   bool? blacklisted;
@@ -8,6 +11,8 @@ class SearchInStreamModel {
 
   SearchInStreamModel(
       {this.blacklisted,
+      this.blacklisted_list_checks,
+      this.textAccuracy,
       this.security_breach,
       this.data,
       this.boxes,
@@ -27,6 +32,13 @@ class SearchInStreamModel {
         data?.add(Dataa.fromJson(v));
       });
     }
+    textAccuracy = json['confidences'] != null
+        ? List<String>.from(json['confidences'])
+        : null;
+
+    blacklisted_list_checks = json['blacklisted_list_checks'] != null
+        ? List<String>.from(json['blacklisted_list_checks'])
+        : null;
 
     result = json['result'] != null ? List<String>.from(json['result']) : null;
     targeted = json['targeted'];
@@ -39,8 +51,12 @@ class SearchInStreamModel {
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
+    data['blacklisted_list_checks'] = blacklisted_list_checks;
+
     data['boxes'] = boxes;
     data['result'] = result;
+    data['confidences'] = textAccuracy;
+
     data['blacklisted'] = blacklisted;
     data['security_breach'] = security_breach;
     data['targeted'] = targeted;

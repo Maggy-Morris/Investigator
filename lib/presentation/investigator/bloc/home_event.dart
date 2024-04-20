@@ -25,6 +25,16 @@ class CompnyNameFromSP extends HomeEvent {
   List<Object?> get props => [companyName];
 }
 
+
+class reloadSnapShots extends HomeEvent {
+  final List<String> snapyy;
+
+  const reloadSnapShots({required this.snapyy});
+
+  @override
+  List<Object?> get props => [snapyy];
+}
+
 class GetAccuracy extends HomeEvent {
   final String accuracy;
 

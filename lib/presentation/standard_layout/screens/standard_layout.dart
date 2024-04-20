@@ -158,7 +158,9 @@ class StandardLayoutScreen extends StatelessWidget {
                                         StandardLayoutCubit.get(context)
                                             .onEditExtend(!state.extend),
                                     logo: Image.asset(
-                                      'assets/images/logo.png',
+                                      'assets/images/ico.png',
+                                      width: 150,
+                                      height: 150,
                                       color: AppColors.white,
                                     ),
                                   ),

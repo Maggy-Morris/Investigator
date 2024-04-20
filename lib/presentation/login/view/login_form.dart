@@ -39,7 +39,7 @@ class LoginForm extends StatelessWidget {
                 alignment: Alignment.center,
                 children: [
                   Image.asset(
-                    "assets/images/bbb.jpeg",
+                    "assets/images/bbb.png",
                     height: MediaQuery.of(context).size.height,
                     width: MediaQuery.of(context).size.width,
                     fit: BoxFit.cover,

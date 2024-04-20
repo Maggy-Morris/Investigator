@@ -296,16 +296,18 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
       /// this to update the state once i deleted a person
       if (value.data != "No documents found for deletion.") {
         // Remove the deleted employee from the state
-        final updatedList = state.employeeNamesList
-            .where((employee) => employee.name != event.personName)
-            .toList();
+        // final updatedList = state.employeeNamesList
+        //     .where((employee) => employee.name != event.personName)
+        //     .toList();
         emit(state.copyWith(
             submission: Submission.success,
-            employeeNamesList: updatedList,
+            // employeeNamesList: state.employeeNamesList,
             responseMessage: value.data));
-      } else if (value.data!.isEmpty) {
+        add(const GetEmployeeNamesEvent());
+      } else if (value.data == "No documents found for deletion.") {
         emit(state.copyWith(
           submission: Submission.noDataFound,
+          responseMessage: value.data,
         ));
       }
 

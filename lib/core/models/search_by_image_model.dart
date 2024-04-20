@@ -3,8 +3,16 @@ class SearchByImageModel {
   List<String>? result;
   bool? targeted;
   List<Dataa>? data;
+  List<String>? textAccuracy;
+  List<String>? blacklis;
 
-  SearchByImageModel({this.data, this.boxes, this.result, this.targeted});
+  SearchByImageModel(
+      {this.blacklis,
+      this.textAccuracy,
+      this.data,
+      this.boxes,
+      this.result,
+      this.targeted});
 
   SearchByImageModel.fromJson(Map<String, dynamic> json) {
     if (json['boxes'] != null) {
@@ -13,12 +21,19 @@ class SearchByImageModel {
               (box as List).map<double>((value) => value.toDouble()).toList())
           .toList();
     }
+
+    textAccuracy = json['confidences'] != null
+        ? List<String>.from(json['confidences'])
+        : null;
+
     if (json['data'] != []) {
       data = <Dataa>[];
       json['data'].forEach((v) {
         data?.add(Dataa.fromJson(v));
       });
     }
+    blacklis =
+        json['blacklisted_list_checks'] != null ? List<String>.from(json['blacklisted_list_checks']) : null;
 
     result = json['result'] != null ? List<String>.from(json['result']) : null;
     targeted = json['targeted'];
@@ -30,6 +45,9 @@ class SearchByImageModel {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
     data['boxes'] = boxes;
+    data['confidences'] = textAccuracy;
+    data['blacklisted_list_checks'] = blacklis;
+
     data['result'] = result;
     data['targeted'] = targeted;
     return data;

@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:syncfusion_flutter_core/theme.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
+// import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:yaru/yaru.dart';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -41,7 +43,10 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
   String companyNameRepo =
       AuthenticationRepository.instance.currentUser.companyName?.first ?? "";
   late TabController tabController;
-  bool _isBackCamera = true;
+  // bool _isBackCamera = true;
+  final double _min = 10;
+  final double _max = 100;
+  double _value = 10;
   bool? isChecked;
   List<String> checkboxItems =
       AuthenticationRepository.instance.currentUser.roomsNames ?? [];
@@ -50,6 +55,12 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -248,8 +259,18 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                             ),
                                             CustomPaint(
                                               painter: RectanglePainter(
+                                                (state.blacklis ?? [])
+                                                    .map((blacklis) => blacklis)
+                                                    .toList(),
+                                                (state.result ?? [])
+                                                    .map((result) => result)
+                                                    .toList(),
                                                 (state.boxes ?? [])
                                                     .map((box) => (box))
+                                                    .toList(),
+                                                (state.textAccuracy ?? [])
+                                                    .map((textForAccuracy) =>
+                                                        textForAccuracy)
                                                     .toList(),
                                               ),
                                             ),
@@ -582,8 +603,20 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                 ),
                                                 CustomPaint(
                                                   painter: RectanglePainter(
+                                                    (state.blacklis ?? [])
+                                                        .map((blacklis) =>
+                                                            blacklis)
+                                                        .toList(),
+                                                    (state.result ?? [])
+                                                        .map((result) => result)
+                                                        .toList(),
                                                     (state.boxes ?? [])
                                                         .map((box) => (box))
+                                                        .toList(),
+                                                    (state.textAccuracy ?? [])
+                                                        .map(
+                                                            (textForAccuracy) =>
+                                                                textForAccuracy)
                                                         .toList(),
                                                   ),
                                                 ),
@@ -779,265 +812,6 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                   /////////////////////////////////////////////////////////////////////////////////////////////
                   ///Live Stream Video
 
-                  // BlocListener<PhotoAppCubit, PhotoAppState>(
-                  //   listener: (context, state) {},
-                  //   child: BlocBuilder<PhotoAppCubit, PhotoAppState>(
-                  //     builder: (context, state) {
-                  //       if (state is SelectProfilePhotoState) {
-                  //         return Column(
-                  //           children: [
-                  //             Row(
-                  //               mainAxisAlignment: MainAxisAlignment.start,
-                  //               children: [
-                  //                 Padding(
-                  //                   padding: const EdgeInsets.all(15.0),
-                  //                   child: SizedBox(
-                  //                     width: 250,
-                  //                     child:
-                  //                         singleSelectGenericDropdown<String>(
-                  //                       titleName: "Select A Room",
-                  //                       isEnabled: true,
-                  //                       isRequired: false,
-                  //                       filled: true,
-                  //                       showSearch: true,
-                  //                       onChanged: (value) {
-                  //                         if (value?.isNotEmpty ?? false) {
-                  //                           context
-                  //                               .read<SearchByImageBloc>()
-                  //                               .add(
-                  //                                 RadioButtonChanged(
-                  //                                     selectedOption:
-                  //                                         value ?? ""),
-                  //                               );
-
-                  //                           context
-                  //                               .read<PhotoAppCubit>()
-                  //                               .openCamera(
-                  //                                   roomChoosen: value ?? '');
-                  //                         }
-                  //                       },
-                  //                       itemsList: checkboxItems,
-                  //                     ),
-                  //                   ),
-                  //                 ),
-                  //                 Row(
-                  //                   children: [
-                  //                     Checkbox(
-                  //                       value: isChecked,
-                  //                       onChanged: (bool? value) {
-                  //                         context
-                  //                             .read<PhotoAppCubit>()
-                  //                             .toggleSecurityBreach(
-                  //                                 value ?? false);
-
-                  //                         setState(() {
-                  //                           isChecked = value ?? false;
-                  //                         });
-                  //                       },
-                  //                     ),
-                  //                     const Text(
-                  //                       'Security Breach',
-                  //                       style: TextStyle(
-                  //                         fontSize: 16,
-                  //                         // You can adjust the style of the text as needed
-                  //                       ),
-                  //                     ),
-                  //                   ],
-                  //                 )
-                  //               ],
-                  //             ),
-                  //             Center(
-                  //               child: Stack(
-                  //                 children: [
-                  //                   getAvatar(state.file),
-                  //                 ],
-                  //               ),
-                  //             ),
-                  //           ],
-                  //         );
-                  //       } else if (state is CameraState) {
-                  //         if (state.submission == Submission.loading) {
-                  //           EasyLoading.show(status: 'loading...');
-                  //         }
-
-                  //         return Expanded(
-                  //           // aspectRatio: state.controller.value.aspectRatio,
-                  //           child: Column(
-                  //             mainAxisAlignment: MainAxisAlignment.start,
-                  //             crossAxisAlignment: CrossAxisAlignment.center,
-                  //             children: [
-                  //               Stack(children: [
-                  //                 Container(
-                  //                   width: 720,
-                  //                   height: 480,
-                  //                   child: AspectRatio(
-                  //                     aspectRatio:
-                  //                         state.controller.value.aspectRatio,
-                  //                     child: CameraPreview(
-                  //                       state.controller,
-                  //                       child: Stack(
-                  //                         // fit: StackFit.expand,
-                  //                         alignment: Alignment.bottomCenter,
-                  //                         children: [
-                  //                           Row(
-                  //                             crossAxisAlignment:
-                  //                                 CrossAxisAlignment.end,
-                  //                             mainAxisAlignment:
-                  //                                 MainAxisAlignment.center,
-                  //                             children: [
-                  //                               Padding(
-                  //                                 padding: const EdgeInsets
-                  //                                     .symmetric(
-                  //                                     horizontal: 8.0,
-                  //                                     vertical: 20),
-                  //                                 child: ElevatedButton(
-                  //                                   style: ButtonStyle(
-                  //                                       backgroundColor:
-                  //                                           MaterialStateProperty
-                  //                                               .all<Color>(
-                  //                                                   AppColors
-                  //                                                       .babyBlue),
-                  //                                       shape: MaterialStateProperty
-                  //                                           .all<
-                  //                                               RoundedRectangleBorder>(
-                  //                                         RoundedRectangleBorder(
-                  //                                           borderRadius:
-                  //                                               BorderRadius
-                  //                                                   .circular(
-                  //                                                       50),
-                  //                                         ),
-                  //                                       )),
-                  //                                   onPressed: () {
-                  //                                     context
-                  //                                         .read<PhotoAppCubit>()
-                  //                                         .startStream();
-                  //                                   },
-                  //                                   child: Text(
-                  //                                     context
-                  //                                             .watch<
-                  //                                                 PhotoAppCubit>()
-                  //                                             .isStreaming
-                  //                                         ? 'Stop Stream'
-                  //                                         : 'Start Stream',
-                  //                                     style: const TextStyle(
-                  //                                         color: Colors.black,
-                  //                                         fontSize: 12,
-                  //                                         fontWeight:
-                  //                                             FontWeight.bold),
-                  //                                   ),
-                  //                                 ),
-                  //                               ),
-                  //                               IconButton(
-                  //                                   color: Colors.white,
-                  //                                   padding:
-                  //                                       const EdgeInsets.only(
-                  //                                           bottom: 25),
-                  //                                   onPressed: () {
-                  //                                     setState(() {
-                  //                                       _isBackCamera =
-                  //                                           !_isBackCamera;
-                  //                                     });
-                  //                                   },
-                  //                                   icon: const Icon(
-                  //                                       Icons.cameraswitch))
-                  //                             ],
-                  //                           ),
-                  //                           Positioned(
-                  //                             top: 0,
-                  //                             left: 0,
-                  //                             right: 0,
-                  //                             child: Container(
-                  //                               padding:
-                  //                                   const EdgeInsets.symmetric(
-                  //                                 vertical: 8,
-                  //                                 horizontal: 16,
-                  //                               ),
-                  //                               decoration: BoxDecoration(
-                  //                                 borderRadius:
-                  //                                     const BorderRadius.only(
-                  //                                   bottomLeft:
-                  //                                       Radius.circular(12),
-                  //                                   bottomRight:
-                  //                                       Radius.circular(12),
-                  //                                 ),
-                  //                                 color: Colors.black
-                  //                                     .withOpacity(0.6),
-                  //                               ),
-                  //                               child: Text(
-                  //                                 "Data : ${state.result}",
-                  //                                 style: const TextStyle(
-                  //                                   color: Colors.black,
-                  //                                   fontSize: 18,
-                  //                                   fontWeight: FontWeight.bold,
-                  //                                 ),
-                  //                               ),
-                  //                             ),
-                  //                           ),
-                  //                           state.blacklisted == true
-                  //                               ? const Column(
-                  //                                   crossAxisAlignment:
-                  //                                       CrossAxisAlignment.end,
-                  //                                   children: [
-                  //                                       Tooltip(
-                  //                                         message:
-                  //                                             "BlackListed Person",
-                  //                                         child: Icon(
-                  //                                           Icons.warning,
-                  //                                           color: Colors.red,
-                  //                                           size: 60,
-                  //                                         ),
-                  //                                       ),
-                  //                                     ])
-                  //                               : const SizedBox(),
-                  //                           state.security_breach == true
-                  //                               ? const Column(
-                  //                                   crossAxisAlignment:
-                  //                                       CrossAxisAlignment.end,
-                  //                                   children: [
-                  //                                       Tooltip(
-                  //                                         message:
-                  //                                             "Security Breach Unauhorized person",
-                  //                                         child: Icon(
-                  //                                           Icons.warning,
-                  //                                           color: Colors.amber,
-                  //                                           size: 50,
-                  //                                         ),
-                  //                                       ),
-                  //                                     ])
-                  //                               : const SizedBox(),
-                  //                         ],
-                  //                       ),
-                  //                     ),
-                  //                   ),
-                  //                 ),
-                  //                 // Transform.scale(
-                  //                 //   scale: state.controller.value.aspectRatio,
-                  //                 //   child:
-
-                  //                 CustomPaint(
-                  //                   painter: RectanglePainter(
-                  //                     (state.boxes ?? [])
-                  //                         .map((box) => (box))
-                  //                         .toList(),
-                  //                   ),
-                  //                 ),
-                  //                 // ),
-                  //               ]),
-                  //             ],
-                  //           ),
-                  //         );
-                  //       } else {
-                  //         return const Scaffold(
-                  //           body: Center(
-                  //             child: Text('Nothing to show'),
-                  //           ),
-                  //         );
-                  //       }
-                  //     },
-                  //   ),
-                  // ),
-
-                  // ////////////////////////////////////////////////////////////////////////////
                   BlocListener<PhotoAppCubit, PhotoAppState>(
                     listener: (context, state) {
                       // Handle any state changes if needed
@@ -1104,6 +878,83 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                     ],
                                   )
                                 ],
+                              ),
+                              const Tooltip(
+                                message:
+                                    "Choose The Accuracy You Want To Search For A Person With Using The SliderBar \n        Note That If the Video Resolution Is Bad Try to Choose High Accuracy ",
+                                child: Icon(
+                                  Icons.info_outline_rounded,
+                                  color: AppColors.white,
+                                  size: 25,
+                                ),
+                              ),
+                              Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 50.0, vertical: 20),
+                                  child: SfRangeSliderTheme(
+                                    data: SfRangeSliderThemeData(
+                                      activeTrackColor: Colors.white,
+                                      activeLabelStyle: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontStyle: FontStyle.italic),
+                                      inactiveLabelStyle: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontStyle: FontStyle.italic),
+                                    ),
+                                    child: SfSlider(
+                                      enableTooltip: true,
+                                      activeColor: const Color.fromRGBO(
+                                          214, 221, 224, 1),
+                                      min: _min,
+                                      max: _max,
+                                      value: _value,
+                                      interval: 18, // Assuming interval is 1
+                                      showTicks: true,
+                                      showLabels: true,
+
+                                      onChanged: (dynamic newValue) {
+                                        context
+                                            .read<PhotoAppCubit>()
+                                            .sliderControl(
+                                                sliderVal: (newValue / 100)
+                                                    .toString());
+
+                                        // HomeBloc.get(context).add(GetAccuracy(
+                                        //     accuracy:
+                                        //         (newValue / 100).toString())
+
+                                        //         );
+
+                                        setState(() {
+                                          _value = newValue;
+                                        });
+                                      },
+                                      labelFormatterCallback: (dynamic value,
+                                          String formattedValue) {
+                                        // Map numeric values to custom string labels
+                                        switch (value.toInt()) {
+                                          case 10:
+                                            return 'Low';
+                                          case 28:
+                                            return 'Medium';
+                                          case 46:
+                                            return 'High';
+                                          case 64:
+                                            return 'Very High';
+                                          case 82:
+                                            return 'Extreme';
+                                          case 100:
+                                            return 'Identical';
+                                          default:
+                                            return ''; // Return empty string for other values
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ),
                               ),
                               Center(
                                 child: Stack(
@@ -1301,8 +1152,19 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                   ),
                                   CustomPaint(
                                     painter: RectanglePainter(
+                                      (state.blacklisted_list_checks ?? [])
+                                          .map((blacklisted_list_checks) =>
+                                              blacklisted_list_checks)
+                                          .toList(),
+                                      (state.result ?? [])
+                                          .map((result) => result)
+                                          .toList(),
                                       (state.boxes ?? [])
                                           .map((box) => (box))
+                                          .toList(),
+                                      (state.textAccuracy ?? [])
+                                          .map((textForAccuracy) =>
+                                              textForAccuracy)
                                           .toList(),
                                     ),
                                   ),
@@ -1314,11 +1176,18 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                       onPressed: () {
                                         context
                                             .read<PhotoAppCubit>()
+                                            .stopCamera();
+
+                                        // state.controller?.pausePreview();
+
+                                        context
+                                            .read<PhotoAppCubit>()
                                             .isChosenChanged(
                                               false,
                                             );
+                                        // Navigator.pop(context);
                                       },
-                                      icon: Icon(
+                                      icon: const Icon(
                                         Icons.close,
                                         size: 50,
                                         color: Colors.red,
@@ -1443,50 +1312,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                         } else if (choice == 'Delete') {
                           // Handle delete action
 
-                          showDialog(
-                            context: context,
-                            builder: (ctx) {
-                              return AlertDialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                icon: const Icon(
-                                  Icons.warning,
-                                  color: Colors.red,
-                                ),
-                                title: Text(
-                                  "Are you sure you want to remove this person from the organization?"
-                                      .tr(),
-                                  style: const TextStyle(color: Colors.black),
-                                ),
-                                actions: [
-                                  TextButton(
-                                      child: Text(
-                                        "yes".tr(),
-                                        style: const TextStyle(
-                                            color: AppColors.thinkRedColor),
-                                      ),
-                                      onPressed: () {
-                                        context.read<SearchByImageBloc>().add(
-                                              DeletePersonByNameEvent(
-                                                companyNameRepo,
-                                                name,
-                                              ),
-                                            );
-
-                                        Navigator.of(ctx).pop();
-                                      }),
-                                  TextButton(
-                                      child: Text(
-                                        "no".tr(),
-                                        style: const TextStyle(
-                                            color: AppColors.blueBlack),
-                                      ),
-                                      onPressed: () => Navigator.of(ctx).pop()),
-                                ],
-                              );
-                            },
-                          );
+                          
                         }
                       },
                       itemBuilder: (BuildContext context) =>
@@ -1565,6 +1391,56 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
     );
   }
 
+  
+  void _showDeleteDialog(BuildContext context, String name) {
+   showDialog(
+                            context: context,
+                            builder: (ctx) {
+                              return AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                icon: const Icon(
+                                  Icons.warning,
+                                  color: Colors.red,
+                                ),
+                                title: Text(
+                                  "Are you sure you want to remove this person from the organization?"
+                                      .tr(),
+                                  style: const TextStyle(color: Colors.black),
+                                ),
+                                actions: [
+                                  TextButton(
+                                      child: Text(
+                                        "yes".tr(),
+                                        style: const TextStyle(
+                                            color: AppColors.thinkRedColor),
+                                      ),
+                                      onPressed: () {
+                                        context.read<SearchByImageBloc>().add(
+                                              DeletePersonByNameEvent(
+                                                companyNameRepo,
+                                                name,
+                                              ),
+                                            );
+
+                                        Navigator.of(ctx).pop();
+                                      }),
+                                  TextButton(
+                                      child: Text(
+                                        "no".tr(),
+                                        style: const TextStyle(
+                                            color: AppColors.blueBlack),
+                                      ),
+                                      onPressed: () => Navigator.of(ctx).pop()),
+                                ],
+                              );
+                            },
+                          );
+  
+  }
+
+
   void _showUpdateDialog(BuildContext context, Dataa employee) {
     showDialog(
       context: context,
@@ -1576,6 +1452,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextFormField(
+                  cursorColor: Colors.white,
                   style: const TextStyle(color: Colors.white),
                   initialValue: employee.name,
                   decoration: const InputDecoration(labelText: 'Name'),
@@ -1595,6 +1472,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                 ),
                 FxBox.h24,
                 TextFormField(
+                  cursorColor: Colors.white,
                   style: const TextStyle(color: Colors.white),
                   initialValue: employee.userId,
                   decoration: const InputDecoration(labelText: 'UserId'),
@@ -1616,6 +1494,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                 ),
                 FxBox.h24,
                 TextFormField(
+                  cursorColor: Colors.white,
                   style: const TextStyle(color: Colors.white),
                   initialValue: employee.phone,
                   decoration: const InputDecoration(labelText: 'Phone Number'),
@@ -1637,6 +1516,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                 ),
                 FxBox.h24,
                 TextFormField(
+                  cursorColor: Colors.white,
                   style: const TextStyle(color: Colors.white),
                   initialValue: employee.email,
                   decoration: const InputDecoration(labelText: 'Email'),

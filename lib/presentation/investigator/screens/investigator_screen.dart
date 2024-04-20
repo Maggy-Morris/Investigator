@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:Investigator/core/enum/enum.dart';
@@ -14,6 +15,8 @@ import 'package:Investigator/core/widgets/sizedbox.dart';
 import 'package:Investigator/core/widgets/textformfield.dart';
 import 'package:Investigator/core/widgets/toast/toast.dart';
 import 'package:Investigator/presentation/standard_layout/screens/standard_layout.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:image_downloader_web/image_downloader_web.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:video_player/video_player.dart';
@@ -103,8 +106,8 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                           message:
                               "Choose The Accuracy You Want To Search For A Person With Using The SliderBar \n        Note That If the Video Resolution Is Bad Try to Choose High Accuracy ",
                           child: Icon(
-                            Icons.info_sharp,
-                            color: AppColors.thinkRedColor,
+                            Icons.info_outline_rounded,
+                            color: AppColors.white,
                             size: 25,
                           ),
                         ),
@@ -146,47 +149,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                           _value = newValue;
                                         });
                                       },
-//                                       labelFormatterCallback: (dynamic value, String formattedValue) {
-//   // Map numeric values to custom string labels
-//   switch (value.toInt()) {
-//     case 0:
-//       return TextSpan(
-//         text: 'Low',
-//         style: SfRangeSliderTheme.of(context).activeLabelStyle,
-//       ).toStaticList();
-//     case 20:
-//       return TextSpan(
-//         text: 'Medium',
-//         style: SfRangeSliderTheme.of(context).activeLabelStyle,
-//       ).toStaticList();
-//     case 40:
-//       return TextSpan(
-//         text: 'High',
-//         style: SfRangeSliderTheme.of(context)?.activeLabelStyle,
-//       ).toStaticList();
-//     case 60:
-//       return TextSpan(
-//         text: 'Very High',
-//         style: SfRangeSliderTheme.of(context)?.activeLabelStyle,
-//       ).toStaticList();
-//     case 80:
-//       return TextSpan(
-//         text: 'Extreme',
-//         style: SfRangeSliderTheme.of(context)?.activeLabelStyle,
-//       ).toStaticList();
-//     case 100:
-//       return TextSpan(
-//         text: 'Identical',
-//         style: SfRangeSliderTheme.of(context)?.activeLabelStyle,
-//       ).toStaticList();
-//     default:
-//       return TextSpan(
-//         text: '',
-//         style: SfRangeSliderTheme.of(context)?.activeLabelStyle,
-//       ).toStaticList(); // Return empty string for other values
-//   }
-// },
-                                      labelFormatterCallback: (dynamic value,
+                                     labelFormatterCallback: (dynamic value,
                                           String formattedValue) {
                                         // Map numeric values to custom string labels
                                         switch (value.toInt()) {
@@ -352,6 +315,9 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                       child: ElevatedButton.icon(
                                           onPressed: () {
                                             HomeBloc.get(context).add(
+                                                const reloadSnapShots(
+                                                    snapyy: []));
+                                            HomeBloc.get(context).add(
                                                 const SearchForEmployeeByVideoEvent());
                                           },
                                           style: ElevatedButton.styleFrom(
@@ -470,6 +436,13 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                         final data_time =
                                                             state.data[index];
                                                         return imagesListWidget(
+                                                            onDownloadPressed:
+                                                                () {
+                                                              _downloadImage(
+                                                                  data: image,
+                                                                  downloadName:
+                                                                      data_time);
+                                                            },
                                                             image64: image,
                                                             text: data_time);
                                                       },
@@ -625,6 +598,9 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                       child: ElevatedButton.icon(
                                           onPressed: () {
                                             HomeBloc.get(context).add(
+                                                const reloadSnapShots(
+                                                    snapyy: []));
+                                            HomeBloc.get(context).add(
                                                 const SearchForEmployeeByVideoEvent());
                                           },
                                           style: ElevatedButton.styleFrom(
@@ -728,6 +704,17 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                   final data_time =
                                                       state.data[index];
                                                   return imagesListWidget(
+                                                      onDownloadPressed: () {
+                                                        final uint8List =
+                                                            _decodeBase64Image(
+                                                                base64Image:
+                                                                    image);
+
+                                                        _downloadImage(
+                                                            data: image,
+                                                            downloadName:
+                                                                data_time);
+                                                      },
                                                       image64: image,
                                                       text: data_time);
                                                 },
@@ -784,10 +771,80 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
   }
 
 ////////////////////////////////////////////////////////////////////////////////
+//   Widget imagesListWidget({
+//     required String image64,
+//     required String text,
+//     required VoidCallback onDownloadPressed,
+//   }) {
+//     return Container(
+//       width: 300,
+//       padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+//       decoration: BoxDecoration(
+//         color: Colors.grey.withOpacity(0.3),
+//         borderRadius: BorderRadius.circular(12.0),
+//       ),
+//       child: Column(
+//         children: [
+//           ClipRRect(
+//             borderRadius: BorderRadius.circular(6.0),
+//             child: Stack(
+//               children: [
+//                 GestureDetector(
+//                   onTap: () {
+//                     Navigator.push(
+//                       context,
+//                       MaterialPageRoute(
+//                         builder: (context) => FullScreenImageFromMemory(
+//                           text: text,
+//                           imageUrl: image64,
+//                         ),
+//                       ),
+//                     );
+//                   },
+//                   child: Image.memory(
+//                     _decodeBase64Image(base64Image: image64),
+//                     width: double.infinity,
+//                     height: double.infinity,
+//                     fit: BoxFit.cover,
+//                   ),
+//                 ),
+//                 Container(
+//                   padding: const EdgeInsets.all(8),
+//                   color: Colors.black.withOpacity(0.5),
+//                   child: Text(
+//                     text,
+//                     style: const TextStyle(
+//                       color: Colors.white,
+//                       fontSize: 16,
+//                     ),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//           // SizedBox(
+//           //   height: 50,
+//           //   width: 50,
+//           //   child: ElevatedButton(
+//           //     onPressed: onDownloadPressed,
+//           //     child: Text('Download'),
+//           //   ),
+//           // ),
+//         ],
+//       ),
+//     );
+//   }
 
+//   Uint8List _decodeBase64Image({required String base64Image}) {
+//     final bytes = base64.decode(base64Image);
+//     return Uint8List.fromList(bytes);
+//   }
+
+// }
   Widget imagesListWidget({
     required String image64,
     required String text,
+    required VoidCallback onDownloadPressed,
   }) {
     return Container(
       width: 300,
@@ -826,6 +883,18 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                 ),
               ),
             ),
+            Positioned(
+              top: 0,
+              right: 0,
+              child: IconButton(
+                onPressed: onDownloadPressed,
+                icon: const Icon(
+                  Icons.download,
+                  size: 45,
+                  color: AppColors.buttonBlue,
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -834,13 +903,52 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
 
   Uint8List _decodeBase64Image({required String base64Image}) {
     final bytes = base64.decode(base64Image);
+
     return Uint8List.fromList(bytes);
   }
+
+//   Future<void> _downloadImage({required String image64}) async {
+//     final uint8List = _decodeBase64Image(base64Image: image64);
+//     await WebImageDownloader.downloadImageFromUInt8List(uInt8List: uint8List);
+//   }
+// }
+  _downloadImage({required String data, String downloadName = 'image'}) async {
+    if (data.isNotEmpty) {
+      try {
+        final uint8List = _decodeBase64Image(base64Image: data);
+        // first we make a request to the url like you did
+        // in the android and ios version
+        // final http.Response r = await http.get(
+        //   Uri.parse(getPhotosServerLink(imageUrl)),
+        // );
+
+        // we get the bytes from the body
+        // final data = r.bodyBytes;
+        // and encode them to base64
+        final base64data = base64Encode(uint8List);
+
+        // then we create and AnchorElement with the html package
+        final a =
+            html.AnchorElement(href: 'data:image/jpeg;base64,$base64data');
+
+        // set the name of the file we want the image to get
+        // downloaded to
+        a.download = '$downloadName.jpg';
+
+        // and we click the AnchorElement which downloads the image
+        a.click();
+        // finally we remove the AnchorElement
+        a.remove();
+      } catch (e) {
+        if (kDebugMode) {
+          print(e);
+        }
+      }
+    } else {
+      EasyLoading.showError('لا يوجد صورة');
+    }
+  }
 }
-
-
-
-
 // Stack(
 //         fit: StackFit.expand,
 //         children: [

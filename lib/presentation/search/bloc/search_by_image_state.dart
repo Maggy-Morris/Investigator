@@ -5,7 +5,11 @@ class SearchByImageState extends Equatable {
 
   List<List<double>>? boxes;
   List<String>? result;
+    List<String>? blacklis;
+
   final Widget? imageWidget;
+
+  List<String>? textAccuracy;
 
   final String companyName;
   final String image;
@@ -22,6 +26,8 @@ class SearchByImageState extends Equatable {
   bool isSearching;
 
   SearchByImageState({
+    this.blacklis = const[],
+    this.textAccuracy,
     this.selectedOption = "",
     this.id = '',
     this.phoneNum = "",
@@ -40,6 +46,10 @@ class SearchByImageState extends Equatable {
   });
 
   SearchByImageState copyWith({
+    
+        List<String>? blacklis,
+
+    List<String>? textAccuracy,
     String? selectedOption,
     String? id,
     String? phoneNum,
@@ -57,6 +67,8 @@ class SearchByImageState extends Equatable {
     Submission? submission,
   }) {
     return SearchByImageState(
+      blacklis : blacklis ?? this.blacklis,
+      textAccuracy: textAccuracy ?? this.textAccuracy,
       selectedOption: selectedOption ?? this.selectedOption,
       id: id ?? this.id,
       userId: userId ?? this.userId,
@@ -80,6 +92,8 @@ class SearchByImageState extends Equatable {
 
   @override
   List<Object?> get props => [
+    blacklis,
+        textAccuracy,
         selectedOption,
         imageWidget,
         result,

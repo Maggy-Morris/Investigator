@@ -153,15 +153,15 @@ class _CustomPaginationState extends State<CustomPagination> {
                   padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
                     color: currentPage == pageNumber
-                        ? AppColors.blueBlack
-                        : Colors.grey.withOpacity(0.5),
+                        ? AppColors.white
+                        : AppColors.grey3,
                     borderRadius: BorderRadius.circular(15.0),
                   ),
                   child: Text(
                     pageNumber.toString(),
                     style: TextStyle(
                       color: currentPage == pageNumber
-                          ? Colors.white
+                          ? Colors.black
                           : Colors.black,
                     ),
                   ),

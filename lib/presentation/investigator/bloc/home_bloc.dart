@@ -25,6 +25,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     // /// Add New Employee
 
+    on<reloadSnapShots>(_onreloadSnapShots);
+
     on<GetAccuracy>(_onGetAccuracy);
 
     on<imageevent>(_onimageevent);
@@ -68,6 +70,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(state.copyWith(
         accuracy: event.accuracy, submission: Submission.editing));
   }
+  _onreloadSnapShots(reloadSnapShots event, Emitter<HomeState> emit) async {
+    emit(state.copyWith(
+        snapShots: event.snapyy, submission: Submission.editing));
+  }
+
+  
 
   _onAddCompanyName(AddCompanyName event, Emitter<HomeState> emit) async {
     emit(state.copyWith(

@@ -206,14 +206,13 @@
 //   List<Object?> get props => [file, isLoading, errorMessage, hasError];
 // }
 
-
 // /////////////////////////////////////////////////////////////////
-
-
 
 part of 'photo_app_cubit.dart';
 
 class PhotoAppState extends Equatable {
+  final List<String>? textAccuracy;
+
   final bool isLoading;
   final bool hasError;
   final String? errorMessage;
@@ -221,6 +220,10 @@ class PhotoAppState extends Equatable {
   final bool isChosen;
   final File? file;
   final String? selectedOption;
+  final List<String>? blacklisted_list_checks;
+
+  final String? sliderValue;
+
   final bool securityBreachChecked;
   final Submission submission;
   final CameraDescription? camera;
@@ -231,8 +234,11 @@ class PhotoAppState extends Equatable {
   final bool? securityBreach;
 
   const PhotoAppState({
+    this.blacklisted_list_checks,
+    this.textAccuracy,
     required this.isLoading,
     required this.hasError,
+    this.sliderValue,
     this.errorMessage,
     this.roomChoosen,
     required this.isChosen,
@@ -250,6 +256,9 @@ class PhotoAppState extends Equatable {
 
   @override
   List<Object?> get props => [
+        blacklisted_list_checks,
+        textAccuracy,
+        sliderValue,
         roomChoosen,
         isChosen,
         errorMessage,
@@ -268,6 +277,9 @@ class PhotoAppState extends Equatable {
       ];
 
   PhotoAppState copyWith({
+    List<String>? textAccuracy,
+    List<String>? blacklisted_list_checks,
+    String? sliderValue,
     bool? isLoading,
     bool? hasError,
     String? errorMessage,
@@ -285,6 +297,9 @@ class PhotoAppState extends Equatable {
     bool? securityBreach,
   }) {
     return PhotoAppState(
+      blacklisted_list_checks: blacklisted_list_checks ?? this.blacklisted_list_checks,
+      textAccuracy: textAccuracy ?? this.textAccuracy,
+      sliderValue: sliderValue ?? this.sliderValue,
       isLoading: isLoading ?? this.isLoading,
       hasError: hasError ?? this.hasError,
       errorMessage: errorMessage ?? this.errorMessage,
