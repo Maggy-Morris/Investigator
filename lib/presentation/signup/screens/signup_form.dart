@@ -51,20 +51,19 @@ class SignUpForm extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          // mainAxisSize: MainAxisSize.min,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             FxBox.h20,
                             Center(
                               child: Container(
-                                constraints: BoxConstraints(
-                                  maxWidth:
-                                      MediaQuery.of(context).size.width / 2,
+                                constraints: const BoxConstraints(
+                                  maxWidth: 460,
                                 ),
                                 padding: Responsive.isMobile(context)
                                     ? const EdgeInsets.all(32)
                                     : const EdgeInsets.all(40),
                                 decoration: BoxDecoration(
-                                  color: AppColors.grey5,
+                                  color: AppColors.grey.withOpacity(0.5),
                                   border: Border.all(
                                     color: AppColors.white.withOpacity(0.9),
                                   ),
@@ -125,51 +124,33 @@ Widget _bottomView() {
     //mainAxisSize: MainAxisSize.min,
     children: [
       FxBox.h16,
-      headerView("Sign Up".tr(), "", true),
+      headerView("Sign Up".tr(), "", false),
       FxBox.h28,
-      Row(
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("Email".tr(),
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontFamily: "Cairo",
-                        fontSize: AppFontSize.s14,
-                        fontWeight: FontWeight.bold)),
-              ),
-              FxBox.h8,
-              _EmailInput(),
-            ],
-          ),
-          const SizedBox(
-            width: 25,
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "password".tr(),
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontFamily: "Cairo",
-                      fontSize: AppFontSize.s14,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-              FxBox.h8,
-              _PasswordInput(),
-            ],
-          ),
-        ],
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text("Email".tr(),
+            style: const TextStyle(
+                color: Colors.black,
+                fontFamily: "Cairo",
+                fontSize: AppFontSize.s14,
+                fontWeight: FontWeight.bold)),
       ),
+      // FxBox.h8,
+      _EmailInput(),
+      FxBox.h8,
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          "password".tr(),
+          style: const TextStyle(
+              color: Colors.white,
+              fontFamily: "Cairo",
+              fontSize: AppFontSize.s14,
+              fontWeight: FontWeight.bold),
+        ),
+      ),
+      // FxBox.h8,
+      _PasswordInput(),
       FxBox.h8,
       Padding(
         padding: const EdgeInsets.all(8.0),
@@ -182,10 +163,9 @@ Widget _bottomView() {
       ),
       companyNameInput(),
       FxBox.h20,
-      const DropDwon(),
+      DropDwon(),
       FxBox.h28,
       Center(child: _SignUpButton()),
-      FxBox.h28,
     ],
   );
 }
@@ -203,32 +183,49 @@ class DropDwon extends StatelessWidget {
             children: <Widget>[
               Row(
                 children: [
-                  const Text(
-                    "Choose Number Of Rooms :",
+                  Text(
+                    "Choose Number Of Rooms",
                     style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15),
+                        color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
-                    width: 35,
+                    width: 20,
                   ),
-                  DropdownButton<int>(
-                    value: state.selectedNumber,
-                    onChanged: (value) {
-                      context
-                          .read<SignupCubit>()
-                          .selectedNumberChanged(value ?? 0);
-                    },
-                    items: List.generate(101, (index) {
-                      return DropdownMenuItem<int>(
-                        value: index,
-                        child: Text(
-                          '${index}',
-                          style: const TextStyle(color: Colors.white),
+                  SizedBox(
+                    width: 100, // Adjust the width as needed
+                    child: TextFormField(
+                      style: TextStyle(color: Colors.black),
+                      initialValue: state.selectedNumber?.toString(),
+                      onChanged: (value) {
+                        final int? newValue = int.tryParse(value);
+                        if (newValue != null) {
+                          context
+                              .read<SignupCubit>()
+                              .selectedNumberChanged(newValue);
+                        }
+                      },
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        // labelText: 'Number of Rooms',
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(style: BorderStyle.none),
                         ),
-                      );
-                    }),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(style: BorderStyle.none),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(style: BorderStyle.none),
+                        ),
+                        filled: true,
+                        fillColor: AppColors.primaryColorDark,
+                        isDense: true,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -236,60 +233,44 @@ class DropDwon extends StatelessWidget {
               state.selectedNumber! > 0
                   ? Column(
                       children: List.generate(
-                        (state.selectedNumber! / 2)
-                            .ceil(), // Adjust the number of rows
-                        (rowIndex) {
-                          return Row(
-                            children: List.generate(
-                              2, // Two text fields per row
-                              (colIndex) {
-                                final roomIndex = rowIndex * 2 + colIndex;
-                                if (roomIndex < state.selectedNumber!) {
-                                  return SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width / 5,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          bottom: 15.0, right: 25.0),
-                                      child: TextField(
-                                        style: TextStyle(color: Colors.black),
-                                        decoration: InputDecoration(
-                                          labelText:
-                                              'Room Number ${roomIndex + 1}',
-                                          border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              borderSide: const BorderSide(
-                                                  style: BorderStyle.none)),
-                                          focusedBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              borderSide: const BorderSide(
-                                                  style: BorderStyle.none)),
-                                          enabledBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              borderSide: const BorderSide(
-                                                  style: BorderStyle.none)),
-                                          filled: true,
-                                          fillColor: AppColors.primaryColorDark,
-                                          isDense: true,
-                                        ),
-                                        onChanged: (value) {
-                                          context
-                                              .read<SignupCubit>()
-                                              .roomNumbersChanged(
-                                                  roomIndex, value);
-                                        },
-                                      ),
+                        state.selectedNumber!,
+                        (index) {
+                          return SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 15.0),
+                              child: TextField(
+                                style: TextStyle(color: Colors.black),
+                                decoration: InputDecoration(
+                                  labelText: 'Room Number ${index + 1}',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                    borderSide: const BorderSide(
+                                      style: BorderStyle.none,
                                     ),
-                                  );
-                                } else {
-                                  return SizedBox(
-                                      width: MediaQuery.of(context).size.width /
-                                          5);
-                                }
-                              },
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                    borderSide: const BorderSide(
+                                      style: BorderStyle.none,
+                                    ),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                    borderSide: const BorderSide(
+                                      style: BorderStyle.none,
+                                    ),
+                                  ),
+                                  filled: true,
+                                  fillColor: AppColors.primaryColorDark,
+                                  isDense: true,
+                                ),
+                                onChanged: (value) {
+                                  context
+                                      .read<SignupCubit>()
+                                      .roomNumbersChanged(index, value);
+                                },
+                              ),
                             ),
                           );
                         },
@@ -304,6 +285,87 @@ class DropDwon extends StatelessWidget {
   }
 }
 
+// class DropDwon extends StatelessWidget {
+//   const DropDwon({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocBuilder<SignupCubit, SignupState>(
+//       builder: (context, state) {
+//         // List<String> roomNumbers = List.filled(state.selectedNumber ?? 0, '');
+
+//         return Center(
+//           child: Column(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             children: <Widget>[
+//               DropdownButton<int>(
+//                 value: state.selectedNumber,
+//                 onChanged: (value) {
+//                   context.read<SignupCubit>().selectedNumberChanged(value ?? 0);
+
+//                   // setState(() {
+//                   //   selectedNumber = value;
+//                   // });
+//                 },
+//                 items: List.generate(101, (index) {
+//                   return DropdownMenuItem<int>(
+//                     value: index,
+//                     child: Text(
+//                       '${index}',
+//                       style: TextStyle(color: Colors.black),
+//                     ),
+//                   );
+//                 }),
+//               ),
+//               SizedBox(height: 20),
+//               state.selectedNumber! > 0
+//                   ? Column(
+//                       children: List.generate(state.selectedNumber!, (index) {
+//                         return SizedBox(
+//                           width: MediaQuery.of(context).size.width,
+//                           child: Padding(
+//                             padding: const EdgeInsets.only(bottom: 15.0),
+//                             child: TextField(
+//                               style: TextStyle(color: Colors.black),
+//                               decoration: InputDecoration(
+//                                 labelText: 'Room Number ${index + 1}',
+//                                 border: OutlineInputBorder(
+//                                     borderRadius: BorderRadius.circular(15),
+//                                     borderSide: const BorderSide(
+//                                         style: BorderStyle.none)),
+//                                 focusedBorder: OutlineInputBorder(
+//                                     borderRadius: BorderRadius.circular(15),
+//                                     borderSide: const BorderSide(
+//                                         style: BorderStyle.none)),
+//                                 enabledBorder: OutlineInputBorder(
+//                                     borderRadius: BorderRadius.circular(15),
+//                                     borderSide: const BorderSide(
+//                                         style: BorderStyle.none)),
+//                                 filled: true,
+//                                 fillColor: AppColors.primaryColorDark,
+//                                 isDense: true,
+//                               ),
+//                               onChanged: (value) {
+//                                 // state.roomNumbers[index] = value;
+
+//                                 context
+//                                     .read<SignupCubit>()
+//                                     .roomNumbersChanged(index, value);
+//                               },
+//                             ),
+//                           ),
+//                         );
+//                       }),
+//                     )
+//                   : Container(),
+//             ],
+//           ),
+//         );
+//       },
+//     );
+//   }
+// }
+
 class _EmailInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -311,7 +373,7 @@ class _EmailInput extends StatelessWidget {
       buildWhen: (previous, current) => previous.email != current.email,
       builder: (context, state) {
         return SizedBox(
-          width: MediaQuery.of(context).size.width / 5,
+          width: MediaQuery.of(context).size.width,
           child: TextFormField(
             style: TextStyle(color: Colors.black),
             cursorColor: Colors.black,
@@ -334,7 +396,7 @@ class _EmailInput extends StatelessWidget {
               fillColor: AppColors.primaryColorDark,
               isDense: true,
               // labelText: 'Email',
-              hintText: 'enterEmail'.tr(),
+              hintText: 'enterUserName'.tr(),
               errorText: state.email.invalid ? 'wrongUserName'.tr() : null,
             ),
           ),
@@ -403,7 +465,7 @@ class _PasswordInputState extends State<_PasswordInput> {
       buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
         return SizedBox(
-          width: MediaQuery.of(context).size.width / 5,
+          width: MediaQuery.of(context).size.width,
           child: TextField(
             style: TextStyle(color: Colors.black),
             cursorColor: Colors.black,
