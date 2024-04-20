@@ -835,6 +835,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                         isRequired: false,
                                         filled: true,
                                         showSearch: true,
+                                        selectedItem: state.roomChoosen,
                                         onChanged: (value) {
                                           if (value?.isNotEmpty ?? false) {
                                             context
@@ -998,205 +999,206 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                             ],
                           );
                         } else {
-                          return Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Stack(children: [
-                                  Container(
-                                    width: 720,
-                                    height: 480,
-                                    child: AspectRatio(
-                                      aspectRatio:
-                                          // state.controller?.value.aspectRatio ??
-                                          16 / 10.7,
-                                      child: CameraPreview(
-                                        state.controller!,
-                                        child: Stack(
-                                          alignment: Alignment.bottomCenter,
-                                          children: [
-                                            Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 8.0,
-                                                      vertical: 20),
-                                                  child: ElevatedButton(
-                                                    style: ButtonStyle(
-                                                        backgroundColor:
-                                                            MaterialStateProperty
-                                                                .all<Color>(
-                                                                    AppColors
-                                                                        .babyBlue),
-                                                        shape: MaterialStateProperty
-                                                            .all<
-                                                                RoundedRectangleBorder>(
-                                                          RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        50),
-                                                          ),
-                                                        )),
-                                                    onPressed: () {
-                                                      context
-                                                          .read<PhotoAppCubit>()
-                                                          .startStream();
-                                                    },
-                                                    child: Text(
-                                                      context
-                                                              .watch<
-                                                                  PhotoAppCubit>()
-                                                              .isStreaming
-                                                          ? 'Stop Stream'
-                                                          : 'Start Stream',
-                                                      style: const TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ),
-                                                ),
-                                                // IconButton(
-                                                //     color: Colors.white,
-                                                //     padding:
-                                                //         const EdgeInsets.only(
-                                                //             bottom: 25),
-                                                //     onPressed: () {
-                                                //       setState(() {
-                                                //         _isBackCamera =
-                                                //             !_isBackCamera;
-                                                //       });
-                                                //     },
-                                                //     icon: const Icon(
-                                                //       Icons.cameraswitch,
-                                                //       size: 25,
-                                                //       color: Colors.white,
-                                                //     ))
-                                              ],
-                                            ),
-                                            Positioned(
-                                              top: 0,
-                                              left: 0,
-                                              right: 0,
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                  vertical: 8,
-                                                  horizontal: 16,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      const BorderRadius.only(
-                                                    bottomLeft:
-                                                        Radius.circular(12),
-                                                    bottomRight:
-                                                        Radius.circular(12),
-                                                  ),
-                                                  color: Colors.black
-                                                      .withOpacity(0.6),
-                                                ),
-                                                child: Text(
-                                                  "Data : ${state.result}",
-                                                  style: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.bold,
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Stack(children: [
+                                SizedBox(
+                                  width: 720,
+                                  height: 480,
+                                  child: AspectRatio(
+                                    aspectRatio:
+                                        // state.controller?.value.aspectRatio ??
+                                        16 / 10.7,
+                                    child:
+                                    (state.controller?.value.isInitialized == false)?
+                                    loadingIndicator()
+                                        :CameraPreview(
+                                      state.controller!,
+                                      child: Stack(
+                                        alignment: Alignment.bottomCenter,
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets
+                                                    .symmetric(
+                                                    horizontal: 8.0,
+                                                    vertical: 20),
+                                                child: ElevatedButton(
+                                                  style: ButtonStyle(
+                                                      backgroundColor:
+                                                          MaterialStateProperty
+                                                              .all<Color>(
+                                                                  AppColors
+                                                                      .babyBlue),
+                                                      shape: MaterialStateProperty
+                                                          .all<
+                                                              RoundedRectangleBorder>(
+                                                        RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      50),
+                                                        ),
+                                                      )),
+                                                  onPressed: () {
+                                                    context
+                                                        .read<PhotoAppCubit>()
+                                                        .startStream();
+                                                  },
+                                                  child: Text(
+                                                    context
+                                                            .watch<
+                                                                PhotoAppCubit>()
+                                                            .isStreaming
+                                                        ? 'Stop Stream'
+                                                        : 'Start Stream',
+                                                    style: const TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.bold),
                                                   ),
                                                 ),
                                               ),
+                                              // IconButton(
+                                              //     color: Colors.white,
+                                              //     padding:
+                                              //         const EdgeInsets.only(
+                                              //             bottom: 25),
+                                              //     onPressed: () {
+                                              //       setState(() {
+                                              //         _isBackCamera =
+                                              //             !_isBackCamera;
+                                              //       });
+                                              //     },
+                                              //     icon: const Icon(
+                                              //       Icons.cameraswitch,
+                                              //       size: 25,
+                                              //       color: Colors.white,
+                                              //     ))
+                                            ],
+                                          ),
+                                          Positioned(
+                                            top: 0,
+                                            left: 0,
+                                            right: 0,
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                vertical: 8,
+                                                horizontal: 16,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(12),
+                                                  bottomRight:
+                                                      Radius.circular(12),
+                                                ),
+                                                color: Colors.black
+                                                    .withOpacity(0.6),
+                                              ),
+                                              child: Text(
+                                                "Data : ${state.result}",
+                                                style: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
                                             ),
-                                            state.blacklisted == true
-                                                ? const Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment.end,
-                                                    children: [
-                                                        Tooltip(
-                                                          message:
-                                                              "BlackListed Person",
-                                                          child: Icon(
-                                                            Icons.warning,
-                                                            color: Colors.red,
-                                                            size: 60,
-                                                          ),
+                                          ),
+                                          state.blacklisted == true
+                                              ? const Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.end,
+                                                  children: [
+                                                      Tooltip(
+                                                        message:
+                                                            "BlackListed Person",
+                                                        child: Icon(
+                                                          Icons.warning,
+                                                          color: Colors.red,
+                                                          size: 60,
                                                         ),
-                                                      ])
-                                                : const SizedBox(),
-                                            state.securityBreach == true
-                                                ? const Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment.end,
-                                                    children: [
-                                                        Tooltip(
-                                                          message:
-                                                              "Security Breach Unauthorized person",
-                                                          child: Icon(
-                                                            Icons.warning,
-                                                            color: Colors.amber,
-                                                            size: 50,
-                                                          ),
+                                                      ),
+                                                    ])
+                                              : const SizedBox(),
+                                          state.securityBreach == true
+                                              ? const Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.end,
+                                                  children: [
+                                                      Tooltip(
+                                                        message:
+                                                            "Security Breach Unauthorized person",
+                                                        child: Icon(
+                                                          Icons.warning,
+                                                          color: Colors.amber,
+                                                          size: 50,
                                                         ),
-                                                      ])
-                                                : const SizedBox(),
-                                          ],
-                                        ),
+                                                      ),
+                                                    ])
+                                              : const SizedBox(),
+                                        ],
                                       ),
                                     ),
                                   ),
-                                  CustomPaint(
-                                    painter: RectanglePainter(
-                                      (state.blacklisted_list_checks ?? [])
-                                          .map((blacklisted_list_checks) =>
-                                              blacklisted_list_checks)
-                                          .toList(),
-                                      (state.result ?? [])
-                                          .map((result) => result)
-                                          .toList(),
-                                      (state.boxes ?? [])
-                                          .map((box) => (box))
-                                          .toList(),
-                                      (state.textAccuracy ?? [])
-                                          .map((textForAccuracy) =>
-                                              textForAccuracy)
-                                          .toList(),
+                                ),
+                                CustomPaint(
+                                  painter: RectanglePainter(
+                                    (state.blacklisted_list_checks ?? [])
+                                        .map((blacklisted_list_checks) =>
+                                            blacklisted_list_checks)
+                                        .toList(),
+                                    (state.result ?? [])
+                                        .map((result) => result)
+                                        .toList(),
+                                    (state.boxes ?? [])
+                                        .map((box) => (box))
+                                        .toList(),
+                                    (state.textAccuracy ?? [])
+                                        .map((textForAccuracy) =>
+                                            textForAccuracy)
+                                        .toList(),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  // left: 0,
+                                  right: 0,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      context
+                                          .read<PhotoAppCubit>()
+                                          .stopCamera();
+
+                                      // state.controller?.pausePreview();
+
+                                      context
+                                          .read<PhotoAppCubit>()
+                                          .isChosenChanged(
+                                            false,
+                                          );
+                                      // Navigator.pop(context);
+                                    },
+                                    icon: const Icon(
+                                      Icons.close,
+                                      size: 50,
+                                      color: Colors.red,
                                     ),
                                   ),
-                                  Positioned(
-                                    top: 0,
-                                    // left: 0,
-                                    right: 0,
-                                    child: IconButton(
-                                      onPressed: () {
-                                        context
-                                            .read<PhotoAppCubit>()
-                                            .stopCamera();
-
-                                        // state.controller?.pausePreview();
-
-                                        context
-                                            .read<PhotoAppCubit>()
-                                            .isChosenChanged(
-                                              false,
-                                            );
-                                        // Navigator.pop(context);
-                                      },
-                                      icon: const Icon(
-                                        Icons.close,
-                                        size: 50,
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                  ),
-                                ]),
-                              ],
-                            ),
+                                ),
+                              ]),
+                            ],
                           );
                         }
                       },
@@ -1446,7 +1448,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
       context: context,
       builder: (ctx) {
         return AlertDialog(
-          title: SizedBox(width: 500, child: const Text("Update Employee")),
+          title: const SizedBox(width: 500, child: Text("Update Employee")),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
