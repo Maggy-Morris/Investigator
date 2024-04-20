@@ -1311,8 +1311,6 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                           // Handle edit action
                         } else if (choice == 'Delete') {
                           // Handle delete action
-
-                          
                         }
                       },
                       itemBuilder: (BuildContext context) =>
@@ -1391,55 +1389,50 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
     );
   }
 
-  
   void _showDeleteDialog(BuildContext context, String name) {
-   showDialog(
-                            context: context,
-                            builder: (ctx) {
-                              return AlertDialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                icon: const Icon(
-                                  Icons.warning,
-                                  color: Colors.red,
-                                ),
-                                title: Text(
-                                  "Are you sure you want to remove this person from the organization?"
-                                      .tr(),
-                                  style: const TextStyle(color: Colors.black),
-                                ),
-                                actions: [
-                                  TextButton(
-                                      child: Text(
-                                        "yes".tr(),
-                                        style: const TextStyle(
-                                            color: AppColors.thinkRedColor),
-                                      ),
-                                      onPressed: () {
-                                        context.read<SearchByImageBloc>().add(
-                                              DeletePersonByNameEvent(
-                                                companyNameRepo,
-                                                name,
-                                              ),
-                                            );
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          icon: const Icon(
+            Icons.warning,
+            color: Colors.red,
+          ),
+          title: Text(
+            "Are you sure you want to remove this person from the organization?"
+                .tr(),
+            style: const TextStyle(color: Colors.black),
+          ),
+          actions: [
+            TextButton(
+                child: Text(
+                  "yes".tr(),
+                  style: const TextStyle(color: AppColors.thinkRedColor),
+                ),
+                onPressed: () {
+                  context.read<SearchByImageBloc>().add(
+                        DeletePersonByNameEvent(
+                          companyNameRepo,
+                          name,
+                        ),
+                      );
 
-                                        Navigator.of(ctx).pop();
-                                      }),
-                                  TextButton(
-                                      child: Text(
-                                        "no".tr(),
-                                        style: const TextStyle(
-                                            color: AppColors.blueBlack),
-                                      ),
-                                      onPressed: () => Navigator.of(ctx).pop()),
-                                ],
-                              );
-                            },
-                          );
-  
+                  Navigator.of(ctx).pop();
+                }),
+            TextButton(
+                child: Text(
+                  "no".tr(),
+                  style: const TextStyle(color: AppColors.blueBlack),
+                ),
+                onPressed: () => Navigator.of(ctx).pop()),
+          ],
+        );
+      },
+    );
   }
-
 
   void _showUpdateDialog(BuildContext context, Dataa employee) {
     showDialog(
