@@ -167,10 +167,8 @@ class SearchByImageBloc extends Bloc<SearchByImageEvent, SearchByImageState> {
             boxes: value.boxes,
             result: value.result,
             employeeNamesList: value.data,
-            textAccuracy:value.textAccuracy,
-            blacklis:value.blacklis,
-
-            
+            textAccuracy: value.textAccuracy,
+            blacklis: value.blacklis,
           ),
         );
       } else {
@@ -178,13 +176,14 @@ class SearchByImageBloc extends Bloc<SearchByImageEvent, SearchByImageState> {
       }
     });
   }
+
   //RadioButton
   _onRadioButtonChanged(
       RadioButtonChanged event, Emitter<SearchByImageState> emit) async {
     emit(
       state.copyWith(
         selectedOption: event.selectedOption,
-        submission: Submission.loading,
+        // submission: Submission.loading,
         // showTextField: event.showTextField,
       ),
     );
