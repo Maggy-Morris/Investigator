@@ -63,7 +63,7 @@ class SignUpForm extends StatelessWidget {
                                     ? const EdgeInsets.all(32)
                                     : const EdgeInsets.all(40),
                                 decoration: BoxDecoration(
-                                  color: AppColors.grey.withOpacity(0.5),
+                                  color: AppColors.grey5,
                                   border: Border.all(
                                     color: AppColors.white.withOpacity(0.9),
                                   ),
@@ -181,9 +181,10 @@ Widget _bottomView() {
       ),
       companyNameInput(),
       FxBox.h20,
-      DropDwon(),
+      const DropDwon(),
       FxBox.h28,
       Center(child: _SignUpButton()),
+      FxBox.h28,
     ],
   );
 }
@@ -201,7 +202,7 @@ class DropDwon extends StatelessWidget {
             children: <Widget>[
               Row(
                 children: [
-                  Text(
+                  const Text(
                     "Choose Number Of Rooms :",
                     style: TextStyle(
                         color: Colors.white,
@@ -223,7 +224,7 @@ class DropDwon extends StatelessWidget {
                         value: index,
                         child: Text(
                           '${index}',
-                          style: TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Colors.white),
                         ),
                       );
                     }),
@@ -245,7 +246,7 @@ class DropDwon extends StatelessWidget {
                                 if (roomIndex < state.selectedNumber!) {
                                   return SizedBox(
                                     width:
-                                        MediaQuery.of(context).size.width / 5,
+                                        MediaQuery.of(context).size.width / 4,
                                     child: Padding(
                                       padding: const EdgeInsets.only(
                                           bottom: 15.0, right: 25.0),
@@ -285,7 +286,7 @@ class DropDwon extends StatelessWidget {
                                 } else {
                                   return SizedBox(
                                       width: MediaQuery.of(context).size.width /
-                                          5);
+                                          4);
                                 }
                               },
                             ),
