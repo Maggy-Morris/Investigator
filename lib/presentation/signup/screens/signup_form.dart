@@ -39,12 +39,12 @@ class SignUpForm extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  // Image.asset(
-                  //   "assets/images/bbb.jpeg",
-                  //   height: MediaQuery.of(context).size.height,
-                  //   width: MediaQuery.of(context).size.width,
-                  //   fit: BoxFit.cover,
-                  // ),
+                  Image.asset(
+                    "assets/images/bbb.png",
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    fit: BoxFit.cover,
+                  ),
                   Row(
                     children: [
                       Expanded(
@@ -56,8 +56,9 @@ class SignUpForm extends StatelessWidget {
                             FxBox.h20,
                             Center(
                               child: Container(
-                                constraints: const BoxConstraints(
-                                  maxWidth: 660,
+                                constraints: BoxConstraints(
+                                  maxWidth:
+                                      MediaQuery.of(context).size.width / 2,
                                 ),
                                 padding: Responsive.isMobile(context)
                                     ? const EdgeInsets.all(32)
@@ -82,22 +83,22 @@ class SignUpForm extends StatelessWidget {
                           ],
                         ),
                       ),
-                      // Responsive.isWeb(context)
-                      //     ? Expanded(
-                      //         child: Column(
-                      //           children: [
-                      //             // Container(
-                      //             //   constraints:
-                      //             //       const BoxConstraints(maxHeight: 400),
-                      //             //   child: SvgPicture.asset(
-                      //             //     "assets/images/Admin_Kit_Text.svg",
-                      //             //   ),
-                      //             // ),
-                      //             FxBox.h16,
-                      //           ],
-                      //         ),
-                      //       )
-                      //     : Container(),
+                      Responsive.isWeb(context)
+                          ? Expanded(
+                              child: Column(
+                                children: [
+                                  // Container(
+                                  //   constraints:
+                                  //       const BoxConstraints(maxHeight: 400),
+                                  //   child: SvgPicture.asset(
+                                  //     "assets/images/Admin_Kit_Text.svg",
+                                  //   ),
+                                  // ),
+                                  FxBox.h16,
+                                ],
+                              ),
+                            )
+                          : Container(),
                     ],
                   ),
                 ],
@@ -333,7 +334,7 @@ class _EmailInput extends StatelessWidget {
               fillColor: AppColors.primaryColorDark,
               isDense: true,
               // labelText: 'Email',
-              hintText: 'enterUserName'.tr(),
+              hintText: 'enterEmail'.tr(),
               errorText: state.email.invalid ? 'wrongUserName'.tr() : null,
             ),
           ),
