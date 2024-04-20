@@ -52,28 +52,25 @@ class LoginForm extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           // mainAxisSize: MainAxisSize.min,
                           children: [
-                            // FxBox.h20,
+                            FxBox.h20,
                             Center(
                               child: Container(
-                                // constraints: const BoxConstraints(
-                                //   maxWidth: 460,
-                                // ),
+                                constraints: const BoxConstraints(
+                                  maxWidth: 460,
+                                ),
                                 padding: Responsive.isMobile(context)
                                     ? const EdgeInsets.all(32)
                                     : const EdgeInsets.all(40),
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   color: AppColors.grey5,
-                                  // border: Border.all(
-                                  //   color: AppColors.white.withOpacity(0.9),
-                                  // ),
-                                  // borderRadius: BorderRadius.circular(24),
+                                  border: Border.all(
+                                    color: AppColors.white.withOpacity(0.9),
+                                  ),
+                                  borderRadius: BorderRadius.circular(24),
                                 ),
                                 child: Column(
                                   children: [
-                                    SizedBox(
-                                      // height: 80,
-                                      child: _logoView(),
-                                    ),
+                                    SizedBox(height: 80, child: _logoView()),
                                     // Image.asset("assets/images/logo.png"),
                                     FxBox.h16,
                                     // ConstantAuth.headerView(
@@ -86,7 +83,7 @@ class LoginForm extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            // FxBox.h20,
+                            FxBox.h20,
                           ],
                         ),
                       ),
@@ -159,8 +156,6 @@ class LoginForm extends StatelessWidget {
 Widget _logoView() {
   return Image.asset(
     "assets/images/ico.png",
-    height: 120,
-    width: 200,
   );
   // SvgPicture.asset("assets/images/Admin_Kit.svg");
 }
@@ -172,42 +167,38 @@ Widget _bottomView() {
     //mainAxisSize: MainAxisSize.min,
     children: [
       FxBox.h16,
-      Padding(
-        padding: const EdgeInsets.only(
-            left: 140.0, right: 8.0, top: 8.0, bottom: 8.0),
-        child: headerView("login".tr(), "", true),
-      ),
+      headerView("login".tr(), "", true),
       FxBox.h28,
       Padding(
-        padding: const EdgeInsets.only(
-            left: 140.0, right: 8.0, top: 8.0, bottom: 8.0),
-        child: Text("Email".tr(),
+        padding: const EdgeInsets.all(8.0),
+        child: Text("userName".tr(),
             style: const TextStyle(
-                fontFamily: "Cairo",
                 color: Colors.white,
+                fontFamily: "Cairo",
                 fontSize: AppFontSize.s14,
                 fontWeight: FontWeight.bold)),
       ),
       FxBox.h8,
-      Center(child: _EmailInput()),
+      _EmailInput(),
       FxBox.h16,
       Padding(
-        padding: const EdgeInsets.only(
-            left: 140.0, right: 8.0, top: 8.0, bottom: 8.0),
+        padding: const EdgeInsets.all(8.0),
         child: Text("password".tr(),
             style: const TextStyle(
-                fontFamily: "Cairo",
                 color: Colors.white,
+                fontFamily: "Cairo",
                 fontSize: AppFontSize.s14,
                 fontWeight: FontWeight.bold)),
       ),
       FxBox.h8,
-      Center(child: _PasswordInput()),
+      _PasswordInput(),
       FxBox.h28,
       Center(child: _LoginButton()),
       FxBox.h20,
       Center(child: _SignUpButton()),
+
       FxBox.h20,
+      // _serviceText(),
     ],
   );
 }
@@ -219,7 +210,7 @@ class _EmailInput extends StatelessWidget {
       buildWhen: (previous, current) => previous.email != current.email,
       builder: (context, state) {
         return SizedBox(
-          width: MediaQuery.of(context).size.width / 4,
+          width: MediaQuery.of(context).size.width,
           child: TextFormField(
             style: TextStyle(color: Colors.black),
             cursorColor: Colors.black,
@@ -242,8 +233,8 @@ class _EmailInput extends StatelessWidget {
               fillColor: AppColors.primaryColorDark,
               isDense: true,
               // labelText: 'Email',
-              hintText: 'enterEmail'.tr(),
-              errorText: state.email.invalid ? 'wrongEmail'.tr() : null,
+              hintText: 'enterUserName'.tr(),
+              errorText: state.email.invalid ? 'wrongUserName'.tr() : null,
             ),
           ),
         );
@@ -266,7 +257,7 @@ class _PasswordInputState extends State<_PasswordInput> {
       buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
         return SizedBox(
-          width: MediaQuery.of(context).size.width / 4,
+          width: MediaQuery.of(context).size.width,
           child: TextField(
             style: TextStyle(color: Colors.black),
             cursorColor: Colors.black,
