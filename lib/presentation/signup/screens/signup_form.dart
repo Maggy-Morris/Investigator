@@ -246,7 +246,7 @@ class DropDwon extends StatelessWidget {
                                 if (roomIndex < state.selectedNumber!) {
                                   return SizedBox(
                                     width:
-                                        MediaQuery.of(context).size.width / 4,
+                                        MediaQuery.of(context).size.width / 5,
                                     child: Padding(
                                       padding: const EdgeInsets.only(
                                           bottom: 15.0, right: 25.0),
@@ -286,7 +286,7 @@ class DropDwon extends StatelessWidget {
                                 } else {
                                   return SizedBox(
                                       width: MediaQuery.of(context).size.width /
-                                          4);
+                                          5);
                                 }
                               },
                             ),
