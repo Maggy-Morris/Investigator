@@ -517,7 +517,7 @@ class _SignUpButton extends StatelessWidget {
       builder: (context, state) {
         return state.status.isSubmissionInProgress
             ? loadingIndicator(
-                color: Theme.of(context).primaryColor,
+                color: AppColors.white,
               )
             : SizedBox(
                 width: Responsive.isWeb(context)
