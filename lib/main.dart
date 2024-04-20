@@ -13,6 +13,7 @@ import 'package:Investigator/theme.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:routemaster/routemaster.dart';
 import 'presentation/investigator/bloc/home_bloc.dart';
+import 'presentation/signup/screens/signup_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -130,6 +131,9 @@ class AppView extends StatelessWidget {
     },
     routes: {
       '/': (route) => const NoAnimationPage(child: LoginPage()),
+      '/signUp': (route) => const NoAnimationPage(
+        child: SignUpPage(),
+      ),
       // '/allEmployees': (route) =>
       //     const NoAnimationPage(child: AllCamerasScreen()),
       // '/cameraDetails': (route) => NoAnimationPage(

@@ -7,6 +7,7 @@ import 'package:Investigator/core/resources/app_fonts.dart';
 import 'package:Investigator/core/utils/responsive.dart';
 import 'package:Investigator/core/widgets/sizedbox.dart';
 import 'package:Investigator/presentation/login/widgets/custom_text.dart';
+import 'package:routemaster/routemaster.dart';
 // import 'package:svg_flutter/svg.dart';
 
 import '../../../core/resources/app_colors.dart';
@@ -366,7 +367,8 @@ class _SignUpButton extends StatelessWidget {
     return TextButton(
       // key: const Key('loginForm_createAccount_flatButton'),
       onPressed: () {
-        Navigator.of(context).push<void>(SignUpPage.route());
+        Routemaster.of(context).push("/signUp");
+        // Navigator.of(context).push(SignUpPage.route());
       },
       child: Text(
         'CREATE ACCOUNT',
