@@ -19,7 +19,7 @@ checkAuthority() {
   if ((userPermission.isNotEmpty)) {
     return getRoutesAdmin();
   } else {
-    return getRoutesAdmin();
+    return getLoginRoute();
   }
 }
 
