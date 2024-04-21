@@ -8,8 +8,7 @@ import 'package:routemaster/routemaster.dart';
 import 'authentication/authentication_repository.dart';
 import 'core/widgets/no_animation_page.dart';
 import 'presentation/all_employees/screens/all_employees.dart';
-import 'presentation/all_employees/screens/camera_details.dart';
-import 'presentation/choose_your_company/choose_your_company_screen.dart';
+// import 'presentation/choose_your_company/choose_your_company_screen.dart';
 import 'presentation/investigator/screens/investigator_screen.dart';
 
 checkAuthority() {

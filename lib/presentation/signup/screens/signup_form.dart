@@ -37,7 +37,7 @@ class SignUpForm extends StatelessWidget {
           SelectionArea(
             child: SingleChildScrollView(
               child: Stack(
-                alignment: Alignment.center,
+                alignment: Alignment.topCenter,
                 children: [
                   Image.asset(
                     "assets/images/bbb.png",
@@ -171,8 +171,8 @@ Widget _bottomView() {
 }
 
 class DropDwon extends StatelessWidget {
-  const DropDwon({Key? key}) : super(key: key);
-
+  DropDwon({Key? key}) : super(key: key);
+  final TextEditingController numberController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SignupCubit, SignupState>(
@@ -183,22 +183,24 @@ class DropDwon extends StatelessWidget {
             children: <Widget>[
               Row(
                 children: [
-                  Text(
+                  const Text(
                     "Choose Number Of Rooms",
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 20,
                   ),
                   SizedBox(
                     width: 100, // Adjust the width as needed
                     child: TextFormField(
+                      // controller: numberController,
+                      initialValue: state.selectedNumber.toString(),
                       style: TextStyle(color: Colors.black),
-                      initialValue: state.selectedNumber?.toString(),
                       onChanged: (value) {
                         final int? newValue = int.tryParse(value);
                         if (newValue != null) {
+                          int.tryParse(numberController.text);
                           context
                               .read<SignupCubit>()
                               .selectedNumberChanged(newValue);
@@ -206,7 +208,20 @@ class DropDwon extends StatelessWidget {
                       },
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                        // labelText: 'Number of Rooms',
+                        hintText: "0",
+                        // suffixIcon: IconButton(
+                        //   icon: const Icon(
+                        //     Icons.arrow_drop_down_outlined,
+                        //     size: 25,
+                        //   ),
+                        //   onPressed: () {
+                        //     final int? newValue =
+                        //         int.tryParse(numberController.text);
+                        //     context
+                        //         .read<SignupCubit>()
+                        //         .selectedNumberChanged(newValue ?? 0);
+                        //   },
+                        // ),
                         contentPadding:
                             EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                         border: OutlineInputBorder(

@@ -181,7 +181,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
 
                                 // Add Employee Button
                                 FxBox.h24,
-                                 MaterialButton(
+                                MaterialButton(
                                   height: 50,
                                   minWidth: 210,
                                   shape: RoundedRectangleBorder(
@@ -626,6 +626,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                             ),
                                                       const SizedBox(
                                                           height: 24),
+
                                                       ElevatedButton(
                                                         onPressed: () async {
                                                           try {
@@ -691,6 +692,131 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                           style: TextStyle(
                                                               color: AppColors
                                                                   .black),
+                                                        ),
+                                                      ),
+
+                                                      const SizedBox(
+                                                          height: 24),
+                                                      //////////////////////////////////////
+
+                                                      // BlocProvider(
+                                                      //   create: (context) =>
+                                                      //       RadioButtonBloc(),
+                                                      //   child: BlocBuilder<
+                                                      //       RadioButtonBloc,
+                                                      //       RadioButtonState>(
+                                                      //     builder: (context,
+                                                      //         state) {
+                                                      //       return
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(16.0),
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            const Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              // mainAxisSize:
+                                                              //     MainAxisSize
+                                                              //         .min,
+                                                              children: [
+                                                                Text(
+                                                                  'BlackListed:',
+                                                                  style: TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w900,
+                                                                      color: AppColors
+                                                                          .white,
+                                                                      fontSize:
+                                                                          20.0),
+                                                                ),
+                                                                Icon(
+                                                                  Icons
+                                                                      .warning_amber_outlined,
+                                                                  color: Colors
+                                                                      .red,
+                                                                  size: 35,
+                                                                )
+                                                              ],
+                                                            ),
+                                                            RadioListTile(
+                                                              activeColor:
+                                                                  Colors.white,
+                                                              title: const Text(
+                                                                  'True',
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white)),
+                                                              value: 'True',
+                                                              groupValue: state
+                                                                  .selectedOption,
+                                                              onChanged:
+                                                                  (value) {
+                                                                context.read<AllEmployeesBloc>().add(RadioButtonChanged(
+                                                                    selectedOption:
+                                                                        value
+                                                                            .toString(),
+                                                                    showTextField:
+                                                                        false));
+                                                              },
+                                                            ),
+                                                            RadioListTile(
+                                                              activeColor:
+                                                                  Colors.white,
+                                                              title: const Text(
+                                                                  'False',
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white)),
+                                                              value: 'False',
+                                                              groupValue: state
+                                                                  .selectedOption,
+                                                              onChanged:
+                                                                  (value) {
+                                                                context
+                                                                    .read<
+                                                                        AllEmployeesBloc>()
+                                                                    .add(RadioButtonChanged(
+                                                                        selectedOption:
+                                                                            value
+                                                                                .toString(),
+                                                                        showTextField:
+                                                                            true));
+                                                              },
+                                                            ),
+                                                            FxBox.h24,
+                                                            if (state
+                                                                .showTextField)
+                                                              multiSelectGenericDropdown(
+                                                                showSearch:
+                                                                    true,
+                                                                isEnabled: true,
+                                                                isRequired:
+                                                                    false,
+                                                                filled: true,
+                                                                // selectedItem:
+                                                                //     null,
+                                                                titleName:
+                                                                    "Room Access Management",
+                                                                onChanged:
+                                                                    (value) {
+                                                                  AllEmployeesBloc
+                                                                          .get(
+                                                                              context)
+                                                                      .add(checkBox(
+                                                                          room_NMs:
+                                                                              value!));
+                                                                },
+                                                                itemsList:
+                                                                    checkboxItems,
+                                                              ),
+                                                          ],
                                                         ),
                                                       ),
                                                     ],
@@ -1247,7 +1373,6 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                  
                     buildTextFormField(
                       labelText: 'Name',
                       onChanged: (valuee) async {
@@ -1258,11 +1383,9 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                         );
                       },
                     ),
-                    
 
                     FxBox.h24,
 
-                    
                     buildTextFormField(
                       labelText: 'UserId',
                       onChanged: (value) async {
@@ -1273,10 +1396,9 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                         );
                       },
                     ),
-                   
 
                     FxBox.h24,
-                   
+
                     buildTextFormField(
                       labelText: 'Phone Number',
                       onChanged: (value) async {
@@ -1287,7 +1409,6 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                         );
                       },
                     ),
-                   
 
                     FxBox.h24,
 
@@ -1301,10 +1422,9 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                         );
                       },
                     ),
-                   
 
                     FxBox.h24,
-                  
+
                     FxBox.h24,
 
                     Row(
@@ -1593,4 +1713,9 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
       },
     );
   }
+
+
+
+
+
 }

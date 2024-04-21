@@ -838,6 +838,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                         selectedItem: state.roomChoosen,
                                         onChanged: (value) {
                                           if (value?.isNotEmpty ?? false) {
+                                            
                                             // context
                                             //     .read<SearchByImageBloc>()
                                             //     .add(
