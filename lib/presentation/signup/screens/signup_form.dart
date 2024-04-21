@@ -165,7 +165,22 @@ Widget _bottomView() {
       FxBox.h20,
       DropDwon(),
       FxBox.h28,
-      Center(child: _SignUpButton()),
+      Center(child: BlocBuilder<SignupCubit, SignupState>(
+        builder: (context, state) {
+          return _SignUpButton(
+            onPressed: state.status.isValidated &&
+                    state.roomNames.isNotEmpty &&
+                    state.password.valid &&
+                    state.companyName?.isNotEmpty == true
+                ? () {
+                    //check this one out
+                    context.read<SignupCubit>().signUpWithCredentials();
+                    state.status.isValidated ? Navigator.pop(context) : null;
+                  }
+                : null,
+          );
+        },
+      )),
     ],
   );
 }
@@ -411,7 +426,7 @@ class _EmailInput extends StatelessWidget {
               fillColor: AppColors.primaryColorDark,
               isDense: true,
               // labelText: 'Email',
-              hintText: 'enterUserName'.tr(),
+              hintText: 'enterEmail'.tr(),
               errorText: state.email.invalid ? 'wrongUserName'.tr() : null,
             ),
           ),
@@ -524,7 +539,58 @@ class _PasswordInputState extends State<_PasswordInput> {
   }
 }
 
+// class _SignUpButton extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocBuilder<SignupCubit, SignupState>(
+//       buildWhen: (previous, current) => previous.status != current.status,
+//       builder: (context, state) {
+//         return state.status.isSubmissionInProgress
+//             ? loadingIndicator(
+//                 color: Theme.of(context).primaryColor,
+//               )
+//             : SizedBox(
+//                 width: Responsive.isWeb(context)
+//                     ? MediaQuery.of(context).size.width * 0.20
+//                     : MediaQuery.of(context).size.width,
+//                 height: 50,
+//                 child: ElevatedButton(
+//                   key: const Key('signUpForm_continue_raisedButton'),
+//                   style: ElevatedButton.styleFrom(
+//                     shape: RoundedRectangleBorder(
+//                       borderRadius: BorderRadius.circular(15),
+//                     ),
+//                     backgroundColor: Theme.of(context).primaryColor,
+//                   ),
+//                   onPressed: state.status.isValidated &&
+//                           state.companyName?.isNotEmpty == true
+//                       ? () {
+//                           //check this one out
+//                           context.read<SignupCubit>().signUpWithCredentials();
+//                           state.status.isValidated
+//                               ? Navigator.pop(context)
+
+//                               // Navigator.of(context).push(
+//                               //     MaterialPageRoute<void>(
+//                               //         builder: (_) => const LoginPage()))
+//                               : null;
+//                         }
+//                       : null,
+//                   child: Text('Sign Up'.tr(),
+//                       style: const TextStyle(
+//                           fontFamily: "Cairo", color: Colors.white)),
+//                 ),
+//               );
+//       },
+//     );
+//   }
+// }
+
 class _SignUpButton extends StatelessWidget {
+  final Function()? onPressed;
+
+  const _SignUpButton({Key? key, required this.onPressed}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SignupCubit, SignupState>(
@@ -547,22 +613,14 @@ class _SignUpButton extends StatelessWidget {
                     ),
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
-                  onPressed: state.status.isValidated
-                      ? () {
-                          //check this one out
-                          context.read<SignupCubit>().signUpWithCredentials();
-                          state.status.isValidated
-                              ? Navigator.pop(context)
-
-                              // Navigator.of(context).push(
-                              //     MaterialPageRoute<void>(
-                              //         builder: (_) => const LoginPage()))
-                              : null;
-                        }
-                      : null,
-                  child: Text('Sign Up'.tr(),
-                      style: const TextStyle(
-                          fontFamily: "Cairo", color: Colors.white)),
+                  onPressed: onPressed,
+                  child: Text(
+                    'Sign Up'.tr(),
+                    style: const TextStyle(
+                      fontFamily: "Cairo",
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               );
       },
