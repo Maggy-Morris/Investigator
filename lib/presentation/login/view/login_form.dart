@@ -193,7 +193,15 @@ Widget _bottomView() {
       FxBox.h8,
       _PasswordInput(),
       FxBox.h28,
-      Center(child: _LoginButton()),
+      Center(child: BlocBuilder<LoginCubit, LoginState>(
+        builder: (context, state) {
+          return _LoginButton(
+            onpress: state.status.isValidated && state.password.valid
+                ? () => context.read<LoginCubit>().logInWithCredentials()
+                : null,
+          );
+        },
+      )),
       FxBox.h20,
       Center(child: _SignUpButton()),
 
@@ -302,6 +310,10 @@ class _PasswordInputState extends State<_PasswordInput> {
 }
 
 class _LoginButton extends StatelessWidget {
+  final Function()? onpress;
+
+  const _LoginButton({Key? key, required this.onpress}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
@@ -324,9 +336,7 @@ class _LoginButton extends StatelessWidget {
                     ),
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
-                  onPressed: state.status.isValidated
-                      ? () => context.read<LoginCubit>().logInWithCredentials()
-                      : null,
+                  onPressed: onpress,
                   child: Text('login'.tr(),
                       style: const TextStyle(
                           fontFamily: "Cairo", color: Colors.white)),
