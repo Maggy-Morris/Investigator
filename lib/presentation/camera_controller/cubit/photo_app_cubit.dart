@@ -245,6 +245,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../../../authentication/authentication_repository.dart';
 import '../../../core/enum/enum.dart';
+
 part 'photo_app_state.dart';
 
 class PhotoAppCubit extends Cubit<PhotoAppState> {
@@ -266,6 +267,7 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
 
   String companyNameRepo =
       AuthenticationRepository.instance.currentUser.companyName?.first ?? "";
+
   // late CameraController controller;
   late Timer _periodicTimer;
 
@@ -382,6 +384,7 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
       }
     });
   }
+
   //////////////////////////////////////////////////////
 
   void stopPeriodicPictureCapture() {
@@ -428,6 +431,15 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
   Future<void> stopCamera() async {
     if (state.controller?.value.isInitialized ?? false) {
       await state.controller?.dispose();
+      emit(state.copyWith(
+        controller: CameraController(
+          const CameraDescription(
+              name: "",
+              lensDirection: CameraLensDirection.front,
+              sensorOrientation: 0),
+          ResolutionPreset.medium,
+        ),
+      ));
     }
   }
 

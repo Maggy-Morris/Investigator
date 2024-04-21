@@ -1,3 +1,4 @@
+import 'package:Investigator/presentation/signup/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Investigator/presentation/search/screens/search_screen.dart';
@@ -44,6 +45,9 @@ getRoutesAdmin() {
 getLoginRoute() {
   Map<String, RouteSettings Function(RouteData)> loginRoute = {
     '/': (route) => const NoAnimationPage(child: LoginPage()),
+    '/signUp': (route) => const NoAnimationPage(
+      child: SignUpPage(),
+    ),
     // '/': (route) =>
     //     const NoAnimationPage(child: ChooseYourCompany()),
   };
