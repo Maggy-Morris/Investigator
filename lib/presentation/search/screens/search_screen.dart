@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 // import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -115,364 +116,42 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                 controller: tabController,
                 children: [
                   BlocBuilder<PhotoAppCubit, PhotoAppState>(
-  builder: (context, state) {
-    context.read<PhotoAppCubit>().stopCamera();
-    context.read<PhotoAppCubit>().isChosenChanged(false);
-    return BlocListener<SearchByImageBloc, SearchByImageState>(
-                    listener: (context, state) {
-                      if (state.submission == Submission.success) {
-                        FxToast.showSuccessToast(context: context);
-                      }
+                    builder: (context, state) {
+                      context.read<PhotoAppCubit>().stopCamera();
+                      context.read<PhotoAppCubit>().isChosenChanged(false);
+                      return BlocListener<SearchByImageBloc,
+                          SearchByImageState>(
+                        listener: (context, state) {
+                          if (state.submission == Submission.success) {
+                            FxToast.showSuccessToast(context: context);
+                          }
 
-                      // if (state.submission == Submission.noDataFound) {
-                      //   FxToast.showWarningToast(
-                      //       context: context,
-                      //       warningMessage: "NO data found about this person");
-                      // }
-                    },
-                    child: BlocBuilder<SearchByImageBloc, SearchByImageState>(
-                      builder: (context, state) {
-                        return SingleChildScrollView(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              FxBox.h24,
-                              if (Responsive.isWeb(context))
-                                Column(
-                                  children: [
-                                    FxBox.h24,
+                          // if (state.submission == Submission.noDataFound) {
+                          //   FxToast.showWarningToast(
+                          //       context: context,
+                          //       warningMessage: "NO data found about this person");
+                          // }
+                        },
+                        child:
+                            BlocBuilder<SearchByImageBloc, SearchByImageState>(
+                          builder: (context, state) {
+                            return SingleChildScrollView(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  FxBox.h24,
+                                  if (Responsive.isWeb(context))
+                                    Column(
+                                      children: [
+                                        FxBox.h24,
 
-                                    // Here to search for an Employee in the database
-                                    // BlocBuilder<SearchByImageBloc,
-                                    //     SearchByImageState>(
-                                    //   builder: (context, state) {
-                                    // return
-                                    Card(
-                                      elevation: 4,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(12),
-                                        child: Stack(
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () async {
-                                                // FilePickerResult? result =
-                                                await FilePicker.platform
-                                                    .pickFiles(
-                                                  type: FileType.image,
-                                                )
-                                                    .then((result) {
-                                                  if (result != null &&
-                                                      result.files.isNotEmpty) {
-                                                    final imageFile =
-                                                        result.files.first;
-                                                    final image = imageFile
-                                                                .bytes !=
-                                                            null
-                                                        ? Image.memory(
-                                                            imageFile.bytes!,
-                                                            fit: BoxFit.cover,
-                                                          )
-                                                        : loadingIndicator();
-
-                                                    SearchByImageBloc.get(
-                                                            context)
-                                                        .add(
-                                                      ImageToSearchForEmployee(
-                                                          imageWidget: image),
-                                                    );
-
-                                                    setState(() {
-                                                      _image = image;
-                                                    });
-                                                    String base64Image =
-                                                        base64Encode(
-                                                            imageFile.bytes!);
-
-                                                    SearchByImageBloc.get(
-                                                            context)
-                                                        .add(
-                                                      SearchForEmployee(
-                                                        companyName:
-                                                            companyNameRepo,
-                                                        image: base64Image,
-                                                      ),
-                                                    );
-                                                  }
-                                                  return null;
-                                                });
-                                              },
-                                              child:
-                                                  //  state.imageWidget
-                                                  _image ??
-                                                      SizedBox(
-                                                        width: 400,
-                                                        height: 400,
-                                                        child: Image.asset(
-                                                          'assets/images/person-search.png',
-                                                          // width: double.infinity,
-                                                          // height: 200,
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                      ),
-                                            ),
-                                            Positioned(
-                                              bottom: 0,
-                                              left: 0,
-                                              right: 0,
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                  vertical: 8,
-                                                  horizontal: 16,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      const BorderRadius.only(
-                                                    bottomLeft:
-                                                        Radius.circular(12),
-                                                    bottomRight:
-                                                        Radius.circular(12),
-                                                  ),
-                                                  color: Colors.black
-                                                      .withOpacity(0.6),
-                                                ),
-                                                child: Text(
-                                                  // Use state data to show appropriate text
-                                                  state.submission ==
-                                                          Submission.loading
-                                                      ? 'Searching...'
-                                                      : state.submission ==
-                                                              Submission.success
-                                                          ? '${state.result}'
-                                                          : state.submission ==
-                                                                  Submission
-                                                                      .noDataFound
-                                                              ? 'Not in the Database'
-                                                              : '',
-                                                  style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            CustomPaint(
-                                              painter: RectanglePainter(
-                                                (state.blacklis ?? [])
-                                                    .map((blacklis) => blacklis)
-                                                    .toList(),
-                                                (state.result ?? [])
-                                                    .map((result) => result)
-                                                    .toList(),
-                                                (state.boxes ?? [])
-                                                    .map((box) => (box))
-                                                    .toList(),
-                                                (state.textAccuracy ?? [])
-                                                    .map((textForAccuracy) =>
-                                                        textForAccuracy)
-                                                    .toList(),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    //   },
-                                    // ),
-
-                                    //Confirm Button to send the image
-                                    FxBox.h24,
-
-                                    state.submission == Submission.loading
-                                        ? loadingIndicator()
-                                        : Center(
-                                            child: ElevatedButton.icon(
-                                              onPressed: () {
-                                                if (state.imageWidget == null) {
-                                                  FxToast.showErrorToast(
-                                                    context: context,
-                                                    message:
-                                                        "Pick your picture",
-                                                  );
-                                                  return;
-                                                }
-
-                                                SearchByImageBloc.get(context)
-                                                    .add(
-                                                  const SearchForEmployeeEvent(),
-                                                );
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                                backgroundColor:
-                                                    AppColors.buttonBlue,
-                                              ),
-                                              label: const Text(
-                                                "Confirm",
-                                                style: TextStyle(
-                                                    color: AppColors.white),
-                                              ),
-                                              icon: const Icon(
-                                                Icons.check_circle_outline,
-                                                color: AppColors.white,
-                                              ),
-                                            ),
-                                          ),
-
-                                    ///employee Data
-                                    FxBox.h24,
-
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: SingleChildScrollView(
-                                        child: Column(
-                                          children: [
-                                            SizedBox(
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              child: (state.submission ==
-                                                      Submission.noDataFound)
-                                                  ? const Center(
-                                                      child: Text(
-                                                      "NOT in the Database!",
-                                                      style: TextStyle(
-                                                          color:
-                                                              AppColors.blueB,
-                                                          fontSize: 25,
-                                                          fontWeight:
-                                                              FontWeight.w600),
-                                                    ))
-                                                  : GridView.builder(
-                                                      shrinkWrap: true,
-                                                      physics:
-                                                          const NeverScrollableScrollPhysics(),
-                                                      itemCount: state
-                                                          .employeeNamesList
-                                                          .length,
-                                                      gridDelegate: Responsive
-                                                              .isMobile(context)
-                                                          ? const SliverGridDelegateWithFixedCrossAxisCount(
-                                                              crossAxisCount: 1,
-                                                              crossAxisSpacing:
-                                                                  45,
-                                                              mainAxisSpacing:
-                                                                  45,
-                                                              mainAxisExtent:
-                                                                  350,
-                                                            )
-                                                          : Responsive.isTablet(
-                                                                  context)
-                                                              ? const SliverGridDelegateWithFixedCrossAxisCount(
-                                                                  crossAxisCount:
-                                                                      2,
-                                                                  crossAxisSpacing:
-                                                                      45,
-                                                                  mainAxisSpacing:
-                                                                      45,
-                                                                  mainAxisExtent:
-                                                                      350,
-                                                                )
-                                                              : MediaQuery.of(context)
-                                                                          .size
-                                                                          .width <
-                                                                      1500
-                                                                  ? SliverGridDelegateWithMaxCrossAxisExtent(
-                                                                      maxCrossAxisExtent:
-                                                                          MediaQuery.of(context).size.width *
-                                                                              0.24,
-                                                                      crossAxisSpacing:
-                                                                          45,
-                                                                      mainAxisSpacing:
-                                                                          45,
-                                                                      mainAxisExtent:
-                                                                          350,
-                                                                    )
-                                                                  : SliverGridDelegateWithMaxCrossAxisExtent(
-                                                                      maxCrossAxisExtent:
-                                                                          MediaQuery.of(context).size.width *
-                                                                              0.24,
-                                                                      crossAxisSpacing:
-                                                                          45,
-                                                                      mainAxisSpacing:
-                                                                          45,
-                                                                      mainAxisExtent:
-                                                                          350,
-                                                                    ),
-                                                      itemBuilder:
-                                                          (context, index) {
-                                                        final employee = state
-                                                                .employeeNamesList[
-                                                            index];
-                                                        return _contactUi(
-                                                          message: employee
-                                                                      .blackListed ==
-                                                                  'True'
-                                                              ? "Blacklisted person"
-                                                              : '',
-                                                          // Conditional display based on whether the employee is blacklisted
-                                                          Icoon:
-                                                              employee.blackListed ==
-                                                                      'True'
-                                                                  ? const Icon(
-                                                                      Icons
-                                                                          .warning_amber_outlined,
-                                                                      color: Colors
-                                                                          .red,
-                                                                      size: 50,
-                                                                    )
-                                                                  : null,
-                                                          id: employee.sId ??
-                                                              '',
-                                                          name: employee.name ??
-                                                              '',
-                                                          profession:
-                                                              'Software Developer',
-                                                          imagesrc: employee
-                                                                  .imagePath ??
-                                                              '',
-                                                          phoneNum:
-                                                              employee.phone ??
-                                                                  '',
-                                                          email:
-                                                              employee.email ??
-                                                                  '',
-                                                          userId:
-                                                              employee.userId ??
-                                                                  '',
-                                                          onUpdate: () {
-                                                            _showUpdateDialog(
-                                                                context,
-                                                                employee);
-                                                          },
-                                                        );
-                                                      },
-                                                    ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-
-                                    ///////////////////////////////////////////////
-                                  ],
-                                ),
-                              if (!Responsive.isWeb(context))
-                                Column(
-                                  children: [
-                                    // Here to search for an Employee in the database
-                                    BlocBuilder<SearchByImageBloc,
-                                        SearchByImageState>(
-                                      builder: (context, state) {
-                                        return Card(
+                                        // Here to search for an Employee in the database
+                                        // BlocBuilder<SearchByImageBloc,
+                                        //     SearchByImageState>(
+                                        //   builder: (context, state) {
+                                        // return
+                                        Card(
                                           elevation: 4,
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
@@ -515,6 +194,9 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                                   image),
                                                         );
 
+                                                        setState(() {
+                                                          _image = image;
+                                                        });
                                                         String base64Image =
                                                             base64Encode(
                                                                 imageFile
@@ -533,13 +215,19 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                       return null;
                                                     });
                                                   },
-                                                  child: state.imageWidget ??
-                                                      Image.asset(
-                                                        'assets/images/person-search.png',
-                                                        // width: double.infinity,
-                                                        // height: 200,
-                                                        fit: BoxFit.cover,
-                                                      ),
+                                                  child:
+                                                      //  state.imageWidget
+                                                      _image ??
+                                                          SizedBox(
+                                                            width: 400,
+                                                            height: 400,
+                                                            child: Image.asset(
+                                                              'assets/images/person-search.png',
+                                                              // width: double.infinity,
+                                                              // height: 200,
+                                                              fit: BoxFit.cover,
+                                                            ),
+                                                          ),
                                                 ),
                                                 Positioned(
                                                   bottom: 0,
@@ -586,25 +274,6 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                     ),
                                                   ),
                                                 ),
-                                                Text(
-                                                  // Use state data to show appropriate text
-                                                  state.submission ==
-                                                          Submission.loading
-                                                      ? 'Searching...'
-                                                      : state.submission ==
-                                                              Submission.success
-                                                          ? '${state.boxes}'
-                                                          : state.submission ==
-                                                                  Submission
-                                                                      .noDataFound
-                                                              ? 'Not in the database'
-                                                              : '',
-                                                  style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
                                                 CustomPaint(
                                                   painter: RectanglePainter(
                                                     (state.blacklis ?? [])
@@ -627,193 +296,560 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                               ],
                                             ),
                                           ),
-                                        );
-                                      },
-                                    ),
+                                        ),
+                                        //   },
+                                        // ),
 
-                                    //Confirm Button to send the image
-                                    FxBox.h24,
-                                    (state.submission == Submission.loading)
-                                        ? loadingIndicator()
-                                        : Center(
-                                            child: ElevatedButton.icon(
-                                              onPressed: () {
-                                                if (state.imageWidget == null) {
-                                                  FxToast.showErrorToast(
-                                                      context: context,
-                                                      message:
-                                                          "pick your picture ");
-                                                  return;
-                                                }
-                                                SearchByImageBloc.get(context)
-                                                    .add(
-                                                  const SearchForEmployeeEvent(),
-                                                );
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10)),
-                                                backgroundColor:
-                                                    AppColors.buttonBlue,
+                                        //Confirm Button to send the image
+                                        FxBox.h24,
+
+                                        state.submission == Submission.loading
+                                            ? loadingIndicator()
+                                            : Center(
+                                                child: ElevatedButton.icon(
+                                                  onPressed: () {
+                                                    if (state.imageWidget ==
+                                                        null) {
+                                                      FxToast.showErrorToast(
+                                                        context: context,
+                                                        message:
+                                                            "Pick your picture",
+                                                      );
+                                                      return;
+                                                    }
+
+                                                    SearchByImageBloc.get(
+                                                            context)
+                                                        .add(
+                                                      const SearchForEmployeeEvent(),
+                                                    );
+                                                  },
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                    ),
+                                                    backgroundColor:
+                                                        AppColors.buttonBlue,
+                                                  ),
+                                                  label: const Text(
+                                                    "Confirm",
+                                                    style: TextStyle(
+                                                        color: AppColors.white),
+                                                  ),
+                                                  icon: const Icon(
+                                                    Icons.check_circle_outline,
+                                                    color: AppColors.white,
+                                                  ),
+                                                ),
                                               ),
-                                              label: Text(
-                                                "confirm".tr(),
-                                                style: const TextStyle(
-                                                    color: AppColors.white),
-                                              ),
-                                              icon: const Icon(
-                                                Icons.check_circle_outline,
-                                                color: AppColors.white,
-                                              ),
+
+                                        ///employee Data
+                                        FxBox.h24,
+
+                                        Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: SingleChildScrollView(
+                                            child: Column(
+                                              children: [
+                                                SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                                  child:
+                                                      (state.submission ==
+                                                              Submission
+                                                                  .noDataFound)
+                                                          ? const Center(
+                                                              child: Text(
+                                                              "NOT in the Database!",
+                                                              style: TextStyle(
+                                                                  color:
+                                                                      AppColors
+                                                                          .blueB,
+                                                                  fontSize: 25,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600),
+                                                            ))
+                                                          : GridView.builder(
+                                                              shrinkWrap: true,
+                                                              physics:
+                                                                  const NeverScrollableScrollPhysics(),
+                                                              itemCount: state
+                                                                  .employeeNamesList
+                                                                  .length,
+                                                              gridDelegate: Responsive
+                                                                      .isMobile(
+                                                                          context)
+                                                                  ? const SliverGridDelegateWithFixedCrossAxisCount(
+                                                                      crossAxisCount:
+                                                                          1,
+                                                                      crossAxisSpacing:
+                                                                          45,
+                                                                      mainAxisSpacing:
+                                                                          45,
+                                                                      mainAxisExtent:
+                                                                          350,
+                                                                    )
+                                                                  : Responsive.isTablet(
+                                                                          context)
+                                                                      ? const SliverGridDelegateWithFixedCrossAxisCount(
+                                                                          crossAxisCount:
+                                                                              2,
+                                                                          crossAxisSpacing:
+                                                                              45,
+                                                                          mainAxisSpacing:
+                                                                              45,
+                                                                          mainAxisExtent:
+                                                                              350,
+                                                                        )
+                                                                      : MediaQuery.of(context).size.width <
+                                                                              1500
+                                                                          ? SliverGridDelegateWithMaxCrossAxisExtent(
+                                                                              maxCrossAxisExtent: MediaQuery.of(context).size.width * 0.24,
+                                                                              crossAxisSpacing: 45,
+                                                                              mainAxisSpacing: 45,
+                                                                              mainAxisExtent: 350,
+                                                                            )
+                                                                          : SliverGridDelegateWithMaxCrossAxisExtent(
+                                                                              maxCrossAxisExtent: MediaQuery.of(context).size.width * 0.24,
+                                                                              crossAxisSpacing: 45,
+                                                                              mainAxisSpacing: 45,
+                                                                              mainAxisExtent: 350,
+                                                                            ),
+                                                              itemBuilder:
+                                                                  (context,
+                                                                      index) {
+                                                                final employee =
+                                                                    state.employeeNamesList[
+                                                                        index];
+                                                                return _contactUi(
+                                                                  message: employee
+                                                                              .blackListed ==
+                                                                          'True'
+                                                                      ? "Blacklisted person"
+                                                                      : '',
+                                                                  // Conditional display based on whether the employee is blacklisted
+                                                                  Icoon: employee
+                                                                              .blackListed ==
+                                                                          'True'
+                                                                      ? const Icon(
+                                                                          Icons
+                                                                              .warning_amber_outlined,
+                                                                          color:
+                                                                              Colors.red,
+                                                                          size:
+                                                                              50,
+                                                                        )
+                                                                      : null,
+                                                                  id: employee
+                                                                          .sId ??
+                                                                      '',
+                                                                  name: employee
+                                                                          .name ??
+                                                                      '',
+                                                                  profession:
+                                                                      'Software Developer',
+                                                                  imagesrc:
+                                                                      employee.imagePath ??
+                                                                          '',
+                                                                  phoneNum:
+                                                                      employee.phone ??
+                                                                          '',
+                                                                  email: employee
+                                                                          .email ??
+                                                                      '',
+                                                                  userId: employee
+                                                                          .userId ??
+                                                                      '',
+                                                                  onUpdate: () {
+                                                                    _showUpdateDialog(
+                                                                        context,
+                                                                        employee);
+                                                                  },
+                                                                );
+                                                              },
+                                                            ),
+                                                ),
+                                              ],
                                             ),
                                           ),
-
-                                    ///employee Data
-                                    FxBox.h24,
-
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: SingleChildScrollView(
-                                        child: Column(
-                                          children: [
-                                            SizedBox(
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              child: (state.submission ==
-                                                      Submission.noDataFound)
-                                                  ? const Center(
-                                                      child: Text(
-                                                      "No data found Yet!",
-                                                      style: TextStyle(
-                                                          color:
-                                                              AppColors.blueB,
-                                                          fontSize: 25,
-                                                          fontWeight:
-                                                              FontWeight.w600),
-                                                    ))
-                                                  : GridView.builder(
-                                                      shrinkWrap: true,
-                                                      physics:
-                                                          const NeverScrollableScrollPhysics(),
-                                                      itemCount: state
-                                                          .employeeNamesList
-                                                          .length,
-                                                      gridDelegate: Responsive
-                                                              .isMobile(context)
-                                                          ? const SliverGridDelegateWithFixedCrossAxisCount(
-                                                              crossAxisCount: 1,
-                                                              crossAxisSpacing:
-                                                                  45,
-                                                              mainAxisSpacing:
-                                                                  45,
-                                                              mainAxisExtent:
-                                                                  350,
-                                                            )
-                                                          : Responsive.isTablet(
-                                                                  context)
-                                                              ? const SliverGridDelegateWithFixedCrossAxisCount(
-                                                                  crossAxisCount:
-                                                                      2,
-                                                                  crossAxisSpacing:
-                                                                      45,
-                                                                  mainAxisSpacing:
-                                                                      45,
-                                                                  mainAxisExtent:
-                                                                      350,
-                                                                )
-                                                              : MediaQuery.of(context)
-                                                                          .size
-                                                                          .width <
-                                                                      1500
-                                                                  ? SliverGridDelegateWithMaxCrossAxisExtent(
-                                                                      maxCrossAxisExtent:
-                                                                          MediaQuery.of(context).size.width *
-                                                                              0.24,
-                                                                      crossAxisSpacing:
-                                                                          45,
-                                                                      mainAxisSpacing:
-                                                                          45,
-                                                                      mainAxisExtent:
-                                                                          350,
-                                                                    )
-                                                                  : SliverGridDelegateWithMaxCrossAxisExtent(
-                                                                      maxCrossAxisExtent:
-                                                                          MediaQuery.of(context).size.width *
-                                                                              0.24,
-                                                                      crossAxisSpacing:
-                                                                          45,
-                                                                      mainAxisSpacing:
-                                                                          45,
-                                                                      mainAxisExtent:
-                                                                          350,
-                                                                    ),
-                                                      itemBuilder:
-                                                          (context, index) {
-                                                        final employee = state
-                                                                .employeeNamesList[
-                                                            index];
-                                                        return _contactUi(
-                                                          message: employee
-                                                                      .blackListed ==
-                                                                  'True'
-                                                              ? "Blacklisted person"
-                                                              : '',
-                                                          // Conditional display based on whether the employee is blacklisted
-                                                          Icoon:
-                                                              employee.blackListed ==
-                                                                      'True'
-                                                                  ? const Icon(
-                                                                      Icons
-                                                                          .warning_amber_outlined,
-                                                                      color: Colors
-                                                                          .red,
-                                                                      size: 50,
-                                                                    )
-                                                                  : null,
-                                                          id: employee.sId ??
-                                                              '',
-                                                          name: employee.name ??
-                                                              '',
-                                                          profession:
-                                                              'Software Developer',
-                                                          imagesrc: employee
-                                                                  .imagePath ??
-                                                              '',
-                                                          phoneNum:
-                                                              employee.phone ??
-                                                                  '',
-                                                          email:
-                                                              employee.email ??
-                                                                  '',
-                                                          userId:
-                                                              employee.userId ??
-                                                                  '',
-                                                          onUpdate: () {
-                                                            _showUpdateDialog(
-                                                                context,
-                                                                employee);
-                                                          },
-                                                        );
-                                                      },
-                                                    ),
-                                            ),
-                                          ],
                                         ),
-                                      ),
+
+                                        ///////////////////////////////////////////////
+                                      ],
                                     ),
-                                  ],
-                                ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  );
-  },
-),
+                                  if (!Responsive.isWeb(context))
+                                    Column(
+                                      children: [
+                                        // Here to search for an Employee in the database
+                                        BlocBuilder<SearchByImageBloc,
+                                            SearchByImageState>(
+                                          builder: (context, state) {
+                                            return Card(
+                                              elevation: 4,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                child: Stack(
+                                                  children: [
+                                                    GestureDetector(
+                                                      onTap: () async {
+                                                        // FilePickerResult? result =
+                                                        await FilePicker
+                                                            .platform
+                                                            .pickFiles(
+                                                          type: FileType.image,
+                                                        )
+                                                            .then((result) {
+                                                          if (result != null &&
+                                                              result.files
+                                                                  .isNotEmpty) {
+                                                            final imageFile =
+                                                                result.files
+                                                                    .first;
+                                                            final image = imageFile
+                                                                        .bytes !=
+                                                                    null
+                                                                ? Image.memory(
+                                                                    imageFile
+                                                                        .bytes!,
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                  )
+                                                                : loadingIndicator();
+
+                                                            SearchByImageBloc
+                                                                    .get(
+                                                                        context)
+                                                                .add(
+                                                              ImageToSearchForEmployee(
+                                                                  imageWidget:
+                                                                      image),
+                                                            );
+
+                                                            String base64Image =
+                                                                base64Encode(
+                                                                    imageFile
+                                                                        .bytes!);
+
+                                                            SearchByImageBloc
+                                                                    .get(
+                                                                        context)
+                                                                .add(
+                                                              SearchForEmployee(
+                                                                companyName:
+                                                                    companyNameRepo,
+                                                                image:
+                                                                    base64Image,
+                                                              ),
+                                                            );
+                                                          }
+                                                          return null;
+                                                        });
+                                                      },
+                                                      child: state
+                                                              .imageWidget ??
+                                                          Image.asset(
+                                                            'assets/images/person-search.png',
+                                                            // width: double.infinity,
+                                                            // height: 200,
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                    ),
+                                                    Positioned(
+                                                      bottom: 0,
+                                                      left: 0,
+                                                      right: 0,
+                                                      child: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                          vertical: 8,
+                                                          horizontal: 16,
+                                                        ),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              const BorderRadius
+                                                                  .only(
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    12),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    12),
+                                                          ),
+                                                          color: Colors.black
+                                                              .withOpacity(0.6),
+                                                        ),
+                                                        child: Text(
+                                                          // Use state data to show appropriate text
+                                                          state.submission ==
+                                                                  Submission
+                                                                      .loading
+                                                              ? 'Searching...'
+                                                              : state.submission ==
+                                                                      Submission
+                                                                          .success
+                                                                  ? '${state.result}'
+                                                                  : state.submission ==
+                                                                          Submission
+                                                                              .noDataFound
+                                                                      ? 'Not in the Database'
+                                                                      : '',
+                                                          style:
+                                                              const TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 18,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      // Use state data to show appropriate text
+                                                      state.submission ==
+                                                              Submission.loading
+                                                          ? 'Searching...'
+                                                          : state.submission ==
+                                                                  Submission
+                                                                      .success
+                                                              ? '${state.boxes}'
+                                                              : state.submission ==
+                                                                      Submission
+                                                                          .noDataFound
+                                                                  ? 'Not in the database'
+                                                                  : '',
+                                                      style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                    CustomPaint(
+                                                      painter: RectanglePainter(
+                                                        (state.blacklis ?? [])
+                                                            .map((blacklis) =>
+                                                                blacklis)
+                                                            .toList(),
+                                                        (state.result ?? [])
+                                                            .map((result) =>
+                                                                result)
+                                                            .toList(),
+                                                        (state.boxes ?? [])
+                                                            .map((box) => (box))
+                                                            .toList(),
+                                                        (state.textAccuracy ??
+                                                                [])
+                                                            .map((textForAccuracy) =>
+                                                                textForAccuracy)
+                                                            .toList(),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+
+                                        //Confirm Button to send the image
+                                        FxBox.h24,
+                                        (state.submission == Submission.loading)
+                                            ? loadingIndicator()
+                                            : Center(
+                                                child: ElevatedButton.icon(
+                                                  onPressed: () {
+                                                    if (state.imageWidget ==
+                                                        null) {
+                                                      FxToast.showErrorToast(
+                                                          context: context,
+                                                          message:
+                                                              "pick your picture ");
+                                                      return;
+                                                    }
+                                                    SearchByImageBloc.get(
+                                                            context)
+                                                        .add(
+                                                      const SearchForEmployeeEvent(),
+                                                    );
+                                                  },
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10)),
+                                                    backgroundColor:
+                                                        AppColors.buttonBlue,
+                                                  ),
+                                                  label: Text(
+                                                    "confirm".tr(),
+                                                    style: const TextStyle(
+                                                        color: AppColors.white),
+                                                  ),
+                                                  icon: const Icon(
+                                                    Icons.check_circle_outline,
+                                                    color: AppColors.white,
+                                                  ),
+                                                ),
+                                              ),
+
+                                        ///employee Data
+                                        FxBox.h24,
+
+                                        Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: SingleChildScrollView(
+                                            child: Column(
+                                              children: [
+                                                SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                                  child:
+                                                      (state.submission ==
+                                                              Submission
+                                                                  .noDataFound)
+                                                          ? const Center(
+                                                              child: Text(
+                                                              "No data found Yet!",
+                                                              style: TextStyle(
+                                                                  color:
+                                                                      AppColors
+                                                                          .blueB,
+                                                                  fontSize: 25,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600),
+                                                            ))
+                                                          : GridView.builder(
+                                                              shrinkWrap: true,
+                                                              physics:
+                                                                  const NeverScrollableScrollPhysics(),
+                                                              itemCount: state
+                                                                  .employeeNamesList
+                                                                  .length,
+                                                              gridDelegate: Responsive
+                                                                      .isMobile(
+                                                                          context)
+                                                                  ? const SliverGridDelegateWithFixedCrossAxisCount(
+                                                                      crossAxisCount:
+                                                                          1,
+                                                                      crossAxisSpacing:
+                                                                          45,
+                                                                      mainAxisSpacing:
+                                                                          45,
+                                                                      mainAxisExtent:
+                                                                          350,
+                                                                    )
+                                                                  : Responsive.isTablet(
+                                                                          context)
+                                                                      ? const SliverGridDelegateWithFixedCrossAxisCount(
+                                                                          crossAxisCount:
+                                                                              2,
+                                                                          crossAxisSpacing:
+                                                                              45,
+                                                                          mainAxisSpacing:
+                                                                              45,
+                                                                          mainAxisExtent:
+                                                                              350,
+                                                                        )
+                                                                      : MediaQuery.of(context).size.width <
+                                                                              1500
+                                                                          ? SliverGridDelegateWithMaxCrossAxisExtent(
+                                                                              maxCrossAxisExtent: MediaQuery.of(context).size.width * 0.24,
+                                                                              crossAxisSpacing: 45,
+                                                                              mainAxisSpacing: 45,
+                                                                              mainAxisExtent: 350,
+                                                                            )
+                                                                          : SliverGridDelegateWithMaxCrossAxisExtent(
+                                                                              maxCrossAxisExtent: MediaQuery.of(context).size.width * 0.24,
+                                                                              crossAxisSpacing: 45,
+                                                                              mainAxisSpacing: 45,
+                                                                              mainAxisExtent: 350,
+                                                                            ),
+                                                              itemBuilder:
+                                                                  (context,
+                                                                      index) {
+                                                                final employee =
+                                                                    state.employeeNamesList[
+                                                                        index];
+                                                                return _contactUi(
+                                                                  message: employee
+                                                                              .blackListed ==
+                                                                          'True'
+                                                                      ? "Blacklisted person"
+                                                                      : '',
+                                                                  // Conditional display based on whether the employee is blacklisted
+                                                                  Icoon: employee
+                                                                              .blackListed ==
+                                                                          'True'
+                                                                      ? const Icon(
+                                                                          Icons
+                                                                              .warning_amber_outlined,
+                                                                          color:
+                                                                              Colors.red,
+                                                                          size:
+                                                                              50,
+                                                                        )
+                                                                      : null,
+                                                                  id: employee
+                                                                          .sId ??
+                                                                      '',
+                                                                  name: employee
+                                                                          .name ??
+                                                                      '',
+                                                                  profession:
+                                                                      'Software Developer',
+                                                                  imagesrc:
+                                                                      employee.imagePath ??
+                                                                          '',
+                                                                  phoneNum:
+                                                                      employee.phone ??
+                                                                          '',
+                                                                  email: employee
+                                                                          .email ??
+                                                                      '',
+                                                                  userId: employee
+                                                                          .userId ??
+                                                                      '',
+                                                                  onUpdate: () {
+                                                                    _showUpdateDialog(
+                                                                        context,
+                                                                        employee);
+                                                                  },
+                                                                );
+                                                              },
+                                                            ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  ),
 
                   /////////////////////////////////////////////////////////////////////////////////////////////
                   ///Live Stream Video
@@ -844,7 +880,6 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                         selectedItem: state.roomChoosen,
                                         onChanged: (value) {
                                           if (value?.isNotEmpty ?? false) {
-                                            
                                             // context
                                             //     .read<SearchByImageBloc>()
                                             //     .add(
@@ -1523,6 +1558,12 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                 ),
                 FxBox.h24,
                 TextFormField(
+                  keyboardType: TextInputType.emailAddress,
+                  // inputFormatters: [
+                  //   FilteringTextInputFormatter.allow(
+                  //     RegExp(r'^[\w-\.]+@[a-zA-Z]+\.[a-zA-Z]{2,4}$'),
+                  //   ),
+                  // ],
                   cursorColor: Colors.white,
                   style: const TextStyle(color: Colors.white),
                   initialValue: employee.email,

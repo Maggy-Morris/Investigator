@@ -1,6 +1,7 @@
 import 'package:Investigator/presentation/login/view/login_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:Investigator/core/loader/loading_indicator.dart';
@@ -209,6 +210,12 @@ class DropDwon extends StatelessWidget {
                   SizedBox(
                     width: 100, // Adjust the width as needed
                     child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(
+                            r'^[1-9]\d*')), // Allow only digits excluding zero at first position
+                      ],
+
                       // controller: numberController,
                       initialValue: state.selectedNumber.toString(),
                       style: TextStyle(color: Colors.black),
@@ -221,7 +228,6 @@ class DropDwon extends StatelessWidget {
                               .selectedNumberChanged(newValue);
                         }
                       },
-                      keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         hintText: "0",
                         // suffixIcon: IconButton(
