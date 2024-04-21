@@ -193,10 +193,9 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                     // Show dialog to fill in employee data
                                     showDialog(
                                       context: context,
-                                      builder: (BuildContext context) {
-                                        return BlocProvider(
-                                          create: (context) =>
-                                              AllEmployeesBloc(),
+                                      builder: (ctx) {
+                                        return BlocProvider.value(
+                                          value: AllEmployeesBloc.get(context),
                                           child: BlocBuilder<AllEmployeesBloc,
                                               AllEmployeesState>(
                                             builder: (context, state) {
