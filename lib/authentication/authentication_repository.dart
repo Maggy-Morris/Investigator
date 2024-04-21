@@ -31,7 +31,7 @@ class AuthenticationRepository {
 
   static getInstance() async {
     if (kDebugMode) {
-      print("init shared global");
+      // print("init shared global");
     }
     sharedUser ??= await SharedPreferences.getInstance();
     if (instance != null) {
@@ -98,7 +98,8 @@ class AuthenticationRepository {
       if (roomsNamesString != null) {
         List<String>? roomsNames =
             List<String>.from(jsonDecode(roomsNamesString));
-      };
+      }
+
       // List<String>? roomsNames = roomsNamesString != null
       //     ? List<String>.from(jsonDecode(roomsNamesString))
       //     : null;
@@ -112,6 +113,26 @@ class AuthenticationRepository {
       return UserData.empty;
     }
     // return User.empty;
+  }
+
+  Future<void> updateRoomsNames(List<String> updatedRoomsNames) async {
+    try {
+      // Convert list of strings to JSON string before saving
+
+      // UserData ahmed = currentUser;
+
+      UserData ahmed1 = currentUser.copyWith(
+          roomsNames: updatedRoomsNames, nRooms: updatedRoomsNames.length);
+      String updatedRoomsNamesJson = jsonEncode(updatedRoomsNames);
+      // Save the updated roomsNames to SharedPreferences
+
+      sharedUser?.setString(roomsNamesCacheKey, updatedRoomsNamesJson);
+      sharedUser?.setString(userCacheKey, jsonEncode(ahmed1));
+      controller.add(ahmed1);
+    } catch (e) {
+      // Handle error
+      print("Error updating roomsNames: $e");
+    }
   }
 
   /// Signs in with the provided [email] and [password].
@@ -130,6 +151,8 @@ class AuthenticationRepository {
                 ""; // Adjust this according to your response structure
             List<String>? roomNames = value.roomsNames;
             sharedUser?.setString(userCacheKey, jsonEncode(value));
+            sharedUser?.setString(passwordCacheKey, password);
+
             sharedUser?.setString(usernameCacheKey, email);
             sharedUser?.setString(companyNameCacheKey, companyName);
             // sharedUser?.setString(roomsNamesCacheKey, roomNames);
@@ -138,7 +161,6 @@ class AuthenticationRepository {
               String roomNamesJson = jsonEncode(roomNames);
               sharedUser?.setString(roomsNamesCacheKey, roomNamesJson);
             }
-            sharedUser?.setString(passwordCacheKey, password);
             sharedUser?.setStringList(routesCacheKey, ["/"]);
 
             controller.add(value);

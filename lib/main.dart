@@ -132,8 +132,8 @@ class AppView extends StatelessWidget {
     routes: {
       '/': (route) => const NoAnimationPage(child: LoginPage()),
       '/signUp': (route) => const NoAnimationPage(
-        child: SignUpPage(),
-      ),
+            child: SignUpPage(),
+          ),
       // '/allEmployees': (route) =>
       //     const NoAnimationPage(child: AllCamerasScreen()),
       // '/cameraDetails': (route) => NoAnimationPage(

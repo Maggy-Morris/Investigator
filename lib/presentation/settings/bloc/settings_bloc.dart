@@ -1,0 +1,131 @@
+import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../authentication/authentication_repository.dart';
+import '../../../core/enum/enum.dart';
+import '../../../core/models/employee_model.dart';
+import '../../../core/remote_provider/remote_provider.dart';
+
+part 'settings_event.dart';
+part 'settings_state.dart';
+
+class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
+  String companyNameRepo =
+      AuthenticationRepository.instance.currentUser.companyName?.first ?? "";
+  static SettingsBloc get(context) => BlocProvider.of<SettingsBloc>(context);
+
+  SettingsBloc() : super(SettingsState()) {
+    on<SettingsEvent>((event, emit) {});
+    on<UpdateRoomsEvent>(_onUpdateRoomsEvent);
+
+    on<UpdateRooms>(_onUpdateRooms);
+    on<InitialList>(_onInitialList);
+    on<AddListItem>(_onAddListItem);
+
+    on<UpdatePasswordEvent>(_onUpdatePasswordEvent);
+    on<UpdatePassword>(_onUpdatePassword);
+  }
+  _onUpdatePasswordEvent(
+      UpdatePasswordEvent event, Emitter<SettingsState> emit) async {
+    emit(state.copyWith(
+      passwordUpdate: event.passwordUpd,
+      // submission: Submission.hasData,
+    ));
+  }
+
+  _onUpdatePassword(UpdatePassword event, Emitter<SettingsState> emit) async {
+    emit(state.copyWith(submission: Submission.loading));
+    try {
+      final result = await RemoteProvider().UpdatePassword(
+        // companyName: event.companyName,
+        // personName: state.personName,
+        // phoneNum: state.phoneNum,
+        email: AuthenticationRepository.instance.currentUser.username ?? "",
+        password: state.passwordUpdate,
+      );
+      // result.updated == true
+      if (result != null) {
+        emit(state.copyWith(
+          submission: Submission.success,
+
+          // employeeNamesList:
+        ));
+      } else {
+        emit(state.copyWith(submission: Submission.error));
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      emit(state.copyWith(submission: Submission.error));
+    }
+  }
+
+  _onUpdateRoomsEvent(
+      UpdateRoomsEvent event, Emitter<SettingsState> emit) async {
+    List<String> newList = state.roomNAMS;
+    if (event.roomNames != null) {
+      if (event.roomNames?.isNotEmpty ?? false) {
+        newList[event.index] = event.roomNames ?? "";
+
+        emit(state.copyWith(
+          roomNAMS: newList,
+          // room_numbers: event.room_num,
+          // submission: Submission.hasData,
+        ));
+      }
+    } else {
+      newList.removeAt(event.index);
+      emit(state.copyWith(
+        roomNAMS: newList,
+      ));
+    }
+  }
+
+  _onInitialList(InitialList event, Emitter<SettingsState> emit) async {
+    emit(state.copyWith(
+      roomNAMS: event.list,
+      // room_numbers: event.room_num,
+      // submission: Submission.hasData,
+    ));
+  }
+
+  _onAddListItem(AddListItem event, Emitter<SettingsState> emit) async {
+    emit(state.copyWith(
+      roomNAMS: [...state.roomNAMS, ""],
+      // room_numbers: event.room_num,
+      // submission: Submission.hasData,
+    ));
+  }
+
+  _onUpdateRooms(UpdateRooms event, Emitter<SettingsState> emit) async {
+    emit(state.copyWith(submission: Submission.loading));
+    try {
+      final result = await RemoteProvider().UpdateRooms(
+        // companyName: event.companyName,
+        // personName: state.personName,
+        // phoneNum: state.phoneNum,
+        email: AuthenticationRepository.instance.currentUser.username ?? "",
+        roomsNumber: state.roomNAMS.length,
+        roomNames: state.roomNAMS,
+      );
+      // result.updated == true
+      if (result.updated == true) {
+        emit(state.copyWith(
+          submission: Submission.success,
+
+          // employeeNamesList:
+        ));
+        await AuthenticationRepository.instance
+            .updateRoomsNames(state.roomNAMS);
+        // await AuthenticationRepository.getInstance();
+      } else {
+        emit(state.copyWith(submission: Submission.noDataFound));
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      emit(state.copyWith(submission: Submission.error));
+    }
+  }
+}

@@ -20,6 +20,27 @@ class UserData {
     // this.role,
   });
 
+  UserData copyWith({
+    String? token,
+    String? sId,
+    bool? logined,
+    String? username,
+    int? nRooms,
+    List<String>? roomsNames, // final String? companyName;
+    // final String? role;
+    List<dynamic>? companyName,
+  }) {
+    return UserData(
+      token: token ?? this.token,
+      sId: sId ?? this.sId,
+      logined: logined ?? this.logined,
+      username: username ?? this.username,
+      nRooms: nRooms ?? this.nRooms,
+      roomsNames: roomsNames ?? this.roomsNames,
+      companyName: companyName ?? this.companyName,
+    );
+  }
+
   UserData.fromJson(Map<String, dynamic> json)
       : token = json['token'],
         username = json['username'],

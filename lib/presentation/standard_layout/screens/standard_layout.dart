@@ -131,6 +131,14 @@ class StandardLayoutScreen extends StatelessWidget {
                                       label: Text('Investigator'.tr()),
                                     ),
 
+                                    NavigationRailDestination(
+                                      icon: const Icon(Icons.settings),
+                                      selectedIcon: const Icon(
+                                        Icons.settings,
+                                      ),
+                                      label: Text('Settings'.tr()),
+                                    ),
+
                                     /// Language
                                     ///
                                     // NavigationRailDestination(
@@ -299,11 +307,9 @@ class StandardLayoutScreen extends StatelessWidget {
                                     } else if (index == 2) {
                                       Routemaster.of(context)
                                           .push('/investigator');
+                                    } else if (index == 3) {
+                                      Routemaster.of(context).push('/settings');
                                     }
-                                    // else if (index == 3) {
-                                    //   Routemaster.of(context)
-                                    //       .push('/allEmployees');
-                                    // }
                                     ///////////////////////////////////////////////////////////////////////////////
                                     // else if (index == 4) {
                                     //   Routemaster.of(context)

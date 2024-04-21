@@ -388,7 +388,20 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
   //////////////////////////////////////////////////////
 
   void stopPeriodicPictureCapture() {
+    // final _channel = WebSocketChannel.connect(
+
+    //   Uri.parse('ws:${RemoteDataSource.baseUrlWithoutPort}8765/socket.io/'),
+    // );
+    emit(state.copyWith(
+      boxes: [],
+      blacklisted_list_checks: [],
+      blacklisted: false,
+      result: [],
+      securityBreach: false,
+      textAccuracy: [],
+    ));
     _periodicTimer.cancel();
+    // _channel.sink.close();
   }
 
   void switchCameraOptions({
@@ -429,9 +442,24 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
   }
 
   Future<void> stopCamera() async {
+    // final _channel = WebSocketChannel.connect(
+    //   // Uri.parse('ws://192.168.1.114:8765/socket.io/'),
+
+    //   Uri.parse('ws:${RemoteDataSource.baseUrlWithoutPort}8765/socket.io/'),
+    // );
+
     if (state.controller?.value.isInitialized ?? false) {
+      _periodicTimer.cancel();
+      // _channel.sink.close();
+
       await state.controller?.dispose();
       emit(state.copyWith(
+        boxes: [],
+        blacklisted_list_checks: [],
+        blacklisted: false,
+        result: [],
+        securityBreach: false,
+        textAccuracy: [],
         controller: CameraController(
           const CameraDescription(
               name: "",

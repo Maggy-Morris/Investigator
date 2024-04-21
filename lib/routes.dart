@@ -1,3 +1,4 @@
+import 'package:Investigator/presentation/settings/screens/settings.dart';
 import 'package:Investigator/presentation/signup/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -36,6 +37,9 @@ getRoutesAdmin() {
     //         child: CameraDetails(
     //       cameraName: route.queryParameters["name"] ?? "",
     //     )),
+
+    '/settings': (route) => NoAnimationPage(child: Settings()),
+
     '/investigator': (route) => const NoAnimationPage(child: AddCameraScreen()),
     '/search': (route) => const NoAnimationPage(child: Search()),
   };
@@ -46,8 +50,8 @@ getLoginRoute() {
   Map<String, RouteSettings Function(RouteData)> loginRoute = {
     '/': (route) => const NoAnimationPage(child: LoginPage()),
     '/signUp': (route) => const NoAnimationPage(
-      child: SignUpPage(),
-    ),
+          child: SignUpPage(),
+        ),
     // '/': (route) =>
     //     const NoAnimationPage(child: ChooseYourCompany()),
   };

@@ -26,6 +26,7 @@ class RemoteProvider {
 
   factory RemoteProvider() {
     // _inst.currentUser = currentUser;
+
     return _inst;
   }
 
@@ -97,6 +98,67 @@ class RemoteProvider {
     }
   }
 
+  ///edit Rooms Data
+
+  Future<UpdateModel> UpdateRooms({
+    // required String companyName,
+    required String email,
+    required int roomsNumber,
+    required List<String> roomNames,
+  }) async {
+    try {
+      Map<String, dynamic> callBack = await RemoteDataSource().post(
+        endPoint: "/qdrant/update_rooms",
+        body: {
+          "username": email,
+          "n_rooms": roomsNumber,
+          "rooms_names": roomNames,
+        },
+      );
+      // debugPrint(callBack);
+      //Change this "Collection Created Successfully!"
+
+      if (callBack.isNotEmpty) {
+        UpdateModel callBackList = UpdateModel.fromJson(callBack);
+
+        return callBackList;
+      } else {
+        return UpdateModel();
+      }
+    } catch (e) {
+      return UpdateModel();
+    }
+  }
+
+  ///edit Password Data
+
+  Future<UpdateModel> UpdatePassword({
+    required String password,
+    required String email,
+  }) async {
+    try {
+      Map<String, dynamic> callBack = await RemoteDataSource().post(
+        endPoint: "/qdrant/update_password'",
+        body: {
+          "username": email,
+          "password": password,
+        },
+      );
+
+      //Change this "Collection Created Successfully!"
+
+      if (callBack.isNotEmpty) {
+        UpdateModel callBackList = UpdateModel.fromJson(callBack);
+
+        return callBackList;
+      } else {
+        return UpdateModel();
+      }
+    } catch (e) {
+      return UpdateModel();
+    }
+  }
+
   ///Add Comany
   Future<CallBackModel> addCompany({
     required String companyName,
@@ -163,8 +225,6 @@ class RemoteProvider {
       return AddPersonModel();
     }
   }
-
-  ///edit Employee data
 
   /// Add New Person with image as stream of bytes
   Future<UpdateModel> UpdateEmployeeData({

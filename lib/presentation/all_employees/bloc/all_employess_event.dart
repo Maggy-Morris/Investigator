@@ -53,12 +53,12 @@ class EditPageNumber extends AllEmployeesEvent {
   List<Object> get props => [pageIndex];
 }
 
-class CameraMainDataEvent extends AllEmployeesEvent {
-  const CameraMainDataEvent();
+// class CameraMainDataEvent extends AllEmployeesEvent {
+//   const CameraMainDataEvent();
 
-  @override
-  List<Object?> get props => [];
-}
+//   @override
+//   List<Object?> get props => [];
+// }
 
 class AddpersonName extends AllEmployeesEvent {
   final String personName;
