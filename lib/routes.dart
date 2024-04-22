@@ -1,3 +1,4 @@
+import 'package:Investigator/presentation/group_search/screens/group_search_screen.dart';
 import 'package:Investigator/presentation/settings/screens/settings.dart';
 import 'package:Investigator/presentation/signup/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +42,9 @@ getRoutesAdmin() {
     '/settings': (route) => NoAnimationPage(child: Settings()),
 
     '/investigator': (route) => const NoAnimationPage(child: AddCameraScreen()),
+    '/groupSearch': (route) =>
+        const NoAnimationPage(child: GroupSearchScreen()),
+
     '/search': (route) => const NoAnimationPage(child: Search()),
   };
   return adminRoutes;

@@ -45,6 +45,10 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
     on<Addemail>(_onAddemail);
     on<AdduserId>(_onAdduserId);
 
+
+    on<selectedFiltering>(_onselectedFiltering);
+
+
     on<imageevent>(_onimageevent);
     on<EditPageNumber>(_onEditPageNumber);
     on<checkBox>(_oncheckBox);
@@ -70,6 +74,12 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
   _onCheck(Check event, Emitter<AllEmployeesState> emit) async {
     emit(state.copyWith(check: event.check, submission: Submission.editing));
   }
+
+_onselectedFiltering(selectedFiltering event, Emitter<AllEmployeesState> emit) async {
+    emit(state.copyWith(filterCase: event.filterCase, submission: Submission.editing));
+  }
+
+
 
   _oncheckBox(checkBox event, Emitter<AllEmployeesState> emit) async {
     emit(state.copyWith(

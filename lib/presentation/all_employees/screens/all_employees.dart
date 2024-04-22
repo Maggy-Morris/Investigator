@@ -25,8 +25,6 @@ import '../../../core/widgets/toast/toast.dart';
 import '../bloc/all_employess_bloc.dart';
 
 class AllEmployeesScreen extends StatefulWidget {
-
-
   const AllEmployeesScreen({
     Key? key,
     // required this.data
@@ -41,7 +39,6 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
       AuthenticationRepository.instance.currentUser.companyName?.first ?? "";
   List<String> checkboxItems =
       AuthenticationRepository.instance.currentUser.roomsNames ?? [];
-
 
   TextEditingController employeeNameController = TextEditingController();
   final TextEditingController _searchController = TextEditingController();
@@ -462,26 +459,41 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                     mainAxisAlignment:
                                                                         MainAxisAlignment
                                                                             .spaceBetween,
-                                                                    // mainAxisSize:
-                                                                    //     MainAxisSize
-                                                                    //         .min,
                                                                     children: [
-                                                                      Text(
-                                                                        'BlackListed:',
-                                                                        style: TextStyle(
-                                                                            fontWeight:
-                                                                                FontWeight.w900,
-                                                                            color: AppColors.white,
-                                                                            fontSize: 20.0),
+                                                                      Tooltip(
+                                                                        message:
+                                                                            "If the person is BlackListed he has no access to any room if not choose the rooms he is authorized to enter",
+                                                                        child:
+                                                                            Icon(
+                                                                          Icons
+                                                                              .info_outline,
+                                                                          color:
+                                                                              Colors.white,
+                                                                        ),
                                                                       ),
-                                                                      Icon(
-                                                                        Icons
-                                                                            .warning_amber_outlined,
-                                                                        color: Colors
-                                                                            .red,
-                                                                        size:
-                                                                            35,
-                                                                      )
+                                                                      Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceBetween,
+                                                                        // mainAxisSize:
+                                                                        //     MainAxisSize
+                                                                        //         .min,
+                                                                        children: [
+                                                                          Text(
+                                                                            'BlackListed:',
+                                                                            style: TextStyle(
+                                                                                fontWeight: FontWeight.w900,
+                                                                                color: AppColors.white,
+                                                                                fontSize: 20.0),
+                                                                          ),
+                                                                          Icon(
+                                                                            Icons.warning_amber_outlined,
+                                                                            color:
+                                                                                Colors.red,
+                                                                            size:
+                                                                                35,
+                                                                          )
+                                                                        ],
+                                                                      ),
                                                                     ],
                                                                   ),
                                                                   RadioListTile(
@@ -489,12 +501,12 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                         Colors
                                                                             .white,
                                                                     title: const Text(
-                                                                        'True',
+                                                                        'Yes',
                                                                         style: TextStyle(
                                                                             color:
                                                                                 Colors.white)),
                                                                     value:
-                                                                        'True',
+                                                                        'Yes',
                                                                     groupValue:
                                                                         state
                                                                             .selectedOption,
@@ -512,12 +524,11 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                         Colors
                                                                             .white,
                                                                     title: const Text(
-                                                                        'False',
+                                                                        'No',
                                                                         style: TextStyle(
                                                                             color:
                                                                                 Colors.white)),
-                                                                    value:
-                                                                        'False',
+                                                                    value: 'No',
                                                                     groupValue:
                                                                         state
                                                                             .selectedOption,
@@ -1098,12 +1109,12 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                         Colors
                                                                             .white,
                                                                     title: const Text(
-                                                                        'True',
+                                                                        'Yes',
                                                                         style: TextStyle(
                                                                             color:
                                                                                 Colors.white)),
                                                                     value:
-                                                                        'True',
+                                                                        'Yes',
                                                                     groupValue:
                                                                         state
                                                                             .selectedOption,
@@ -1121,12 +1132,11 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                         Colors
                                                                             .white,
                                                                     title: const Text(
-                                                                        'False',
+                                                                        'No',
                                                                         style: TextStyle(
                                                                             color:
                                                                                 Colors.white)),
-                                                                    value:
-                                                                        'False',
+                                                                    value: 'No',
                                                                     groupValue:
                                                                         state
                                                                             .selectedOption,
@@ -1305,6 +1315,40 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                             ),
                           ),
                         FxBox.h24,
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: SizedBox(
+                            width: 250,
+                            child: singleSelectGenericDropdown<String>(
+                              // titleName: "Filter By:",
+                              isEnabled: true,
+                              isRequired: false,
+                              filled: true,
+                              // showSearch: true,
+                              selectedItem: state.filterCase!.isEmpty
+                                  ? "All"
+                                  : state.filterCase,
+                              onChanged: (value) {
+                                if (value?.isNotEmpty ?? false) {
+                                  AllEmployeesBloc.get(context).add(
+                                      selectedFiltering(
+                                          filterCase: value ?? ""));
+                                  if (value == "All") {
+                                    AllEmployeesBloc.get(context)
+                                        .add(const GetEmployeeNamesEvent());
+                                  } else if (value == "Normal") {
+                                    AllEmployeesBloc.get(context).add(
+                                        const GetEmployeeNormalNamesEvent());
+                                  } else if (value == "BlackListed") {
+                                    AllEmployeesBloc.get(context).add(
+                                        const GetEmployeeBlackListedNamesEvent());
+                                  }
+                                }
+                              },
+                              itemsList: ["All", "Normal", "BlackListed"],
+                            ),
+                          ),
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: SingleChildScrollView(

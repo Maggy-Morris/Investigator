@@ -16,6 +16,7 @@ import '../models/employee_model.dart';
 import '../models/search_by_image_model.dart';
 import '../models/sigup_model.dart';
 import '../models/update_model.dart';
+import '../models/update_password_model.dart';
 
 enum AppLifecycleStatus { online, offline }
 
@@ -132,33 +133,33 @@ class RemoteProvider {
 
   ///edit Password Data
 
-  Future<UpdateModel> UpdatePassword({
+  Future<UpdatePasswordModel> UpdatePassword({
     required String password,
-        // required String oldPassword,
-
+    required String oldPassword,
     required String email,
   }) async {
     try {
       Map<String, dynamic> callBack = await RemoteDataSource().post(
-        endPoint: "/qdrant/update_password'",
+        endPoint: "/qdrant/update_password",
         body: {
           "username": email,
           "password": password,
-        // "oldPassword": oldPassword,
+          "old_password": oldPassword,
         },
       );
 
       //Change this "Collection Created Successfully!"
 
       if (callBack.isNotEmpty) {
-        UpdateModel callBackList = UpdateModel.fromJson(callBack);
+        UpdatePasswordModel callBackList =
+            UpdatePasswordModel.fromJson(callBack);
 
         return callBackList;
       } else {
-        return UpdateModel();
+        return UpdatePasswordModel();
       }
     } catch (e) {
-      return UpdateModel();
+      return UpdatePasswordModel();
     }
   }
 
@@ -319,15 +320,16 @@ class RemoteProvider {
       return EmployeeModel();
     }
   }
-///
-  
+
+  ///
+
   Future<EmployeeModel> getOnlyNormalEmployeeNames({
     required String companyName,
     required int pageNumber,
   }) async {
     try {
       Map<String, dynamic> callBack = await RemoteDataSource()
-          .post(endPoint: "/qdrant/retrieve_it_all", body: {
+          .post(endPoint: "/qdrant/retrieve_it_all_normal", body: {
         "collection_name": companyName,
         "page_number": pageNumber,
       });
@@ -350,15 +352,14 @@ class RemoteProvider {
     }
   }
 
-
- /// 
+  ///
   Future<EmployeeModel> getOnlyBlackListedEmployeeNames({
     required String companyName,
     required int pageNumber,
   }) async {
     try {
       Map<String, dynamic> callBack = await RemoteDataSource()
-          .post(endPoint: "/qdrant/retrieve_it_all", body: {
+          .post(endPoint: "/qdrant/retrieve_it_all_blacklisted", body: {
         "collection_name": companyName,
         "page_number": pageNumber,
       });
@@ -380,25 +381,6 @@ class RemoteProvider {
       return EmployeeModel();
     }
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   ///get person data by name
   Future<List<Data>> getPersonByName(

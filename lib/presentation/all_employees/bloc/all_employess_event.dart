@@ -7,6 +7,8 @@ class AllEmployeesEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+
+
 class RadioButtonChanged extends AllEmployeesEvent {
   final String selectedOption;
   final bool showTextField;
@@ -65,6 +67,16 @@ class AddpersonName extends AllEmployeesEvent {
 
   @override
   List<Object?> get props => [personName];
+}
+
+
+class selectedFiltering extends AllEmployeesEvent {
+  final String filterCase;
+
+  const selectedFiltering({required this.filterCase});
+
+  @override
+  List<Object?> get props => [filterCase];
 }
 
 class AddphoneNum extends AllEmployeesEvent {

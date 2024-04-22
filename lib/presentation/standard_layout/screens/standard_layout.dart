@@ -111,7 +111,7 @@ class StandardLayoutScreen extends StatelessWidget {
                                       selectedIcon: const Icon(
                                         Icons.person_outlined,
                                       ),
-                                      label: Text('AllEmployees'.tr()),
+                                      label: Text('AllTargets'.tr()),
                                     ),
 
                                     NavigationRailDestination(
@@ -129,6 +129,15 @@ class StandardLayoutScreen extends StatelessWidget {
                                         Icons.model_training_outlined,
                                       ),
                                       label: Text('Investigator'.tr()),
+                                    ),
+
+                                    NavigationRailDestination(
+                                      icon: const Icon(
+                                          Icons.supervisor_account_outlined),
+                                      selectedIcon: const Icon(
+                                        Icons.supervisor_account_outlined,
+                                      ),
+                                      label: Text('GroupSearch'.tr()),
                                     ),
 
                                     NavigationRailDestination(
@@ -308,6 +317,9 @@ class StandardLayoutScreen extends StatelessWidget {
                                       Routemaster.of(context)
                                           .push('/investigator');
                                     } else if (index == 3) {
+                                      Routemaster.of(context)
+                                          .push('/groupSearch');
+                                    } else if (index == 4) {
                                       Routemaster.of(context).push('/settings');
                                     }
                                     ///////////////////////////////////////////////////////////////////////////////

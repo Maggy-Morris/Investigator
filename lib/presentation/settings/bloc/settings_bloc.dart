@@ -35,7 +35,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       oldPasswordEvent event, Emitter<SettingsState> emit) async {
     emit(state.copyWith(
       oldpassword: event.oldpassword,
-      // submission: Submission.hasData,
+      submission: Submission.hasData,
     ));
   }
 
@@ -43,7 +43,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       UpdatePasswordEvent event, Emitter<SettingsState> emit) async {
     emit(state.copyWith(
       passwordUpdate: event.passwordUpd,
-      // submission: Submission.hasData,
+      submission: Submission.hasData,
     ));
   }
 
@@ -53,18 +53,17 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       final result = await RemoteProvider().UpdatePassword(
         email: AuthenticationRepository.instance.currentUser.username ?? "",
         password: state.passwordUpdate,
-        // oldpassword: state.oldpassword,
+        oldPassword: state.oldpassword,
       );
-      // result.updated == true
-      if (result != null) {
+      if (result.updated == true) {
         emit(state.copyWith(
           submission: Submission.success,
-         // responseMessage: result.data,
+          responseMessage: result.data,
         ));
-      } else {
-        emit(state.copyWith(submission: Submission.error
-        // responseMessage: result.data,
-
+      } else if (result.updated == false) {
+        emit(state.copyWith(
+          submission: Submission.error,
+          responseMessage: result.data,
         ));
       }
     } catch (e) {
