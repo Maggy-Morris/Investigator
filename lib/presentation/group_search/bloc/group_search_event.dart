@@ -16,6 +16,79 @@ class selectedFiltering extends GroupSearchEvent {
   @override
   List<Object?> get props => [filterCase];
 }
+
+
+
+
+class AddpersonName extends GroupSearchEvent {
+  final String personName;
+
+  const AddpersonName({required this.personName});
+
+  @override
+  List<Object?> get props => [personName];
+}
+
+class AddphoneNum extends GroupSearchEvent {
+  final String phoneNum;
+
+  const AddphoneNum({required this.phoneNum});
+
+  @override
+  List<Object?> get props => [phoneNum];
+}
+
+class Addemail extends GroupSearchEvent {
+  final String email;
+
+  const Addemail({required this.email});
+
+  @override
+  List<Object?> get props => [email];
+}
+
+class AdduserId extends GroupSearchEvent {
+  final String userId;
+
+  const AdduserId({required this.userId});
+
+  @override
+  List<Object?> get props => [userId];
+}
+
+
+class UpdateEmployeeEvent extends GroupSearchEvent {
+  final String companyName;
+  final String personName;
+  final String image;
+  final String phoneNum;
+  final String email;
+  final String userId;
+  final String id;
+
+  const UpdateEmployeeEvent(
+      {this.id = '',
+      this.userId = '',
+      this.personName = ' ',
+      this.phoneNum = '',
+      this.email = ' ',
+      this.companyName = ' ',
+      this.image = ''});
+
+  @override
+  List<Object?> get props => [
+        id,
+        companyName,
+        personName,
+        phoneNum,
+        userId,
+        email,
+        image,
+      ];
+}
+
+
+
 class ImageToSearchForEmployee extends GroupSearchEvent {
   final Widget imageWidget;
 
@@ -34,6 +107,23 @@ class CompnyNameFromSP extends GroupSearchEvent {
   List<Object?> get props => [companyName];
 }
 
+class DeletePersonByNameEvent extends GroupSearchEvent {
+  final String companyName;
+  final String personName;
+
+  const DeletePersonByNameEvent(this.companyName, this.personName);
+
+  @override
+  List<Object?> get props => [companyName, personName];
+}
+class reloadTargetsData extends GroupSearchEvent {
+  final List<Dataaa> Employyyy;
+
+  const reloadTargetsData({required this.Employyyy});
+
+  @override
+  List<Object?> get props => [Employyyy];
+}
 
 class reloadSnapShots extends GroupSearchEvent {
   final List<String> snapyy;

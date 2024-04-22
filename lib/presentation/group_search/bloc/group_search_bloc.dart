@@ -1,3 +1,4 @@
+import 'package:Investigator/authentication/authentication_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,12 +9,16 @@ import 'package:Investigator/core/remote_provider/remote_provider.dart';
 
 import '../../../core/models/add_company_model.dart';
 import '../../../core/models/employee_model.dart';
+import '../../../core/models/search_by_image_model.dart';
+import '../../../core/models/search_by_video_in_group_search.dart';
 
 part 'group_search_event.dart';
 
 part 'group_search_state.dart';
 
 class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
+  String companyNameRepo =
+      AuthenticationRepository.instance.currentUser.companyName?.first ?? "";
   static GroupSearchBloc get(context) =>
       BlocProvider.of<GroupSearchBloc>(context);
   GroupSearchBloc() : super(GroupSearchState()) {
@@ -25,8 +30,9 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
     on<DeleteCompanyEvent>(_onDeleteCompanyEvent);
 
     // /// Add New Employee
-
     on<reloadSnapShots>(_onreloadSnapShots);
+
+    on<reloadTargetsData>(_onreloadTargetsData);
 
     on<GetAccuracy>(_onGetAccuracy);
 
@@ -43,8 +49,16 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
     on<SearchForEmployeeByVideoEvent>(_onSearchForEmployeeByVideoEvent);
     on<ImageToSearchForEmployee>(_onImageToSearchForEmployee);
 
-    // on<DeletePersonByNameEvent>(_onDeletePersonByNameEvent);
+    /// Add New Employee
+
+    on<AddpersonName>(_onAddpersonName);
+    on<AddphoneNum>(_onAddphoneNum);
+    on<Addemail>(_onAddemail);
+    on<AdduserId>(_onAdduserId);
+    on<DeletePersonByNameEvent>(_onDeletePersonByNameEvent);
     on<DeletePersonByIdEvent>(_onDeletePersonByIdEvent);
+
+    on<UpdateEmployeeEvent>(_onUpdateEmployeeEvent);
   }
 
   _onGroupSearchEvent(
@@ -55,6 +69,33 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
   //   add(const GetSourceTypes());
   //   add(const GetModelsName());
   // }
+
+  _onUpdateEmployeeEvent(
+      UpdateEmployeeEvent event, Emitter<GroupSearchState> emit) async {
+    emit(state.copyWith(submission: Submission.loading));
+    try {
+      final result = await RemoteProvider().UpdateEmployeeData(
+        companyName: event.companyName,
+        personName: state.personName,
+        phoneNum: state.phoneNum,
+        email: state.email,
+        userId: state.userId,
+        id: event.id,
+      );
+      if (result.updated == true) {
+        emit(state.copyWith(
+          submission: Submission.success,
+
+          // employeeNamesList:
+        ));
+      } else {
+        emit(state.copyWith(submission: Submission.error));
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      emit(state.copyWith(submission: Submission.error));
+    }
+  }
 
   _onImageToSearchForEmployee(
       ImageToSearchForEmployee event, Emitter<GroupSearchState> emit) async {
@@ -74,11 +115,46 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
         accuracy: event.accuracy, submission: Submission.editing));
   }
 
+  _onreloadTargetsData(
+      reloadTargetsData event, Emitter<GroupSearchState> emit) async {
+    emit(state.copyWith(
+        employeeNamesList: event.Employyyy, submission: Submission.editing));
+  }
+
   _onreloadSnapShots(
       reloadSnapShots event, Emitter<GroupSearchState> emit) async {
     emit(state.copyWith(
         snapShots: event.snapyy, submission: Submission.editing));
   }
+
+  _onAddpersonName(AddpersonName event, Emitter<GroupSearchState> emit) async {
+    emit(state.copyWith(
+      personName: event.personName,
+      submission: Submission.hasData,
+    ));
+  }
+
+  _onAddphoneNum(AddphoneNum event, Emitter<GroupSearchState> emit) async {
+    // .getAllEmployeeNames(companyName: state.companyName)
+    // .then((value) {
+    emit(state.copyWith(
+        phoneNum: event.phoneNum, submission: Submission.hasData));
+  }
+
+  _onAddemail(Addemail event, Emitter<GroupSearchState> emit) async {
+    // .getAllEmployeeNames(companyName: state.companyName)
+    // .then((value) {
+    emit(state.copyWith(email: event.email, submission: Submission.hasData));
+    // });
+  }
+
+  _onAdduserId(AdduserId event, Emitter<GroupSearchState> emit) async {
+    // .getAllEmployeeNames(companyName: state.companyName)
+    // .then((value) {
+    emit(state.copyWith(userId: event.userId, submission: Submission.hasData));
+    // });
+  }
+  ///////////////////////////////////////////////////
 
   _onAddCompanyName(
       AddCompanyName event, Emitter<GroupSearchState> emit) async {
@@ -178,25 +254,65 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
     });
   }
 
+  /// Delete person data by Name
+  _onDeletePersonByNameEvent(
+      DeletePersonByNameEvent event, Emitter<GroupSearchState> emit) async {
+    emit(state.copyWith(submission: Submission.loading));
+    await RemoteProvider()
+        .deleteDocumentByName(
+      companyName: companyNameRepo,
+      personName: event.personName,
+    )
+        .then((value) {
+      /// this to update the state once i deleted a person
+      if (value.data != "No documents found for deletion.") {
+        // Remove the deleted employee from the state
+        // final updatedList = state.employeeNamesList
+        //     .where((employee) => employee.name != event.personName)
+        //     .toList();
+        emit(state.copyWith(
+            submission: Submission.success,
+            // employeeNamesList: state.employeeNamesList,
+            responseMessage: value.data));
+      } else if (value.data == "No documents found for deletion.") {
+        emit(state.copyWith(
+          submission: Submission.noDataFound,
+          responseMessage: value.data,
+        ));
+      }
+
+      // if (value != EmployeeModel()) {
+      //   emit(const HomeState().copyWith(submission: Submission.success));
+      // }
+
+      else {
+        emit(state.copyWith(submission: Submission.error));
+      }
+    });
+  }
+
 /////////////////////////////////////////////
 
   ///search by video and
   _onSearchForEmployeeByVideoEvent(SearchForEmployeeByVideoEvent event,
       Emitter<GroupSearchState> emit) async {
     emit(state.copyWith(submission: Submission.loading));
-    await RemoteProvider().searchForpersonByVideo(
-        similarityScore: state.accuracy,
-        video: state.video,
-        // image: state.imageFile,
-        images: []
-        // personName: state.personName,
-        // image: state.image,
-        ).then((value) {
+    await RemoteProvider()
+        .searchForpersonByVideoGroupSearch(
+      similarityScore: state.accuracy,
+      video: state.video,
+      filterCase: state.filterCase,
+      companyName:
+          AuthenticationRepository.instance.currentUser.companyName?.first ??
+              "",
+    )
+        .then((value) {
       if (value.found == true) {
         emit(state.copyWith(
           submission: Submission.success,
           data: value.data,
           snapShots: value.snapshot_list,
+          employeeNamesList: value.dataCards,
         ));
       } else if (value.found == false) {
         emit(state.copyWith(

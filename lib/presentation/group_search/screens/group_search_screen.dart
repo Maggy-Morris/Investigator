@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:Investigator/core/models/search_by_video_in_group_search.dart';
 import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:Investigator/core/enum/enum.dart';
 import 'package:Investigator/core/loader/loading_indicator.dart';
@@ -20,8 +22,10 @@ import 'package:video_player/video_player.dart';
 import 'dart:html' as html;
 
 import '../../../authentication/authentication_repository.dart';
+import '../../../core/remote_provider/remote_data_source.dart';
 import '../../../core/widgets/drop_down_widgets.dart';
 import '../../../core/widgets/fullscreenImage.dart';
+import '../../all_employees/screens/text.dart';
 import '../../camera_controller/cubit/photo_app_cubit.dart';
 import '../bloc/group_search_bloc.dart';
 
@@ -189,7 +193,7 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                       if (value?.isNotEmpty ?? false) {
                                         GroupSearchBloc.get(context).add(
                                             selectedFiltering(
-                                                filterCase: value ?? ""));
+                                                filterCase: value ?? "All"));
                                         // if (value == "All") {
                                         //   GroupSearchBloc.get(context)
                                         //       .add(const GetEmployeeNamesEvent());
@@ -211,77 +215,6 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
-                                  // SizedBox(
-                                  //   height: 300,
-                                  //   width: 300,
-                                  //   child: Card(
-                                  //     elevation: 4,
-                                  //     shape: RoundedRectangleBorder(
-                                  //       borderRadius: BorderRadius.circular(12),
-                                  //     ),
-                                  //     child: ClipRRect(
-                                  //       borderRadius: BorderRadius.circular(12),
-                                  //       child: Stack(
-                                  //         children: [
-                                  //           GestureDetector(
-                                  //             onTap: () async {
-                                  //               await FilePicker.platform
-                                  //                   .pickFiles(
-                                  //                 type: FileType.image,
-                                  //               )
-                                  //                   .then((result) {
-                                  //                 if (result != null &&
-                                  //                     result.files.isNotEmpty) {
-                                  //                   // Use the selected image file
-                                  //                   final imageFile =
-                                  //                       result.files.first;
-                                  //                   // Load the image file as an image
-                                  //                   final image = imageFile
-                                  //                               .bytes !=
-                                  //                           null
-                                  //                       ? Image.memory(
-                                  //                           imageFile.bytes!,
-                                  //                           fit: BoxFit.cover,
-                                  //                         )
-                                  //                       : loadingIndicator();
-
-                                  //                   // Replace the image with the selected image
-                                  //                   setState(() {
-                                  //                     _image = image;
-                                  //                   });
-                                  //                   GroupSearchBloc.get(context).add(
-                                  //                       ImageToSearchForEmployee(
-                                  //                           imageWidget:
-                                  //                               image));
-
-                                  //                   GroupSearchBloc.get(context).add(
-                                  //                       imageevent(
-                                  //                           imageFile:
-                                  //                               imageFile));
-                                  //                 }
-                                  //               });
-                                  //             },
-                                  //             child: Stack(
-                                  //                 fit: StackFit.expand,
-                                  //                 children: [
-                                  //                   // state.imageWidget
-                                  //                   _image ??
-                                  //                       Image.asset(
-                                  //                         'assets/images/imagepick.png',
-                                  //                         width:
-                                  //                             double.infinity,
-                                  //                         height:
-                                  //                             double.infinity,
-                                  //                         fit: BoxFit.cover,
-                                  //                       ),
-                                  //                 ]),
-                                  //           ),
-                                  //         ],
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  // ),
-
                                   SizedBox(
                                     height: 300,
                                     width: 300,
@@ -348,6 +281,9 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                       child: ElevatedButton.icon(
                                           onPressed: () {
                                             GroupSearchBloc.get(context).add(
+                                                const reloadTargetsData(
+                                                    Employyyy: []));
+                                            GroupSearchBloc.get(context).add(
                                                 const reloadSnapShots(
                                                     snapyy: []));
                                             GroupSearchBloc.get(context).add(
@@ -371,120 +307,276 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                           )),
                                     ),
 
+                              (state.submission == Submission.noDataFound)
+                                  ? const Text(
+                                      "No Data Found",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 30),
+                                    )
+                                  : const Text(
+                                      "",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 25),
+                                    ),
+                              (state.employeeNamesList.isNotEmpty)
+                                  ? const Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          "Targets Data :",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 25),
+                                        ),
+                                      ],
+                                    )
+                                  : const Text(
+                                      "",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 25),
+                                    ),
+
+                              ///employee Data
+                              FxBox.h24,
+
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: (state.submission ==
+                                                Submission.noDataFound)
+                                            ? const Center(
+                                                child: Text(
+                                                "No data found Yet!",
+                                                style: TextStyle(
+                                                    color: AppColors.blueB,
+                                                    fontSize: 25,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ))
+                                            : GridView.builder(
+                                                shrinkWrap: true,
+                                                physics:
+                                                    const NeverScrollableScrollPhysics(),
+                                                itemCount: state
+                                                    .employeeNamesList.length,
+                                                gridDelegate: Responsive
+                                                        .isMobile(context)
+                                                    ? const SliverGridDelegateWithFixedCrossAxisCount(
+                                                        crossAxisCount: 1,
+                                                        crossAxisSpacing: 45,
+                                                        mainAxisSpacing: 45,
+                                                        mainAxisExtent: 350,
+                                                      )
+                                                    : Responsive.isTablet(
+                                                            context)
+                                                        ? const SliverGridDelegateWithFixedCrossAxisCount(
+                                                            crossAxisCount: 2,
+                                                            crossAxisSpacing:
+                                                                45,
+                                                            mainAxisSpacing: 45,
+                                                            mainAxisExtent: 350,
+                                                          )
+                                                        : MediaQuery.of(context)
+                                                                    .size
+                                                                    .width <
+                                                                1500
+                                                            ? SliverGridDelegateWithMaxCrossAxisExtent(
+                                                                maxCrossAxisExtent:
+                                                                    MediaQuery.of(context)
+                                                                            .size
+                                                                            .width *
+                                                                        0.24,
+                                                                crossAxisSpacing:
+                                                                    45,
+                                                                mainAxisSpacing:
+                                                                    45,
+                                                                mainAxisExtent:
+                                                                    350,
+                                                              )
+                                                            : SliverGridDelegateWithMaxCrossAxisExtent(
+                                                                maxCrossAxisExtent:
+                                                                    MediaQuery.of(context)
+                                                                            .size
+                                                                            .width *
+                                                                        0.24,
+                                                                crossAxisSpacing:
+                                                                    45,
+                                                                mainAxisSpacing:
+                                                                    45,
+                                                                mainAxisExtent:
+                                                                    350,
+                                                              ),
+                                                itemBuilder: (context, index) {
+                                                  final employee = state
+                                                      .employeeNamesList[index];
+                                                  return _contactUi(
+                                                    onDelete: () {
+                                                      _showDeleteDialog(context,
+                                                          employee.name ?? '');
+                                                    },
+                                                    message: employee
+                                                                .blackListed ==
+                                                            'True'
+                                                        ? "Blacklisted person"
+                                                        : '',
+                                                    // Conditional display based on whether the employee is blacklisted
+                                                    Icoon: employee
+                                                                .blackListed ==
+                                                            'True'
+                                                        ? const Icon(
+                                                            Icons
+                                                                .warning_amber_outlined,
+                                                            color: Colors.red,
+                                                            size: 50,
+                                                          )
+                                                        : null,
+                                                    id: employee.sId ?? '',
+                                                    name: employee.name ?? '',
+                                                    profession:
+                                                        'Software Developer',
+                                                    imagesrc:
+                                                        employee.imagePath ??
+                                                            '',
+                                                    phoneNum:
+                                                        employee.phone ?? '',
+                                                    email: employee.email ?? '',
+                                                    userId:
+                                                        employee.userId ?? '',
+                                                    onUpdate: () {
+                                                      _showUpdateDialog(
+                                                          context, employee);
+                                                    },
+                                                  );
+                                                },
+                                              ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+
                               FxBox.h16,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  (state.snapShots.isNotEmpty)
+                                      ? const Text(
+                                          "Frames Where Targets Appeard in :",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 25),
+                                        )
+                                      : const Text(
+                                          "",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 25),
+                                        ),
+                                ],
+                              ),
 
                               ///frames Data
-                              state.submission == Submission.noDataFound
-                                  ? const Padding(
-                                      padding: EdgeInsets.all(10.0),
-                                      child: Text(
-                                        "This Person Is   Not In The Video",
-                                        style: TextStyle(
-                                          color: Colors.red,
-                                          fontWeight: FontWeight.w900,
-                                          fontSize: 25,
-                                        ),
-                                      ))
-                                  : Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: SingleChildScrollView(
-                                        child: Column(
-                                          children: [
-                                            SizedBox(
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              child: (state.submission ==
-                                                      Submission.noDataFound)
-                                                  ? const Center(
-                                                      child: Text(
-                                                      "No data found Yet!",
-                                                      style: TextStyle(
-                                                          color:
-                                                              AppColors.blueB,
-                                                          fontSize: 25,
-                                                          fontWeight:
-                                                              FontWeight.w600),
-                                                    ))
-                                                  : GridView.builder(
-                                                      shrinkWrap: true,
-                                                      physics:
-                                                          const NeverScrollableScrollPhysics(),
-                                                      itemCount: state
-                                                          .snapShots.length,
-                                                      gridDelegate: Responsive
-                                                              .isMobile(context)
-                                                          ? const SliverGridDelegateWithFixedCrossAxisCount(
-                                                              crossAxisCount: 1,
-                                                              crossAxisSpacing:
-                                                                  45,
-                                                              mainAxisSpacing:
-                                                                  45,
-                                                              mainAxisExtent:
-                                                                  350,
-                                                            )
-                                                          : Responsive.isTablet(
-                                                                  context)
-                                                              ? const SliverGridDelegateWithFixedCrossAxisCount(
-                                                                  crossAxisCount:
-                                                                      2,
-                                                                  crossAxisSpacing:
-                                                                      45,
-                                                                  mainAxisSpacing:
-                                                                      45,
-                                                                  mainAxisExtent:
-                                                                      350,
-                                                                )
-                                                              : MediaQuery.of(context)
-                                                                          .size
-                                                                          .width <
-                                                                      1500
-                                                                  ? SliverGridDelegateWithMaxCrossAxisExtent(
-                                                                      maxCrossAxisExtent:
-                                                                          MediaQuery.of(context).size.width *
-                                                                              0.24,
-                                                                      crossAxisSpacing:
-                                                                          45,
-                                                                      mainAxisSpacing:
-                                                                          45,
-                                                                      mainAxisExtent:
-                                                                          350,
-                                                                    )
-                                                                  : SliverGridDelegateWithMaxCrossAxisExtent(
-                                                                      maxCrossAxisExtent:
-                                                                          MediaQuery.of(context).size.width *
-                                                                              0.24,
-                                                                      crossAxisSpacing:
-                                                                          45,
-                                                                      mainAxisSpacing:
-                                                                          45,
-                                                                      mainAxisExtent:
-                                                                          350,
-                                                                    ),
-                                                      itemBuilder:
-                                                          (context, index) {
-                                                        final image = state
-                                                            .snapShots[index];
 
-                                                        final data_time =
-                                                            state.data[index];
-                                                        return imagesListWidget(
-                                                            onDownloadPressed:
-                                                                () {
-                                                              _downloadImage(
-                                                                  data: image,
-                                                                  downloadName:
-                                                                      data_time);
-                                                            },
-                                                            image64: image,
-                                                            text: data_time);
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: (state.submission ==
+                                                Submission.noDataFound)
+                                            ? const Center(
+                                                child: Text(
+                                                "No data found Yet!",
+                                                style: TextStyle(
+                                                    color: AppColors.blueB,
+                                                    fontSize: 25,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ))
+                                            : GridView.builder(
+                                                shrinkWrap: true,
+                                                physics:
+                                                    const NeverScrollableScrollPhysics(),
+                                                itemCount:
+                                                    state.snapShots.length,
+                                                gridDelegate: Responsive
+                                                        .isMobile(context)
+                                                    ? const SliverGridDelegateWithFixedCrossAxisCount(
+                                                        crossAxisCount: 1,
+                                                        crossAxisSpacing: 45,
+                                                        mainAxisSpacing: 45,
+                                                        mainAxisExtent: 350,
+                                                      )
+                                                    : Responsive.isTablet(
+                                                            context)
+                                                        ? const SliverGridDelegateWithFixedCrossAxisCount(
+                                                            crossAxisCount: 2,
+                                                            crossAxisSpacing:
+                                                                45,
+                                                            mainAxisSpacing: 45,
+                                                            mainAxisExtent: 350,
+                                                          )
+                                                        : MediaQuery.of(context)
+                                                                    .size
+                                                                    .width <
+                                                                1500
+                                                            ? SliverGridDelegateWithMaxCrossAxisExtent(
+                                                                maxCrossAxisExtent:
+                                                                    MediaQuery.of(context)
+                                                                            .size
+                                                                            .width *
+                                                                        0.24,
+                                                                crossAxisSpacing:
+                                                                    45,
+                                                                mainAxisSpacing:
+                                                                    45,
+                                                                mainAxisExtent:
+                                                                    350,
+                                                              )
+                                                            : SliverGridDelegateWithMaxCrossAxisExtent(
+                                                                maxCrossAxisExtent:
+                                                                    MediaQuery.of(context)
+                                                                            .size
+                                                                            .width *
+                                                                        0.24,
+                                                                crossAxisSpacing:
+                                                                    45,
+                                                                mainAxisSpacing:
+                                                                    45,
+                                                                mainAxisExtent:
+                                                                    350,
+                                                              ),
+                                                itemBuilder: (context, index) {
+                                                  final image =
+                                                      state.snapShots[index];
+
+                                                  final data_time =
+                                                      state.data[index];
+                                                  return imagesListWidget(
+                                                      onDownloadPressed: () {
+                                                        _downloadImage(
+                                                            data: image,
+                                                            downloadName:
+                                                                data_time);
                                                       },
-                                                    ),
-                                            ),
-                                          ],
-                                        ),
+                                                      image64: image,
+                                                      text: data_time);
+                                                },
+                                              ),
                                       ),
-                                    ),
+                                    ],
+                                  ),
+                                ),
+                              ),
 
                               // ),
                             ],
@@ -631,6 +723,9 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                       child: ElevatedButton.icon(
                                           onPressed: () {
                                             GroupSearchBloc.get(context).add(
+                                                const reloadTargetsData(
+                                                    Employyyy: []));
+                                            GroupSearchBloc.get(context).add(
                                                 const reloadSnapShots(
                                                     snapyy: []));
                                             GroupSearchBloc.get(context).add(
@@ -657,7 +752,7 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                               FxBox.h16,
 
                               ///frames Data
-
+                              Text("Frames Where Targets Appeard in :"),
                               Padding(
                                 padding: const EdgeInsets.all(10.0),
                                 child: SingleChildScrollView(
@@ -984,7 +1079,360 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
       EasyLoading.showError('لا يوجد صورة');
     }
   }
+
+  Widget _contactUi({
+    required String name,
+    required String profession,
+    required String phoneNum,
+    required String email,
+    required String userId,
+    required String imagesrc,
+    required String id,
+    String? message,
+    Icon? Icoon,
+    required Function onUpdate,
+    required Function onDelete,
+  }) {
+    return Container(
+      width: 300,
+      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 18),
+      decoration: BoxDecoration(
+          color: AppColors.grey.withOpacity(0.3),
+
+          // const Color.fromARGB(255, 143, 188, 211),
+          borderRadius: BorderRadius.circular(12.0)),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            // mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 70,
+                width: 70,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(6.0),
+                ),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FullScreenImage(
+                            text: name,
+                            imageUrl:
+                                "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/$imagesrc"),
+                      ),
+                    );
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(6.0),
+                    child: Image.network(
+                      "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/$imagesrc",
+                      // Images.profileImage,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+              Tooltip(message: message, child: Icoon),
+              // BlocProvider(
+              //   create: (context) => GroupSearchBloc(),
+              //   child: BlocBuilder<GroupSearchBloc, AllEmployeesState>(
+              //     builder: (context, state) {
+              //       return
+              PopupMenuButton<String>(
+                icon: const Icon(Icons.more_horiz, color: Colors.black),
+                onSelected: (String choice) {
+                  if (choice == 'Edit') {
+                    onUpdate();
+                    // Handle edit action
+                  } else if (choice == 'Delete') {
+                    // Handle delete action
+
+                    onDelete();
+                  }
+                },
+                itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                  const PopupMenuItem<String>(
+                    value: 'Edit',
+                    child: Text('Edit'),
+                  ),
+                  const PopupMenuItem<String>(
+                    value: 'Delete',
+                    child: Text('Delete'),
+                  ),
+                ],
+              ),
+              //     },
+              //   ),
+              // ),
+            ],
+          ),
+          FxBox.h24,
+          ConstText.lightText(
+            message: "Name",
+            color: Colors.white,
+            text: name,
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+          ),
+          FxBox.h8,
+          ConstText.lightText(
+            message: "UserID",
+            text: userId,
+            fontSize: 14,
+            color: Colors.white,
+            fontWeight: FontWeight.w400,
+          ),
+          FxBox.h24,
+          Tooltip(
+            message: "Job Title",
+            child: _iconWithText(
+                icon: const Icon(
+                  Icons.badge_outlined,
+                  color: Colors.white,
+                ),
+                text: profession),
+          ),
+          FxBox.h28,
+          Tooltip(
+            message: "Phone Contact",
+            child: _iconWithText(
+                icon: const Icon(
+                  Icons.contact_phone,
+                  color: Colors.white,
+                ),
+                text: phoneNum),
+          ),
+          FxBox.h28,
+          Tooltip(
+            message: "Email Address",
+            child: _iconWithText(
+                icon: const Icon(
+                  Icons.email,
+                  color: Colors.white,
+                ),
+                text: email),
+          ),
+          // FxBox.h24,
+        ],
+      ),
+    );
+  }
+
+  Widget _iconWithText({
+    required Icon icon,
+    required String text,
+  }) {
+    return Row(
+      children: [
+        icon,
+        FxBox.w16,
+        ConstText.lightText(
+          color: Colors.white,
+          text: text,
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+        ),
+      ],
+    );
+  }
+
+  void _showDeleteDialog(BuildContext context, String name) {
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          icon: const Icon(
+            Icons.warning,
+            color: Colors.red,
+          ),
+          title: Text(
+            "Are you sure you want to remove this person from the organization?"
+                .tr(),
+            style: const TextStyle(color: Colors.black),
+          ),
+          actions: [
+            TextButton(
+                child: Text(
+                  "yes".tr(),
+                  style: const TextStyle(color: AppColors.thinkRedColor),
+                ),
+                onPressed: () {
+                  context.read<GroupSearchBloc>().add(
+                        DeletePersonByNameEvent(
+                          companyNameRepo,
+                          name,
+                        ),
+                      );
+
+                  Navigator.of(ctx).pop();
+                }),
+            TextButton(
+                child: Text(
+                  "no".tr(),
+                  style: const TextStyle(color: AppColors.green),
+                ),
+                onPressed: () => Navigator.of(ctx).pop()),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showUpdateDialog(BuildContext context, Dataaa employee) {
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          title: const SizedBox(width: 500, child: Text("Update Employee")),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  cursorColor: Colors.white,
+                  style: const TextStyle(color: Colors.white),
+                  initialValue: employee.name,
+                  decoration: const InputDecoration(labelText: 'Name'),
+                  onChanged: (value) async {
+                    if (value.isEmpty) {
+                      GroupSearchBloc.get(context).add(
+                        AdduserId(
+                          userId: employee.name!,
+                        ),
+                      );
+                    } else {
+                      GroupSearchBloc.get(context).add(
+                        AddpersonName(personName: value),
+                      );
+                    }
+                  },
+                ),
+                FxBox.h24,
+                TextFormField(
+                  cursorColor: Colors.white,
+                  style: const TextStyle(color: Colors.white),
+                  initialValue: employee.userId,
+                  decoration: const InputDecoration(labelText: 'UserId'),
+                  onChanged: (value) async {
+                    if (value.isEmpty) {
+                      GroupSearchBloc.get(context).add(
+                        AdduserId(
+                          userId: employee.userId!,
+                        ),
+                      );
+                    } else {
+                      GroupSearchBloc.get(context).add(
+                        AdduserId(
+                          userId: value,
+                        ),
+                      );
+                    }
+                  },
+                ),
+                FxBox.h24,
+                TextFormField(
+                  keyboardType: TextInputType.phone,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  cursorColor: Colors.white,
+                  style: const TextStyle(color: Colors.white),
+                  initialValue: employee.phone,
+                  decoration: const InputDecoration(labelText: 'Phone Number'),
+                  onChanged: (value) async {
+                    if (value.isEmpty) {
+                      GroupSearchBloc.get(context).add(
+                        AdduserId(
+                          userId: employee.phone!,
+                        ),
+                      );
+                    } else {
+                      GroupSearchBloc.get(context).add(
+                        AddphoneNum(
+                          phoneNum: value,
+                        ),
+                      );
+                    }
+                  },
+                ),
+                FxBox.h24,
+                TextFormField(
+                  cursorColor: Colors.white,
+                  style: const TextStyle(color: Colors.white),
+                  initialValue: employee.email,
+                  decoration: const InputDecoration(labelText: 'Email'),
+                  onChanged: (value) async {
+                    if (value.isEmpty) {
+                      GroupSearchBloc.get(context).add(
+                        AdduserId(
+                          userId: employee.email!,
+                        ),
+                      );
+                    } else {
+                      GroupSearchBloc.get(context).add(
+                        Addemail(
+                          email: value,
+                        ),
+                      );
+                    }
+                  },
+                ),
+                FxBox.h24,
+                FxBox.h24,
+                SizedBox(
+                  height: 100,
+                  child: Image.network(
+                    "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/${employee.imagePath}",
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text(
+                'Cancel',
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                GroupSearchBloc.get(context).add(
+                  UpdateEmployeeEvent(
+                    companyName: companyNameRepo,
+                    id: employee.sId ?? '',
+
+                    // userId: state.userId,
+                    // companyName: state.companyName,
+                  ),
+                );
+                Navigator.of(context).pop();
+              },
+              child: const Text('Update'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
+
 // Stack(
 //         fit: StackFit.expand,
 //         children: [

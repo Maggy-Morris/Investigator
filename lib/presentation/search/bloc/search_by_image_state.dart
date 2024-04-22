@@ -29,12 +29,13 @@ class SearchByImageState extends Equatable {
     this.blacklis = const[],
     this.textAccuracy,
     this.selectedOption = "",
+        this.isSearching = false,
+
     this.id = '',
     this.phoneNum = "",
     this.email = "",
     this.profession = "",
     this.userId = "",
-    this.isSearching = false,
     this.personName = "",
     this.employeeNamesList = const [],
     this.imageWidget,
@@ -56,9 +57,10 @@ class SearchByImageState extends Equatable {
     String? email,
     String? profession,
     String? userId,
+        String? personName,
+
     bool? isSearching,
     List<Dataa>? employeeNamesList,
-    String? personName,
     List<List<double>>? boxes,
     Widget? imageWidget,
     List<String>? result,
@@ -75,11 +77,11 @@ class SearchByImageState extends Equatable {
       email: email ?? this.email,
       profession: profession ?? this.profession,
       phoneNum: phoneNum ?? this.phoneNum,
+      personName: personName ?? this.personName,
 
       ////////////////////////////////////
       isSearching: isSearching ?? this.isSearching,
       employeeNamesList: employeeNamesList ?? this.employeeNamesList,
-      personName: personName ?? this.personName,
 
       result: result ?? this.result,
       boxes: boxes ?? this.boxes,
@@ -93,6 +95,12 @@ class SearchByImageState extends Equatable {
   @override
   List<Object?> get props => [
     blacklis,
+    email,
+    phoneNum,
+    profession,
+    userId,
+        id,
+        personName,
         textAccuracy,
         selectedOption,
         imageWidget,
@@ -101,9 +109,7 @@ class SearchByImageState extends Equatable {
         companyName,
         image,
         submission,
-        id,
         isSearching,
-        personName,
         employeeNamesList,
       ];
 }

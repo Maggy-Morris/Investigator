@@ -456,10 +456,35 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                         .start,
                                                                 children: [
                                                                   const Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .spaceBetween,
                                                                     children: [
+                                                                      Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceBetween,
+                                                                        children: [
+                                                                          Text(
+                                                                            'BlackListed:',
+                                                                            style: TextStyle(
+                                                                                fontWeight: FontWeight.w900,
+                                                                                color: AppColors.white,
+                                                                                fontSize: 20.0),
+                                                                          ),
+                                                                          SizedBox(
+                                                                            width:
+                                                                                15,
+                                                                          ),
+                                                                          Icon(
+                                                                            Icons.warning_amber_outlined,
+                                                                            color:
+                                                                                Colors.red,
+                                                                            size:
+                                                                                35,
+                                                                          ),
+                                                                          // SizedBox(
+                                                                          //   width:
+                                                                          //       50,
+                                                                          // ),
+                                                                        ],
+                                                                      ),
                                                                       Tooltip(
                                                                         message:
                                                                             "If the person is BlackListed he has no access to any room if not choose the rooms he is authorized to enter",
@@ -470,29 +495,6 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                           color:
                                                                               Colors.white,
                                                                         ),
-                                                                      ),
-                                                                      Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.spaceBetween,
-                                                                        // mainAxisSize:
-                                                                        //     MainAxisSize
-                                                                        //         .min,
-                                                                        children: [
-                                                                          Text(
-                                                                            'BlackListed:',
-                                                                            style: TextStyle(
-                                                                                fontWeight: FontWeight.w900,
-                                                                                color: AppColors.white,
-                                                                                fontSize: 20.0),
-                                                                          ),
-                                                                          Icon(
-                                                                            Icons.warning_amber_outlined,
-                                                                            color:
-                                                                                Colors.red,
-                                                                            size:
-                                                                                35,
-                                                                          )
-                                                                        ],
                                                                       ),
                                                                     ],
                                                                   ),
@@ -506,7 +508,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                             color:
                                                                                 Colors.white)),
                                                                     value:
-                                                                        'Yes',
+                                                                        'True',
                                                                     groupValue:
                                                                         state
                                                                             .selectedOption,
@@ -528,7 +530,8 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                         style: TextStyle(
                                                                             color:
                                                                                 Colors.white)),
-                                                                    value: 'No',
+                                                                    value:
+                                                                        'False',
                                                                     groupValue:
                                                                         state
                                                                             .selectedOption,
@@ -1579,6 +1582,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
           ),
           FxBox.h24,
           ConstText.lightText(
+            message: "Name",
             color: Colors.white,
             text: name,
             fontSize: 18,
@@ -1586,6 +1590,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
           ),
           FxBox.h8,
           ConstText.lightText(
+            message: "UserID",
             text: userId,
             fontSize: 14,
             color: Colors.white,

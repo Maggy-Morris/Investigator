@@ -1,7 +1,7 @@
 part of 'group_search_bloc.dart';
 
 class GroupSearchState extends Equatable {
-  final List<Data> employeeNamesList;
+  final List<Dataaa> employeeNamesList;
   final List<String> companiesNamesList;
   final PlatformFile? video;
   final PlatformFile? imageFile;
@@ -9,6 +9,15 @@ class GroupSearchState extends Equatable {
   List<String> snapShots;
   final String accuracy;
   final Submission submission;
+  final String responseMessage;
+
+  String personName;
+  final String id;
+
+  final String phoneNum;
+  final String email;
+  final String userId;
+  final String profession;
 
   final String companyName;
   String filterCase;
@@ -16,6 +25,13 @@ class GroupSearchState extends Equatable {
   final List<String> data;
 
   GroupSearchState({
+    this.responseMessage = '',
+    this.id = '',
+    this.phoneNum = "",
+    this.email = "",
+    this.profession = "",
+    this.userId = "",
+    this.personName = "",
     this.accuracy = '',
     this.imageWidget,
     this.snapShots = const [],
@@ -31,13 +47,20 @@ class GroupSearchState extends Equatable {
   });
 
   GroupSearchState copyWith({
-     String? accuracy,
+    String?responseMessage,
+    String? id,
+    String? phoneNum,
+    String? email,
+    String? profession,
+    String? userId,
+    String? personName,
+    String? accuracy,
     List<String>? snapShots,
     Widget? imageWidget,
     PlatformFile? video,
     PlatformFile? imageFile,
     List<String>? companiesNamesList,
-    List<Data>? employeeNamesList,
+    List<Dataaa>? employeeNamesList,
     String? companyName,
     String? filterCase,
     String? personId,
@@ -45,7 +68,14 @@ class GroupSearchState extends Equatable {
     List<String>? data,
   }) {
     return GroupSearchState(
-        accuracy :   accuracy ?? this.accuracy,
+      responseMessage : responseMessage ?? this.responseMessage,
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      email: email ?? this.email,
+      profession: profession ?? this.profession,
+      phoneNum: phoneNum ?? this.phoneNum,
+      personName: personName ?? this.personName,
+      accuracy: accuracy ?? this.accuracy,
       snapShots: snapShots ?? this.snapShots,
       imageWidget: imageWidget ?? this.imageWidget,
       data: data ?? this.data,
@@ -62,7 +92,14 @@ class GroupSearchState extends Equatable {
 
   @override
   List<Object?> get props => [
-    accuracy,
+    responseMessage,
+        accuracy,
+        email,
+        phoneNum,
+        profession,
+        userId,
+        id,
+        personName,
         snapShots,
         imageWidget,
         data,

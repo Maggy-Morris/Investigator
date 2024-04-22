@@ -164,7 +164,6 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                               children: [
                                                 GestureDetector(
                                                   onTap: () async {
-                                                    // FilePickerResult? result =
                                                     await FilePicker.platform
                                                         .pickFiles(
                                                       type: FileType.image,

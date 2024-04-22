@@ -3,22 +3,26 @@ import 'package:flutter/material.dart';
 class ConstText {
   static lightText({
     required String text,
+    String message = "",
     double? fontSize,
     Color? color,
     FontWeight? fontWeight,
     TextAlign? textAlign,
   }) {
-    return Text(
-      text,
-      softWrap: true,
-      maxLines: 1,
-      textAlign: textAlign,
-      style: TextStyle(
-        fontSize: fontSize ?? 16,
-        color: color,
-        fontWeight: fontWeight,
+    return Tooltip(
+      message: message,
+      child: Text(
+        text,
+        softWrap: true,
+        maxLines: 1,
+        textAlign: textAlign,
+        style: TextStyle(
+          fontSize: fontSize ?? 16,
+          color: color,
+          fontWeight: fontWeight,
+        ),
+        overflow: TextOverflow.ellipsis,
       ),
-      overflow: TextOverflow.ellipsis,
     );
   }
 

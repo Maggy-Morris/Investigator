@@ -14,6 +14,7 @@ import '../models/call_back_model.dart';
 import '../models/delete_model.dart';
 import '../models/employee_model.dart';
 import '../models/search_by_image_model.dart';
+import '../models/search_by_video_in_group_search.dart';
 import '../models/sigup_model.dart';
 import '../models/update_model.dart';
 import '../models/update_password_model.dart';
@@ -479,13 +480,45 @@ class RemoteProvider {
 
       if (callBack.isNotEmpty) {
         SearchByImageModel callBackList = SearchByImageModel.fromJson(callBack);
-        print(callBack);
         return callBackList;
       } else {
         return SearchByImageModel();
       }
     } catch (e) {
       return SearchByImageModel();
+    }
+  }
+
+  ///Search for person in the database by Video
+  Future<SearchByVideoInGroupSearch> searchForpersonByVideoGroupSearch({
+    required PlatformFile? video,
+    required String similarityScore,
+    required String filterCase,
+    required String companyName,
+  }) async {
+    try {
+      Map<String, String> body = {
+        "collection_name": companyName,
+        "similarity_score": similarityScore,
+        "search_type": filterCase,
+      };
+
+      Map<String, dynamic>? callBack =
+          await RemoteDataSource().postMultiPartFiles(
+        endPoint: "/search_in_video",
+        body: body,
+        files: [
+          video!,
+        ],
+      );
+
+      if (callBack != null) {
+        return SearchByVideoInGroupSearch.fromJson(callBack);
+      } else {
+        return SearchByVideoInGroupSearch();
+      }
+    } catch (e) {
+      return SearchByVideoInGroupSearch();
     }
   }
 
@@ -500,19 +533,17 @@ class RemoteProvider {
     try {
       Map<String, String> body = {
         "similarity_score": similarityScore,
-        "name": "personName",
+        // "name": "personName",
       };
 
-      Map<String, dynamic>? callBack =
-          await RemoteDataSource().postMultiPartFiles(
-        endPoint: "/find_target",
-        body: body,
-        files: [
-          video!,
-          // image!,
-          ...images ?? [],
-        ],
-      );
+      Map<String, dynamic>? callBack = await RemoteDataSource()
+          .postMultiPartListOfListFiles(
+              endPoint: "/find_target",
+              body: body,
+              files: {
+            "video": video,
+            "imagesList": images,
+          });
 
       if (callBack != null && callBack.isNotEmpty) {
         return SearchByVideoAndImage.fromJson(callBack);

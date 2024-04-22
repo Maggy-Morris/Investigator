@@ -26,6 +26,7 @@ import 'dart:html' as html;
 import '../../../authentication/authentication_repository.dart';
 import '../../../core/remote_provider/remote_data_source.dart';
 import '../../../core/widgets/fullscreenImage.dart';
+import '../../all_employees/screens/text.dart';
 import '../../camera_controller/cubit/photo_app_cubit.dart';
 import '../bloc/home_bloc.dart';
 
@@ -247,6 +248,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                 children: [
                                                   _images?.isNotEmpty == true
                                                       ? CarouselSlider(
+                                                        
                                                           items: _images ?? [],
                                                           options:
                                                               CarouselOptions(
@@ -431,7 +433,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                   ? const Padding(
                                       padding: EdgeInsets.all(10.0),
                                       child: Text(
-                                        "This Person Is   Not In The Video",
+                                        "This Person Is Not In The Video",
                                         style: TextStyle(
                                           color: Colors.red,
                                           fontWeight: FontWeight.w900,
@@ -1038,29 +1040,3 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
     }
   }
 }
-// Stack(
-//         fit: StackFit.expand,
-//         children: [
-//         ClipRRect(
-//           borderRadius: BorderRadius.circular(6.0),
-//           child: Image.memory(
-//             _decodeBase64Image(base64Image: image64),
-//             fit: BoxFit.cover,
-//           ),
-//         ),
-//         Positioned(
-//           bottom: 0,
-//           left: 0,
-//           child: Container(
-//             padding: EdgeInsets.all(8),
-//             color: Colors.black.withOpacity(0.5),
-//             child: Text(
-//               'Your Texttttttttttttttttttttttttttttttttttttt',
-//               style: TextStyle(
-//                 color: Colors.white,
-//                 fontSize: 16,
-//               ),
-//             ),
-//           ),
-//         ),
-//       ])
