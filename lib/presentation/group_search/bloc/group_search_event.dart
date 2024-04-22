@@ -7,6 +7,15 @@ class GroupSearchEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+
+class selectedFiltering extends GroupSearchEvent {
+  final String filterCase;
+
+  const selectedFiltering({required this.filterCase});
+
+  @override
+  List<Object?> get props => [filterCase];
+}
 class ImageToSearchForEmployee extends GroupSearchEvent {
   final Widget imageWidget;
 

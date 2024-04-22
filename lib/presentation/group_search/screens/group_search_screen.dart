@@ -99,16 +99,15 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                               color: AppColors.white),
                         ),
                         FxBox.h24,
-                        // const Tooltip(
-                        //   message:
-                        //       "Choose The Accuracy You Want To Search For A Person With Using The SliderBar \n        Note That If the Video Resolution Is Bad Try to Choose Low Accuracy ",
-                        //   child: Icon(
-                        //     Icons.info_outline_rounded,
-                        //     color: AppColors.white,
-                        //     size: 25,
-                        //   ),
-                        // ),
-
+                        const Tooltip(
+                          message:
+                              "Choose The Accuracy You Want To Search For A Person With Using The SliderBar \n        Note That If the Video Resolution Is Bad Try to Choose Low Accuracy ",
+                          child: Icon(
+                            Icons.info_outline_rounded,
+                            color: AppColors.white,
+                            size: 25,
+                          ),
+                        ),
                         if (Responsive.isWeb(context))
                           Column(
                             children: [
@@ -176,29 +175,29 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                               Padding(
                                 padding: const EdgeInsets.all(15.0),
                                 child: SizedBox(
-                                  width: 250,
+                                  width: 295,
                                   child: singleSelectGenericDropdown<String>(
                                     // titleName: "Filter By:",
                                     isEnabled: true,
                                     isRequired: false,
                                     filled: true,
                                     // showSearch: true,
-                                    // selectedItem: state.filterCase!.isEmpty
-                                    //     ? "All"
-                                    //     : state.filterCase,
+                                    selectedItem: state.filterCase.isEmpty
+                                        ? "All"
+                                        : state.filterCase,
                                     onChanged: (value) {
                                       if (value?.isNotEmpty ?? false) {
-                                        // AllEmployeesBloc.get(context).add(
-                                        //     selectedFiltering(
-                                        //         filterCase: value ?? ""));
+                                        GroupSearchBloc.get(context).add(
+                                            selectedFiltering(
+                                                filterCase: value ?? ""));
                                         // if (value == "All") {
-                                        //   AllEmployeesBloc.get(context)
+                                        //   GroupSearchBloc.get(context)
                                         //       .add(const GetEmployeeNamesEvent());
                                         // } else if (value == "Normal") {
-                                        //   AllEmployeesBloc.get(context).add(
+                                        //   GroupSearchBloc.get(context).add(
                                         //       const GetEmployeeNormalNamesEvent());
                                         // } else if (value == "BlackListed") {
-                                        //   AllEmployeesBloc.get(context).add(
+                                        //   GroupSearchBloc.get(context).add(
                                         //       const GetEmployeeBlackListedNamesEvent());
                                         // }
                                       }

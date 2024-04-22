@@ -14,7 +14,8 @@ part 'group_search_event.dart';
 part 'group_search_state.dart';
 
 class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
-  static GroupSearchBloc get(context) => BlocProvider.of<GroupSearchBloc>(context);
+  static GroupSearchBloc get(context) =>
+      BlocProvider.of<GroupSearchBloc>(context);
   GroupSearchBloc() : super(GroupSearchState()) {
     on<GroupSearchEvent>(_onGroupSearchEvent);
     // on<DataEvent>(_onDataEvent);
@@ -31,7 +32,7 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
 
     on<imageevent>(_onimageevent);
     on<videoevent>(_onvideoevent);
-    on<getPersonName>(_ongetPersonName);
+    on<selectedFiltering>(_oselectedFiltering);
 
     /// functionality Company get employees Data
     // on<GetPersonByNameEvent>(_onGetPersonByNameEvent);
@@ -46,7 +47,8 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
     on<DeletePersonByIdEvent>(_onDeletePersonByIdEvent);
   }
 
-  _onGroupSearchEvent(GroupSearchEvent event, Emitter<GroupSearchState> emit) async {}
+  _onGroupSearchEvent(
+      GroupSearchEvent event, Emitter<GroupSearchState> emit) async {}
 
   // _onDataEvent(DataEvent event, Emitter<GroupSearchState> emit) async {
   //   add(const GetCamerasNames());
@@ -61,23 +63,25 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
     // Your logic here to fetch data and determine the imageWidget
   }
 
-  _ongetPersonName(getPersonName event, Emitter<GroupSearchState> emit) async {
+  _oselectedFiltering(
+      selectedFiltering event, Emitter<GroupSearchState> emit) async {
     emit(state.copyWith(
-        personName: event.personName, submission: Submission.editing));
+        filterCase: event.filterCase, submission: Submission.editing));
   }
 
   _onGetAccuracy(GetAccuracy event, Emitter<GroupSearchState> emit) async {
     emit(state.copyWith(
         accuracy: event.accuracy, submission: Submission.editing));
   }
-  _onreloadSnapShots(reloadSnapShots event, Emitter<GroupSearchState> emit) async {
+
+  _onreloadSnapShots(
+      reloadSnapShots event, Emitter<GroupSearchState> emit) async {
     emit(state.copyWith(
         snapShots: event.snapyy, submission: Submission.editing));
   }
 
-  
-
-  _onAddCompanyName(AddCompanyName event, Emitter<GroupSearchState> emit) async {
+  _onAddCompanyName(
+      AddCompanyName event, Emitter<GroupSearchState> emit) async {
     emit(state.copyWith(
         companyName: event.companyName, submission: Submission.editing));
   }
@@ -93,7 +97,8 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
 
   /// Add Company Handle
 
-  _onAddCompanyEvent(AddCompanyEvent event, Emitter<GroupSearchState> emit) async {
+  _onAddCompanyEvent(
+      AddCompanyEvent event, Emitter<GroupSearchState> emit) async {
     emit(state.copyWith(submission: Submission.loading));
     await RemoteProvider()
         .addCompany(
@@ -176,8 +181,8 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
 /////////////////////////////////////////////
 
   ///search by video and
-  _onSearchForEmployeeByVideoEvent(
-      SearchForEmployeeByVideoEvent event, Emitter<GroupSearchState> emit) async {
+  _onSearchForEmployeeByVideoEvent(SearchForEmployeeByVideoEvent event,
+      Emitter<GroupSearchState> emit) async {
     emit(state.copyWith(submission: Submission.loading));
     await RemoteProvider()
         .searchForpersonByVideo(

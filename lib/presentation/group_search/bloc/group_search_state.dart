@@ -11,7 +11,7 @@ class GroupSearchState extends Equatable {
   final Submission submission;
 
   final String companyName;
-  String personName;
+  String filterCase;
   final String personId;
   final List<String> data;
 
@@ -22,7 +22,7 @@ class GroupSearchState extends Equatable {
     this.data = const [],
     this.imageFile,
     this.video,
-    this.personName = "",
+    this.filterCase = "",
     this.personId = "",
     this.companyName = "",
     this.companiesNamesList = const [],
@@ -39,7 +39,7 @@ class GroupSearchState extends Equatable {
     List<String>? companiesNamesList,
     List<Data>? employeeNamesList,
     String? companyName,
-    String? personName,
+    String? filterCase,
     String? personId,
     Submission? submission,
     List<String>? data,
@@ -52,7 +52,7 @@ class GroupSearchState extends Equatable {
       video: video ?? this.video,
       imageFile: imageFile ?? this.imageFile,
       personId: personId ?? this.personId,
-      personName: personName ?? this.personName,
+      filterCase: filterCase ?? this.filterCase,
       companiesNamesList: companiesNamesList ?? this.companiesNamesList,
       companyName: companyName ?? this.companyName,
       employeeNamesList: employeeNamesList ?? this.employeeNamesList,
@@ -68,7 +68,7 @@ class GroupSearchState extends Equatable {
         data,
         video,
         imageFile,
-        personName,
+        filterCase,
         personId,
         companiesNamesList,
         companyName,
