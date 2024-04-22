@@ -62,6 +62,15 @@ class imageevent extends HomeEvent {
   List<Object?> get props => [imageFile];
 }
 
+
+class imagesList extends HomeEvent {
+  final List<PlatformFile>? imagesListdata;
+
+  const imagesList({required this.imagesListdata});
+
+  @override
+  List<Object?> get props => [imagesListdata];
+}
 class videoevent extends HomeEvent {
   final PlatformFile video;
 

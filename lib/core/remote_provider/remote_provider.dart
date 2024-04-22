@@ -492,7 +492,8 @@ class RemoteProvider {
   ///Search for person in the database by Video
   Future<SearchByVideoAndImage> searchForpersonByVideo({
     required PlatformFile? video,
-    required PlatformFile? image,
+    // required PlatformFile? image,
+    required List<PlatformFile>? images,
     required String similarityScore,
     // required String personName,
   }) async {
@@ -506,7 +507,11 @@ class RemoteProvider {
           await RemoteDataSource().postMultiPartFiles(
         endPoint: "/find_target",
         body: body,
-        files: [video!, image!],
+        files: [
+          video!,
+          // image!,
+          ...images ?? [],
+        ],
       );
 
       if (callBack != null && callBack.isNotEmpty) {

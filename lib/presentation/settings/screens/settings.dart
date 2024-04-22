@@ -160,7 +160,7 @@ class _SettingsState extends State<Settings> {
                                                   }
 
                                                   SettingsBloc.get(context).add(
-                                                    UpdatePassword(),
+                                                   const UpdatePassword(),
                                                   );
                                                   Navigator.of(context).pop();
                                                 },
@@ -211,8 +211,8 @@ class _SettingsState extends State<Settings> {
                           SizedBox(height: 10),
                         ],
                       ),
-                      SizedBox(height: 20),
-                      Row(
+                     const SizedBox(height: 20),
+                     const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(

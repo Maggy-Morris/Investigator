@@ -29,6 +29,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     on<GetAccuracy>(_onGetAccuracy);
 
+    on<imagesList>(_onimagesList);
+
     on<imageevent>(_onimageevent);
     on<videoevent>(_onvideoevent);
     on<getPersonName>(_ongetPersonName);
@@ -86,6 +88,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(state.copyWith(
         imageFile: event.imageFile, submission: Submission.editing));
   }
+  _onimagesList(imagesList event, Emitter<HomeState> emit) async {
+    emit(state.copyWith(
+        imagesListdata: event.imagesListdata, submission: Submission.editing));
+  }
+
+  
 
   _onvideoevent(videoevent event, Emitter<HomeState> emit) async {
     emit(state.copyWith(video: event.video, submission: Submission.editing));
@@ -183,7 +191,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         .searchForpersonByVideo(
       similarityScore: state.accuracy,
       video: state.video,
-      image: state.imageFile,
+      // image: state.imageFile,
+      images:state.imagesListdata,
       // personName: state.personName,
       // image: state.image,
     )
@@ -203,4 +212,46 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
     });
   }
+
+
+
+
+
+
+
+// _onUpdateRoomsEvent(
+//       UpdateRoomsEvent event, Emitter<HomeState> emit) async {
+//     List<PlatformFile> newList = state.roomNAMS;
+//     if (event.roomNames != null) {
+//       if (event.roomNames?.isNotEmpty ?? false) {
+//         newList[event.index] = event.roomNames ?? "";
+
+//         emit(state.copyWith(
+//           roomNAMS: newList,
+//           // room_numbers: event.room_num,
+//           // submission: Submission.hasData,
+//         ));
+//       }
+//     } else {
+//       newList.removeAt(event.index);
+//       emit(state.copyWith(
+//         roomNAMS: newList,
+//       ));
+//     }
+//   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

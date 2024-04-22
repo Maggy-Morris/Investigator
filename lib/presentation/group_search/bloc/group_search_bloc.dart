@@ -184,15 +184,14 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
   _onSearchForEmployeeByVideoEvent(SearchForEmployeeByVideoEvent event,
       Emitter<GroupSearchState> emit) async {
     emit(state.copyWith(submission: Submission.loading));
-    await RemoteProvider()
-        .searchForpersonByVideo(
-      similarityScore: state.accuracy,
-      video: state.video,
-      image: state.imageFile,
-      // personName: state.personName,
-      // image: state.image,
-    )
-        .then((value) {
+    await RemoteProvider().searchForpersonByVideo(
+        similarityScore: state.accuracy,
+        video: state.video,
+        // image: state.imageFile,
+        images: []
+        // personName: state.personName,
+        // image: state.image,
+        ).then((value) {
       if (value.found == true) {
         emit(state.copyWith(
           submission: Submission.success,

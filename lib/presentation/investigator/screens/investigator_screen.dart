@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -38,6 +39,8 @@ class AddCameraScreen extends StatefulWidget {
 class _AddCameraScreenState extends State<AddCameraScreen> {
   TextEditingController nameController = TextEditingController();
   Widget? _image;
+  List<Widget>? _images;
+
   CameraController? controller;
   XFile? imageFile;
   final double _min = 10;
@@ -197,45 +200,71 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                 await FilePicker.platform
                                                     .pickFiles(
                                                   type: FileType.image,
+                                                  allowMultiple: true,
                                                 )
                                                     .then((result) {
                                                   if (result != null &&
                                                       result.files.isNotEmpty) {
-                                                    // Use the selected image file
-                                                    final imageFile =
-                                                        result.files.first;
-                                                    // Load the image file as an image
-                                                    final image = imageFile
-                                                                .bytes !=
-                                                            null
-                                                        ? Image.memory(
-                                                            imageFile.bytes!,
-                                                            fit: BoxFit.cover,
-                                                          )
-                                                        : loadingIndicator();
+                                                    List<Widget> images = [];
+                                                    for (var imageFile
+                                                        in result.files) {
+                                                      final image = imageFile
+                                                                  .bytes !=
+                                                              null
+                                                          ? Image.memory(
+                                                              imageFile.bytes!,
+                                                              fit: BoxFit.cover,
+                                                            )
+                                                          : loadingIndicator();
 
-                                                    // Replace the image with the selected image
-                                                    setState(() {
-                                                      _image = image;
-                                                    });
-                                                    HomeBloc.get(context).add(
+                                                      images.add(image);
+
+                                                      HomeBloc.get(context).add(
+                                                        imagesList(
+                                                            imagesListdata:
+                                                                result.files),
+                                                      );
+                                                      // Process each selected image file
+                                                      HomeBloc.get(context).add(
                                                         ImageToSearchForEmployee(
-                                                            imageWidget:
-                                                                image));
-
-                                                    HomeBloc.get(context).add(
+                                                            imageWidget: image),
+                                                      );
+                                                      HomeBloc.get(context).add(
                                                         imageevent(
                                                             imageFile:
-                                                                imageFile));
+                                                                imageFile),
+                                                      );
+                                                    }
+
+                                                    setState(() {
+                                                      _images = images;
+                                                    });
                                                   }
                                                 });
                                               },
                                               child: Stack(
-                                                  fit: StackFit.expand,
-                                                  children: [
-                                                    // state.imageWidget
-                                                    _image ??
-                                                        Image.asset(
+                                                fit: StackFit.expand,
+                                                children: [
+                                                  _images?.isNotEmpty == true
+                                                      ? CarouselSlider(
+                                                          items: _images ?? [],
+                                                          options:
+                                                              CarouselOptions(
+                                                            aspectRatio: 16 /
+                                                                9, // Adjust as needed
+                                                            viewportFraction:
+                                                                0.8, // Adjust as needed
+                                                            enableInfiniteScroll:
+                                                                false,
+                                                            reverse: false,
+                                                            autoPlay: false,
+                                                            enlargeCenterPage:
+                                                                true,
+                                                            scrollDirection:
+                                                                Axis.horizontal,
+                                                          ),
+                                                        )
+                                                      : Image.asset(
                                                           'assets/images/imagepick.png',
                                                           width:
                                                               double.infinity,
@@ -243,8 +272,65 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                               double.infinity,
                                                           fit: BoxFit.cover,
                                                         ),
-                                                  ]),
-                                            ),
+                                                ],
+                                              ),
+                                            )
+                                            // GestureDetector(
+                                            //   onTap: () async {
+                                            //     await FilePicker.platform
+                                            //         .pickFiles(
+                                            //       type: FileType.image,
+                                            //             allowMultiple: true, // Allow selecting multiple files
+
+                                            //     )
+
+                                            //         .then((result) {
+                                            //       if (result != null &&
+                                            //           result.files.isNotEmpty) {
+                                            //         // Use the selected image file
+                                            //         final imageFile =
+                                            //             result.files.first;
+                                            //         // Load the image file as an image
+                                            //         final image = imageFile
+                                            //                     .bytes !=
+                                            //                 null
+                                            //             ? Image.memory(
+                                            //                 imageFile.bytes!,
+                                            //                 fit: BoxFit.cover,
+                                            //               )
+                                            //             : loadingIndicator();
+
+                                            //         // Replace the image with the selected image
+                                            //         setState(() {
+                                            //           _image = image;
+                                            //         });
+                                            //         HomeBloc.get(context).add(
+                                            //             ImageToSearchForEmployee(
+                                            //                 imageWidget:
+                                            //                     image));
+
+                                            //         HomeBloc.get(context).add(
+                                            //             imageevent(
+                                            //                 imageFile:
+                                            //                     imageFile));
+                                            //       }
+                                            //     });
+                                            //   },
+                                            //   child: Stack(
+                                            //       fit: StackFit.expand,
+                                            //       children: [
+                                            //         // state.imageWidget
+                                            //         _image ??
+                                            //             Image.asset(
+                                            //               'assets/images/imagepick.png',
+                                            //               width:
+                                            //                   double.infinity,
+                                            //               height:
+                                            //                   double.infinity,
+                                            //               fit: BoxFit.cover,
+                                            //             ),
+                                            //       ]),
+                                            // ),
                                           ],
                                         ),
                                       ),
