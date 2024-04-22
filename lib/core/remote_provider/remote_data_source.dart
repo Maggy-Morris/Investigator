@@ -16,9 +16,9 @@ class RemoteDataSource {
   // static String baseURL = 'http://172.10.1.2:10000';
   // static String baseUrlWithoutPort = "//172.10.1.2:";
   // static String baseUrlWithoutPortForImages = "//172.10.1.2:";
-  static String baseURL = 'http://192.168.1.114:10000';
-  static String baseUrlWithoutPort = "//192.168.1.114:";
-  static String baseUrlWithoutPortForImages = "//192.168.1.114:";
+  static String baseURL = 'http://192.168.1.138:10000';
+  static String baseUrlWithoutPort = "//192.168.1.138:";
+  static String baseUrlWithoutPortForImages = "//192.168.1.138:";
 
   Future<Map<String, dynamic>> post({
     required String endPoint,
@@ -230,6 +230,62 @@ class RemoteDataSource {
     }
   }
 
+  Future<dynamic> postMultiPartListOfListFiles({
+    required String endPoint,
+    Map<String, String>? body,
+    Map<String,dynamic>? files,
+  }) async {
+    http.MultipartRequest response;
+    String url = baseURL + endPoint;
+    //1. base url
+    if (kDebugMode) {
+      print("url $url");
+    }
+    //2.parse url with Uri.parse()
+    Uri uri = Uri.parse(url);
+
+    //3. make post request
+
+    Map<String, String> header = {
+      'Content-Type': 'application/json',
+      'Authorization':
+      'Bearer ${AuthenticationRepository.instance.currentUser.token}'
+    };
+
+    response = http.MultipartRequest("POST", uri);
+    response.headers.addAll(header);
+
+    if (files != null) {
+      if (files.isNotEmpty) {
+        PlatformFile videoFile = files["video"];
+        response.files.add(MultipartFile.fromBytes(
+            'files[]', videoFile.bytes ?? [],
+            filename: videoFile.name));
+
+        for (var (file as PlatformFile)  in files["imagesList"]) {
+          response.files.add(MultipartFile.fromBytes(
+              'files[]', file.bytes ?? [],
+              filename: file.name));
+        }
+      }
+    }
+    if (body != null) {
+      response.fields.addAll(body);
+    }
+
+    var streamedResponse = await response.send();
+    var result = await http.Response.fromStream(streamedResponse);
+    if (result.statusCode >= 200 && result.statusCode < 300) {
+      return jsonDecode(result.body);
+    }
+    if (result.statusCode == 400) {
+      throw RequestErrorException(
+          responseMessage: jsonDecode(result.body)['message']);
+    } else {
+      // throw UnknownServerException();
+    }
+  }
+
   Future<dynamic> postMultiPartFile({
     required String endPoint,
     Map<String, String>? body,
@@ -333,59 +389,59 @@ class RemoteDataSource {
     }
   }
 
-  Future<dynamic> postWithFileTest({
-    required String endPoint,
-    Map<String, String>? body,
-    File? files,
-  }) async {
-    http.MultipartRequest response;
-    String url = baseURL + endPoint;
-    //1. base url
-    if (kDebugMode) {
-      print("url $url");
-    }
-    //2.parse url with Uri.parse()
-    Uri uri = Uri.parse(url);
-
-    //3. make post request
-
-    Map<String, String> header = {
-      'Content-Type': 'multipart/form-data; charset=UTF-8',
-      'Authorization':
-          'Bearer ${AuthenticationRepository.instance.currentUser.token}'
-    };
-
-    response = http.MultipartRequest("POST", uri);
-    response.headers.addAll(header);
-
-    if (files != null) {
-      // if (files.isNotEmpty) {
-      //   for (var file in files) {
-      /// response.files.add(await http.MultipartFile.fromPath('file', files.path!,filename: files.name));
-      response.files.add(await http.MultipartFile.fromPath(
-          'file', files.relativePath ?? "",
-          filename: files.name));
-
-      ///
-      //   }
-      // }
-    }
-    if (body != null) {
-      response.fields.addAll(body);
-    }
-
-    var streamedResponse = await response.send();
-    var result = await http.Response.fromStream(streamedResponse);
-    if (result.statusCode >= 200 && result.statusCode < 300) {
-      return jsonDecode(result.body);
-    }
-    if (result.statusCode == 400) {
-      throw RequestErrorException(
-          responseMessage: jsonDecode(result.body)['message']);
-    } else {
-      throw UnknownServerException();
-    }
-  }
+  // Future<dynamic> postWithFileTest({
+  //   required String endPoint,
+  //   Map<String, String>? body,
+  //   File? files,
+  // }) async {
+  //   http.MultipartRequest response;
+  //   String url = baseURL + endPoint;
+  //   //1. base url
+  //   if (kDebugMode) {
+  //     print("url $url");
+  //   }
+  //   //2.parse url with Uri.parse()
+  //   Uri uri = Uri.parse(url);
+  //
+  //   //3. make post request
+  //
+  //   Map<String, String> header = {
+  //     'Content-Type': 'multipart/form-data; charset=UTF-8',
+  //     'Authorization':
+  //         'Bearer ${AuthenticationRepository.instance.currentUser.token}'
+  //   };
+  //
+  //   response = http.MultipartRequest("POST", uri);
+  //   response.headers.addAll(header);
+  //
+  //   if (files != null) {
+  //     // if (files.isNotEmpty) {
+  //     //   for (var file in files) {
+  //     /// response.files.add(await http.MultipartFile.fromPath('file', files.path!,filename: files.name));
+  //     response.files.add(await http.MultipartFile.fromPath(
+  //         'file', files.relativePath ?? "",
+  //         filename: files.name));
+  //
+  //     ///
+  //     //   }
+  //     // }
+  //   }
+  //   if (body != null) {
+  //     response.fields.addAll(body);
+  //   }
+  //
+  //   var streamedResponse = await response.send();
+  //   var result = await http.Response.fromStream(streamedResponse);
+  //   if (result.statusCode >= 200 && result.statusCode < 300) {
+  //     return jsonDecode(result.body);
+  //   }
+  //   if (result.statusCode == 400) {
+  //     throw RequestErrorException(
+  //         responseMessage: jsonDecode(result.body)['message']);
+  //   } else {
+  //     throw UnknownServerException();
+  //   }
+  // }
 
   dynamic _responseHandler({
     required http.Response response,
