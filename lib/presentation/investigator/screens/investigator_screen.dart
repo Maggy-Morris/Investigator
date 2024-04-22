@@ -104,7 +104,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                         FxBox.h24,
                         const Tooltip(
                           message:
-                              "Choose The Accuracy You Want To Search For A Person With Using The SliderBar \n        Note That If the Video Resolution Is Bad Try to Choose High Accuracy ",
+                              "Choose The Accuracy You Want To Search For A Person With Using The SliderBar \n        Note That If the Video Resolution Is Bad Try to Choose Low Accuracy ",
                           child: Icon(
                             Icons.info_outline_rounded,
                             color: AppColors.white,
@@ -149,7 +149,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                           _value = newValue;
                                         });
                                       },
-                                     labelFormatterCallback: (dynamic value,
+                                      labelFormatterCallback: (dynamic value,
                                           String formattedValue) {
                                         // Map numeric values to custom string labels
                                         switch (value.toInt()) {
@@ -886,12 +886,15 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
             Positioned(
               top: 0,
               right: 0,
-              child: IconButton(
-                onPressed: onDownloadPressed,
-                icon: const Icon(
-                  Icons.download,
-                  size: 45,
-                  color: AppColors.buttonBlue,
+              child: Tooltip(
+                message: "Download This Frame",
+                child: IconButton(
+                  onPressed: onDownloadPressed,
+                  icon: const Icon(
+                    Icons.download,
+                    size: 45,
+                    color: AppColors.buttonBlue,
+                  ),
                 ),
               ),
             ),

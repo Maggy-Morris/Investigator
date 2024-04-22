@@ -127,40 +127,67 @@ Widget _bottomView() {
       FxBox.h16,
       headerView("Sign Up".tr(), "", true),
       FxBox.h28,
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text("Email".tr(),
-            style: const TextStyle(
-                color: Colors.white,
-                fontFamily: "Cairo",
-                fontSize: AppFontSize.s14,
-                fontWeight: FontWeight.bold)),
+      Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("Email".tr(),
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontFamily: "Cairo",
+                    fontSize: AppFontSize.s14,
+                    fontWeight: FontWeight.bold)),
+          ),
+          const Text(
+            "*",
+            style: TextStyle(
+                color: Colors.red, fontSize: 20, fontWeight: FontWeight.bold),
+          )
+        ],
       ),
       // FxBox.h8,
       _EmailInput(),
       FxBox.h8,
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          "password".tr(),
-          style: const TextStyle(
-              color: Colors.white,
-              fontFamily: "Cairo",
-              fontSize: AppFontSize.s14,
-              fontWeight: FontWeight.bold),
-        ),
+      Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "password".tr(),
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontFamily: "Cairo",
+                  fontSize: AppFontSize.s14,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          const Text(
+            "*",
+            style: TextStyle(
+                color: Colors.red, fontSize: 20, fontWeight: FontWeight.bold),
+          )
+        ],
       ),
       // FxBox.h8,
       _PasswordInput(),
       FxBox.h8,
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text("Company Name".tr(),
-            style: const TextStyle(
-                color: Colors.white,
-                fontFamily: "Cairo",
-                fontSize: AppFontSize.s14,
-                fontWeight: FontWeight.bold)),
+      Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("Company Name".tr(),
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontFamily: "Cairo",
+                    fontSize: AppFontSize.s14,
+                    fontWeight: FontWeight.bold)),
+          ),
+          const Text(
+            "*",
+            style: TextStyle(
+                color: Colors.red, fontSize: 20, fontWeight: FontWeight.bold),
+          )
+        ],
       ),
       companyNameInput(),
       FxBox.h20,
@@ -218,7 +245,7 @@ class DropDwon extends StatelessWidget {
 
                       // controller: numberController,
                       initialValue: state.selectedNumber.toString(),
-                      style: TextStyle(color: Colors.black),
+                      style: const TextStyle(color: Colors.black),
                       onChanged: (value) {
                         final int? newValue = int.tryParse(value);
                         if (newValue != null) {
@@ -243,8 +270,8 @@ class DropDwon extends StatelessWidget {
                         //         .selectedNumberChanged(newValue ?? 0);
                         //   },
                         // ),
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 15),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: const BorderSide(style: BorderStyle.none),
@@ -265,7 +292,7 @@ class DropDwon extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               state.selectedNumber! > 0
                   ? Column(
                       children: List.generate(
@@ -276,9 +303,11 @@ class DropDwon extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.only(bottom: 15.0),
                               child: TextField(
-                                style: TextStyle(color: Colors.black),
+                                style: const TextStyle(color: Colors.black),
                                 decoration: InputDecoration(
-                                  labelText: 'Room Number ${index + 1}',
+                                  hintText: 'Room Name ${index + 1}'.tr(),
+
+                                  // labelText: 'Room Name ${index + 1}',
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(15),
                                     borderSide: const BorderSide(
@@ -411,7 +440,7 @@ class _EmailInput extends StatelessWidget {
         return SizedBox(
           width: MediaQuery.of(context).size.width,
           child: TextFormField(
-            style: TextStyle(color: Colors.black),
+            style: const TextStyle(color: Colors.black),
             cursorColor: Colors.black,
             key: const Key('loginForm_emailInput_textField'),
             onChanged: (email) =>
@@ -461,7 +490,7 @@ class _companyNameInputState extends State<companyNameInput> {
         return SizedBox(
           width: MediaQuery.of(context).size.width,
           child: TextFormField(
-            style: TextStyle(color: Colors.black),
+            style: const TextStyle(color: Colors.black),
             cursorColor: Colors.black,
             // key: const Key('loginForm_emailInput_textField'),
             onChanged: (companyName) =>
@@ -503,7 +532,7 @@ class _PasswordInputState extends State<_PasswordInput> {
         return SizedBox(
           width: MediaQuery.of(context).size.width,
           child: TextField(
-            style: TextStyle(color: Colors.black),
+            style: const TextStyle(color: Colors.black),
             cursorColor: Colors.black,
             obscureText: visible,
             obscuringCharacter: "•",

@@ -134,6 +134,8 @@ class RemoteProvider {
 
   Future<UpdateModel> UpdatePassword({
     required String password,
+        // required String oldPassword,
+
     required String email,
   }) async {
     try {
@@ -142,6 +144,7 @@ class RemoteProvider {
         body: {
           "username": email,
           "password": password,
+        // "oldPassword": oldPassword,
         },
       );
 
@@ -316,6 +319,86 @@ class RemoteProvider {
       return EmployeeModel();
     }
   }
+///
+  
+  Future<EmployeeModel> getOnlyNormalEmployeeNames({
+    required String companyName,
+    required int pageNumber,
+  }) async {
+    try {
+      Map<String, dynamic> callBack = await RemoteDataSource()
+          .post(endPoint: "/qdrant/retrieve_it_all", body: {
+        "collection_name": companyName,
+        "page_number": pageNumber,
+      });
+
+      if (callBack.isNotEmpty) {
+        // Extract the relevant data from the callBack
+        // List<dynamic> dataList = callBack['data'];
+        EmployeeModel general = EmployeeModel.fromJson(callBack);
+        // Map the extracted data to my EmployeeModel
+        // List<Data> employeeDataList =
+        //     dataList.map((data) => Data.fromJson(data)).toList();
+
+        return general;
+      } else {
+        return EmployeeModel();
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return EmployeeModel();
+    }
+  }
+
+
+ /// 
+  Future<EmployeeModel> getOnlyBlackListedEmployeeNames({
+    required String companyName,
+    required int pageNumber,
+  }) async {
+    try {
+      Map<String, dynamic> callBack = await RemoteDataSource()
+          .post(endPoint: "/qdrant/retrieve_it_all", body: {
+        "collection_name": companyName,
+        "page_number": pageNumber,
+      });
+
+      if (callBack.isNotEmpty) {
+        // Extract the relevant data from the callBack
+        // List<dynamic> dataList = callBack['data'];
+        EmployeeModel general = EmployeeModel.fromJson(callBack);
+        // Map the extracted data to my EmployeeModel
+        // List<Data> employeeDataList =
+        //     dataList.map((data) => Data.fromJson(data)).toList();
+
+        return general;
+      } else {
+        return EmployeeModel();
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return EmployeeModel();
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   ///get person data by name
   Future<List<Data>> getPersonByName(

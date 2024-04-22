@@ -6,6 +6,7 @@ class AllEmployeesEvent extends Equatable {
   @override
   List<Object?> get props => [];
 }
+
 class RadioButtonChanged extends AllEmployeesEvent {
   final String selectedOption;
   final bool showTextField;
@@ -22,6 +23,7 @@ class Check extends AllEmployeesEvent {
   @override
   List<Object?> get props => [check];
 }
+
 class checkBox extends AllEmployeesEvent {
   final List<String> room_NMs;
 
@@ -31,8 +33,6 @@ class checkBox extends AllEmployeesEvent {
   List<Object?> get props => [room_NMs];
 }
 
-
-
 class ImageWidget extends AllEmployeesEvent {
   final Widget imageWidget;
 
@@ -41,8 +41,6 @@ class ImageWidget extends AllEmployeesEvent {
   @override
   List<Object?> get props => [imageWidget];
 }
-
-
 
 class EditPageNumber extends AllEmployeesEvent {
   final int pageIndex;
@@ -112,13 +110,26 @@ class GetEmployeeNamesEvent extends AllEmployeesEvent {
   @override
   List<Object?> get props => [];
 }
+
+class GetEmployeeNormalNamesEvent extends AllEmployeesEvent {
+  const GetEmployeeNormalNamesEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class GetEmployeeBlackListedNamesEvent extends AllEmployeesEvent {
+  const GetEmployeeBlackListedNamesEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
+////////////////////////////////////////////////
 class imageevent extends AllEmployeesEvent {
-    final PlatformFile imageFile;
+  final PlatformFile? imageFile;
 
-  const imageevent(
-{required this.imageFile}
-
-  );
+  const imageevent({required this.imageFile});
 
   @override
   List<Object?> get props => [imageFile];

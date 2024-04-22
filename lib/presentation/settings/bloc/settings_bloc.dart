@@ -25,9 +25,20 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<InitialList>(_onInitialList);
     on<AddListItem>(_onAddListItem);
 
+    on<oldPasswordEvent>(_onoldPasswordEvent);
+
     on<UpdatePasswordEvent>(_onUpdatePasswordEvent);
     on<UpdatePassword>(_onUpdatePassword);
   }
+
+  _onoldPasswordEvent(
+      oldPasswordEvent event, Emitter<SettingsState> emit) async {
+    emit(state.copyWith(
+      oldpassword: event.oldpassword,
+      // submission: Submission.hasData,
+    ));
+  }
+
   _onUpdatePasswordEvent(
       UpdatePasswordEvent event, Emitter<SettingsState> emit) async {
     emit(state.copyWith(
@@ -40,21 +51,21 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     emit(state.copyWith(submission: Submission.loading));
     try {
       final result = await RemoteProvider().UpdatePassword(
-        // companyName: event.companyName,
-        // personName: state.personName,
-        // phoneNum: state.phoneNum,
         email: AuthenticationRepository.instance.currentUser.username ?? "",
         password: state.passwordUpdate,
+        // oldpassword: state.oldpassword,
       );
       // result.updated == true
       if (result != null) {
         emit(state.copyWith(
           submission: Submission.success,
-
-          // employeeNamesList:
+         // responseMessage: result.data,
         ));
       } else {
-        emit(state.copyWith(submission: Submission.error));
+        emit(state.copyWith(submission: Submission.error
+        // responseMessage: result.data,
+
+        ));
       }
     } catch (e) {
       debugPrint(e.toString());

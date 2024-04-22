@@ -51,6 +51,16 @@ class UpdatePasswordEvent extends SettingsEvent {
   List<Object> get props => [passwordUpd];
 }
 
+class oldPasswordEvent extends SettingsEvent {
+  final String oldpassword;
+
+  const oldPasswordEvent({required this.oldpassword});
+
+  @override
+  List<Object> get props => [oldpassword];
+}
+
+
 class UpdatePassword extends SettingsEvent {
   // final String passwordUpdate;
 

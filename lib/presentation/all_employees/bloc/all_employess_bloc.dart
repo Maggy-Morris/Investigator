@@ -30,6 +30,8 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
 
     // on<GetEmployeeNames>(_onGetEmployeeNames);
     on<GetEmployeeNamesEvent>(_onGetEmployeeNamesEvent);
+    on<GetEmployeeNormalNamesEvent>(_onGetEmployeeNormalNamesEvent);
+    on<GetEmployeeBlackListedNamesEvent>(_onGetEmployeeBlackListedNamesEvent);
 
     /// Delete
     on<DeletePersonByNameEvent>(_onDeletePersonByNameEvent);
@@ -209,6 +211,90 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
     }
   }
 
+
+///Normal Empoloyees
+
+  _onGetEmployeeNormalNamesEvent(
+      GetEmployeeNormalNamesEvent event, Emitter<AllEmployeesState> emit) async {
+    emit(state.copyWith(submission: Submission.loading));
+
+    try {
+      final employeeModel = await RemoteProvider().getOnlyNormalEmployeeNames(
+        companyName: companyNameRepo,
+        pageNumber:
+            state.pageIndex == 0 ? state.pageIndex + 1 : state.pageIndex,
+      );
+
+      if (state.pageCount == 0) {
+        emit(state.copyWith(
+          pageCount: employeeModel.nPages,
+        ));
+      }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      if (employeeModel.data!.isNotEmpty) {
+        emit(state.copyWith(
+          // submission: Submission.success,
+          employeeNamesList: employeeModel.data,
+          count: employeeModel.count,
+        ));
+      } else {
+        emit(state.copyWith(
+          // submission: Submission.noDataFound,
+          employeeNamesList: [],
+        ));
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+
+      emit(state.copyWith(
+        submission: Submission.error,
+        employeeNamesList: [],
+      ));
+    }
+  }
+
+
+///BlackListed Employess
+
+  _onGetEmployeeBlackListedNamesEvent(
+      GetEmployeeBlackListedNamesEvent event, Emitter<AllEmployeesState> emit) async {
+    emit(state.copyWith(submission: Submission.loading));
+
+    try {
+      final employeeModel = await RemoteProvider().getOnlyBlackListedEmployeeNames(
+        companyName: companyNameRepo,
+        pageNumber:
+            state.pageIndex == 0 ? state.pageIndex + 1 : state.pageIndex,
+      );
+
+      if (state.pageCount == 0) {
+        emit(state.copyWith(
+          pageCount: employeeModel.nPages,
+        ));
+      }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      if (employeeModel.data!.isNotEmpty) {
+        emit(state.copyWith(
+          // submission: Submission.success,
+          employeeNamesList: employeeModel.data,
+          count: employeeModel.count,
+        ));
+      } else {
+        emit(state.copyWith(
+          // submission: Submission.noDataFound,
+          employeeNamesList: [],
+        ));
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+
+      emit(state.copyWith(
+        submission: Submission.error,
+        employeeNamesList: [],
+      ));
+    }
+  }
+//////////////////////////////////////////////////////////////////////////////////////////////
   /// New Employees Added
   _onAddNewEmployee(
       AddNewEmployee event, Emitter<AllEmployeesState> emit) async {
@@ -244,7 +330,7 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
       if (result.success == true) {
         emit(state.copyWith(
             submission: Submission.success, responseMessage: result.message));
-        // add(const GetEmployeeNamesEvent());
+        add(const GetEmployeeNamesEvent());
       } else {
         emit(state.copyWith(
             submission: Submission.error, responseMessage: result.message));

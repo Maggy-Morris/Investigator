@@ -1394,26 +1394,35 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
             fontWeight: FontWeight.w400,
           ),
           FxBox.h24,
-          _iconWithText(
-              icon: const Icon(
-                Icons.badge_outlined,
-                color: Colors.white,
-              ),
-              text: profession),
+          Tooltip(
+            message: "Job Title",
+            child: _iconWithText(
+                icon: const Icon(
+                  Icons.badge_outlined,
+                  color: Colors.white,
+                ),
+                text: profession),
+          ),
           FxBox.h28,
-          _iconWithText(
-              icon: const Icon(
-                Icons.contact_phone,
-                color: Colors.white,
-              ),
-              text: phoneNum),
+          Tooltip(
+            message: "Phone Contact",
+            child: _iconWithText(
+                icon: const Icon(
+                  Icons.contact_phone,
+                  color: Colors.white,
+                ),
+                text: phoneNum),
+          ),
           FxBox.h28,
-          _iconWithText(
-              icon: const Icon(
-                Icons.email,
-                color: Colors.white,
-              ),
-              text: email),
+          Tooltip(
+            message: "Email Address",
+            child: _iconWithText(
+                icon: const Icon(
+                  Icons.email,
+                  color: Colors.white,
+                ),
+                text: email),
+          ),
           // FxBox.h24,
         ],
       ),

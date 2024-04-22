@@ -4,6 +4,9 @@ class SettingsState extends Equatable {
   final List<Data> employeeNamesList;
   final String companyName;
   String passwordUpdate;
+    String oldpassword;
+
+  
   final String image;
   final String id;
   int pageIndex;
@@ -48,6 +51,9 @@ class SettingsState extends Equatable {
     this.isSearching = false,
     this.image = "",
     this.passwordUpdate = "",
+        this.oldpassword = "",
+
+    
     this.companyName = "",
     this.employeeNamesList = const [],
     this.submission = Submission.initial,
@@ -75,6 +81,10 @@ class SettingsState extends Equatable {
     List<Data>? employeeNamesList,
     String? companyName,
     String? passwordUpdate,
+        String? oldpassword,
+
+
+
     Submission? submission,
   }) {
     return SettingsState(
@@ -102,6 +112,9 @@ class SettingsState extends Equatable {
       employeeNamesList: employeeNamesList ?? this.employeeNamesList,
       companyName: companyName ?? this.companyName,
       passwordUpdate: passwordUpdate ?? this.passwordUpdate,
+
+
+      oldpassword:oldpassword ?? this.oldpassword,
       submission: submission ?? this.submission,
     );
   }
@@ -124,6 +137,7 @@ class SettingsState extends Equatable {
         pageIndex,
         count,
         passwordUpdate,
+        oldpassword,
         companyName,
         employeeNamesList,
       ];

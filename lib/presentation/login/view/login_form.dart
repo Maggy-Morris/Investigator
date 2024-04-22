@@ -89,7 +89,7 @@ class LoginForm extends StatelessWidget {
                         ),
                       ),
                       Responsive.isWeb(context)
-                          ? Expanded(
+                          ? const Expanded(
                               child: Column(
                                 children: [
                                   // Container(
@@ -170,26 +170,44 @@ Widget _bottomView() {
       FxBox.h16,
       headerView("login".tr(), "", true),
       FxBox.h28,
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text("userName".tr(),
-            style: const TextStyle(
-                color: Colors.white,
-                fontFamily: "Cairo",
-                fontSize: AppFontSize.s14,
-                fontWeight: FontWeight.bold)),
+      Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("userName".tr(),
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontFamily: "Cairo",
+                    fontSize: AppFontSize.s14,
+                    fontWeight: FontWeight.bold)),
+          ),
+          const Text(
+            "*",
+            style: TextStyle(
+                color: Colors.red, fontSize: 20, fontWeight: FontWeight.bold),
+          )
+        ],
       ),
       FxBox.h8,
       _EmailInput(),
       FxBox.h16,
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text("password".tr(),
-            style: const TextStyle(
-                color: Colors.white,
-                fontFamily: "Cairo",
-                fontSize: AppFontSize.s14,
-                fontWeight: FontWeight.bold)),
+      Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("password".tr(),
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontFamily: "Cairo",
+                    fontSize: AppFontSize.s14,
+                    fontWeight: FontWeight.bold)),
+          ),
+          const Text(
+            "*",
+            style: TextStyle(
+                color: Colors.red, fontSize: 20, fontWeight: FontWeight.bold),
+          )
+        ],
       ),
       FxBox.h8,
       _PasswordInput(),
@@ -221,7 +239,7 @@ class _EmailInput extends StatelessWidget {
         return SizedBox(
           width: MediaQuery.of(context).size.width,
           child: TextFormField(
-            style: TextStyle(color: Colors.black),
+            style: const TextStyle(color: Colors.black),
             cursorColor: Colors.black,
             key: const Key('loginForm_emailInput_textField'),
             onChanged: (email) =>
@@ -268,7 +286,7 @@ class _PasswordInputState extends State<_PasswordInput> {
         return SizedBox(
           width: MediaQuery.of(context).size.width,
           child: TextField(
-            style: TextStyle(color: Colors.black),
+            style: const TextStyle(color: Colors.black),
             cursorColor: Colors.black,
             obscureText: visible,
             obscuringCharacter: "•",
