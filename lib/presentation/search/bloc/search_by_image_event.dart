@@ -9,14 +9,23 @@ class SearchByImageEvent extends Equatable {
 
 class RadioButtonChanged extends SearchByImageEvent {
   final String selectedOption;
-  // final bool showTextField;
+  final bool? showTextField;
 
   const RadioButtonChanged({
     required this.selectedOption,
-    // required this.showTextField
+     this.showTextField
   });
 }
+/////////////////////////////////////
+class checkBox extends SearchByImageEvent {
+  final List<String> room_NMs;
 
+  const checkBox({required this.room_NMs});
+
+  @override
+  List<Object?> get props => [room_NMs];
+}
+///////////////////////////////////
 class AddpersonName extends SearchByImageEvent {
   final String personName;
 

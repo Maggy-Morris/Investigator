@@ -35,6 +35,8 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
     on<reloadTargetsData>(_onreloadTargetsData);
 
     on<GetAccuracy>(_onGetAccuracy);
+    on<RadioButtonChanged>(_onRadioButtonChanged);
+    on<checkBox>(_oncheckBox);
 
     on<imageevent>(_onimageevent);
     on<videoevent>(_onvideoevent);
@@ -81,6 +83,8 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
         email: state.email,
         userId: state.userId,
         id: event.id,
+        blackListed: "",
+        roomNamesChoosen:[]
       );
       if (result.updated == true) {
         emit(state.copyWith(
@@ -323,5 +327,24 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
         ));
       }
     });
+  }
+
+
+  
+  _oncheckBox(checkBox event, Emitter<GroupSearchState> emit) async {
+    emit(state.copyWith(
+        roomNAMS: event.room_NMs, submission: Submission.editing));
+  }
+
+    //RadioButton
+  _onRadioButtonChanged(
+      RadioButtonChanged event, Emitter<GroupSearchState> emit) async {
+    emit(
+      state.copyWith(
+        selectedOption: event.selectedOption,
+        submission: Submission.loading,
+        showTextField: event.showTextField,
+      ),
+    );
   }
 }

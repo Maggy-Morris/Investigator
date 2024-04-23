@@ -359,6 +359,8 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
         phoneNum: state.phoneNum,
         email: state.email,
         userId: state.userId,
+        blackListed: state.selectedOption,
+        roomNamesChoosen: state.roomNAMS,
         id: event.id,
       );
       if (result.updated == true) {
@@ -453,4 +455,6 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
       ),
     );
   }
+
+  
 }

@@ -34,6 +34,7 @@ class SearchByImageBloc extends Bloc<SearchByImageEvent, SearchByImageState> {
 //edit
     on<RadioButtonChanged>(_onRadioButtonChanged);
     on<reloadEmployeeData>(_onreloadEmployeeData);
+    on<checkBox>(_oncheckBox);
 
     on<UpdateEmployeeEvent>(_onUpdateEmployeeEvent);
   }
@@ -48,6 +49,11 @@ class SearchByImageBloc extends Bloc<SearchByImageEvent, SearchByImageState> {
       blacklis: event.blacklisData,
       submission: Submission.hasData,
     ));
+  }
+
+  _oncheckBox(checkBox event, Emitter<SearchByImageState> emit) async {
+    emit(state.copyWith(
+        roomNAMS: event.room_NMs, submission: Submission.editing));
   }
 
   _onAddpersonName(
@@ -146,13 +152,18 @@ class SearchByImageBloc extends Bloc<SearchByImageEvent, SearchByImageState> {
         email: state.email,
         userId: state.userId,
         id: event.id,
+        blackListed: state.selectedOption,
+        roomNamesChoosen: state.roomNAMS,
       );
       if (result.updated == true) {
-        emit(state.copyWith(
-          submission: Submission.success,
+        emit(
+          state.copyWith(
+            submission: Submission.success,
 
-          // employeeNamesList:
-        ));
+            // employeeNamesList:
+          ),
+        );
+        // add(const GetEmployeeNamesEvent());
       } else {
         emit(state.copyWith(submission: Submission.error));
       }
@@ -195,8 +206,8 @@ class SearchByImageBloc extends Bloc<SearchByImageEvent, SearchByImageState> {
     emit(
       state.copyWith(
         selectedOption: event.selectedOption,
-        // submission: Submission.loading,
-        // showTextField: event.showTextField,
+        submission: Submission.loading,
+        showTextField: event.showTextField,
       ),
     );
   }

@@ -52,9 +52,11 @@ class Dataaa {
   String? phone;
   String? userId;
   String? blackListed;
+  List<String>? roomsAccesseble;
 
   Dataaa(
-      {this.sId,
+      {this.roomsAccesseble,
+      this.sId,
       this.blackListed,
       this.email,
       this.imagePath,
@@ -63,6 +65,9 @@ class Dataaa {
       this.userId});
 
   Dataaa.fromJson(Map<String, dynamic> json) {
+    roomsAccesseble =
+        json['IAM'] != null ? List<String>.from(json['IAM']) : null;
+
     blackListed = json['blacklisted'];
     sId = json['_id'];
     email = json['email'];
@@ -74,6 +79,8 @@ class Dataaa {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['IAM'] = roomsAccesseble;
+
     data['blacklisted'] = blackListed;
     data['_id'] = sId;
     data['email'] = email;

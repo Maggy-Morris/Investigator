@@ -1,6 +1,12 @@
 part of 'group_search_bloc.dart';
 
 class GroupSearchState extends Equatable {
+  final String selectedOption;
+
+  final bool showTextField;
+  final bool check;
+
+  List<String> roomNAMS;
   final List<Dataaa> employeeNamesList;
   final List<String> companiesNamesList;
   final PlatformFile? video;
@@ -25,6 +31,10 @@ class GroupSearchState extends Equatable {
   final List<String> data;
 
   GroupSearchState({
+    this.showTextField = false,
+    this.roomNAMS = const [],
+    this.check = false,
+    this.selectedOption = "",
     this.responseMessage = '',
     this.id = '',
     this.phoneNum = "",
@@ -47,7 +57,11 @@ class GroupSearchState extends Equatable {
   });
 
   GroupSearchState copyWith({
-    String?responseMessage,
+    bool? check,
+    String? selectedOption,
+    List<String>? roomNAMS,
+    bool? showTextField,
+    String? responseMessage,
     String? id,
     String? phoneNum,
     String? email,
@@ -68,7 +82,11 @@ class GroupSearchState extends Equatable {
     List<String>? data,
   }) {
     return GroupSearchState(
-      responseMessage : responseMessage ?? this.responseMessage,
+      roomNAMS: roomNAMS ?? this.roomNAMS,
+      showTextField: showTextField ?? this.showTextField,
+      check: check ?? this.check,
+      selectedOption: selectedOption ?? this.selectedOption,
+      responseMessage: responseMessage ?? this.responseMessage,
       id: id ?? this.id,
       userId: userId ?? this.userId,
       email: email ?? this.email,
@@ -92,7 +110,11 @@ class GroupSearchState extends Equatable {
 
   @override
   List<Object?> get props => [
-    responseMessage,
+        check,
+        roomNAMS,
+        showTextField,
+        selectedOption,
+        responseMessage,
         accuracy,
         email,
         phoneNum,

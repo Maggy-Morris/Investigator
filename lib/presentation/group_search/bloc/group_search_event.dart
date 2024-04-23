@@ -177,6 +177,26 @@ class SearchForEmployeeByVideoEvent extends GroupSearchEvent {
   List<Object?> get props => [];
 }
 
+
+
+class RadioButtonChanged extends GroupSearchEvent {
+  final String selectedOption;
+  final bool? showTextField;
+
+  const RadioButtonChanged({
+    required this.selectedOption,
+     this.showTextField
+  });
+}
+/////////////////////////////////////
+class checkBox extends GroupSearchEvent {
+  final List<String> room_NMs;
+
+  const checkBox({required this.room_NMs});
+
+  @override
+  List<Object?> get props => [room_NMs];
+}
 ///
 
 // class GetEmployeeNames extends GroupSearchEvent {

@@ -1,13 +1,18 @@
 part of 'search_by_image_bloc.dart';
 
 class SearchByImageState extends Equatable {
-  final String selectedOption;
   final String responseMessage;
   List<List<double>>? boxes;
   List<String>? result;
   List<String>? blacklis;
 
   final Widget? imageWidget;
+  final String selectedOption;
+
+  final bool showTextField;
+  final bool check;
+
+  List<String> roomNAMS;
 
   List<String>? textAccuracy;
 
@@ -26,10 +31,14 @@ class SearchByImageState extends Equatable {
   bool isSearching;
 
   SearchByImageState({
+    this.showTextField = false,
+    this.roomNAMS = const [],
+    this.check = false,
+        this.selectedOption = "",
+
     this.responseMessage = '',
     this.blacklis = const [],
     this.textAccuracy,
-    this.selectedOption = "",
     this.isSearching = false,
     this.id = '',
     this.phoneNum = "",
@@ -47,11 +56,14 @@ class SearchByImageState extends Equatable {
   });
 
   SearchByImageState copyWith({
+    bool? check,
+        String? selectedOption,
+
+    List<String>? roomNAMS,
+    bool? showTextField,
     List<String>? blacklis,
     List<String>? textAccuracy,
-    String? selectedOption,
-String? responseMessage,
-
+    String? responseMessage,
     String? id,
     String? phoneNum,
     String? email,
@@ -68,10 +80,14 @@ String? responseMessage,
     Submission? submission,
   }) {
     return SearchByImageState(
-      responseMessage : responseMessage ?? this.responseMessage,
+      roomNAMS: roomNAMS ?? this.roomNAMS,
+      showTextField: showTextField ?? this.showTextField,
+      check: check ?? this.check,
+      selectedOption: selectedOption ?? this.selectedOption,
+
+      responseMessage: responseMessage ?? this.responseMessage,
       blacklis: blacklis ?? this.blacklis,
       textAccuracy: textAccuracy ?? this.textAccuracy,
-      selectedOption: selectedOption ?? this.selectedOption,
       id: id ?? this.id,
       userId: userId ?? this.userId,
       email: email ?? this.email,
@@ -94,7 +110,12 @@ String? responseMessage,
 
   @override
   List<Object?> get props => [
-    responseMessage,
+        check,
+        roomNAMS,
+        showTextField,
+                selectedOption,
+
+        responseMessage,
         blacklis,
         email,
         phoneNum,
@@ -103,7 +124,6 @@ String? responseMessage,
         id,
         personName,
         textAccuracy,
-        selectedOption,
         imageWidget,
         result,
         boxes,

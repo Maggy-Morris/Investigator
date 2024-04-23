@@ -493,9 +493,235 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                                           .userId ??
                                                                       '',
                                                                   onUpdate: () {
-                                                                    _showUpdateDialog(
-                                                                        context,
-                                                                        employee);
+                                                                    SearchByImageBloc.get(context).add(RadioButtonChanged(
+                                                                        selectedOption: employee
+                                                                            .blackListed
+                                                                            .toString(),
+                                                                        showTextField: employee.blackListed ==
+                                                                                "True"
+                                                                            ? false
+                                                                            : true));
+
+                                                                    showDialog(
+                                                                      context:
+                                                                          context,
+                                                                      builder:
+                                                                          (ctx) {
+                                                                        return BlocProvider
+                                                                            .value(
+                                                                          value:
+                                                                              SearchByImageBloc.get(context),
+                                                                          child: BlocBuilder<
+                                                                              SearchByImageBloc,
+                                                                              SearchByImageState>(
+                                                                            builder:
+                                                                                (context, state) {
+                                                                              return AlertDialog(
+                                                                                title: const SizedBox(width: 500, child: Text("Update Employee")),
+                                                                                content: SingleChildScrollView(
+                                                                                  child: Column(
+                                                                                    mainAxisSize: MainAxisSize.min,
+                                                                                    children: [
+                                                                                      TextFormField(
+                                                                                        cursorColor: Colors.white,
+                                                                                        style: const TextStyle(color: Colors.white),
+                                                                                        initialValue: employee.name,
+                                                                                        decoration: const InputDecoration(labelText: 'Name'),
+                                                                                        onChanged: (value) async {
+                                                                                          if (value.isEmpty) {
+                                                                                            SearchByImageBloc.get(context).add(
+                                                                                              AdduserId(
+                                                                                                userId: employee.name!,
+                                                                                              ),
+                                                                                            );
+                                                                                          } else {
+                                                                                            SearchByImageBloc.get(context).add(
+                                                                                              AddpersonName(personName: value),
+                                                                                            );
+                                                                                          }
+                                                                                        },
+                                                                                      ),
+                                                                                      FxBox.h24,
+                                                                                      TextFormField(
+                                                                                        cursorColor: Colors.white,
+                                                                                        style: const TextStyle(color: Colors.white),
+                                                                                        initialValue: employee.userId,
+                                                                                        decoration: const InputDecoration(labelText: 'UserId'),
+                                                                                        onChanged: (value) async {
+                                                                                          if (value.isEmpty) {
+                                                                                            SearchByImageBloc.get(context).add(
+                                                                                              AdduserId(
+                                                                                                userId: employee.userId!,
+                                                                                              ),
+                                                                                            );
+                                                                                          } else {
+                                                                                            SearchByImageBloc.get(context).add(
+                                                                                              AdduserId(
+                                                                                                userId: value,
+                                                                                              ),
+                                                                                            );
+                                                                                          }
+                                                                                        },
+                                                                                      ),
+                                                                                      FxBox.h24,
+                                                                                      TextFormField(
+                                                                                        cursorColor: Colors.white,
+                                                                                        style: const TextStyle(color: Colors.white),
+                                                                                        initialValue: employee.phone,
+                                                                                        decoration: const InputDecoration(labelText: 'Phone Number'),
+                                                                                        onChanged: (value) async {
+                                                                                          if (value.isEmpty) {
+                                                                                            SearchByImageBloc.get(context).add(
+                                                                                              AdduserId(
+                                                                                                userId: employee.phone!,
+                                                                                              ),
+                                                                                            );
+                                                                                          } else {
+                                                                                            SearchByImageBloc.get(context).add(
+                                                                                              AddphoneNum(
+                                                                                                phoneNum: value,
+                                                                                              ),
+                                                                                            );
+                                                                                          }
+                                                                                        },
+                                                                                      ),
+                                                                                      FxBox.h24,
+                                                                                      TextFormField(
+                                                                                        keyboardType: TextInputType.emailAddress,
+                                                                                        cursorColor: Colors.white,
+                                                                                        style: const TextStyle(color: Colors.white),
+                                                                                        initialValue: employee.email,
+                                                                                        decoration: const InputDecoration(labelText: 'Email'),
+                                                                                        onChanged: (value) async {
+                                                                                          if (value.isEmpty) {
+                                                                                            SearchByImageBloc.get(context).add(
+                                                                                              AdduserId(
+                                                                                                userId: employee.email!,
+                                                                                              ),
+                                                                                            );
+                                                                                          } else {
+                                                                                            SearchByImageBloc.get(context).add(
+                                                                                              Addemail(
+                                                                                                email: value,
+                                                                                              ),
+                                                                                            );
+                                                                                          }
+                                                                                        },
+                                                                                      ),
+                                                                                      FxBox.h24,
+                                                                                      FxBox.h24,
+                                                                                      SizedBox(
+                                                                                        height: 100,
+                                                                                        child: Image.network(
+                                                                                          "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/${employee.imagePath}",
+                                                                                          fit: BoxFit.cover,
+                                                                                        ),
+                                                                                      ),
+                                                                                      Padding(
+                                                                                        padding: const EdgeInsets.all(16.0),
+                                                                                        child: Column(
+                                                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                          children: [
+                                                                                            const Row(
+                                                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                              children: [
+                                                                                                Row(
+                                                                                                  children: [
+                                                                                                    Text(
+                                                                                                      'BlackListed:',
+                                                                                                      style: TextStyle(fontWeight: FontWeight.w900, color: AppColors.white, fontSize: 20.0),
+                                                                                                    ),
+                                                                                                    SizedBox(
+                                                                                                      width: 15,
+                                                                                                    ),
+                                                                                                    Icon(
+                                                                                                      Icons.warning_amber_outlined,
+                                                                                                      color: Colors.red,
+                                                                                                      size: 35,
+                                                                                                    ),
+                                                                                                  ],
+                                                                                                ),
+                                                                                                Tooltip(
+                                                                                                  message: "If the person is BlackListed he has no access to any room if not choose the rooms he is authorized to enter",
+                                                                                                  child: Icon(
+                                                                                                    Icons.info_outline,
+                                                                                                    color: Colors.white,
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ],
+                                                                                            ),
+                                                                                            RadioListTile(
+                                                                                              activeColor: Colors.white,
+                                                                                              // selected: employee.blackListed == "True",
+                                                                                              title: const Text('Yes', style: TextStyle(color: Colors.white)),
+                                                                                              value: 'True',
+                                                                                              groupValue: state.selectedOption,
+                                                                                              onChanged: (value) {
+                                                                                                SearchByImageBloc.get(context).add(RadioButtonChanged(selectedOption: value.toString(), showTextField: false));
+                                                                                              },
+                                                                                            ),
+                                                                                            RadioListTile(
+                                                                                              activeColor: Colors.white,
+                                                                                              title: const Text('No', style: TextStyle(color: Colors.white)),
+                                                                                              value: 'False',
+                                                                                              // selected: employee.blackListed != "True",
+                                                                                              groupValue: state.selectedOption,
+                                                                                              onChanged: (value) {
+                                                                                                SearchByImageBloc.get(context).add(RadioButtonChanged(selectedOption: value.toString(), showTextField: true));
+                                                                                              },
+                                                                                            ),
+                                                                                            FxBox.h24,
+                                                                                            if (state.showTextField)
+                                                                                              multiSelectGenericDropdown(
+                                                                                                showSearch: true,
+                                                                                                isEnabled: true,
+                                                                                                isRequired: false,
+                                                                                                filled: true,
+                                                                                                selectedItem: employee.roomsAccesseble,
+                                                                                                titleName: "Room Access Management",
+                                                                                                onChanged: (value) {
+                                                                                                  SearchByImageBloc.get(context).add(checkBox(room_NMs: value!));
+                                                                                                },
+                                                                                                itemsList: checkboxItems,
+                                                                                              ),
+                                                                                          ],
+                                                                                        ),
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                ),
+                                                                                actions: [
+                                                                                  TextButton(
+                                                                                    onPressed: () {
+                                                                                      Navigator.of(context).pop(); // Close the dialog
+                                                                                    },
+                                                                                    child: const Text(
+                                                                                      'Cancel',
+                                                                                      style: TextStyle(color: Colors.red),
+                                                                                    ),
+                                                                                  ),
+                                                                                  ElevatedButton(
+                                                                                    onPressed: () {
+                                                                                      SearchByImageBloc.get(context).add(
+                                                                                        UpdateEmployeeEvent(
+                                                                                          companyName: companyNameRepo,
+                                                                                          id: employee.sId ?? '',
+
+                                                                                          // userId: state.userId,
+                                                                                          // companyName: state.companyName,
+                                                                                        ),
+                                                                                      );
+                                                                                      Navigator.of(context).pop();
+                                                                                    },
+                                                                                    child: const Text('Update'),
+                                                                                  ),
+                                                                                ],
+                                                                              );
+                                                                            },
+                                                                          ),
+                                                                        );
+                                                                      },
+                                                                    );
                                                                   },
                                                                 );
                                                               },
@@ -866,9 +1092,235 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                                           .userId ??
                                                                       '',
                                                                   onUpdate: () {
-                                                                    _showUpdateDialog(
-                                                                        context,
-                                                                        employee);
+                                                                    SearchByImageBloc.get(context).add(RadioButtonChanged(
+                                                                        selectedOption: employee
+                                                                            .blackListed
+                                                                            .toString(),
+                                                                        showTextField: employee.blackListed ==
+                                                                                "True"
+                                                                            ? false
+                                                                            : true));
+
+                                                                    showDialog(
+                                                                      context:
+                                                                          context,
+                                                                      builder:
+                                                                          (ctx) {
+                                                                        return BlocProvider
+                                                                            .value(
+                                                                          value:
+                                                                              SearchByImageBloc.get(context),
+                                                                          child: BlocBuilder<
+                                                                              SearchByImageBloc,
+                                                                              SearchByImageState>(
+                                                                            builder:
+                                                                                (context, state) {
+                                                                              return AlertDialog(
+                                                                                title: const SizedBox(width: 500, child: Text("Update Employee")),
+                                                                                content: SingleChildScrollView(
+                                                                                  child: Column(
+                                                                                    mainAxisSize: MainAxisSize.min,
+                                                                                    children: [
+                                                                                      TextFormField(
+                                                                                        cursorColor: Colors.white,
+                                                                                        style: const TextStyle(color: Colors.white),
+                                                                                        initialValue: employee.name,
+                                                                                        decoration: const InputDecoration(labelText: 'Name'),
+                                                                                        onChanged: (value) async {
+                                                                                          if (value.isEmpty) {
+                                                                                            SearchByImageBloc.get(context).add(
+                                                                                              AdduserId(
+                                                                                                userId: employee.name!,
+                                                                                              ),
+                                                                                            );
+                                                                                          } else {
+                                                                                            SearchByImageBloc.get(context).add(
+                                                                                              AddpersonName(personName: value),
+                                                                                            );
+                                                                                          }
+                                                                                        },
+                                                                                      ),
+                                                                                      FxBox.h24,
+                                                                                      TextFormField(
+                                                                                        cursorColor: Colors.white,
+                                                                                        style: const TextStyle(color: Colors.white),
+                                                                                        initialValue: employee.userId,
+                                                                                        decoration: const InputDecoration(labelText: 'UserId'),
+                                                                                        onChanged: (value) async {
+                                                                                          if (value.isEmpty) {
+                                                                                            SearchByImageBloc.get(context).add(
+                                                                                              AdduserId(
+                                                                                                userId: employee.userId!,
+                                                                                              ),
+                                                                                            );
+                                                                                          } else {
+                                                                                            SearchByImageBloc.get(context).add(
+                                                                                              AdduserId(
+                                                                                                userId: value,
+                                                                                              ),
+                                                                                            );
+                                                                                          }
+                                                                                        },
+                                                                                      ),
+                                                                                      FxBox.h24,
+                                                                                      TextFormField(
+                                                                                        cursorColor: Colors.white,
+                                                                                        style: const TextStyle(color: Colors.white),
+                                                                                        initialValue: employee.phone,
+                                                                                        decoration: const InputDecoration(labelText: 'Phone Number'),
+                                                                                        onChanged: (value) async {
+                                                                                          if (value.isEmpty) {
+                                                                                            SearchByImageBloc.get(context).add(
+                                                                                              AdduserId(
+                                                                                                userId: employee.phone!,
+                                                                                              ),
+                                                                                            );
+                                                                                          } else {
+                                                                                            SearchByImageBloc.get(context).add(
+                                                                                              AddphoneNum(
+                                                                                                phoneNum: value,
+                                                                                              ),
+                                                                                            );
+                                                                                          }
+                                                                                        },
+                                                                                      ),
+                                                                                      FxBox.h24,
+                                                                                      TextFormField(
+                                                                                        keyboardType: TextInputType.emailAddress,
+                                                                                        cursorColor: Colors.white,
+                                                                                        style: const TextStyle(color: Colors.white),
+                                                                                        initialValue: employee.email,
+                                                                                        decoration: const InputDecoration(labelText: 'Email'),
+                                                                                        onChanged: (value) async {
+                                                                                          if (value.isEmpty) {
+                                                                                            SearchByImageBloc.get(context).add(
+                                                                                              AdduserId(
+                                                                                                userId: employee.email!,
+                                                                                              ),
+                                                                                            );
+                                                                                          } else {
+                                                                                            SearchByImageBloc.get(context).add(
+                                                                                              Addemail(
+                                                                                                email: value,
+                                                                                              ),
+                                                                                            );
+                                                                                          }
+                                                                                        },
+                                                                                      ),
+                                                                                      FxBox.h24,
+                                                                                      FxBox.h24,
+                                                                                      SizedBox(
+                                                                                        height: 100,
+                                                                                        child: Image.network(
+                                                                                          "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/${employee.imagePath}",
+                                                                                          fit: BoxFit.cover,
+                                                                                        ),
+                                                                                      ),
+                                                                                      Padding(
+                                                                                        padding: const EdgeInsets.all(16.0),
+                                                                                        child: Column(
+                                                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                          children: [
+                                                                                            const Row(
+                                                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                              children: [
+                                                                                                Row(
+                                                                                                  children: [
+                                                                                                    Text(
+                                                                                                      'BlackListed:',
+                                                                                                      style: TextStyle(fontWeight: FontWeight.w900, color: AppColors.white, fontSize: 20.0),
+                                                                                                    ),
+                                                                                                    SizedBox(
+                                                                                                      width: 15,
+                                                                                                    ),
+                                                                                                    Icon(
+                                                                                                      Icons.warning_amber_outlined,
+                                                                                                      color: Colors.red,
+                                                                                                      size: 35,
+                                                                                                    ),
+                                                                                                  ],
+                                                                                                ),
+                                                                                                Tooltip(
+                                                                                                  message: "If the person is BlackListed he has no access to any room if not choose the rooms he is authorized to enter",
+                                                                                                  child: Icon(
+                                                                                                    Icons.info_outline,
+                                                                                                    color: Colors.white,
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ],
+                                                                                            ),
+                                                                                            RadioListTile(
+                                                                                              activeColor: Colors.white,
+                                                                                              // selected: employee.blackListed == "True",
+                                                                                              title: const Text('Yes', style: TextStyle(color: Colors.white)),
+                                                                                              value: 'True',
+                                                                                              groupValue: state.selectedOption,
+                                                                                              onChanged: (value) {
+                                                                                                SearchByImageBloc.get(context).add(RadioButtonChanged(selectedOption: value.toString(), showTextField: false));
+                                                                                              },
+                                                                                            ),
+                                                                                            RadioListTile(
+                                                                                              activeColor: Colors.white,
+                                                                                              title: const Text('No', style: TextStyle(color: Colors.white)),
+                                                                                              value: 'False',
+                                                                                              // selected: employee.blackListed != "True",
+                                                                                              groupValue: state.selectedOption,
+                                                                                              onChanged: (value) {
+                                                                                                SearchByImageBloc.get(context).add(RadioButtonChanged(selectedOption: value.toString(), showTextField: true));
+                                                                                              },
+                                                                                            ),
+                                                                                            FxBox.h24,
+                                                                                            if (state.showTextField)
+                                                                                              multiSelectGenericDropdown(
+                                                                                                showSearch: true,
+                                                                                                isEnabled: true,
+                                                                                                isRequired: false,
+                                                                                                filled: true,
+                                                                                                selectedItem: employee.roomsAccesseble,
+                                                                                                titleName: "Room Access Management",
+                                                                                                onChanged: (value) {
+                                                                                                  SearchByImageBloc.get(context).add(checkBox(room_NMs: value!));
+                                                                                                },
+                                                                                                itemsList: checkboxItems,
+                                                                                              ),
+                                                                                          ],
+                                                                                        ),
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                ),
+                                                                                actions: [
+                                                                                  TextButton(
+                                                                                    onPressed: () {
+                                                                                      Navigator.of(context).pop(); // Close the dialog
+                                                                                    },
+                                                                                    child: const Text(
+                                                                                      'Cancel',
+                                                                                      style: TextStyle(color: Colors.red),
+                                                                                    ),
+                                                                                  ),
+                                                                                  ElevatedButton(
+                                                                                    onPressed: () {
+                                                                                      SearchByImageBloc.get(context).add(
+                                                                                        UpdateEmployeeEvent(
+                                                                                          companyName: companyNameRepo,
+                                                                                          id: employee.sId ?? '',
+
+                                                                                          // userId: state.userId,
+                                                                                          // companyName: state.companyName,
+                                                                                        ),
+                                                                                      );
+                                                                                      Navigator.of(context).pop();
+                                                                                    },
+                                                                                    child: const Text('Update'),
+                                                                                  ),
+                                                                                ],
+                                                                              );
+                                                                            },
+                                                                          ),
+                                                                        );
+                                                                      },
+                                                                    );
                                                                   },
                                                                 );
                                                               },
@@ -1180,6 +1632,14 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                   children: [
                                     IconButton(
                                       onPressed: () {
+                                        if (state.sliderValue == null) {
+                                          FxToast.showErrorToast(
+                                            context: context,
+                                            message:
+                                                "Choose Accuracy on the SliderBar",
+                                          );
+                                          return;
+                                        }
                                         if (state.roomChoosen == null) {
                                           FxToast.showErrorToast(
                                             context: context,
@@ -1404,8 +1864,6 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                       context
                                           .read<PhotoAppCubit>()
                                           .stopCamera();
-
-                                      // state.controller?.pausePreview();
 
                                       context
                                           .read<PhotoAppCubit>()
@@ -1656,150 +2114,6 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                   style: const TextStyle(color: AppColors.green),
                 ),
                 onPressed: () => Navigator.of(ctx).pop()),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showUpdateDialog(BuildContext context, Dataa employee) {
-    showDialog(
-      context: context,
-      builder: (ctx) {
-        return AlertDialog(
-          title: const SizedBox(width: 500, child: Text("Update Employee")),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  cursorColor: Colors.white,
-                  style: const TextStyle(color: Colors.white),
-                  initialValue: employee.name,
-                  decoration: const InputDecoration(labelText: 'Name'),
-                  onChanged: (value) async {
-                    if (value.isEmpty) {
-                      SearchByImageBloc.get(context).add(
-                        AdduserId(
-                          userId: employee.name!,
-                        ),
-                      );
-                    } else {
-                      SearchByImageBloc.get(context).add(
-                        AddpersonName(personName: value),
-                      );
-                    }
-                  },
-                ),
-                FxBox.h24,
-                TextFormField(
-                  cursorColor: Colors.white,
-                  style: const TextStyle(color: Colors.white),
-                  initialValue: employee.userId,
-                  decoration: const InputDecoration(labelText: 'UserId'),
-                  onChanged: (value) async {
-                    if (value.isEmpty) {
-                      SearchByImageBloc.get(context).add(
-                        AdduserId(
-                          userId: employee.userId!,
-                        ),
-                      );
-                    } else {
-                      SearchByImageBloc.get(context).add(
-                        AdduserId(
-                          userId: value,
-                        ),
-                      );
-                    }
-                  },
-                ),
-                FxBox.h24,
-                TextFormField(
-                  cursorColor: Colors.white,
-                  style: const TextStyle(color: Colors.white),
-                  initialValue: employee.phone,
-                  decoration: const InputDecoration(labelText: 'Phone Number'),
-                  onChanged: (value) async {
-                    if (value.isEmpty) {
-                      SearchByImageBloc.get(context).add(
-                        AdduserId(
-                          userId: employee.phone!,
-                        ),
-                      );
-                    } else {
-                      SearchByImageBloc.get(context).add(
-                        AddphoneNum(
-                          phoneNum: value,
-                        ),
-                      );
-                    }
-                  },
-                ),
-                FxBox.h24,
-                TextFormField(
-                  keyboardType: TextInputType.emailAddress,
-                  // inputFormatters: [
-                  //   FilteringTextInputFormatter.allow(
-                  //     RegExp(r'^[\w-\.]+@[a-zA-Z]+\.[a-zA-Z]{2,4}$'),
-                  //   ),
-                  // ],
-                  cursorColor: Colors.white,
-                  style: const TextStyle(color: Colors.white),
-                  initialValue: employee.email,
-                  decoration: const InputDecoration(labelText: 'Email'),
-                  onChanged: (value) async {
-                    if (value.isEmpty) {
-                      SearchByImageBloc.get(context).add(
-                        AdduserId(
-                          userId: employee.email!,
-                        ),
-                      );
-                    } else {
-                      SearchByImageBloc.get(context).add(
-                        Addemail(
-                          email: value,
-                        ),
-                      );
-                    }
-                  },
-                ),
-                FxBox.h24,
-                FxBox.h24,
-                SizedBox(
-                  height: 100,
-                  child: Image.network(
-                    "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/${employee.imagePath}",
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: const Text(
-                'Cancel',
-                style: TextStyle(color: Colors.red),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                SearchByImageBloc.get(context).add(
-                  UpdateEmployeeEvent(
-                    companyName: companyNameRepo,
-                    id: employee.sId ?? '',
-
-                    // userId: state.userId,
-                    // companyName: state.companyName,
-                  ),
-                );
-                Navigator.of(context).pop();
-              },
-              child: const Text('Update'),
-            ),
           ],
         );
       },

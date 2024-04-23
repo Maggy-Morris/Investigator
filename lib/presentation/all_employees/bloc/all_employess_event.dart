@@ -11,10 +11,10 @@ class AllEmployeesEvent extends Equatable {
 
 class RadioButtonChanged extends AllEmployeesEvent {
   final String selectedOption;
-  final bool showTextField;
+  final bool? showTextField;
 
   const RadioButtonChanged(
-      {required this.selectedOption, required this.showTextField});
+      {required this.selectedOption,  this.showTextField});
 }
 
 class Check extends AllEmployeesEvent {

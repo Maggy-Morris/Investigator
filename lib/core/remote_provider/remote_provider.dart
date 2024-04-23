@@ -218,7 +218,6 @@ class RemoteProvider {
         endPoint: "/add_a_new_person",
         body: body,
       );
-      //Change this "Collection Created Successfully!"
 
       if (callBack.isNotEmpty) {
         AddPersonModel addPersonModel = AddPersonModel.fromJson(callBack);
@@ -239,20 +238,29 @@ class RemoteProvider {
     required String id,
     required String phoneNum,
     required String userId,
+    required String blackListed,
+    List<String>? roomNamesChoosen,
   }) async {
     try {
+      Map<String, dynamic> body = {
+        "collection_name": companyName,
+        "_id": id,
+        "data": {
+          if (blackListed.isNotEmpty) "blacklisted": blackListed,
+          "target_name": personName,
+          "email": email,
+          "phone": phoneNum,
+          "user_id": userId,
+          if (roomNamesChoosen != null) "IAM": roomNamesChoosen,
+        }
+      };
+
+      // if (roomNamesChoosen != null) {
+      //   body["IAM"] = roomNamesChoosen;
+      // }
       Map<String, dynamic> callBack = await RemoteDataSource().post(
         endPoint: "/qdrant/update_user",
-        body: {
-          "collection_name": companyName,
-          "_id": id,
-          "data": {
-            "target_name": personName,
-            "email": email,
-            "phone": phoneNum,
-            "user_id": userId,
-          }
-        },
+        body: body,
       );
 
       //Change this "Collection Created Successfully!"

@@ -142,6 +142,9 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                       min: _min,
                                       max: _max,
                                       value: _value,
+                                      //  state.accuracy.isEmpty
+                                      //     ? 10
+                                      //     : state.accuracy.toString(),
                                       interval: 18, // Assuming interval is 1
                                       showTicks: true,
                                       showLabels: true,
@@ -185,10 +188,9 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
-                             // Images Carasol
+                                  // Images Carasol
                                   Tooltip(
-                                    message:
-                                        "Upload Image or Multiple Images",
+                                    message: "Upload Image or Multiple Images",
                                     child: SizedBox(
                                       height: 300,
                                       width: 300,
@@ -412,6 +414,30 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                   : Center(
                                       child: ElevatedButton.icon(
                                           onPressed: () {
+                                            if (state.imageWidget == null) {
+                                              FxToast.showErrorToast(
+                                                context: context,
+                                                message:
+                                                    "Pick your Image or Images",
+                                              );
+                                              return;
+                                            }
+                                            if (state.video == null) {
+                                              FxToast.showErrorToast(
+                                                context: context,
+                                                message: "Pick your Video",
+                                              );
+                                              return;
+                                            }
+
+                                            if (state.accuracy.isEmpty) {
+                                              FxToast.showErrorToast(
+                                                context: context,
+                                                message:
+                                                    "Choose Accuracy on the SliderBar",
+                                              );
+                                              return;
+                                            }
                                             HomeBloc.get(context).add(
                                                 const reloadSnapShots(
                                                     snapyy: []));
@@ -828,6 +854,30 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                   : Center(
                                       child: ElevatedButton.icon(
                                           onPressed: () {
+                                            if (state.imageWidget == null) {
+                                              FxToast.showErrorToast(
+                                                context: context,
+                                                message:
+                                                    "Pick your Image or Images",
+                                              );
+                                              return;
+                                            }
+                                            if (state.video == null) {
+                                              FxToast.showErrorToast(
+                                                context: context,
+                                                message: "Pick your Video",
+                                              );
+                                              return;
+                                            }
+
+                                            if (state.accuracy.isEmpty) {
+                                              FxToast.showErrorToast(
+                                                context: context,
+                                                message:
+                                                    "Choose Accuracy on the SliderBar",
+                                              );
+                                              return;
+                                            }
                                             HomeBloc.get(context).add(
                                                 const reloadSnapShots(
                                                     snapyy: []));

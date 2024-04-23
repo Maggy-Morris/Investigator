@@ -35,8 +35,10 @@ class Data {
   String? phone;
   String? userId;
   String? blackListed;
+  List<String>? roomsAccesseble;
 
   Data({
+    this.roomsAccesseble,
     this.sId,
     this.email,
     this.imagePath,
@@ -47,6 +49,9 @@ class Data {
   });
 
   Data.fromJson(Map<String, dynamic> json) {
+    roomsAccesseble = json['IAM'] != null
+        ? List<String>.from(json['IAM'])
+        : null;
     blackListed = json['blacklisted'];
     sId = json['_id'];
     email = json['email'];
@@ -58,6 +63,7 @@ class Data {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['IAM'] = roomsAccesseble;
     data['blacklisted'] = blackListed;
     data['_id'] = sId;
     data['email'] = email;

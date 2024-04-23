@@ -32,8 +32,9 @@ class SearchByImageModel {
         data?.add(Dataa.fromJson(v));
       });
     }
-    blacklis =
-        json['blacklisted_list_checks'] != null ? List<String>.from(json['blacklisted_list_checks']) : null;
+    blacklis = json['blacklisted_list_checks'] != null
+        ? List<String>.from(json['blacklisted_list_checks'])
+        : null;
 
     result = json['result'] != null ? List<String>.from(json['result']) : null;
     targeted = json['targeted'];
@@ -62,9 +63,11 @@ class Dataa {
   String? phone;
   String? userId;
   String? blackListed;
+  List<String>? roomsAccesseble;
 
   Dataa(
-      {this.sId,
+      {this.roomsAccesseble,
+      this.sId,
       this.blackListed,
       this.email,
       this.imagePath,
@@ -73,6 +76,8 @@ class Dataa {
       this.userId});
 
   Dataa.fromJson(Map<String, dynamic> json) {
+    roomsAccesseble =
+        json['IAM'] != null ? List<String>.from(json['IAM']) : null;
     blackListed = json['blacklisted'];
     sId = json['_id'];
     email = json['email'];
@@ -84,6 +89,8 @@ class Dataa {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['IAM'] = roomsAccesseble;
+
     data['blacklisted'] = blackListed;
     data['_id'] = sId;
     data['email'] = email;
