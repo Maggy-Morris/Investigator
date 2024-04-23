@@ -1,4 +1,3 @@
-import 'package:Investigator/presentation/group_search/screens/group_search_screen.dart';
 import 'package:Investigator/presentation/settings/screens/settings.dart';
 import 'package:Investigator/presentation/signup/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +11,7 @@ import 'authentication/authentication_repository.dart';
 import 'core/widgets/no_animation_page.dart';
 import 'presentation/all_employees/screens/all_employees.dart';
 // import 'presentation/choose_your_company/choose_your_company_screen.dart';
+import 'presentation/database_search/screens/group_search_screen.dart';
 import 'presentation/investigator/screens/investigator_screen.dart';
 
 checkAuthority() {
@@ -42,7 +42,7 @@ getRoutesAdmin() {
     '/settings': (route) => NoAnimationPage(child: Settings()),
 
     '/investigator': (route) => const NoAnimationPage(child: AddCameraScreen()),
-    '/groupSearch': (route) =>
+    '/databaseSearch': (route) =>
         const NoAnimationPage(child: GroupSearchScreen()),
 
     '/search': (route) => const NoAnimationPage(child: Search()),

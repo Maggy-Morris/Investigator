@@ -81,7 +81,7 @@ class SearchByImageBloc extends Bloc<SearchByImageEvent, SearchByImageState> {
   _onImageToSearchForEmployee(
       ImageToSearchForEmployee event, Emitter<SearchByImageState> emit) async {
     emit(state.copyWith(
-        imageWidget: event.imageWidget, submission: Submission.loading));
+        imageWidget: event.imageWidget, submission: Submission.hasData));
     // Your logic here to fetch data and determine the imageWidget
   }
 

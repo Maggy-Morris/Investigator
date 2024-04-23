@@ -318,7 +318,7 @@ class StandardLayoutScreen extends StatelessWidget {
                                           .push('/investigator');
                                     } else if (index == 3) {
                                       Routemaster.of(context)
-                                          .push('/groupSearch');
+                                          .push('/databaseSearch');
                                     } else if (index == 4) {
                                       Routemaster.of(context).push('/settings');
                                     }

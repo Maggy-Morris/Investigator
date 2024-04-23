@@ -486,183 +486,179 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                     Column(
                                       children: [
                                         // Here to search for an Employee in the database
-                                        BlocBuilder<SearchByImageBloc,
-                                            SearchByImageState>(
-                                          builder: (context, state) {
-                                            return Card(
-                                              elevation: 4,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                              ),
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                child: Stack(
-                                                  children: [
-                                                    GestureDetector(
-                                                      onTap: () async {
-                                                        // FilePickerResult? result =
-                                                        await FilePicker
-                                                            .platform
-                                                            .pickFiles(
-                                                          type: FileType.image,
-                                                        )
-                                                            .then((result) {
-                                                          if (result != null &&
-                                                              result.files
-                                                                  .isNotEmpty) {
-                                                            final imageFile =
-                                                                result.files
-                                                                    .first;
-                                                            final image = imageFile
-                                                                        .bytes !=
-                                                                    null
-                                                                ? Image.memory(
-                                                                    imageFile
-                                                                        .bytes!,
-                                                                    fit: BoxFit
-                                                                        .cover,
-                                                                  )
-                                                                : loadingIndicator();
 
-                                                            SearchByImageBloc
-                                                                    .get(
-                                                                        context)
-                                                                .add(
-                                                              ImageToSearchForEmployee(
-                                                                  imageWidget:
-                                                                      image),
-                                                            );
-
-                                                            String base64Image =
-                                                                base64Encode(
-                                                                    imageFile
-                                                                        .bytes!);
-
-                                                            SearchByImageBloc
-                                                                    .get(
-                                                                        context)
-                                                                .add(
-                                                              SearchForEmployee(
-                                                                companyName:
-                                                                    companyNameRepo,
-                                                                image:
-                                                                    base64Image,
-                                                              ),
-                                                            );
-                                                          }
-                                                          return null;
-                                                        });
-                                                      },
-                                                      child: state
-                                                              .imageWidget ??
-                                                          Image.asset(
-                                                            'assets/images/person-search.png',
-                                                            // width: double.infinity,
-                                                            // height: 200,
-                                                            fit: BoxFit.cover,
-                                                          ),
-                                                    ),
-                                                    Positioned(
-                                                      bottom: 0,
-                                                      left: 0,
-                                                      right: 0,
-                                                      child: Container(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                          vertical: 8,
-                                                          horizontal: 16,
-                                                        ),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              const BorderRadius
-                                                                  .only(
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    12),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    12),
-                                                          ),
-                                                          color: Colors.black
-                                                              .withOpacity(0.6),
-                                                        ),
-                                                        child: Text(
-                                                          // Use state data to show appropriate text
-                                                          state.submission ==
-                                                                  Submission
-                                                                      .loading
-                                                              ? 'Searching...'
-                                                              : state.submission ==
-                                                                      Submission
-                                                                          .success
-                                                                  ? '${state.result}'
-                                                                  : state.submission ==
-                                                                          Submission
-                                                                              .noDataFound
-                                                                      ? 'Not in the Database'
-                                                                      : '',
-                                                          style:
-                                                              const TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 18,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      // Use state data to show appropriate text
-                                                      state.submission ==
-                                                              Submission.loading
-                                                          ? 'Searching...'
-                                                          : state.submission ==
-                                                                  Submission
-                                                                      .success
-                                                              ? '${state.boxes}'
-                                                              : state.submission ==
-                                                                      Submission
-                                                                          .noDataFound
-                                                                  ? 'Not in the database'
-                                                                  : '',
-                                                      style: const TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                    CustomPaint(
-                                                      painter: RectanglePainter(
-                                                        (state.blacklis ?? [])
-                                                            .map((blacklis) =>
-                                                                blacklis)
-                                                            .toList(),
-                                                        (state.result ?? [])
-                                                            .map((result) =>
-                                                                result)
-                                                            .toList(),
-                                                        (state.boxes ?? [])
-                                                            .map((box) => (box))
-                                                            .toList(),
-                                                        (state.textAccuracy ??
-                                                                [])
-                                                            .map((textForAccuracy) =>
-                                                                textForAccuracy)
-                                                            .toList(),
-                                                      ),
-                                                    ),
-                                                  ],
+                                        BlocProvider.value(
+                                          value: SearchByImageBloc.get(context),
+                                          child: BlocBuilder<SearchByImageBloc,
+                                              SearchByImageState>(
+                                            builder: (context, state) {
+                                              return Card(
+                                                elevation: 4,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
                                                 ),
-                                              ),
-                                            );
-                                          },
-                                        ),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  child: Stack(
+                                                    children: [
+                                                      GestureDetector(
+                                                        onTap: () async {
+                                                          // FilePickerResult? result =
+                                                          await FilePicker
+                                                              .platform
+                                                              .pickFiles(
+                                                            type:
+                                                                FileType.image,
+                                                          )
+                                                              .then((result) {
+                                                            if (result !=
+                                                                    null &&
+                                                                result.files
+                                                                    .isNotEmpty) {
+                                                              final imageFile =
+                                                                  result.files
+                                                                      .first;
+                                                              final image = imageFile
+                                                                          .bytes !=
+                                                                      null
+                                                                  ? Image
+                                                                      .memory(
+                                                                      imageFile
+                                                                          .bytes!,
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    )
+                                                                  : loadingIndicator();
 
+                                                              SearchByImageBloc
+                                                                      .get(
+                                                                          context)
+                                                                  .add(
+                                                                ImageToSearchForEmployee(
+                                                                    imageWidget:
+                                                                        image),
+                                                              );
+                                                              setState(() {
+                                                                _image = image;
+                                                              });
+
+                                                              String
+                                                                  base64Image =
+                                                                  base64Encode(
+                                                                      imageFile
+                                                                          .bytes!);
+
+                                                              SearchByImageBloc
+                                                                      .get(
+                                                                          context)
+                                                                  .add(
+                                                                SearchForEmployee(
+                                                                  companyName:
+                                                                      companyNameRepo,
+                                                                  image:
+                                                                      base64Image,
+                                                                ),
+                                                              );
+                                                            }
+                                                            return null;
+                                                          });
+                                                        },
+                                                        child: _image
+                                                            // state
+                                                            //         .imageWidget
+
+                                                            ??
+                                                            Image.asset(
+                                                              'assets/images/person-search.png',
+                                                              // width: double.infinity,
+                                                              // height: 200,
+                                                              fit: BoxFit.cover,
+                                                            ),
+                                                      ),
+                                                      Positioned(
+                                                        bottom: 0,
+                                                        left: 0,
+                                                        right: 0,
+                                                        child: Container(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                            vertical: 8,
+                                                            horizontal: 16,
+                                                          ),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                const BorderRadius
+                                                                    .only(
+                                                              bottomLeft: Radius
+                                                                  .circular(12),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          12),
+                                                            ),
+                                                            color: Colors.black
+                                                                .withOpacity(
+                                                                    0.6),
+                                                          ),
+                                                          child: Text(
+                                                            // Use state data to show appropriate text
+                                                            state.submission ==
+                                                                    Submission
+                                                                        .loading
+                                                                ? 'Searching...'
+                                                                : state.submission ==
+                                                                        Submission
+                                                                            .success
+                                                                    ? '${state.result}'
+                                                                    : state.submission ==
+                                                                            Submission.noDataFound
+                                                                        ? 'Not in the Database'
+                                                                        : '',
+                                                            style:
+                                                                const TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 18,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      CustomPaint(
+                                                        painter:
+                                                            RectanglePainter(
+                                                          (state.blacklis ?? [])
+                                                              .map((blacklis) =>
+                                                                  blacklis)
+                                                              .toList(),
+                                                          (state.result ?? [])
+                                                              .map((result) =>
+                                                                  result)
+                                                              .toList(),
+                                                          (state.boxes ?? [])
+                                                              .map((box) =>
+                                                                  (box))
+                                                              .toList(),
+                                                          (state.textAccuracy ??
+                                                                  [])
+                                                              .map((textForAccuracy) =>
+                                                                  textForAccuracy)
+                                                              .toList(),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
                                         //Confirm Button to send the image
                                         FxBox.h24,
                                         (state.submission == Submission.loading)
@@ -862,144 +858,286 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                         if (state.isChosen == false) {
                           return Column(
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(15.0),
-                                    child: SizedBox(
-                                      width: 250,
-                                      child:
-                                          singleSelectGenericDropdown<String>(
-                                        titleName: "Select A Room",
-                                        isEnabled: true,
-                                        isRequired: false,
-                                        filled: true,
-                                        showSearch: true,
-                                        selectedItem: state.roomChoosen,
-                                        onChanged: (value) {
-                                          if (value?.isNotEmpty ?? false) {
-                                            // context
-                                            //     .read<SearchByImageBloc>()
-                                            //     .add(
-                                            //       RadioButtonChanged(
-                                            //           selectedOption:
-                                            //               value ?? ""),
-                                            //);
+                              if (Responsive.isWeb(context))
+                                Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(15.0),
+                                          child: SizedBox(
+                                            width: 250,
+                                            child: singleSelectGenericDropdown<
+                                                String>(
+                                              titleName: "Select A Room",
+                                              isEnabled: true,
+                                              isRequired: false,
+                                              filled: true,
+                                              showSearch: true,
+                                              selectedItem: state.roomChoosen,
+                                              onChanged: (value) {
+                                                if (value?.isNotEmpty ??
+                                                    false) {
+                                                  // context
+                                                  //     .read<SearchByImageBloc>()
+                                                  //     .add(
+                                                  //       RadioButtonChanged(
+                                                  //           selectedOption:
+                                                  //               value ?? ""),
+                                                  //);
 
+                                                  context
+                                                      .read<PhotoAppCubit>()
+                                                      .roomChoosen(value ?? "");
+                                                }
+                                              },
+                                              itemsList: checkboxItems,
+                                            ),
+                                          ),
+                                        ),
+
+                                        ///////////////////////////////////////
+
+                                        Row(
+                                          children: [
+                                            Checkbox(
+                                              checkColor: Colors.white,
+                                              focusColor: Colors.white,
+                                              hoverColor: Colors.white,
+                                              value:
+                                                  state.securityBreachChecked,
+                                              onChanged: (bool? value) {
+                                                context
+                                                    .read<PhotoAppCubit>()
+                                                    .toggleSecurityBreach(
+                                                        value ?? false);
+                                              },
+                                            ),
+                                            const Text(
+                                              'Security Breach',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.white
+                                                  // You can adjust the style of the text as needed
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    const Tooltip(
+                                      message:
+                                          "Choose The Accuracy You Want To Search For A Person With Using The SliderBar \n        Note That If the Video Resolution Is Bad Try to Choose High Accuracy ",
+                                      child: Icon(
+                                        Icons.info_outline_rounded,
+                                        color: AppColors.white,
+                                        size: 25,
+                                      ),
+                                    ),
+                                    Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 50.0, vertical: 20),
+                                        child: SfRangeSliderTheme(
+                                          data: SfRangeSliderThemeData(
+                                            activeTrackColor: Colors.white,
+                                            activeLabelStyle: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12,
+                                                fontStyle: FontStyle.italic),
+                                            inactiveLabelStyle: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12,
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                          child: SfSlider(
+                                            enableTooltip: true,
+                                            activeColor: const Color.fromRGBO(
+                                                214, 221, 224, 1),
+                                            min: _min,
+                                            max: _max,
+                                            value: _value,
+                                            interval:
+                                                18, // Assuming interval is 1
+                                            showTicks: true,
+                                            showLabels: true,
+
+                                            onChanged: (dynamic newValue) {
+                                              context
+                                                  .read<PhotoAppCubit>()
+                                                  .sliderControl(
+                                                      sliderVal:
+                                                          (newValue / 100)
+                                                              .toString());
+
+                                              setState(() {
+                                                _value = newValue;
+                                              });
+                                            },
+                                            labelFormatterCallback:
+                                                (dynamic value,
+                                                    String formattedValue) {
+                                              // Map numeric values to custom string labels
+                                              switch (value.toInt()) {
+                                                case 10:
+                                                  return 'Low';
+                                                case 28:
+                                                  return 'Medium';
+                                                case 46:
+                                                  return 'High';
+                                                case 64:
+                                                  return 'Very High';
+                                                case 82:
+                                                  return 'Extreme';
+                                                case 100:
+                                                  return 'Identical';
+                                                default:
+                                                  return ''; // Return empty string for other values
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              if (!Responsive.isWeb(context))
+                                Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: SizedBox(
+                                        width: 150,
+                                        child:
+                                            singleSelectGenericDropdown<String>(
+                                          titleName: "Select A Room",
+                                          isEnabled: true,
+                                          isRequired: false,
+                                          filled: true,
+                                          showSearch: true,
+                                          selectedItem: state.roomChoosen,
+                                          onChanged: (value) {
+                                            if (value?.isNotEmpty ?? false) {
+                                              
+
+                                              context
+                                                  .read<PhotoAppCubit>()
+                                                  .roomChoosen(value ?? "");
+                                            }
+                                          },
+                                          itemsList: checkboxItems,
+                                        ),
+                                      ),
+                                    ),
+
+                                    ///////////////////////////////////////
+
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Checkbox(
+                                          checkColor: Colors.white,
+                                          focusColor: Colors.white,
+                                          hoverColor: Colors.white,
+                                          value: state.securityBreachChecked,
+                                          onChanged: (bool? value) {
                                             context
                                                 .read<PhotoAppCubit>()
-                                                .roomChoosen(value ?? "");
-                                          }
-                                        },
-                                        itemsList: checkboxItems,
+                                                .toggleSecurityBreach(
+                                                    value ?? false);
+                                          },
+                                        ),
+                                        const Text(
+                                          'Security Breach',
+                                          style: TextStyle(
+                                              fontSize: 16, color: Colors.white
+                                              // You can adjust the style of the text as needed
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                    const Tooltip(
+                                      message:
+                                          "Choose The Accuracy You Want To Search For A Person With Using The SliderBar \n        Note That If the Video Resolution Is Bad Try to Choose High Accuracy ",
+                                      child: Icon(
+                                        Icons.info_outline_rounded,
+                                        color: AppColors.white,
+                                        size: 25,
                                       ),
                                     ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Checkbox(
-                                        checkColor: Colors.white,
-                                        focusColor: Colors.white,
-                                        hoverColor: Colors.white,
-                                        value: state.securityBreachChecked,
-                                        onChanged: (bool? value) {
-                                          context
-                                              .read<PhotoAppCubit>()
-                                              .toggleSecurityBreach(
-                                                  value ?? false);
-                                        },
-                                      ),
-                                      const Text(
-                                        'Security Breach',
-                                        style: TextStyle(
-                                            fontSize: 16, color: Colors.white
-                                            // You can adjust the style of the text as needed
-                                            ),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                              const Tooltip(
-                                message:
-                                    "Choose The Accuracy You Want To Search For A Person With Using The SliderBar \n        Note That If the Video Resolution Is Bad Try to Choose High Accuracy ",
-                                child: Icon(
-                                  Icons.info_outline_rounded,
-                                  color: AppColors.white,
-                                  size: 25,
-                                ),
-                              ),
-                              Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 50.0, vertical: 20),
-                                  child: SfRangeSliderTheme(
-                                    data: SfRangeSliderThemeData(
-                                      activeTrackColor: Colors.white,
-                                      activeLabelStyle: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                          fontStyle: FontStyle.italic),
-                                      inactiveLabelStyle: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                          fontStyle: FontStyle.italic),
-                                    ),
-                                    child: SfSlider(
-                                      enableTooltip: true,
-                                      activeColor: const Color.fromRGBO(
-                                          214, 221, 224, 1),
-                                      min: _min,
-                                      max: _max,
-                                      value: _value,
-                                      interval: 18, // Assuming interval is 1
-                                      showTicks: true,
-                                      showLabels: true,
+                                    Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 50.0, vertical: 20),
+                                        child: SfRangeSliderTheme(
+                                          data: SfRangeSliderThemeData(
+                                            activeTrackColor: Colors.white,
+                                            activeLabelStyle: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12,
+                                                fontStyle: FontStyle.italic),
+                                            inactiveLabelStyle: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12,
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                          child: SfSlider(
+                                            enableTooltip: true,
+                                            activeColor: const Color.fromRGBO(
+                                                214, 221, 224, 1),
+                                            min: _min,
+                                            max: _max,
+                                            value: _value,
+                                            interval:
+                                                18, // Assuming interval is 1
+                                            showTicks: true,
+                                            showLabels: true,
 
-                                      onChanged: (dynamic newValue) {
-                                        context
-                                            .read<PhotoAppCubit>()
-                                            .sliderControl(
-                                                sliderVal: (newValue / 100)
-                                                    .toString());
+                                            onChanged: (dynamic newValue) {
+                                              context
+                                                  .read<PhotoAppCubit>()
+                                                  .sliderControl(
+                                                      sliderVal:
+                                                          (newValue / 100)
+                                                              .toString());
 
-                                        setState(() {
-                                          _value = newValue;
-                                        });
-                                      },
-                                      labelFormatterCallback: (dynamic value,
-                                          String formattedValue) {
-                                        // Map numeric values to custom string labels
-                                        switch (value.toInt()) {
-                                          case 10:
-                                            return 'Low';
-                                          case 28:
-                                            return 'Medium';
-                                          case 46:
-                                            return 'High';
-                                          case 64:
-                                            return 'Very High';
-                                          case 82:
-                                            return 'Extreme';
-                                          case 100:
-                                            return 'Identical';
-                                          default:
-                                            return ''; // Return empty string for other values
-                                        }
-                                      },
+                                              setState(() {
+                                                _value = newValue;
+                                              });
+                                            },
+                                            // labelFormatterCallback: (dynamic value,
+                                            //     String formattedValue) {
+                                            //   // Map numeric values to custom string labels
+                                            //   switch (value.toInt()) {
+                                            //     case 10:
+                                            //       return 'L';
+                                            //     case 28:
+                                            //       return 'M';
+                                            //     case 46:
+                                            //       return 'H';
+                                            //     case 64:
+                                            //       return 'V-H';
+                                            //     case 82:
+                                            //       return 'E';
+                                            //     case 100:
+                                            //       return 'I';
+                                            //     default:
+                                            //       return ''; // Return empty string for other values
+                                            //   }
+                                            // },
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              ),
                               Center(
                                 child: Stack(
                                   children: [
-                                    // getAvatar(state.file),
-                                    // Positioned(
-                                    // bottom: -15,
-                                    // left: 80,
-                                    // child:
+                                   
                                     IconButton(
                                       onPressed: () {
                                         if (state.roomChoosen == null) {

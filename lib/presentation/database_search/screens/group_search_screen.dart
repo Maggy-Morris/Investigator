@@ -115,105 +115,113 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                         if (Responsive.isWeb(context))
                           Column(
                             children: [
-                              Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 50.0, vertical: 20),
-                                  child: SfRangeSliderTheme(
-                                    data: SfRangeSliderThemeData(
-                                      activeTrackColor: Colors.white,
-                                      activeLabelStyle: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                          fontStyle: FontStyle.italic),
-                                      inactiveLabelStyle: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                          fontStyle: FontStyle.italic),
-                                    ),
-                                    child: SfSlider(
-                                      enableTooltip: true,
-                                      activeColor: const Color.fromRGBO(
-                                          214, 221, 224, 1),
-                                      min: _min,
-                                      max: _max,
-                                      value: _value,
-                                      interval: 18, // Assuming interval is 1
-                                      showTicks: true,
-                                      showLabels: true,
+                              Column(
+                                children: [
+                                  Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 50.0, vertical: 20),
+                                      child: SfRangeSliderTheme(
+                                        data: SfRangeSliderThemeData(
+                                          activeTrackColor: Colors.white,
+                                          activeLabelStyle: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                              fontStyle: FontStyle.italic),
+                                          inactiveLabelStyle: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                              fontStyle: FontStyle.italic),
+                                        ),
+                                        child: SfSlider(
+                                          enableTooltip: true,
+                                          activeColor: const Color.fromRGBO(
+                                              214, 221, 224, 1),
+                                          min: _min,
+                                          max: _max,
+                                          value: _value,
+                                          interval:
+                                              18, // Assuming interval is 1
+                                          showTicks: true,
+                                          showLabels: true,
 
-                                      onChanged: (dynamic newValue) {
-                                        GroupSearchBloc.get(context).add(
-                                            GetAccuracy(
-                                                accuracy: (newValue / 100)
-                                                    .toString()));
-                                        setState(() {
-                                          _value = newValue;
-                                        });
-                                      },
-                                      labelFormatterCallback: (dynamic value,
-                                          String formattedValue) {
-                                        // Map numeric values to custom string labels
-                                        switch (value.toInt()) {
-                                          case 10:
-                                            return 'Low';
-                                          case 28:
-                                            return 'Medium';
-                                          case 46:
-                                            return 'High';
-                                          case 64:
-                                            return 'Very High';
-                                          case 82:
-                                            return 'Extreme';
-                                          case 100:
-                                            return 'Identical';
-                                          default:
-                                            return ''; // Return empty string for other values
-                                        }
-                                      },
+                                          onChanged: (dynamic newValue) {
+                                            GroupSearchBloc.get(context).add(
+                                                GetAccuracy(
+                                                    accuracy: (newValue / 100)
+                                                        .toString()));
+                                            setState(() {
+                                              _value = newValue;
+                                            });
+                                          },
+                                          labelFormatterCallback:
+                                              (dynamic value,
+                                                  String formattedValue) {
+                                            // Map numeric values to custom string labels
+                                            switch (value.toInt()) {
+                                              case 10:
+                                                return 'Low';
+                                              case 28:
+                                                return 'Medium';
+                                              case 46:
+                                                return 'High';
+                                              case 64:
+                                                return 'Very High';
+                                              case 82:
+                                                return 'Extreme';
+                                              case 100:
+                                                return 'Identical';
+                                              default:
+                                                return ''; // Return empty string for other values
+                                            }
+                                          },
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
-                              FxBox.h16,
-                              Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: SizedBox(
-                                  width: 295,
-                                  child: singleSelectGenericDropdown<String>(
-                                    // titleName: "Filter By:",
-                                    isEnabled: true,
-                                    isRequired: false,
-                                    filled: true,
-                                    // showSearch: true,
-                                    selectedItem: state.filterCase.isEmpty
-                                        ? "All"
-                                        : state.filterCase,
-                                    onChanged: (value) {
-                                      // if (value?.isNotEmpty ?? false) {
-                                        GroupSearchBloc.get(context).add(
-                                            selectedFiltering(
-                                                filterCase: value ?? "All"));
-                                        // if (value == "All") {
-                                        //   GroupSearchBloc.get(context)
-                                        //       .add(const GetEmployeeNamesEvent());
-                                        // } else if (value == "Normal") {
-                                        //   GroupSearchBloc.get(context).add(
-                                        //       const GetEmployeeNormalNamesEvent());
-                                        // } else if (value == "BlackListed") {
-                                        //   GroupSearchBloc.get(context).add(
-                                        //       const GetEmployeeBlackListedNamesEvent());
-                                        // }
-                                      // }
-                                    },
-                                    itemsList: [
-                                      "All",
-                                      "Neutral",
-                                      "BlackListed"
-                                    ],
+                                  FxBox.h16,
+                                  Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: SizedBox(
+                                      width: 295,
+                                      child:
+                                          singleSelectGenericDropdown<String>(
+                                        // titleName: "Filter By:",
+                                        isEnabled: true,
+                                        isRequired: false,
+                                        filled: true,
+                                        // showSearch: true,
+                                        selectedItem: state.filterCase.isEmpty
+                                            ? "All"
+                                            : state.filterCase,
+                                        onChanged: (value) {
+                                          // if (value?.isNotEmpty ?? false) {
+                                          GroupSearchBloc.get(context).add(
+                                              selectedFiltering(
+                                                  filterCase: value ?? "All"));
+                                          // if (value == "All") {
+                                          //   GroupSearchBloc.get(context)
+                                          //       .add(const GetEmployeeNamesEvent());
+                                          // } else if (value == "Normal") {
+                                          //   GroupSearchBloc.get(context).add(
+                                          //       const GetEmployeeNormalNamesEvent());
+                                          // } else if (value == "BlackListed") {
+                                          //   GroupSearchBloc.get(context).add(
+                                          //       const GetEmployeeBlackListedNamesEvent());
+                                          // }
+                                          // }
+                                        },
+                                        itemsList: [
+                                          "All",
+                                          "Neutral",
+                                          "BlackListed"
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
+
                               // Here to search for an Employee in the database
                               Row(
                                 mainAxisAlignment:
@@ -327,7 +335,7 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
                                       children: [
-                                        const Text(
+                                        Text(
                                           "Targets Data :",
                                           style: TextStyle(
                                               color: Colors.white,
@@ -588,83 +596,121 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                         if (!Responsive.isWeb(context))
                           Column(
                             children: [
-                              // Here to search for an Employee in the database
                               Column(
+                                children: [
+                                  Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 50.0, vertical: 20),
+                                      child: SfRangeSliderTheme(
+                                        data: SfRangeSliderThemeData(
+                                          activeTrackColor: Colors.white,
+                                          activeLabelStyle: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                              fontStyle: FontStyle.italic),
+                                          inactiveLabelStyle: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                              fontStyle: FontStyle.italic),
+                                        ),
+                                        child: SfSlider(
+                                          enableTooltip: true,
+                                          activeColor: const Color.fromRGBO(
+                                              214, 221, 224, 1),
+                                          min: _min,
+                                          max: _max,
+                                          value: _value,
+                                          interval:
+                                              18, // Assuming interval is 1
+                                          showTicks: true,
+                                          showLabels: true,
+
+                                          onChanged: (dynamic newValue) {
+                                            GroupSearchBloc.get(context).add(
+                                                GetAccuracy(
+                                                    accuracy: (newValue / 100)
+                                                        .toString()));
+                                            setState(() {
+                                              _value = newValue;
+                                            });
+                                          },
+                                          // labelFormatterCallback:
+                                          //     (dynamic value,
+                                          //         String formattedValue) {
+                                          //   // Map numeric values to custom string labels
+                                          //   switch (value.toInt()) {
+                                          //     case 10:
+                                          //       return 'Low';
+                                          //     case 28:
+                                          //       return 'Medium';
+                                          //     case 46:
+                                          //       return 'High';
+                                          //     case 64:
+                                          //       return 'Very High';
+                                          //     case 82:
+                                          //       return 'Extreme';
+                                          //     case 100:
+                                          //       return 'Identical';
+                                          //     default:
+                                          //       return ''; // Return empty string for other values
+                                          //   }
+                                          // },
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  FxBox.h16,
+                                  Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: SizedBox(
+                                      width: 295,
+                                      child:
+                                          singleSelectGenericDropdown<String>(
+                                        // titleName: "Filter By:",
+                                        isEnabled: true,
+                                        isRequired: false,
+                                        filled: true,
+                                        // showSearch: true,
+                                        selectedItem: state.filterCase.isEmpty
+                                            ? "All"
+                                            : state.filterCase,
+                                        onChanged: (value) {
+                                          // if (value?.isNotEmpty ?? false) {
+                                          GroupSearchBloc.get(context).add(
+                                              selectedFiltering(
+                                                  filterCase: value ?? "All"));
+                                          // if (value == "All") {
+                                          //   GroupSearchBloc.get(context)
+                                          //       .add(const GetEmployeeNamesEvent());
+                                          // } else if (value == "Normal") {
+                                          //   GroupSearchBloc.get(context).add(
+                                          //       const GetEmployeeNormalNamesEvent());
+                                          // } else if (value == "BlackListed") {
+                                          //   GroupSearchBloc.get(context).add(
+                                          //       const GetEmployeeBlackListedNamesEvent());
+                                          // }
+                                          // }
+                                        },
+                                        itemsList: [
+                                          "All",
+                                          "Neutral",
+                                          "BlackListed"
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              // Here to search for an Employee in the database
+                              Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
-                                  // SizedBox(
-                                  //   height: 300,
-                                  //   width: 300,
-                                  //   child: Card(
-                                  //     elevation: 4,
-                                  //     shape: RoundedRectangleBorder(
-                                  //       borderRadius: BorderRadius.circular(12),
-                                  //     ),
-                                  //     child: ClipRRect(
-                                  //       borderRadius: BorderRadius.circular(12),
-                                  //       child: Stack(
-                                  //         children: [
-                                  //           GestureDetector(
-                                  //             onTap: () async {
-                                  //               // FilePickerResult? result =
-                                  //               await FilePicker.platform
-                                  //                   .pickFiles(
-                                  //                 type: FileType.image,
-                                  //               )
-                                  //                   .then((result) {
-                                  //                 if (result != null &&
-                                  //                     result.files.isNotEmpty) {
-                                  //                   // Use the selected image file
-                                  //                   final imageFile =
-                                  //                       result.files.first;
-                                  //                   // Load the image file as an image
-                                  //                   final image = imageFile
-                                  //                               .bytes !=
-                                  //                           null
-                                  //                       ? Image.memory(
-                                  //                           imageFile.bytes!,
-                                  //                           fit: BoxFit.cover,
-                                  //                         )
-                                  //                       : loadingIndicator();
-                                  //                   // Replace the image with the selected image
-
-                                  //                   GroupSearchBloc.get(context).add(
-                                  //                       ImageToSearchForEmployee(
-                                  //                           imageWidget:
-                                  //                               image));
-
-                                  //                   GroupSearchBloc.get(context).add(
-                                  //                       imageevent(
-                                  //                           imageFile:
-                                  //                               imageFile));
-                                  //                 }
-                                  //                 return null;
-                                  //               });
-                                  //             },
-                                  //             child: Stack(
-                                  //                 fit: StackFit.expand,
-                                  //                 children: [
-                                  //                   state.imageWidget ??
-                                  //                       Image.asset(
-                                  //                         'assets/images/imagepick.png',
-                                  //                         width:
-                                  //                             double.infinity,
-                                  //                         height:
-                                  //                             double.infinity,
-                                  //                         fit: BoxFit.cover,
-                                  //                       ),
-                                  //                 ]),
-                                  //           ),
-                                  //         ],
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  // ),
-
                                   SizedBox(
-                                    height: 300,
-                                    width: 300,
+                                    height: 230,
+                                    width: 230,
                                     child: Card(
                                       elevation: 4,
                                       shape: RoundedRectangleBorder(
@@ -676,14 +722,17 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                           children: [
                                             GestureDetector(
                                               onTap: () async {
-                                                _pickVideo().then(
-                                                    (PlatformFile? videoFile) {
-                                                  if (videoFile != null) {
-                                                    GroupSearchBloc.get(context)
-                                                        .add(videoevent(
-                                                            video: videoFile));
-                                                  }
-                                                });
+                                                await _pickVideo().then(
+                                                  (PlatformFile? videoFile) {
+                                                    if (videoFile != null) {
+                                                      GroupSearchBloc.get(
+                                                              context)
+                                                          .add(videoevent(
+                                                              video:
+                                                                  videoFile));
+                                                    }
+                                                  },
+                                                );
                                               }, // Call _pickVideo function when tapped
                                               child: Stack(
                                                 fit: StackFit.expand,
@@ -715,13 +764,11 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                       ),
                                     ),
                                   ),
-
-                                  ///////////////////////////////
                                 ],
                               ),
 
-                              FxBox.h60,
-                              (state.submission == Submission.loading)
+                              FxBox.h16,
+                              state.submission == Submission.loading
                                   ? loadingIndicator()
                                   : Center(
                                       child: ElevatedButton.icon(
@@ -753,10 +800,182 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                           )),
                                     ),
 
+                              (state.submission == Submission.noDataFound)
+                                  ? const Text(
+                                      "No Data Found",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 30),
+                                    )
+                                  : const Text(
+                                      "",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 25),
+                                    ),
+                              (state.employeeNamesList.isNotEmpty)
+                                  ? const Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Targets Data :",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 25),
+                                        ),
+                                      ],
+                                    )
+                                  : const Text(
+                                      "",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 25),
+                                    ),
+
+                              ///employee Data
+                              FxBox.h24,
+
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: (state.submission ==
+                                                Submission.noDataFound)
+                                            ? const Center(
+                                                child: Text(
+                                                "No data found Yet!",
+                                                style: TextStyle(
+                                                    color: AppColors.blueB,
+                                                    fontSize: 25,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ))
+                                            : GridView.builder(
+                                                shrinkWrap: true,
+                                                physics:
+                                                    const NeverScrollableScrollPhysics(),
+                                                itemCount: state
+                                                    .employeeNamesList.length,
+                                                gridDelegate: Responsive
+                                                        .isMobile(context)
+                                                    ? const SliverGridDelegateWithFixedCrossAxisCount(
+                                                        crossAxisCount: 1,
+                                                        crossAxisSpacing: 45,
+                                                        mainAxisSpacing: 45,
+                                                        mainAxisExtent: 350,
+                                                      )
+                                                    : Responsive.isTablet(
+                                                            context)
+                                                        ? const SliverGridDelegateWithFixedCrossAxisCount(
+                                                            crossAxisCount: 2,
+                                                            crossAxisSpacing:
+                                                                45,
+                                                            mainAxisSpacing: 45,
+                                                            mainAxisExtent: 350,
+                                                          )
+                                                        : MediaQuery.of(context)
+                                                                    .size
+                                                                    .width <
+                                                                1500
+                                                            ? SliverGridDelegateWithMaxCrossAxisExtent(
+                                                                maxCrossAxisExtent:
+                                                                    MediaQuery.of(context)
+                                                                            .size
+                                                                            .width *
+                                                                        0.24,
+                                                                crossAxisSpacing:
+                                                                    45,
+                                                                mainAxisSpacing:
+                                                                    45,
+                                                                mainAxisExtent:
+                                                                    350,
+                                                              )
+                                                            : SliverGridDelegateWithMaxCrossAxisExtent(
+                                                                maxCrossAxisExtent:
+                                                                    MediaQuery.of(context)
+                                                                            .size
+                                                                            .width *
+                                                                        0.24,
+                                                                crossAxisSpacing:
+                                                                    45,
+                                                                mainAxisSpacing:
+                                                                    45,
+                                                                mainAxisExtent:
+                                                                    350,
+                                                              ),
+                                                itemBuilder: (context, index) {
+                                                  final employee = state
+                                                      .employeeNamesList[index];
+                                                  return _contactUi(
+                                                    onDelete: () {
+                                                      _showDeleteDialog(context,
+                                                          employee.name ?? '');
+                                                    },
+                                                    message: employee
+                                                                .blackListed ==
+                                                            'True'
+                                                        ? "Blacklisted person"
+                                                        : '',
+                                                    // Conditional display based on whether the employee is blacklisted
+                                                    Icoon: employee
+                                                                .blackListed ==
+                                                            'True'
+                                                        ? const Icon(
+                                                            Icons
+                                                                .warning_amber_outlined,
+                                                            color: Colors.red,
+                                                            size: 50,
+                                                          )
+                                                        : null,
+                                                    id: employee.sId ?? '',
+                                                    name: employee.name ?? '',
+                                                    profession:
+                                                        'Software Developer',
+                                                    imagesrc:
+                                                        employee.imagePath ??
+                                                            '',
+                                                    phoneNum:
+                                                        employee.phone ?? '',
+                                                    email: employee.email ?? '',
+                                                    userId:
+                                                        employee.userId ?? '',
+                                                    onUpdate: () {
+                                                      _showUpdateDialog(
+                                                          context, employee);
+                                                    },
+                                                  );
+                                                },
+                                              ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+
                               FxBox.h16,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  (state.snapShots.isNotEmpty)
+                                      ? const Text(
+                                          "Frames Where Targets Appeard in :",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 25),
+                                        )
+                                      : const Text(
+                                          "",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 25),
+                                        ),
+                                ],
+                              ),
 
                               ///frames Data
-                              Text("Frames Where Targets Appeard in :"),
+
                               Padding(
                                 padding: const EdgeInsets.all(10.0),
                                 child: SingleChildScrollView(
@@ -837,11 +1056,6 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                       state.data[index];
                                                   return imagesListWidget(
                                                       onDownloadPressed: () {
-                                                        final uint8List =
-                                                            _decodeBase64Image(
-                                                                base64Image:
-                                                                    image);
-
                                                         _downloadImage(
                                                             data: image,
                                                             downloadName:
@@ -856,6 +1070,8 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                   ),
                                 ),
                               ),
+
+                              // ),
                             ],
                           ),
                       ],

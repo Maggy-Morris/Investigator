@@ -456,10 +456,11 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                         .start,
                                                                 children: [
                                                                   const Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
                                                                     children: [
                                                                       Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.spaceBetween,
                                                                         children: [
                                                                           Text(
                                                                             'BlackListed:',
@@ -724,7 +725,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                 ///search field
                                 Form(
                                   child: SizedBox(
-                                    height: 70,
+                                    height: 50,
                                     width: 300,
                                     child: TextFormField(
                                       cursorColor: Colors.white,
@@ -1083,22 +1084,41 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                     //     MainAxisSize
                                                                     //         .min,
                                                                     children: [
-                                                                      Text(
-                                                                        'BlackListed:',
-                                                                        style: TextStyle(
-                                                                            fontWeight:
-                                                                                FontWeight.w900,
-                                                                            color: AppColors.white,
-                                                                            fontSize: 20.0),
+                                                                      Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceBetween,
+                                                                        children: [
+                                                                          Row(
+                                                                            children: [
+                                                                              Text(
+                                                                                'BlackListed:',
+                                                                                style: TextStyle(fontWeight: FontWeight.w900, color: AppColors.white, fontSize: 20.0),
+                                                                              ),
+                                                                              SizedBox(
+                                                                                width: 15,
+                                                                              ),
+                                                                              Icon(
+                                                                                Icons.warning_amber_outlined,
+                                                                                color: Colors.red,
+                                                                                size: 35,
+                                                                              ),
+                                                                              // SizedBox(
+                                                                              //   width:
+                                                                              //       50,
+                                                                              // ),
+                                                                            ],
+                                                                          ),
+                                                                          Tooltip(
+                                                                            message:
+                                                                                "If the person is BlackListed he has no access to any room if not choose the rooms he is authorized to enter",
+                                                                            child:
+                                                                                Icon(
+                                                                              Icons.info_outline,
+                                                                              color: Colors.white,
+                                                                            ),
+                                                                          ),
+                                                                        ],
                                                                       ),
-                                                                      Icon(
-                                                                        Icons
-                                                                            .warning_amber_outlined,
-                                                                        color: Colors
-                                                                            .red,
-                                                                        size:
-                                                                            35,
-                                                                      )
                                                                     ],
                                                                   ),
                                                                   RadioListTile(

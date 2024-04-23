@@ -248,7 +248,6 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                 children: [
                                                   _images?.isNotEmpty == true
                                                       ? CarouselSlider(
-                                                        
                                                           items: _images ?? [],
                                                           options:
                                                               CarouselOptions(
@@ -547,12 +546,75 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                         if (!Responsive.isWeb(context))
                           Column(
                             children: [
+                              Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 50.0, vertical: 20),
+                                  child: SfRangeSliderTheme(
+                                    data: SfRangeSliderThemeData(
+                                      activeTrackColor: Colors.white,
+                                      activeLabelStyle: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontStyle: FontStyle.italic),
+                                      inactiveLabelStyle: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontStyle: FontStyle.italic),
+                                    ),
+                                    child: SfSlider(
+                                      enableTooltip: true,
+                                      activeColor: const Color.fromRGBO(
+                                          214, 221, 224, 1),
+                                      min: _min,
+                                      max: _max,
+                                      value: _value,
+                                      interval: 18, // Assuming interval is 1
+                                      showTicks: true,
+                                      showLabels: true,
+
+                                      onChanged: (dynamic newValue) {
+                                        HomeBloc.get(context).add(GetAccuracy(
+                                            accuracy:
+                                                (newValue / 100).toString()));
+                                        setState(() {
+                                          _value = newValue;
+                                        });
+                                      },
+                                      // labelFormatterCallback: (dynamic value,
+                                      //     String formattedValue) {
+                                      //   // Map numeric values to custom string labels
+                                      //   switch (value.toInt()) {
+                                      //     case 10:
+                                      //       return 'Low';
+                                      //     case 28:
+                                      //       return 'Medium';
+                                      //     case 46:
+                                      //       return 'High';
+                                      //     case 64:
+                                      //       return 'Very High';
+                                      //     case 82:
+                                      //       return 'Extreme';
+                                      //     case 100:
+                                      //       return 'Identical';
+                                      //     default:
+                                      //       return ''; // Return empty string for other values
+                                      //   }
+                                      // },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              // FxBox.h16,
+
                               // Here to search for an Employee in the database
                               Column(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
-                                  SizedBox(
+
+                                  
+                                         SizedBox(
                                     height: 300,
                                     width: 300,
                                     child: Card(
@@ -566,46 +628,74 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                           children: [
                                             GestureDetector(
                                               onTap: () async {
-                                                // FilePickerResult? result =
                                                 await FilePicker.platform
                                                     .pickFiles(
                                                   type: FileType.image,
+                                                  allowMultiple: true,
                                                 )
                                                     .then((result) {
                                                   if (result != null &&
                                                       result.files.isNotEmpty) {
-                                                    // Use the selected image file
-                                                    final imageFile =
-                                                        result.files.first;
-                                                    // Load the image file as an image
-                                                    final image = imageFile
-                                                                .bytes !=
-                                                            null
-                                                        ? Image.memory(
-                                                            imageFile.bytes!,
-                                                            fit: BoxFit.cover,
-                                                          )
-                                                        : loadingIndicator();
-                                                    // Replace the image with the selected image
+                                                    List<Widget> images = [];
+                                                    for (var imageFile
+                                                        in result.files) {
+                                                      final image = imageFile
+                                                                  .bytes !=
+                                                              null
+                                                          ? Image.memory(
+                                                              imageFile.bytes!,
+                                                              fit: BoxFit.cover,
+                                                            )
+                                                          : loadingIndicator();
 
-                                                    HomeBloc.get(context).add(
+                                                      images.add(image);
+
+                                                      HomeBloc.get(context).add(
+                                                        imagesList(
+                                                            imagesListdata:
+                                                                result.files),
+                                                      );
+                                                      // Process each selected image file
+                                                      HomeBloc.get(context).add(
                                                         ImageToSearchForEmployee(
-                                                            imageWidget:
-                                                                image));
-
-                                                    HomeBloc.get(context).add(
+                                                            imageWidget: image),
+                                                      );
+                                                      HomeBloc.get(context).add(
                                                         imageevent(
                                                             imageFile:
-                                                                imageFile));
+                                                                imageFile),
+                                                      );
+                                                    }
+
+                                                    setState(() {
+                                                      _images = images;
+                                                    });
                                                   }
-                                                  return null;
                                                 });
                                               },
                                               child: Stack(
-                                                  fit: StackFit.expand,
-                                                  children: [
-                                                    state.imageWidget ??
-                                                        Image.asset(
+                                                fit: StackFit.expand,
+                                                children: [
+                                                  _images?.isNotEmpty == true
+                                                      ? CarouselSlider(
+                                                          items: _images ?? [],
+                                                          options:
+                                                              CarouselOptions(
+                                                            aspectRatio: 16 /
+                                                                9, // Adjust as needed
+                                                            viewportFraction:
+                                                                0.8, // Adjust as needed
+                                                            enableInfiniteScroll:
+                                                                false,
+                                                            reverse: false,
+                                                            autoPlay: false,
+                                                            enlargeCenterPage:
+                                                                true,
+                                                            scrollDirection:
+                                                                Axis.horizontal,
+                                                          ),
+                                                        )
+                                                      : Image.asset(
                                                           'assets/images/imagepick.png',
                                                           width:
                                                               double.infinity,
@@ -613,14 +703,16 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                               double.infinity,
                                                           fit: BoxFit.cover,
                                                         ),
-                                                  ]),
-                                            ),
+                                                ],
+                                              ),
+                                            )
+                                           
                                           ],
                                         ),
                                       ),
                                     ),
                                   ),
-
+                          
                                   SizedBox(
                                     height: 300,
                                     width: 300,
