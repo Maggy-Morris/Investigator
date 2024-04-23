@@ -2,10 +2,10 @@ part of 'search_by_image_bloc.dart';
 
 class SearchByImageState extends Equatable {
   final String selectedOption;
-
+  final String responseMessage;
   List<List<double>>? boxes;
   List<String>? result;
-    List<String>? blacklis;
+  List<String>? blacklis;
 
   final Widget? imageWidget;
 
@@ -26,11 +26,11 @@ class SearchByImageState extends Equatable {
   bool isSearching;
 
   SearchByImageState({
-    this.blacklis = const[],
+    this.responseMessage = '',
+    this.blacklis = const [],
     this.textAccuracy,
     this.selectedOption = "",
-        this.isSearching = false,
-
+    this.isSearching = false,
     this.id = '',
     this.phoneNum = "",
     this.email = "",
@@ -47,18 +47,17 @@ class SearchByImageState extends Equatable {
   });
 
   SearchByImageState copyWith({
-    
-        List<String>? blacklis,
-
+    List<String>? blacklis,
     List<String>? textAccuracy,
     String? selectedOption,
+String? responseMessage,
+
     String? id,
     String? phoneNum,
     String? email,
     String? profession,
     String? userId,
-        String? personName,
-
+    String? personName,
     bool? isSearching,
     List<Dataa>? employeeNamesList,
     List<List<double>>? boxes,
@@ -69,7 +68,8 @@ class SearchByImageState extends Equatable {
     Submission? submission,
   }) {
     return SearchByImageState(
-      blacklis : blacklis ?? this.blacklis,
+      responseMessage : responseMessage ?? this.responseMessage,
+      blacklis: blacklis ?? this.blacklis,
       textAccuracy: textAccuracy ?? this.textAccuracy,
       selectedOption: selectedOption ?? this.selectedOption,
       id: id ?? this.id,
@@ -94,11 +94,12 @@ class SearchByImageState extends Equatable {
 
   @override
   List<Object?> get props => [
-    blacklis,
-    email,
-    phoneNum,
-    profession,
-    userId,
+    responseMessage,
+        blacklis,
+        email,
+        phoneNum,
+        profession,
+        userId,
         id,
         personName,
         textAccuracy,

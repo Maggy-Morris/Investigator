@@ -123,14 +123,25 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                           SearchByImageState>(
                         listener: (context, state) {
                           if (state.submission == Submission.success) {
-                            FxToast.showSuccessToast(context: context);
+                            FxToast.showSuccessToast(
+                                context: context,
+                                message: state.responseMessage.isNotEmpty
+                                    ? state.responseMessage
+                                    : null);
                           }
-
-                          // if (state.submission == Submission.noDataFound) {
-                          //   FxToast.showWarningToast(
-                          //       context: context,
-                          //       warningMessage: "NO data found about this person");
-                          // }
+                          if (state.submission == Submission.error) {
+                            FxToast.showErrorToast(
+                                context: context,
+                                message: state.responseMessage.isNotEmpty
+                                    ? state.responseMessage
+                                    : null);
+                          }
+                          if (state.submission == Submission.noDataFound) {
+                            FxToast.showWarningToast(
+                                context: context,
+                                warningMessage:
+                                    "NO data found about this person");
+                          }
                         },
                         child:
                             BlocBuilder<SearchByImageBloc, SearchByImageState>(
@@ -427,6 +438,12 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                                     state.employeeNamesList[
                                                                         index];
                                                                 return _contactUi(
+                                                                  onDelete: () {
+                                                                    _showDeleteDialog(
+                                                                        context,
+                                                                        employee.name ??
+                                                                            '');
+                                                                  },
                                                                   message: employee
                                                                               .blackListed ==
                                                                           'True'
@@ -784,6 +801,12 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                                     state.employeeNamesList[
                                                                         index];
                                                                 return _contactUi(
+                                                                  onDelete: () {
+                                                                    _showDeleteDialog(
+                                                                        context,
+                                                                        employee.name ??
+                                                                            '');
+                                                                  },
                                                                   message: employee
                                                                               .blackListed ==
                                                                           'True'
@@ -1020,8 +1043,6 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                           selectedItem: state.roomChoosen,
                                           onChanged: (value) {
                                             if (value?.isNotEmpty ?? false) {
-                                              
-
                                               context
                                                   .read<PhotoAppCubit>()
                                                   .roomChoosen(value ?? "");
@@ -1137,7 +1158,6 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                               Center(
                                 child: Stack(
                                   children: [
-                                   
                                     IconButton(
                                       onPressed: () {
                                         if (state.roomChoosen == null) {
@@ -1439,6 +1459,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
     required Function onUpdate,
     String? message,
     Icon? Icoon,
+    required Function onDelete,
   }) {
     return Container(
       width: 300,
@@ -1485,34 +1506,26 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                 ),
               ),
               Tooltip(message: message, child: Icoon),
-              BlocProvider(
-                create: (context) => SearchByImageBloc(),
-                child: BlocBuilder<SearchByImageBloc, SearchByImageState>(
-                  builder: (context, state) {
-                    return PopupMenuButton<String>(
-                      icon: const Icon(Icons.more_horiz, color: Colors.black),
-                      onSelected: (String choice) {
-                        if (choice == 'Edit') {
-                          onUpdate();
-                          // Handle edit action
-                        } else if (choice == 'Delete') {
-                          // Handle delete action
-                        }
-                      },
-                      itemBuilder: (BuildContext context) =>
-                          <PopupMenuEntry<String>>[
-                        const PopupMenuItem<String>(
-                          value: 'Edit',
-                          child: Text('Edit'),
-                        ),
-                        const PopupMenuItem<String>(
-                          value: 'Delete',
-                          child: Text('Delete'),
-                        ),
-                      ],
-                    );
-                  },
-                ),
+              PopupMenuButton<String>(
+                icon: const Icon(Icons.more_horiz, color: Colors.black),
+                onSelected: (String choice) {
+                  if (choice == 'Edit') {
+                    onUpdate();
+                    // Handle edit action
+                  } else if (choice == 'Delete') {
+                    onDelete();
+                  }
+                },
+                itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                  const PopupMenuItem<String>(
+                    value: 'Edit',
+                    child: Text('Edit'),
+                  ),
+                  const PopupMenuItem<String>(
+                    value: 'Delete',
+                    child: Text('Delete'),
+                  ),
+                ],
               ),
             ],
           ),
@@ -1620,7 +1633,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
             TextButton(
                 child: Text(
                   "no".tr(),
-                  style: const TextStyle(color: AppColors.blueBlack),
+                  style: const TextStyle(color: AppColors.green),
                 ),
                 onPressed: () => Navigator.of(ctx).pop()),
           ],

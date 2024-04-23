@@ -58,9 +58,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                       ? state.responseMessage
                       : null);
 
-              AllEmployeesBloc.get(context)
-                  .add(const imageevent(imageFile: null));
-              state.imageFile == null;
+             
             }
             if (state.submission == Submission.error) {
               FxToast.showErrorToast(
@@ -252,10 +250,17 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                             FxBox.h24,
 
                                                             buildTextFormField(
+                                                              keyboardType:
+                                                                  TextInputType
+                                                                      .phone,
+                                                              inputFormatters: [
+                                                                FilteringTextInputFormatter
+                                                                    .digitsOnly,
+                                                              ],
                                                               labelText:
                                                                   'UserId',
                                                               hintText:
-                                                                  'ex: c0c0sdka5655',
+                                                                  'ex: 5643548',
                                                               onChanged:
                                                                   (value) async {
                                                                 AllEmployeesBloc
@@ -360,31 +365,32 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                               // mainAxisSize:
                                                               //     MainAxisSize.min,
                                                               children: [
-                                                                // Tooltip(
-                                                                //   message:
-                                                                //       "Capture Image",
-                                                                //   child: IconButton(
-                                                                //     onPressed: () {
-                                                                //       Navigator
-                                                                //           .push(
-                                                                //         context,
-                                                                //         MaterialPageRoute(
-                                                                //           builder:
-                                                                //               (context) =>
-                                                                //                   AppBody(), // Navigate to AppBody screen
-                                                                //         ),
+                                                                Tooltip(
+                                                                  message:
+                                                                      "Capture Image",
+                                                                  child:
+                                                                      IconButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      // Navigator
+                                                                      //     .push(
+                                                                      //   context,
+                                                                      //   MaterialPageRoute(
+                                                                      //     builder:
+                                                                      //         (context) =>
+                                                                      //             AppBody(), // Navigate to AppBody screen
+                                                                      //   ),
 
-                                                                //       );
-
-                                                                //     },
-                                                                //     icon: const Icon(
-                                                                //         Icons
-                                                                //             .photo_camera_rounded,
-                                                                //         // size: 300,
-                                                                //         color: AppColors
-                                                                //             .babyBlue),
-                                                                //   ),
-                                                                // ),
+                                                                      // );
+                                                                    },
+                                                                    icon: const Icon(
+                                                                        Icons
+                                                                            .photo_camera_rounded,
+                                                                        // size: 300,
+                                                                        color: AppColors
+                                                                            .babyBlue),
+                                                                  ),
+                                                                ),
                                                                 ElevatedButton(
                                                                   onPressed:
                                                                       () async {
@@ -877,10 +883,17 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                             FxBox.h24,
 
                                                             buildTextFormField(
+                                                              keyboardType:
+                                                                  TextInputType
+                                                                      .phone,
+                                                              inputFormatters: [
+                                                                FilteringTextInputFormatter
+                                                                    .digitsOnly,
+                                                              ],
                                                               labelText:
                                                                   'UserId',
                                                               hintText:
-                                                                  'ex: c0c0sdka5655',
+                                                                  'ex: 5643548',
                                                               onChanged:
                                                                   (value) async {
                                                                 AllEmployeesBloc
@@ -1863,4 +1876,51 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
       },
     );
   }
+
+  // void _openCameraDialog() async {
+  //   await _initializeCamera().then((value) {
+  //     showDialog(
+  //     context: context,
+  //     barrierDismissible: false,
+  //     builder: (context) {
+  //       return AlertDialog(
+  //         title: const Text('Camera'),
+  //         content: SizedBox(
+  //           width: 300,
+  //           height: 300,
+  //           child: _controller.value.isInitialized
+  //               ? CameraPreview(_controller)
+  //               : CircularProgressIndicator(),
+  //         ),
+  //         actions: [
+  //           ElevatedButton(
+  //             onPressed: () async {
+  //               final image = await _controller.takePicture();
+  //               setState(() {
+  //                 _imageFile = image;
+  //               });
+  //               _controller.dispose();
+  //               Navigator.pop(context);
+  //             },
+  //             child: Text('Capture Image'),
+  //           ),
+  //           ElevatedButton(
+  //             onPressed: () {
+  //               _controller.dispose();
+  //               Navigator.pop(context);
+  //             },
+  //             child: Text('Close'),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+
+  //   });
+  // }
+
+  // Future<Uint8List> _getImageBytes() async {
+  //   final bytes = await _imageFile!.readAsBytes();
+  //   return bytes;
+  // }
 }

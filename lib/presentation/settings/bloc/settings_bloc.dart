@@ -103,10 +103,12 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
   _onAddListItem(AddListItem event, Emitter<SettingsState> emit) async {
     emit(state.copyWith(
-      roomNAMS: [...state.roomNAMS, ""],
-      // room_numbers: event.room_num,
-      // submission: Submission.hasData,
-    ));
+        roomNAMS: [...state.roomNAMS, ""],
+        submission: Submission.success,
+        responseMessage:
+            "A Slot is Added Scroll down if you can't see it and enter the name of your room the press Add"
+        // room_numbers: event.room_num,
+        ));
   }
 
   _onUpdateRooms(UpdateRooms event, Emitter<SettingsState> emit) async {
@@ -123,10 +125,11 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       // result.updated == true
       if (result.updated == true) {
         emit(state.copyWith(
-          submission: Submission.success,
+            submission: Submission.success,
+            responseMessage: "Rooms Updated Successfully"
 
-          // employeeNamesList:
-        ));
+            // employeeNamesList:
+            ));
         await AuthenticationRepository.instance
             .updateRoomsNames(state.roomNAMS);
         // await AuthenticationRepository.getInstance();

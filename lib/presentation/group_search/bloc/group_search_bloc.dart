@@ -264,20 +264,21 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
       personName: event.personName,
     )
         .then((value) {
-      /// this to update the state once i deleted a person
       if (value.data != "No documents found for deletion.") {
         // Remove the deleted employee from the state
-        // final updatedList = state.employeeNamesList
-        //     .where((employee) => employee.name != event.personName)
-        //     .toList();
+        final updatedList = state.employeeNamesList
+            .where((employee) => employee.name != event.personName)
+            .toList();
         emit(state.copyWith(
             submission: Submission.success,
-            // employeeNamesList: state.employeeNamesList,
+            employeeNamesList: updatedList,
             responseMessage: value.data));
       } else if (value.data == "No documents found for deletion.") {
         emit(state.copyWith(
+            submission: Submission.error, responseMessage: value.data));
+      } else if (value.data?.isEmpty == true) {
+        emit(state.copyWith(
           submission: Submission.noDataFound,
-          responseMessage: value.data,
         ));
       }
 

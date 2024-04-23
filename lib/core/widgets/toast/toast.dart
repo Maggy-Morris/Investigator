@@ -97,6 +97,7 @@ class FxToast {
 
   static showSuccessToast({required BuildContext context,String? message}){
     return showToast(context: context,
+    
       toast: ToastWithoutColor.success(
         message: message ?? "success".tr(),
         icon: Icons.check_circle_rounded,

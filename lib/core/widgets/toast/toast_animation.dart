@@ -24,7 +24,7 @@ class _ToastAnimationState extends State<ToastAnimation>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: widget.duration ?? const Duration(milliseconds: 300),
+      duration: widget.duration ?? const Duration(milliseconds: 700),
     )..forward();
   }
 

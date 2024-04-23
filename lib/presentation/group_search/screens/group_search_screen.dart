@@ -74,12 +74,24 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
         child: BlocListener<GroupSearchBloc, GroupSearchState>(
           listener: (context, state) {
             if (state.submission == Submission.success) {
-              FxToast.showSuccessToast(context: context);
+              FxToast.showSuccessToast(
+                  context: context,
+                  message: state.responseMessage.isNotEmpty
+                      ? state.responseMessage
+                      : null);
+            }
+            if (state.submission == Submission.error) {
+              FxToast.showErrorToast(
+                  context: context,
+                  
+                  message: state.responseMessage.isNotEmpty
+                      ? state.responseMessage
+                      : null);
             }
             if (state.submission == Submission.noDataFound) {
               FxToast.showWarningToast(
                   context: context,
-                  warningMessage: "The person isn't in the the video .");
+                  warningMessage: "NO data found about this person");
             }
           },
           child: BlocBuilder<GroupSearchBloc, GroupSearchState>(
