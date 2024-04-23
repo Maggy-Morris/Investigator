@@ -632,6 +632,10 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                                             ),
                                                                             FxBox.h24,
                                                                             TextFormField(
+                                                                              keyboardType: TextInputType.phone,
+                                                                              inputFormatters: [
+                                                                                FilteringTextInputFormatter.digitsOnly,
+                                                                              ],
                                                                               cursorColor: Colors.white,
                                                                               style: const TextStyle(color: Colors.white),
                                                                               initialValue: employee.userId,
@@ -1372,6 +1376,10 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                                             ),
                                                                             FxBox.h24,
                                                                             TextFormField(
+                                                                              keyboardType: TextInputType.phone,
+                                                                              inputFormatters: [
+                                                                                FilteringTextInputFormatter.digitsOnly,
+                                                                              ],
                                                                               cursorColor: Colors.white,
                                                                               style: const TextStyle(color: Colors.white),
                                                                               initialValue: employee.userId,
@@ -2124,8 +2132,6 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
       },
     );
   }
-
- 
 }
 
 // Stack(

@@ -1567,6 +1567,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                               MainAxisSize.min,
                                                                           children: [
                                                                             TextFormField(
+                                                                              
                                                                               cursorColor: Colors.white,
                                                                               style: const TextStyle(color: Colors.white),
                                                                               initialValue: employee.name,
@@ -1585,6 +1586,13 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                             ),
                                                                             FxBox.h24,
                                                                             TextFormField(
+                                                                               keyboardType:
+                                                                  TextInputType
+                                                                      .phone,
+                                                              inputFormatters: [
+                                                                FilteringTextInputFormatter
+                                                                    .digitsOnly,
+                                                              ],
                                                                               cursorColor: Colors.white,
                                                                               style: const TextStyle(color: Colors.white),
                                                                               initialValue: employee.userId,
