@@ -190,7 +190,7 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                         ? "All"
                                         : state.filterCase,
                                     onChanged: (value) {
-                                      if (value?.isNotEmpty ?? false) {
+                                      // if (value?.isNotEmpty ?? false) {
                                         GroupSearchBloc.get(context).add(
                                             selectedFiltering(
                                                 filterCase: value ?? "All"));
@@ -204,9 +204,13 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                         //   GroupSearchBloc.get(context).add(
                                         //       const GetEmployeeBlackListedNamesEvent());
                                         // }
-                                      }
+                                      // }
                                     },
-                                    itemsList: ["All", "Normal", "BlackListed"],
+                                    itemsList: [
+                                      "All",
+                                      "Neutral",
+                                      "BlackListed"
+                                    ],
                                   ),
                                 ),
                               ),

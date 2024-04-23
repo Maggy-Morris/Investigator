@@ -137,7 +137,7 @@ class StandardLayoutScreen extends StatelessWidget {
                                       selectedIcon: const Icon(
                                         Icons.supervisor_account_outlined,
                                       ),
-                                      label: Text('GroupSearch'.tr()),
+                                      label: Text('DatabaseSearch'.tr()),
                                     ),
 
                                     NavigationRailDestination(

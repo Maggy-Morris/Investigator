@@ -106,7 +106,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                 ///search field
                                 Form(
                                   child: SizedBox(
-                                    height: 40,
+                                    height: 50,
                                     width: 300,
                                     child: TextFormField(
                                       cursorColor: Colors.white,
@@ -179,7 +179,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                 // Add Employee Button
                                 FxBox.h24,
                                 MaterialButton(
-                                  height: 50,
+                                  height: 55,
                                   minWidth: 210,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15.0),
@@ -679,13 +679,6 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                 .add(
                                                                     const AddNewEmployeeEvent());
 
-                                                            // employeeNameController
-                                                            //     .clear();
-                                                            // state.imageFile == null;
-                                                            // AllEmployeesBloc.get(
-                                                            //         context)
-                                                            //     .add(const imageevent(
-                                                            //         imageFile: null));
                                                             Navigator.of(
                                                                     context)
                                                                 .pop();
@@ -704,7 +697,8 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                               );
                                             }).catchError((error) {
                                           // Handle error
-                                          print("Error loading image: $error");
+                                          debugPrint(
+                                              "Error loading image: $error");
                                         });
                                       },
                                     );
@@ -730,7 +724,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                 ///search field
                                 Form(
                                   child: SizedBox(
-                                    height: 40,
+                                    height: 70,
                                     width: 300,
                                     child: TextFormField(
                                       cursorColor: Colors.white,
@@ -787,7 +781,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                 FxBox.h24,
 
                                 MaterialButton(
-                                  height: 50,
+                                  height: 55,
                                   minWidth: 210,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15.0),
@@ -1318,39 +1312,50 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                             ),
                           ),
                         FxBox.h24,
-                        Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: SizedBox(
-                            width: 250,
-                            child: singleSelectGenericDropdown<String>(
-                              // titleName: "Filter By:",
-                              isEnabled: true,
-                              isRequired: false,
-                              filled: true,
-                              // showSearch: true,
-                              selectedItem: state.filterCase!.isEmpty
-                                  ? "All"
-                                  : state.filterCase,
-                              onChanged: (value) {
-                                if (value?.isNotEmpty ?? false) {
-                                  AllEmployeesBloc.get(context).add(
-                                      selectedFiltering(
-                                          filterCase: value ?? ""));
-                                  if (value == "All") {
-                                    AllEmployeesBloc.get(context)
-                                        .add(const GetEmployeeNamesEvent());
-                                  } else if (value == "Normal") {
-                                    AllEmployeesBloc.get(context).add(
-                                        const GetEmployeeNormalNamesEvent());
-                                  } else if (value == "BlackListed") {
-                                    AllEmployeesBloc.get(context).add(
-                                        const GetEmployeeBlackListedNamesEvent());
-                                  }
-                                }
-                              },
-                              itemsList: ["All", "Normal", "BlackListed"],
+                        Row(
+                          children: [
+                            Text(
+                              "Filter By : ",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: (Responsive.isWeb(context)) ? 25 : 17,
+                              ),
                             ),
-                          ),
+                            Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: SizedBox(
+                                width: 170,
+                                child: singleSelectGenericDropdown<String>(
+                                  // titleName: "Filter By:",
+                                  isEnabled: true,
+                                  isRequired: false,
+                                  filled: true,
+                                  // showSearch: true,
+                                  selectedItem: state.filterCase!.isEmpty
+                                      ? "All"
+                                      : state.filterCase,
+                                  onChanged: (value) {
+                                    if (value?.isNotEmpty ?? false) {
+                                      AllEmployeesBloc.get(context).add(
+                                          selectedFiltering(
+                                              filterCase: value ?? ""));
+                                      if (value == "All") {
+                                        AllEmployeesBloc.get(context)
+                                            .add(const GetEmployeeNamesEvent());
+                                      } else if (value == "Neutral") {
+                                        AllEmployeesBloc.get(context).add(
+                                            const GetEmployeeNormalNamesEvent());
+                                      } else if (value == "BlackListed") {
+                                        AllEmployeesBloc.get(context).add(
+                                            const GetEmployeeBlackListedNamesEvent());
+                                      }
+                                    }
+                                  },
+                                  itemsList: ["All", "Neutral", "BlackListed"],
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         Padding(
                           padding: const EdgeInsets.all(10.0),

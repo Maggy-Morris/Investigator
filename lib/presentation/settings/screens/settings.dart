@@ -1,5 +1,6 @@
 import 'package:Investigator/authentication/auth_bloc/app_bloc.dart';
 import 'package:Investigator/core/enum/enum.dart';
+import 'package:Investigator/core/utils/responsive.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart'; // Import flutter_bloc for BlocProvider
@@ -160,7 +161,7 @@ class _SettingsState extends State<Settings> {
                                                   }
 
                                                   SettingsBloc.get(context).add(
-                                                   const UpdatePassword(),
+                                                    const UpdatePassword(),
                                                   );
                                                   Navigator.of(context).pop();
                                                 },
@@ -185,6 +186,7 @@ class _SettingsState extends State<Settings> {
                                 ),
                               ), // Specify the text
                             ),
+                            (Responsive.isWeb(context)) ? 500 : 250,
                           ),
                           // _buildInputCard(
                           //   'Password',
@@ -211,8 +213,8 @@ class _SettingsState extends State<Settings> {
                           SizedBox(height: 10),
                         ],
                       ),
-                     const SizedBox(height: 20),
-                     const Row(
+                      const SizedBox(height: 20),
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
@@ -381,10 +383,11 @@ Widget _buildInputCard(
   String value,
   void Function(String) onChanged,
   bool readOnly, // Add a bool parameter for read-only state
-  TextButton? suffixTextButton, // Add an optional suffix text button parameter
+  TextButton? suffixTextButton,
+  double siz, // Add an optional suffix text button parameter
 ) {
   return SizedBox(
-    width: 500,
+    width: siz,
     child: Card(
       color: AppColors.white,
       elevation: 2,
