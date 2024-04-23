@@ -203,7 +203,10 @@ Widget _bottomView() {
                 ? () {
                     //check this one out
                     context.read<SignupCubit>().signUpWithCredentials();
-                    state.status.isValidated ? Navigator.pop(context) : null;
+                    if (state.status.isSubmissionSuccess) {
+                      Navigator.pop(context);
+                    }
+                    // state.status.isValidated ?  : null;
                   }
                 : null,
           );
@@ -349,87 +352,6 @@ class DropDwon extends StatelessWidget {
     );
   }
 }
-
-// class DropDwon extends StatelessWidget {
-//   const DropDwon({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocBuilder<SignupCubit, SignupState>(
-//       builder: (context, state) {
-//         // List<String> roomNumbers = List.filled(state.selectedNumber ?? 0, '');
-
-//         return Center(
-//           child: Column(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: <Widget>[
-//               DropdownButton<int>(
-//                 value: state.selectedNumber,
-//                 onChanged: (value) {
-//                   context.read<SignupCubit>().selectedNumberChanged(value ?? 0);
-
-//                   // setState(() {
-//                   //   selectedNumber = value;
-//                   // });
-//                 },
-//                 items: List.generate(101, (index) {
-//                   return DropdownMenuItem<int>(
-//                     value: index,
-//                     child: Text(
-//                       '${index}',
-//                       style: TextStyle(color: Colors.black),
-//                     ),
-//                   );
-//                 }),
-//               ),
-//               SizedBox(height: 20),
-//               state.selectedNumber! > 0
-//                   ? Column(
-//                       children: List.generate(state.selectedNumber!, (index) {
-//                         return SizedBox(
-//                           width: MediaQuery.of(context).size.width,
-//                           child: Padding(
-//                             padding: const EdgeInsets.only(bottom: 15.0),
-//                             child: TextField(
-//                               style: TextStyle(color: Colors.black),
-//                               decoration: InputDecoration(
-//                                 labelText: 'Room Number ${index + 1}',
-//                                 border: OutlineInputBorder(
-//                                     borderRadius: BorderRadius.circular(15),
-//                                     borderSide: const BorderSide(
-//                                         style: BorderStyle.none)),
-//                                 focusedBorder: OutlineInputBorder(
-//                                     borderRadius: BorderRadius.circular(15),
-//                                     borderSide: const BorderSide(
-//                                         style: BorderStyle.none)),
-//                                 enabledBorder: OutlineInputBorder(
-//                                     borderRadius: BorderRadius.circular(15),
-//                                     borderSide: const BorderSide(
-//                                         style: BorderStyle.none)),
-//                                 filled: true,
-//                                 fillColor: AppColors.primaryColorDark,
-//                                 isDense: true,
-//                               ),
-//                               onChanged: (value) {
-//                                 // state.roomNumbers[index] = value;
-
-//                                 context
-//                                     .read<SignupCubit>()
-//                                     .roomNumbersChanged(index, value);
-//                               },
-//                             ),
-//                           ),
-//                         );
-//                       }),
-//                     )
-//                   : Container(),
-//             ],
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }
 
 class _EmailInput extends StatelessWidget {
   @override

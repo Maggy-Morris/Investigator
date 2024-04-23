@@ -11,12 +11,11 @@ class RadioButtonChanged extends SearchByImageEvent {
   final String selectedOption;
   // final bool showTextField;
 
-  const RadioButtonChanged(
-      {required this.selectedOption, 
-      // required this.showTextField
-      });
+  const RadioButtonChanged({
+    required this.selectedOption,
+    // required this.showTextField
+  });
 }
-
 
 class AddpersonName extends SearchByImageEvent {
   final String personName;
@@ -54,8 +53,6 @@ class AdduserId extends SearchByImageEvent {
   List<Object?> get props => [userId];
 }
 
-
-
 class DeletePersonByNameEvent extends SearchByImageEvent {
   final String companyName;
   final String personName;
@@ -65,8 +62,6 @@ class DeletePersonByNameEvent extends SearchByImageEvent {
   @override
   List<Object?> get props => [companyName, personName];
 }
-
-
 
 class UpdateEmployeeEvent extends SearchByImageEvent {
   final String companyName;
@@ -105,7 +100,6 @@ class SearchForEmployeeEvent extends SearchByImageEvent {
   List<Object?> get props => [];
 }
 
-
 class ImageToSearchForEmployee extends SearchByImageEvent {
   final Widget imageWidget;
 
@@ -115,6 +109,18 @@ class ImageToSearchForEmployee extends SearchByImageEvent {
   List<Object?> get props => [imageWidget];
 }
 
+class reloadEmployeeData extends SearchByImageEvent {
+  final List<Dataa> employeeData;
+  final List<List<double>>? boxesData;
+  final List<String>? textAccuracyData;
+  final List<String>? blacklisData;
+  final List<String>? resultData;
+
+  const reloadEmployeeData({required this.boxesData,required this.textAccuracyData,required this.blacklisData,required this.resultData, required this.employeeData});
+
+  @override
+  List<Object?> get props => [boxesData, employeeData , resultData, blacklisData,textAccuracyData];
+}
 
 class SearchForEmployee extends SearchByImageEvent {
   final String companyName;

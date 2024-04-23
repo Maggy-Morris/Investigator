@@ -1,9 +1,11 @@
+import 'package:Investigator/authentication/call_back_authentication.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:Investigator/presentation/login/widgets/password.dart';
 
 import '../../../authentication/authentication_repository.dart';
+import '../../../core/models/sigup_model.dart';
 import '../../login/widgets/email.dart';
 
 part 'signup_state.dart';
@@ -73,8 +75,8 @@ class SignupCubit extends Cubit<SignupState> {
     );
   }
 
-  Future<void> signUpWithCredentials() async {
-    if (!state.status.isValidated) return;
+  Future<signupModel> signUpWithCredentials() async {
+    // if (!state.status.isValidated) return signupModel();
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     try {
       await _authenticationRepository.SignUpWithEmailAndPassword(
@@ -83,17 +85,29 @@ class SignupCubit extends Cubit<SignupState> {
         companyName: state.companyName ?? "",
         roomNames: state.roomNames,
         roomsNumber: state.selectedNumber ?? 0,
-      );
-      emit(state.copyWith(status: FormzStatus.submissionSuccess));
+      ).then((value) {
+        if (value.status == true) {
+          emit(state.copyWith(status: FormzStatus.submissionSuccess));
+        } else {
+          emit(
+            state.copyWith(
+              errorMessage: "${value.logined}",
+              status: FormzStatus.submissionFailure,
+            ),
+          );
+        }
+      });
     } on SignUpWithEmailAndPasswordFailureFirebase catch (e) {
       emit(
         state.copyWith(
-          errorMessage: "E-mail is already  in use",
+          errorMessage: "E-mail or CompanyName is already in use",
           status: FormzStatus.submissionFailure,
         ),
       );
     } catch (_) {
       emit(state.copyWith(status: FormzStatus.submissionFailure));
     }
+
+    return signupModel();
   }
 }

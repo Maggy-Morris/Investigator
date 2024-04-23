@@ -7,6 +7,8 @@ import 'package:Investigator/core/remote_provider/remote_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:Investigator/authentication/call_back_authentication.dart';
 
+import '../core/models/sigup_model.dart';
+
 enum AuthenticationStatus { authenticated, unauthenticated }
 
 class AuthenticationRepository {
@@ -185,7 +187,7 @@ class AuthenticationRepository {
 
   /// Signs Up with the provided [email] and [password] and [companyName]
 
-  Future<void> SignUpWithEmailAndPassword({
+  Future<signupModel> SignUpWithEmailAndPassword({
     required String email,
     required String password,
     required String companyName,
@@ -199,7 +201,7 @@ class AuthenticationRepository {
               email, password, companyName, roomsNumber, roomNames)
           .then(
         (value) {
-          if (value.logined == "Signed up successfully!") {
+          if (value.status == true) {
             // sharedUser?.setString(userCacheKey, jsonEncode(value));
             // sharedUser?.setString(usernameCacheKey, email);
             // sharedUser?.setString(passwordCacheKey, password);
@@ -208,9 +210,9 @@ class AuthenticationRepository {
             // sharedUser?.setStringList(routesCacheKey, ["/"]);
 
             // controller.add(value!);
-          } else if (value.logined == "E-mail is already  in use") {
+          } else if (value.status == false) {
             throw SignUpWithEmailAndPasswordFailureFirebase.fromCode(
-                "E-mail is already  in use");
+                "${value.logined}");
           } else {
             controller.add(UserData.empty);
             logOut();
@@ -226,6 +228,7 @@ class AuthenticationRepository {
         throw const SignUpWithEmailAndPasswordFailureFirebase();
       }
     }
+    return signupModel();
   }
 
   Future<void> logOut() async {

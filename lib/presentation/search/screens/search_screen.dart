@@ -331,6 +331,16 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                     SearchByImageBloc.get(
                                                             context)
                                                         .add(
+                                                      const reloadEmployeeData(
+                                                          resultData: [],
+                                                          blacklisData: [],
+                                                          boxesData: [],
+                                                          textAccuracyData: [],
+                                                          employeeData: []),
+                                                    );
+                                                    SearchByImageBloc.get(
+                                                            context)
+                                                        .add(
                                                       const SearchForEmployeeEvent(),
                                                     );
                                                   },
@@ -691,6 +701,16 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                               "pick your picture ");
                                                       return;
                                                     }
+                                                    SearchByImageBloc.get(
+                                                            context)
+                                                        .add(
+                                                      const reloadEmployeeData(
+                                                          resultData: [],
+                                                          blacklisData: [],
+                                                          boxesData: [],
+                                                          textAccuracyData: [],
+                                                          employeeData: []),
+                                                    );
                                                     SearchByImageBloc.get(
                                                             context)
                                                         .add(

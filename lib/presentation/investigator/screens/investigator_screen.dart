@@ -38,18 +38,19 @@ class AddCameraScreen extends StatefulWidget {
 }
 
 class _AddCameraScreenState extends State<AddCameraScreen> {
-  TextEditingController nameController = TextEditingController();
-  Widget? _image;
+  // TextEditingController nameController = TextEditingController();
+  // Widget? _image;
   List<Widget>? _images;
 
-  CameraController? controller;
-  XFile? imageFile;
+  // CameraController? controller;
+  // XFile? imageFile;
   final double _min = 10;
   final double _max = 100;
   double _value = 10;
   // bool _isBackCamera = true;
   String companyNameRepo =
       AuthenticationRepository.instance.currentUser.companyName?.first ?? "";
+  final CarouselController _carouselController = CarouselController();
 
   //////////////////////////////////////////////////////
   VideoPlayerController? _controller;
@@ -184,209 +185,219 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
-                                  SizedBox(
-                                    height: 300,
-                                    width: 300,
-                                    child: Card(
-                                      elevation: 4,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(12),
-                                        child: Stack(
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () async {
-                                                await FilePicker.platform
-                                                    .pickFiles(
-                                                  type: FileType.image,
-                                                  allowMultiple: true,
-                                                )
-                                                    .then((result) {
-                                                  if (result != null &&
-                                                      result.files.isNotEmpty) {
-                                                    List<Widget> images = [];
-                                                    for (var imageFile
-                                                        in result.files) {
-                                                      final image = imageFile
-                                                                  .bytes !=
-                                                              null
-                                                          ? Image.memory(
-                                                              imageFile.bytes!,
-                                                              fit: BoxFit.cover,
-                                                            )
-                                                          : loadingIndicator();
+                             // Images Carasol
+                                  Tooltip(
+                                    message:
+                                        "Upload Image or Multiple Images",
+                                    child: SizedBox(
+                                      height: 300,
+                                      width: 300,
+                                      child: Card(
+                                        elevation: 4,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          child: Stack(
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () async {
+                                                  await FilePicker.platform
+                                                      .pickFiles(
+                                                    type: FileType.image,
+                                                    allowMultiple: true,
+                                                  )
+                                                      .then((result) {
+                                                    if (result != null &&
+                                                        result
+                                                            .files.isNotEmpty) {
+                                                      List<Widget> images = [];
+                                                      for (var imageFile
+                                                          in result.files) {
+                                                        final image = imageFile
+                                                                    .bytes !=
+                                                                null
+                                                            ? Image.memory(
+                                                                imageFile
+                                                                    .bytes!,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              )
+                                                            : loadingIndicator();
 
-                                                      images.add(image);
+                                                        images.add(image);
 
-                                                      HomeBloc.get(context).add(
-                                                        imagesList(
-                                                            imagesListdata:
-                                                                result.files),
-                                                      );
-                                                      // Process each selected image file
-                                                      HomeBloc.get(context).add(
-                                                        ImageToSearchForEmployee(
-                                                            imageWidget: image),
-                                                      );
-                                                      HomeBloc.get(context).add(
-                                                        imageevent(
-                                                            imageFile:
-                                                                imageFile),
-                                                      );
+                                                        HomeBloc.get(context)
+                                                            .add(
+                                                          imagesList(
+                                                              imagesListdata:
+                                                                  result.files),
+                                                        );
+                                                        // Process each selected image file
+                                                        HomeBloc.get(context)
+                                                            .add(
+                                                          ImageToSearchForEmployee(
+                                                              imageWidget:
+                                                                  image),
+                                                        );
+                                                        HomeBloc.get(context)
+                                                            .add(
+                                                          imageevent(
+                                                              imageFile:
+                                                                  imageFile),
+                                                        );
+                                                      }
+
+                                                      setState(() {
+                                                        _images = images;
+                                                      });
                                                     }
-
-                                                    setState(() {
-                                                      _images = images;
-                                                    });
-                                                  }
-                                                });
-                                              },
-                                              child: Stack(
-                                                fit: StackFit.expand,
-                                                children: [
-                                                  _images?.isNotEmpty == true
-                                                      ? CarouselSlider(
-                                                          items: _images ?? [],
-                                                          options:
-                                                              CarouselOptions(
-                                                            aspectRatio: 16 /
-                                                                9, // Adjust as needed
-                                                            viewportFraction:
-                                                                0.8, // Adjust as needed
-                                                            enableInfiniteScroll:
-                                                                false,
-                                                            reverse: false,
-                                                            autoPlay: false,
-                                                            enlargeCenterPage:
-                                                                true,
-                                                            scrollDirection:
-                                                                Axis.horizontal,
+                                                  });
+                                                },
+                                                child: Stack(
+                                                  fit: StackFit.expand,
+                                                  children: [
+                                                    _images?.isNotEmpty == true
+                                                        ? CarouselSlider(
+                                                            carouselController:
+                                                                _carouselController,
+                                                            items:
+                                                                _images ?? [],
+                                                            options:
+                                                                CarouselOptions(
+                                                              aspectRatio:
+                                                                  16 / 9,
+                                                              viewportFraction:
+                                                                  0.8,
+                                                              enableInfiniteScroll:
+                                                                  false,
+                                                              reverse: false,
+                                                              autoPlay: true,
+                                                              enlargeCenterPage:
+                                                                  true,
+                                                              scrollDirection:
+                                                                  Axis.horizontal,
+                                                            ),
+                                                          )
+                                                        : Image.asset(
+                                                            'assets/images/imagepick.png',
+                                                            width:
+                                                                double.infinity,
+                                                            height:
+                                                                double.infinity,
+                                                            fit: BoxFit.cover,
                                                           ),
-                                                        )
-                                                      : Image.asset(
-                                                          'assets/images/imagepick.png',
-                                                          width:
-                                                              double.infinity,
-                                                          height:
-                                                              double.infinity,
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                ],
+                                                  ],
+                                                ),
                                               ),
-                                            )
-                                            // GestureDetector(
-                                            //   onTap: () async {
-                                            //     await FilePicker.platform
-                                            //         .pickFiles(
-                                            //       type: FileType.image,
-                                            //             allowMultiple: true, // Allow selecting multiple files
-
-                                            //     )
-
-                                            //         .then((result) {
-                                            //       if (result != null &&
-                                            //           result.files.isNotEmpty) {
-                                            //         // Use the selected image file
-                                            //         final imageFile =
-                                            //             result.files.first;
-                                            //         // Load the image file as an image
-                                            //         final image = imageFile
-                                            //                     .bytes !=
-                                            //                 null
-                                            //             ? Image.memory(
-                                            //                 imageFile.bytes!,
-                                            //                 fit: BoxFit.cover,
-                                            //               )
-                                            //             : loadingIndicator();
-
-                                            //         // Replace the image with the selected image
-                                            //         setState(() {
-                                            //           _image = image;
-                                            //         });
-                                            //         HomeBloc.get(context).add(
-                                            //             ImageToSearchForEmployee(
-                                            //                 imageWidget:
-                                            //                     image));
-
-                                            //         HomeBloc.get(context).add(
-                                            //             imageevent(
-                                            //                 imageFile:
-                                            //                     imageFile));
-                                            //       }
-                                            //     });
-                                            //   },
-                                            //   child: Stack(
-                                            //       fit: StackFit.expand,
-                                            //       children: [
-                                            //         // state.imageWidget
-                                            //         _image ??
-                                            //             Image.asset(
-                                            //               'assets/images/imagepick.png',
-                                            //               width:
-                                            //                   double.infinity,
-                                            //               height:
-                                            //                   double.infinity,
-                                            //               fit: BoxFit.cover,
-                                            //             ),
-                                            //       ]),
-                                            // ),
-                                          ],
+                                              _images?.isNotEmpty == true
+                                                  ?
+                                                  // Left Button
+                                                  Positioned(
+                                                      left: 0,
+                                                      top: 110,
+                                                      bottom: 110,
+                                                      child: IconButton(
+                                                        icon: const Icon(
+                                                          Icons.arrow_left,
+                                                          size: 35,
+                                                        ),
+                                                        onPressed: () {
+                                                          // Scroll the carousel to the left
+                                                          _carouselController
+                                                              .previousPage();
+                                                        },
+                                                      ),
+                                                    )
+                                                  : const Positioned(
+                                                      child: Text("")),
+                                              _images?.isNotEmpty == true
+                                                  ?
+                                                  // Right Button
+                                                  Positioned(
+                                                      right: 0,
+                                                      top: 110,
+                                                      bottom: 110,
+                                                      child: IconButton(
+                                                        icon: const Icon(
+                                                          Icons.arrow_right,
+                                                          size: 35,
+                                                        ),
+                                                        onPressed: () {
+                                                          // Scroll the carousel to the right
+                                                          _carouselController
+                                                              .nextPage();
+                                                        },
+                                                      ),
+                                                    )
+                                                  : const Positioned(
+                                                      child: Text("")),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 300,
-                                    width: 300,
-                                    child: Card(
-                                      elevation: 4,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(12),
+
+                                  // Uploading Videos
+                                  Tooltip(
+                                    message: "Upload a video",
+                                    child: SizedBox(
+                                      height: 300,
+                                      width: 300,
+                                      child: Card(
+                                        elevation: 4,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
                                         child: Stack(
+                                          fit: StackFit.expand,
                                           children: [
-                                            GestureDetector(
-                                              onTap: () async {
-                                                await _pickVideo().then(
-                                                  (PlatformFile? videoFile) {
+                                            if (_loading)
+                                              Center(
+                                                child:
+                                                    loadingIndicator(), // Display circular progress indicator while loading
+                                              )
+                                            else if (_controller != null)
+                                              AspectRatio(
+                                                aspectRatio: _controller!
+                                                    .value.aspectRatio,
+                                                child:
+                                                    VideoPlayer(_controller!),
+                                              )
+                                            else
+                                              Image.asset(
+                                                'assets/images/iconVid.png',
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            Positioned(
+                                              left: 1,
+                                              right: 1,
+                                              top: 1,
+                                              bottom: 1,
+                                              child: GestureDetector(
+                                                // child: Text(""),
+
+                                                onTap: () {
+                                                  _pickVideo().then(
+                                                      (PlatformFile?
+                                                          videoFile) {
                                                     if (videoFile != null) {
                                                       HomeBloc.get(context).add(
                                                           videoevent(
                                                               video:
                                                                   videoFile));
                                                     }
-                                                  },
-                                                );
-                                              }, // Call _pickVideo function when tapped
-                                              child: Stack(
-                                                fit: StackFit.expand,
-                                                children: [
-                                                  if (_loading)
-                                                    Center(
-                                                      child:
-                                                          loadingIndicator(), // Display circular progress indicator while loading
-                                                    )
-                                                  else if (_controller != null)
-                                                    AspectRatio(
-                                                      aspectRatio: _controller!
-                                                          .value.aspectRatio,
-                                                      child: VideoPlayer(
-                                                          _controller!),
-                                                    )
-                                                  else
-                                                    Image.asset(
-                                                      'assets/images/iconVid.png',
-                                                      width: double.infinity,
-                                                      height: double.infinity,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                ],
+                                                  });
+                                                },
                                               ),
-                                            ),
+                                            )
                                           ],
                                         ),
                                       ),
@@ -612,9 +623,8 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
-
-                                  
-                                         SizedBox(
+                                  // Images Carasol
+                                  SizedBox(
                                     height: 300,
                                     width: 300,
                                     child: Card(
@@ -678,17 +688,18 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                 children: [
                                                   _images?.isNotEmpty == true
                                                       ? CarouselSlider(
+                                                          carouselController:
+                                                              _carouselController,
                                                           items: _images ?? [],
                                                           options:
                                                               CarouselOptions(
-                                                            aspectRatio: 16 /
-                                                                9, // Adjust as needed
+                                                            aspectRatio: 16 / 9,
                                                             viewportFraction:
-                                                                0.8, // Adjust as needed
+                                                                0.8,
                                                             enableInfiniteScroll:
                                                                 false,
                                                             reverse: false,
-                                                            autoPlay: false,
+                                                            autoPlay: true,
                                                             enlargeCenterPage:
                                                                 true,
                                                             scrollDirection:
@@ -705,14 +716,54 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                         ),
                                                 ],
                                               ),
-                                            )
-                                           
+                                            ),
+                                            _images?.isNotEmpty == true
+                                                ?
+                                                // Left Button
+                                                Positioned(
+                                                    left: 0,
+                                                    top: 110,
+                                                    bottom: 110,
+                                                    child: IconButton(
+                                                      icon: const Icon(
+                                                        Icons.arrow_left,
+                                                        size: 35,
+                                                      ),
+                                                      onPressed: () {
+                                                        // Scroll the carousel to the left
+                                                        _carouselController
+                                                            .previousPage();
+                                                      },
+                                                    ),
+                                                  )
+                                                : const Positioned(
+                                                    child: Text("")),
+                                            _images?.isNotEmpty == true
+                                                ?
+                                                // Right Button
+                                                Positioned(
+                                                    right: 0,
+                                                    top: 110,
+                                                    bottom: 110,
+                                                    child: IconButton(
+                                                      icon: const Icon(
+                                                        Icons.arrow_right,
+                                                        size: 35,
+                                                      ),
+                                                      onPressed: () {
+                                                        // Scroll the carousel to the right
+                                                        _carouselController
+                                                            .nextPage();
+                                                      },
+                                                    ),
+                                                  )
+                                                : const Positioned(
+                                                    child: Text("")),
                                           ],
                                         ),
                                       ),
                                     ),
                                   ),
-                          
                                   SizedBox(
                                     height: 300,
                                     width: 300,
@@ -721,12 +772,36 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(12),
                                       ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(12),
-                                        child: Stack(
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () async {
+                                      child: Stack(
+                                        fit: StackFit.expand,
+                                        children: [
+                                          if (_loading)
+                                            Center(
+                                              child:
+                                                  loadingIndicator(), // Display circular progress indicator while loading
+                                            )
+                                          else if (_controller != null)
+                                            AspectRatio(
+                                              aspectRatio: _controller!
+                                                  .value.aspectRatio,
+                                              child: VideoPlayer(_controller!),
+                                            )
+                                          else
+                                            Image.asset(
+                                              'assets/images/iconVid.png',
+                                              width: double.infinity,
+                                              height: double.infinity,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          Positioned(
+                                            left: 1,
+                                            right: 1,
+                                            top: 1,
+                                            bottom: 1,
+                                            child: GestureDetector(
+                                              // child: Text(""),
+
+                                              onTap: () {
                                                 _pickVideo().then(
                                                     (PlatformFile? videoFile) {
                                                   if (videoFile != null) {
@@ -735,34 +810,10 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                             video: videoFile));
                                                   }
                                                 });
-                                              }, // Call _pickVideo function when tapped
-                                              child: Stack(
-                                                fit: StackFit.expand,
-                                                children: [
-                                                  if (_loading)
-                                                    Center(
-                                                      child:
-                                                          loadingIndicator(), // Display circular progress indicator while loading
-                                                    )
-                                                  else if (_controller != null)
-                                                    AspectRatio(
-                                                      aspectRatio: _controller!
-                                                          .value.aspectRatio,
-                                                      child: VideoPlayer(
-                                                          _controller!),
-                                                    )
-                                                  else
-                                                    Image.asset(
-                                                      'assets/images/iconVid.png',
-                                                      width: double.infinity,
-                                                      height: double.infinity,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                ],
-                                              ),
+                                              },
                                             ),
-                                          ],
-                                        ),
+                                          )
+                                        ],
                                       ),
                                     ),
                                   ),

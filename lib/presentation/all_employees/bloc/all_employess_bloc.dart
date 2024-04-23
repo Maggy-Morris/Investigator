@@ -45,9 +45,7 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
     on<Addemail>(_onAddemail);
     on<AdduserId>(_onAdduserId);
 
-
     on<selectedFiltering>(_onselectedFiltering);
-
 
     on<imageevent>(_onimageevent);
     on<EditPageNumber>(_onEditPageNumber);
@@ -75,11 +73,11 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
     emit(state.copyWith(check: event.check, submission: Submission.editing));
   }
 
-_onselectedFiltering(selectedFiltering event, Emitter<AllEmployeesState> emit) async {
-    emit(state.copyWith(filterCase: event.filterCase, submission: Submission.editing));
+  _onselectedFiltering(
+      selectedFiltering event, Emitter<AllEmployeesState> emit) async {
+    emit(state.copyWith(
+        filterCase: event.filterCase, submission: Submission.editing));
   }
-
-
 
   _oncheckBox(checkBox event, Emitter<AllEmployeesState> emit) async {
     emit(state.copyWith(
@@ -221,11 +219,10 @@ _onselectedFiltering(selectedFiltering event, Emitter<AllEmployeesState> emit) a
     }
   }
 
+  ///Normal Empoloyees
 
-///Normal Empoloyees
-
-  _onGetEmployeeNormalNamesEvent(
-      GetEmployeeNormalNamesEvent event, Emitter<AllEmployeesState> emit) async {
+  _onGetEmployeeNormalNamesEvent(GetEmployeeNormalNamesEvent event,
+      Emitter<AllEmployeesState> emit) async {
     emit(state.copyWith(submission: Submission.loading));
 
     try {
@@ -263,15 +260,15 @@ _onselectedFiltering(selectedFiltering event, Emitter<AllEmployeesState> emit) a
     }
   }
 
+  ///BlackListed Employess
 
-///BlackListed Employess
-
-  _onGetEmployeeBlackListedNamesEvent(
-      GetEmployeeBlackListedNamesEvent event, Emitter<AllEmployeesState> emit) async {
+  _onGetEmployeeBlackListedNamesEvent(GetEmployeeBlackListedNamesEvent event,
+      Emitter<AllEmployeesState> emit) async {
     emit(state.copyWith(submission: Submission.loading));
 
     try {
-      final employeeModel = await RemoteProvider().getOnlyBlackListedEmployeeNames(
+      final employeeModel =
+          await RemoteProvider().getOnlyBlackListedEmployeeNames(
         companyName: companyNameRepo,
         pageNumber:
             state.pageIndex == 0 ? state.pageIndex + 1 : state.pageIndex,
@@ -304,6 +301,7 @@ _onselectedFiltering(selectedFiltering event, Emitter<AllEmployeesState> emit) a
       ));
     }
   }
+
 //////////////////////////////////////////////////////////////////////////////////////////////
   /// New Employees Added
   _onAddNewEmployee(
@@ -430,26 +428,16 @@ _onselectedFiltering(selectedFiltering event, Emitter<AllEmployeesState> emit) a
       // if (state.companyName.isNotEmpty) {
       //   add(const ApplyModelEvent());
       // }
-      if (value != EmployeeModel()) {
+      if (value.isNotEmpty) {
         // Update the employeeNamesList with the new list of employees
         emit(state.copyWith(
           submission: Submission.success,
+          responseMessage: "",
           employeeNamesList: value,
         ));
-        if (value.length == 0) {
-          emit(state.copyWith(
-            submission: Submission.noDataFound,
-          ));
-        }
-      }
-      // else if (value.length == 0) {
-      //   emit(state.copyWith(
-      //     submission: Submission.noDataFound,
-      //   ));
-      // }
-      else {
+      } else {
         emit(state.copyWith(
-          submission: Submission.error,
+          submission: Submission.noDataFound,
         ));
       }
     });

@@ -83,7 +83,6 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
             if (state.submission == Submission.error) {
               FxToast.showErrorToast(
                   context: context,
-                  
                   message: state.responseMessage.isNotEmpty
                       ? state.responseMessage
                       : null);
@@ -239,22 +238,51 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
-                                  SizedBox(
-                                    height: 300,
-                                    width: 300,
-                                    child: Card(
-                                      elevation: 4,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(12),
+                                  Tooltip(
+                                    message: "Upload a video",
+                                    child: SizedBox(
+                                      height: 300,
+                                      width: 300,
+                                      child: Card(
+                                        elevation: 4,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
                                         child: Stack(
+                                          fit: StackFit.expand,
                                           children: [
-                                            GestureDetector(
-                                              onTap: () async {
-                                                await _pickVideo().then(
-                                                  (PlatformFile? videoFile) {
+                                            if (_loading)
+                                              Center(
+                                                child:
+                                                    loadingIndicator(), // Display circular progress indicator while loading
+                                              )
+                                            else if (_controller != null)
+                                              AspectRatio(
+                                                aspectRatio: _controller!
+                                                    .value.aspectRatio,
+                                                child:
+                                                    VideoPlayer(_controller!),
+                                              )
+                                            else
+                                              Image.asset(
+                                                'assets/images/iconVid.png',
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            Positioned(
+                                              left: 1,
+                                              right: 1,
+                                              top: 1,
+                                              bottom: 1,
+                                              child: GestureDetector(
+                                                // child: Text(""),
+
+                                                onTap: () {
+                                                  _pickVideo().then(
+                                                      (PlatformFile?
+                                                          videoFile) {
                                                     if (videoFile != null) {
                                                       GroupSearchBloc.get(
                                                               context)
@@ -262,39 +290,72 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                               video:
                                                                   videoFile));
                                                     }
-                                                  },
-                                                );
-                                              }, // Call _pickVideo function when tapped
-                                              child: Stack(
-                                                fit: StackFit.expand,
-                                                children: [
-                                                  if (_loading)
-                                                    Center(
-                                                      child:
-                                                          loadingIndicator(), // Display circular progress indicator while loading
-                                                    )
-                                                  else if (_controller != null)
-                                                    AspectRatio(
-                                                      aspectRatio: _controller!
-                                                          .value.aspectRatio,
-                                                      child: VideoPlayer(
-                                                          _controller!),
-                                                    )
-                                                  else
-                                                    Image.asset(
-                                                      'assets/images/iconVid.png',
-                                                      width: double.infinity,
-                                                      height: double.infinity,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                ],
+                                                  });
+                                                },
                                               ),
-                                            ),
+                                            )
                                           ],
                                         ),
                                       ),
                                     ),
                                   ),
+
+                                  //   SizedBox(
+                                  //     height: 300,
+                                  //     width: 300,
+                                  //     child: Card(
+                                  //       elevation: 4,
+                                  //       shape: RoundedRectangleBorder(
+                                  //         borderRadius: BorderRadius.circular(12),
+                                  //       ),
+                                  //       child: ClipRRect(
+                                  //         borderRadius: BorderRadius.circular(12),
+                                  //         child: Stack(
+                                  //           children: [
+                                  //             GestureDetector(
+                                  //               onTap: () async {
+                                  //                 await _pickVideo().then(
+                                  //                   (PlatformFile? videoFile) {
+                                  //                     if (videoFile != null) {
+                                  //                       GroupSearchBloc.get(
+                                  //                               context)
+                                  //                           .add(videoevent(
+                                  //                               video:
+                                  //                                   videoFile));
+                                  //                     }
+                                  //                   },
+                                  //                 );
+                                  //               }, // Call _pickVideo function when tapped
+                                  //               child: Stack(
+                                  //                 fit: StackFit.expand,
+                                  //                 children: [
+                                  //                   if (_loading)
+                                  //                     Center(
+                                  //                       child:
+                                  //                           loadingIndicator(), // Display circular progress indicator while loading
+                                  //                     )
+                                  //                   else if (_controller != null)
+                                  //                     AspectRatio(
+                                  //                       aspectRatio: _controller!
+                                  //                           .value.aspectRatio,
+                                  //                       child: VideoPlayer(
+                                  //                           _controller!),
+                                  //                     )
+                                  //                   else
+                                  //                     Image.asset(
+                                  //                       'assets/images/iconVid.png',
+                                  //                       width: double.infinity,
+                                  //                       height: double.infinity,
+                                  //                       fit: BoxFit.cover,
+                                  //                     ),
+                                  //                 ],
+                                  //               ),
+                                  //             ),
+                                  //           ],
+                                  //         ),
+                                  //       ),
+                                  //     ),
+                                  //   ),
                                 ],
                               ),
 

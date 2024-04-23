@@ -33,8 +33,21 @@ class SearchByImageBloc extends Bloc<SearchByImageEvent, SearchByImageState> {
 
 //edit
     on<RadioButtonChanged>(_onRadioButtonChanged);
+    on<reloadEmployeeData>(_onreloadEmployeeData);
 
     on<UpdateEmployeeEvent>(_onUpdateEmployeeEvent);
+  }
+
+  _onreloadEmployeeData(
+      reloadEmployeeData event, Emitter<SearchByImageState> emit) async {
+    emit(state.copyWith(
+      employeeNamesList: event.employeeData,
+      result: event.resultData,
+      textAccuracy: event.textAccuracyData,
+      boxes: event.boxesData,
+      blacklis: event.blacklisData,
+      submission: Submission.hasData,
+    ));
   }
 
   _onAddpersonName(
@@ -110,7 +123,7 @@ class SearchByImageBloc extends Bloc<SearchByImageEvent, SearchByImageState> {
       } else if (value.data == "No documents found for deletion.") {
         emit(state.copyWith(
             submission: Submission.error, responseMessage: value.data));
-      } else if (value.data?.isEmpty == true ) {
+      } else if (value.data?.isEmpty == true) {
         emit(state.copyWith(
           submission: Submission.noDataFound,
         ));
@@ -119,8 +132,6 @@ class SearchByImageBloc extends Bloc<SearchByImageEvent, SearchByImageState> {
       // if (value != EmployeeModel()) {
       //   emit(const HomeState().copyWith(submission: Submission.success));
       // }
-
-     
     });
   }
 

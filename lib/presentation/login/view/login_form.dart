@@ -174,7 +174,7 @@ Widget _bottomView() {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text("userName".tr(),
+            child: Text("Email".tr(),
                 style: const TextStyle(
                     color: Colors.white,
                     fontFamily: "Cairo",
@@ -260,8 +260,8 @@ class _EmailInput extends StatelessWidget {
               fillColor: AppColors.primaryColorDark,
               isDense: true,
               // labelText: 'Email',
-              hintText: 'enterUserName'.tr(),
-              errorText: state.email.invalid ? 'wrongUserName'.tr() : null,
+              hintText: 'enterEmail'.tr(),
+              errorText: state.email.invalid ? 'wrongEmail'.tr() : null,
             ),
           ),
         );
