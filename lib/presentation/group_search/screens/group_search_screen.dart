@@ -1991,7 +1991,7 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
               //     builder: (context, state) {
               //       return
               PopupMenuButton<String>(
-                icon: const Icon(Icons.more_horiz, color: Colors.black),
+                icon: const Icon(Icons.more_horiz, color: Colors.white),
                 onSelected: (String choice) {
                   if (choice == 'Edit') {
                     onUpdate();

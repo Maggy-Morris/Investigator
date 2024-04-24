@@ -359,6 +359,13 @@ class _SettingsState extends State<Settings> {
                         children: [
                           ElevatedButton(
                               onPressed: () async {
+                                if (state.room_names.isEmpty) {
+                                  FxToast.showErrorToast(
+                                    context: context,
+                                    message: "please fill the room name first",
+                                  );
+                                  return;
+                                }
                                 SettingsBloc.get(context).add(
                                   const UpdateRooms(),
                                 );

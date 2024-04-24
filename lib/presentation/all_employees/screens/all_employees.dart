@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:Investigator/core/loader/loading_indicator.dart';
-import 'package:Investigator/core/models/employee_model.dart';
 import 'package:Investigator/core/remote_provider/remote_data_source.dart';
 import 'package:Investigator/core/resources/app_colors.dart';
 import 'package:Investigator/core/widgets/customTextField.dart';
@@ -21,13 +21,11 @@ import '../../../core/widgets/drop_down_widgets.dart';
 import '../../../core/widgets/fullscreenImage.dart';
 import '../../../core/widgets/persons_per_widget.dart';
 import '../../../core/widgets/toast/toast.dart';
-// import '../../search/screens/camera_front.dart';
 import '../bloc/all_employess_bloc.dart';
 
 class AllEmployeesScreen extends StatefulWidget {
   const AllEmployeesScreen({
     Key? key,
-    // required this.data
   }) : super(key: key);
 
   @override
@@ -52,13 +50,24 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
         child: BlocListener<AllEmployeesBloc, AllEmployeesState>(
           listener: (context, state) {
             if (state.submission == Submission.success) {
+              EasyLoading.dismiss();
+
               FxToast.showSuccessToast(
                   context: context,
                   message: state.responseMessage.isNotEmpty
                       ? state.responseMessage
                       : null);
             }
+            if (state.submission == Submission.loading &&
+                state.addingEmployee == true) {
+              EasyLoading.show(
+                  status: "Adding Employee".tr(),
+                  maskType: EasyLoadingMaskType.black,
+                  dismissOnTap: false);
+            }
             if (state.submission == Submission.error) {
+              EasyLoading.dismiss();
+
               FxToast.showErrorToast(
                   context: context,
                   message: state.responseMessage.isNotEmpty
@@ -66,6 +75,8 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                       : null);
             }
             if (state.submission == Submission.noDataFound) {
+              EasyLoading.dismiss();
+
               FxToast.showWarningToast(
                   context: context,
                   warningMessage: "NO data found about this person");
@@ -161,9 +172,23 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                 ),
                                               );
                                             } else {
-                                              AllEmployeesBloc.get(context).add(
-                                                  const EditPageNumber(
-                                                      pageIndex: 1));
+                                              if (state.filterCase == "All") {
+                                                AllEmployeesBloc.get(context)
+                                                    .add(const EditPageNumber(
+                                                        pageIndex: 1));
+                                              } else if (state.filterCase ==
+                                                  "Neutral") {
+                                                AllEmployeesBloc.get(context).add(
+                                                    const GetEmployeeNormalNamesEvent());
+                                              } else if (state.filterCase ==
+                                                  "BlackListed") {
+                                                AllEmployeesBloc.get(context).add(
+                                                    const GetEmployeeBlackListedNamesEvent());
+                                              } else {
+                                                AllEmployeesBloc.get(context)
+                                                    .add(const EditPageNumber(
+                                                        pageIndex: 1));
+                                              }
                                             }
                                           },
                                         ),
@@ -771,9 +796,23 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                 ),
                                               );
                                             } else {
-                                              AllEmployeesBloc.get(context).add(
-                                                  const EditPageNumber(
-                                                      pageIndex: 1));
+                                              if (state.filterCase == "All") {
+                                                AllEmployeesBloc.get(context)
+                                                    .add(const EditPageNumber(
+                                                        pageIndex: 1));
+                                              } else if (state.filterCase ==
+                                                  "Neutral") {
+                                                AllEmployeesBloc.get(context).add(
+                                                    const GetEmployeeNormalNamesEvent());
+                                              } else if (state.filterCase ==
+                                                  "BlackListed") {
+                                                AllEmployeesBloc.get(context).add(
+                                                    const GetEmployeeBlackListedNamesEvent());
+                                              } else {
+                                                AllEmployeesBloc.get(context)
+                                                    .add(const EditPageNumber(
+                                                        pageIndex: 1));
+                                              }
                                             }
                                           },
                                         ),
@@ -1142,7 +1181,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                             color:
                                                                                 Colors.white)),
                                                                     value:
-                                                                        'Yes',
+                                                                        'True',
                                                                     groupValue:
                                                                         state
                                                                             .selectedOption,
@@ -1164,7 +1203,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                         style: TextStyle(
                                                                             color:
                                                                                 Colors.white)),
-                                                                    value: 'No',
+                                                                    value: 'False',
                                                                     groupValue:
                                                                         state
                                                                             .selectedOption,
@@ -1567,7 +1606,6 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                               MainAxisSize.min,
                                                                           children: [
                                                                             TextFormField(
-                                                                              
                                                                               cursorColor: Colors.white,
                                                                               style: const TextStyle(color: Colors.white),
                                                                               initialValue: employee.name,
@@ -1586,13 +1624,10 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                             ),
                                                                             FxBox.h24,
                                                                             TextFormField(
-                                                                               keyboardType:
-                                                                  TextInputType
-                                                                      .phone,
-                                                              inputFormatters: [
-                                                                FilteringTextInputFormatter
-                                                                    .digitsOnly,
-                                                              ],
+                                                                              keyboardType: TextInputType.phone,
+                                                                              inputFormatters: [
+                                                                                FilteringTextInputFormatter.digitsOnly,
+                                                                              ],
                                                                               cursorColor: Colors.white,
                                                                               style: const TextStyle(color: Colors.white),
                                                                               initialValue: employee.userId,
@@ -1794,8 +1829,6 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                               );
                                                             },
                                                           );
-
-                                                          
                                                         },
                                                         onDelete: () {
                                                           _showDeleteDialog(
@@ -1892,7 +1925,8 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
               //     builder: (context, state) {
               //       return
               PopupMenuButton<String>(
-                icon: const Icon(Icons.more_horiz, color: Colors.black),
+                color: Colors.white,
+                icon: const Icon(Icons.more_horiz, color: Colors.white),
                 onSelected: (String choice) {
                   if (choice == 'Edit') {
                     onUpdate();

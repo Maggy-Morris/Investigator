@@ -6,6 +6,7 @@ import 'package:Investigator/presentation/login/widgets/password.dart';
 
 import '../../../authentication/authentication_repository.dart';
 import '../../../core/models/sigup_model.dart';
+import '../../../core/remote_provider/remote_provider.dart';
 import '../../login/widgets/email.dart';
 
 part 'signup_state.dart';
@@ -75,23 +76,30 @@ class SignupCubit extends Cubit<SignupState> {
     );
   }
 
-  Future<signupModel> signUpWithCredentials() async {
+  Future<String> signUpWithCredentials() async {
     // if (!state.status.isValidated) return signupModel();
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     try {
-      await _authenticationRepository.SignUpWithEmailAndPassword(
-        email: state.email.value,
-        password: state.password.value,
-        companyName: state.companyName ?? "",
-        roomNames: state.roomNames,
-        roomsNumber: state.selectedNumber ?? 0,
-      ).then((value) {
+      await RemoteProvider()
+          .SignUpRemoteCredentials(
+        state.email.value,
+        state.password.value,
+        state.companyName ?? "",
+        state.selectedNumber ?? 0,
+        state.roomNames,
+      )
+          .then((value) {
         if (value.status == true) {
-          emit(state.copyWith(status: FormzStatus.submissionSuccess));
-        } else {
+          emit(state.copyWith(
+            status: FormzStatus.submissionSuccess,
+            access: "True",
+            errorMessage: "${value.logined}",
+          ));
+        } else if (value.status == false) {
           emit(
             state.copyWith(
               errorMessage: "${value.logined}",
+              access: "False",
               status: FormzStatus.submissionFailure,
             ),
           );
@@ -108,6 +116,6 @@ class SignupCubit extends Cubit<SignupState> {
       emit(state.copyWith(status: FormzStatus.submissionFailure));
     }
 
-    return signupModel();
+    return state.access ?? "False";
   }
 }

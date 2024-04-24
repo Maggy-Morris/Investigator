@@ -111,7 +111,7 @@ class StandardLayoutScreen extends StatelessWidget {
                                       selectedIcon: const Icon(
                                         Icons.person_outlined,
                                       ),
-                                      label: Text('AllTargets'.tr()),
+                                      label: Text('AllPeople'.tr()),
                                     ),
 
                                     NavigationRailDestination(

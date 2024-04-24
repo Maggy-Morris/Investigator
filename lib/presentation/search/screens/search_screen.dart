@@ -543,13 +543,10 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                                                       ),
                                                                                       FxBox.h24,
                                                                                       TextFormField(
-                                                                                         keyboardType:
-                                                                  TextInputType
-                                                                      .phone,
-                                                              inputFormatters: [
-                                                                FilteringTextInputFormatter
-                                                                    .digitsOnly,
-                                                              ],
+                                                                                        keyboardType: TextInputType.phone,
+                                                                                        inputFormatters: [
+                                                                                          FilteringTextInputFormatter.digitsOnly,
+                                                                                        ],
                                                                                         cursorColor: Colors.white,
                                                                                         style: const TextStyle(color: Colors.white),
                                                                                         initialValue: employee.userId,
@@ -572,13 +569,10 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                                                       ),
                                                                                       FxBox.h24,
                                                                                       TextFormField(
-                                                                                         keyboardType:
-                                                                  TextInputType
-                                                                      .phone,
-                                                              inputFormatters: [
-                                                                FilteringTextInputFormatter
-                                                                    .digitsOnly,
-                                                              ],
+                                                                                        keyboardType: TextInputType.phone,
+                                                                                        inputFormatters: [
+                                                                                          FilteringTextInputFormatter.digitsOnly,
+                                                                                        ],
                                                                                         cursorColor: Colors.white,
                                                                                         style: const TextStyle(color: Colors.white),
                                                                                         initialValue: employee.phone,
@@ -1178,13 +1172,10 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                                                       ),
                                                                                       FxBox.h24,
                                                                                       TextFormField(
-                                                                                         keyboardType:
-                                                                  TextInputType
-                                                                      .phone,
-                                                              inputFormatters: [
-                                                                FilteringTextInputFormatter
-                                                                    .digitsOnly,
-                                                              ],
+                                                                                        keyboardType: TextInputType.phone,
+                                                                                        inputFormatters: [
+                                                                                          FilteringTextInputFormatter.digitsOnly,
+                                                                                        ],
                                                                                         cursorColor: Colors.white,
                                                                                         style: const TextStyle(color: Colors.white),
                                                                                         initialValue: employee.phone,
@@ -2006,7 +1997,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
               ),
               Tooltip(message: message, child: Icoon),
               PopupMenuButton<String>(
-                icon: const Icon(Icons.more_horiz, color: Colors.black),
+                icon: const Icon(Icons.more_horiz, color: Colors.white),
                 onSelected: (String choice) {
                   if (choice == 'Edit') {
                     onUpdate();

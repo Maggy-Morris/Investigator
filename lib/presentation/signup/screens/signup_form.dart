@@ -20,6 +20,8 @@ class SignUpForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
     return BlocListener<SignupCubit, SignupState>(
       listener: (context, state) {
         if (state.status.isSubmissionFailure) {
@@ -29,6 +31,16 @@ class SignUpForm extends StatelessWidget {
               SnackBar(
                 backgroundColor: Colors.red,
                 content: Text(state.errorMessage ?? 'Authentication Failure'),
+              ),
+            );
+        }
+        if (state.access == "True") {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                backgroundColor: Colors.green,
+                content: Text(state.errorMessage ?? 'Authentication success'),
               ),
             );
         }
@@ -202,10 +214,18 @@ Widget _bottomView() {
                     state.companyName?.isNotEmpty == true
                 ? () {
                     //check this one out
-                    context.read<SignupCubit>().signUpWithCredentials();
-                    if (state.status.isSubmissionSuccess) {
-                      Navigator.pop(context);
-                    }
+                    context
+                        .read<SignupCubit>()
+                        .signUpWithCredentials()
+                        .then((value) {
+                      if (value == "True") {
+                        Navigator.pop(context);
+                      }
+                    });
+
+                    // else {
+                    //   Navigator.pop(context);
+                    // }
                     // state.status.isValidated ?  : null;
                   }
                 : null,

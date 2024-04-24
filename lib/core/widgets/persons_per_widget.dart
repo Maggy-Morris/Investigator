@@ -154,7 +154,7 @@ class _CustomPaginationState extends State<CustomPagination> {
                   decoration: BoxDecoration(
                     color: currentPage == pageNumber
                         ? AppColors.white
-                        : AppColors.grey3,
+                        : AppColors.grey,
                     borderRadius: BorderRadius.circular(15.0),
                   ),
                   child: Text(

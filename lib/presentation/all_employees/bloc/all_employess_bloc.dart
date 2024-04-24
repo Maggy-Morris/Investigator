@@ -324,7 +324,7 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
   ///
   _onAddNewEmployeeEvent(
       AddNewEmployeeEvent event, Emitter<AllEmployeesState> emit) async {
-    emit(state.copyWith(submission: Submission.loading));
+    emit(state.copyWith(submission: Submission.loading, addingEmployee: true));
     try {
       final result = await RemoteProvider().addNewPersonToACompany(
           companyName: companyNameRepo,
@@ -337,15 +337,19 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
           roomNamesChoosen: state.roomNAMS);
       if (result.success == true) {
         emit(state.copyWith(
-            submission: Submission.success, responseMessage: result.message));
+            submission: Submission.success,
+            responseMessage: result.message,
+            addingEmployee: false));
         add(const GetEmployeeNamesEvent());
       } else {
         emit(state.copyWith(
-            submission: Submission.error, responseMessage: result.message));
+            submission: Submission.error,
+            responseMessage: result.message,
+            addingEmployee: false));
       }
     } catch (e) {
       debugPrint(e.toString());
-      emit(state.copyWith(submission: Submission.error));
+      emit(state.copyWith(submission: Submission.error, addingEmployee: false));
     }
   }
 
@@ -455,6 +459,4 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
       ),
     );
   }
-
-  
 }
