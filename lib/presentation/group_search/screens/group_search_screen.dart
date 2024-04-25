@@ -382,15 +382,19 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                               );
                                               return;
                                             }
+                                            // if (state.accuracy.isEmpty) {
+                                            //   GroupSearchBloc.get(context).add(
+                                            //       GetAccuracy(
+                                            //           accuracy: (10 / 100)
+                                            //               .toString()));
+                                            //   // FxToast.showErrorToast(
+                                            //   //   context: context,
+                                            //   //   message:
+                                            //   //       "Choose Accuracy on the SliderBar",
+                                            //   // );
+                                            //   return;
+                                            // }
 
-                                            if (state.accuracy.isEmpty) {
-                                              FxToast.showErrorToast(
-                                                context: context,
-                                                message:
-                                                    "Choose Accuracy on the SliderBar",
-                                              );
-                                              return;
-                                            }
                                             GroupSearchBloc.get(context).add(
                                                 const reloadTargetsData(
                                                     Employyyy: []));
@@ -932,9 +936,11 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                 itemBuilder: (context, index) {
                                                   final image =
                                                       state.snapShots[index];
+                                                  final names =
+                                                      state.data[index];
 
                                                   final data_time =
-                                                      state.data[index];
+                                                      state.timestamps[index];
                                                   return imagesListWidget(
                                                       onDownloadPressed: () {
                                                         _downloadImage(
@@ -942,8 +948,9 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                             downloadName:
                                                                 data_time);
                                                       },
+                                                      timeText: data_time,
                                                       image64: image,
-                                                      text: data_time);
+                                                      text: names);
                                                 },
                                               ),
                                       ),
@@ -1676,9 +1683,11 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                 itemBuilder: (context, index) {
                                                   final image =
                                                       state.snapShots[index];
+                                                  final names =
+                                                      state.data[index];
 
                                                   final data_time =
-                                                      state.data[index];
+                                                      state.timestamps[index];
                                                   return imagesListWidget(
                                                       onDownloadPressed: () {
                                                         _downloadImage(
@@ -1686,8 +1695,9 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                             downloadName:
                                                                 data_time);
                                                       },
+                                                      timeText: data_time,
                                                       image64: image,
-                                                      text: data_time);
+                                                      text: names);
                                                 },
                                               ),
                                       ),
@@ -1817,6 +1827,7 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
   Widget imagesListWidget({
     required String image64,
     required String text,
+    required String timeText,
     required VoidCallback onDownloadPressed,
   }) {
     return Container(
@@ -1867,6 +1878,21 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                     Icons.download,
                     size: 45,
                     color: AppColors.buttonBlue,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                color: Colors.black.withOpacity(0.5),
+                child: Text(
+                  timeText,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
                   ),
                 ),
               ),

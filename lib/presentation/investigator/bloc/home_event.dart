@@ -7,6 +7,17 @@ class HomeEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+
+class EditPageNumber extends HomeEvent {
+  final int pageIndex;
+
+  const EditPageNumber({required this.pageIndex});
+
+  @override
+  List<Object> get props => [pageIndex];
+}
+
+
 class ImageToSearchForEmployee extends HomeEvent {
   final Widget imageWidget;
 

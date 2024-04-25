@@ -226,7 +226,11 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                         // Add the imageFile object to the AllEmployeesBloc
                                         AllEmployeesBloc.get(context).add(
                                             imageevent(imageFile: imageFile));
-
+                                        AllEmployeesBloc.get(context)
+                                            .add(const RadioButtonChanged(
+                                          selectedOption: "",
+                                          showTextField: false,
+                                        ));
                                         // Show dialog to fill in employee data
                                         showDialog(
                                             context: context,
@@ -851,7 +855,11 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                         // Add the imageFile object to the AllEmployeesBloc
                                         AllEmployeesBloc.get(context).add(
                                             imageevent(imageFile: imageFile));
-
+                                        AllEmployeesBloc.get(context)
+                                            .add(const RadioButtonChanged(
+                                          selectedOption: "",
+                                          showTextField: false,
+                                        ));
                                         // // Load the image file from the assets directory
                                         // ByteData imageData = await rootBundle.load(
                                         //     'assets/images/imagepickWhite.png');
@@ -1203,7 +1211,8 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                         style: TextStyle(
                                                                             color:
                                                                                 Colors.white)),
-                                                                    value: 'False',
+                                                                    value:
+                                                                        'False',
                                                                     groupValue:
                                                                         state
                                                                             .selectedOption,
@@ -1447,10 +1456,27 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                           pageCount: state
                                               .pageCount, // Pass the page count
                                           onPageChanged: (int index) async {
-                                            // Your logic to update UI or fetch data for the selected page
-                                            AllEmployeesBloc.get(context).add(
-                                                EditPageNumber(
-                                                    pageIndex: index));
+                                            ///////////////////////////
+                                            if (state.filterCase == "All") {
+                                              AllEmployeesBloc.get(context).add(
+                                                  EditPageNumber(
+                                                      pageIndex: index));
+                                            } else if (state.filterCase ==
+                                                "Neutral") {
+                                              AllEmployeesBloc.get(context).add(
+                                                  EditPageNumberNeutral(
+                                                      pageIndex: index));
+                                            } else if (state.filterCase ==
+                                                "BlackListed") {
+                                              AllEmployeesBloc.get(context).add(
+                                                  EditPageNumberBlackListed(
+                                                      pageIndex: index));
+                                            } else {
+                                              AllEmployeesBloc.get(context).add(
+                                                  EditPageNumber(
+                                                      pageIndex: index));
+                                            }
+                                            //////////////////////////////
                                           },
                                         ),
                                       ),

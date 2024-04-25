@@ -4,21 +4,19 @@ import 'package:file_picker/file_picker.dart';
 class SearchByVideoInGroupSearch extends Equatable {
   bool? found;
   List<String>? data;
+  List<String>? timestamps;
+
   List<Dataaa>? dataCards;
 
   List<String>? snapshot_list;
 
   SearchByVideoInGroupSearch(
-      {
-      // this.data,
-
-      this.found,
-      this.data,
-      this.snapshot_list});
+      {this.timestamps, this.found, this.data, this.snapshot_list});
 
   SearchByVideoInGroupSearch.fromJson(Map<String, dynamic> json) {
     found = json['Found'];
     data = json['data'].cast<String>();
+    timestamps = json['timestamps'].cast<String>();
 
     if (json['data_cards'] != []) {
       dataCards = <Dataaa>[];
@@ -35,13 +33,16 @@ class SearchByVideoInGroupSearch extends Equatable {
       data['data_cards'] = this.dataCards!.map((v) => v.toJson()).toList();
     }
     data['Found'] = found;
+
+    data['timestamps'] = timestamps;
+
     data['data'] = this.data;
     data['snapshot_list'] = snapshot_list;
     return data;
   }
 
   @override
-  List<Object?> get props => [data, found, snapshot_list];
+  List<Object?> get props => [data, found, snapshot_list, timestamps];
 }
 
 class Dataaa {

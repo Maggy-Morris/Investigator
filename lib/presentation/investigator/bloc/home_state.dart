@@ -1,6 +1,8 @@
 part of 'home_bloc.dart';
 
 class HomeState extends Equatable {
+   int pageIndex;
+  int pageCount;
   final List<Data> employeeNamesList;
   final List<String> companiesNamesList;
   final PlatformFile? video;
@@ -19,6 +21,8 @@ class HomeState extends Equatable {
   final List<String> data;
 
   HomeState({
+    this.pageCount = 0,
+    this.pageIndex = 0,
     this.accuracy = '',
     this.imageWidget,
     this.snapShots = const [],
@@ -35,6 +39,8 @@ class HomeState extends Equatable {
   });
 
   HomeState copyWith({
+     int? pageCount,
+    int? pageIndex,
     String? accuracy,
     List<String>? snapShots,
     Widget? imageWidget,
@@ -50,6 +56,9 @@ class HomeState extends Equatable {
     List<String>? data,
   }) {
     return HomeState(
+            pageIndex: pageIndex ?? this.pageIndex,
+      pageCount: pageCount ?? this.pageCount,
+
       accuracy: accuracy ?? this.accuracy,
       snapShots: snapShots ?? this.snapShots,
       imageWidget: imageWidget ?? this.imageWidget,
@@ -68,6 +77,9 @@ class HomeState extends Equatable {
 
   @override
   List<Object?> get props => [
+    pageIndex,
+            pageCount,
+
         accuracy,
         snapShots,
         imageWidget,

@@ -77,15 +77,14 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
     emit(state.copyWith(submission: Submission.loading));
     try {
       final result = await RemoteProvider().UpdateEmployeeData(
-        companyName: event.companyName,
-        personName: state.personName,
-        phoneNum: state.phoneNum,
-        email: state.email,
-        userId: state.userId,
-        id: event.id,
-        blackListed: "",
-        roomNamesChoosen:[]
-      );
+          companyName: event.companyName,
+          personName: state.personName,
+          phoneNum: state.phoneNum,
+          email: state.email,
+          userId: state.userId,
+          id: event.id,
+          blackListed: "",
+          roomNamesChoosen: []);
       if (result.updated == true) {
         emit(state.copyWith(
           submission: Submission.success,
@@ -316,6 +315,7 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
         emit(state.copyWith(
           submission: Submission.success,
           data: value.data,
+          timestamps:value.timestamps,
           snapShots: value.snapshot_list,
           employeeNamesList: value.dataCards,
         ));
@@ -329,14 +329,12 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
     });
   }
 
-
-  
   _oncheckBox(checkBox event, Emitter<GroupSearchState> emit) async {
     emit(state.copyWith(
         roomNAMS: event.room_NMs, submission: Submission.editing));
   }
 
-    //RadioButton
+  //RadioButton
   _onRadioButtonChanged(
       RadioButtonChanged event, Emitter<GroupSearchState> emit) async {
     emit(

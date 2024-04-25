@@ -53,6 +53,25 @@ class EditPageNumber extends AllEmployeesEvent {
   List<Object> get props => [pageIndex];
 }
 
+
+class EditPageNumberBlackListed extends AllEmployeesEvent {
+  final int pageIndex;
+
+  const EditPageNumberBlackListed({required this.pageIndex});
+
+  @override
+  List<Object> get props => [pageIndex];
+}
+
+class EditPageNumberNeutral extends AllEmployeesEvent {
+  final int pageIndex;
+
+  const EditPageNumberNeutral({required this.pageIndex});
+
+  @override
+  List<Object> get props => [pageIndex];
+}
+
 // class CameraMainDataEvent extends AllEmployeesEvent {
 //   const CameraMainDataEvent();
 

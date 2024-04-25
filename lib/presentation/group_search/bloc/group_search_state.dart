@@ -13,6 +13,8 @@ class GroupSearchState extends Equatable {
   final PlatformFile? imageFile;
   final Widget? imageWidget;
   List<String> snapShots;
+    List<String> timestamps;
+
   final String accuracy;
   final Submission submission;
   final String responseMessage;
@@ -31,6 +33,7 @@ class GroupSearchState extends Equatable {
   final List<String> data;
 
   GroupSearchState({
+
     this.showTextField = false,
     this.roomNAMS = const [],
     this.check = false,
@@ -44,6 +47,8 @@ class GroupSearchState extends Equatable {
     this.personName = "",
     this.accuracy = '',
     this.imageWidget,
+        this.timestamps = const [],
+
     this.snapShots = const [],
     this.data = const [],
     this.imageFile,
@@ -69,6 +74,8 @@ class GroupSearchState extends Equatable {
     String? userId,
     String? personName,
     String? accuracy,
+        List<String>? timestamps,
+
     List<String>? snapShots,
     Widget? imageWidget,
     PlatformFile? video,
@@ -82,6 +89,7 @@ class GroupSearchState extends Equatable {
     List<String>? data,
   }) {
     return GroupSearchState(
+      timestamps:timestamps??this.timestamps,
       roomNAMS: roomNAMS ?? this.roomNAMS,
       showTextField: showTextField ?? this.showTextField,
       check: check ?? this.check,
@@ -110,6 +118,7 @@ class GroupSearchState extends Equatable {
 
   @override
   List<Object?> get props => [
+    timestamps,
         check,
         roomNAMS,
         showTextField,

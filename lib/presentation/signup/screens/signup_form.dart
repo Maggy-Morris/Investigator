@@ -222,11 +222,6 @@ Widget _bottomView() {
                         Navigator.pop(context);
                       }
                     });
-
-                    // else {
-                    //   Navigator.pop(context);
-                    // }
-                    // state.status.isValidated ?  : null;
                   }
                 : null,
           );

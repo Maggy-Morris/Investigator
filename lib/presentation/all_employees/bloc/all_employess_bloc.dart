@@ -48,9 +48,11 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
     on<selectedFiltering>(_onselectedFiltering);
 
     on<imageevent>(_onimageevent);
-    on<EditPageNumber>(_onEditPageNumber);
     on<checkBox>(_oncheckBox);
     on<Check>(_onCheck);
+    on<EditPageNumber>(_onEditPageNumber);
+    on<EditPageNumberBlackListed>(_onEditPageNumberBlackListed);
+    on<EditPageNumberNeutral>(_onEditPageNumberNeutral);
 
 //edit
 
@@ -88,7 +90,24 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
       EditPageNumber event, Emitter<AllEmployeesState> emit) async {
     emit(state.copyWith(
         pageIndex: event.pageIndex, submission: Submission.editing));
+
     add(const GetEmployeeNamesEvent());
+  }
+
+  _onEditPageNumberNeutral(
+      EditPageNumberNeutral event, Emitter<AllEmployeesState> emit) async {
+    emit(state.copyWith(
+        pageIndex: event.pageIndex, submission: Submission.editing));
+
+    add(const GetEmployeeNormalNamesEvent());
+  }
+
+  _onEditPageNumberBlackListed(
+      EditPageNumberBlackListed event, Emitter<AllEmployeesState> emit) async {
+    emit(state.copyWith(
+        pageIndex: event.pageIndex, submission: Submission.editing));
+
+    add(const GetEmployeeBlackListedNamesEvent());
   }
 
   _onimageevent(imageevent event, Emitter<AllEmployeesState> emit) async {
@@ -191,17 +210,18 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
             state.pageIndex == 0 ? state.pageIndex + 1 : state.pageIndex,
       );
 
-      if (state.pageCount == 0) {
-        emit(state.copyWith(
-          pageCount: employeeModel.nPages,
-        ));
-      }
+      // if (state.pageCount == 0) {
+      //   emit(state.copyWith(
+      //     pageCount: employeeModel.nPages,
+      //   ));
+      // }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       if (employeeModel.data!.isNotEmpty) {
         emit(state.copyWith(
           // submission: Submission.success,
           employeeNamesList: employeeModel.data,
           count: employeeModel.count,
+          pageCount: employeeModel.nPages,
         ));
       } else {
         emit(state.copyWith(
@@ -232,17 +252,18 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
             state.pageIndex == 0 ? state.pageIndex + 1 : state.pageIndex,
       );
 
-      if (state.pageCount == 0) {
-        emit(state.copyWith(
-          pageCount: employeeModel.nPages,
-        ));
-      }
+      // if (state.pageCount == 0) {
+      //   emit(state.copyWith(
+      //     pageCount: employeeModel.nPages,
+      //   ));
+      // }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       if (employeeModel.data!.isNotEmpty) {
         emit(state.copyWith(
           // submission: Submission.success,
           employeeNamesList: employeeModel.data,
           count: employeeModel.count,
+          pageCount: employeeModel.nPages,
         ));
       } else {
         emit(state.copyWith(
@@ -274,17 +295,18 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
             state.pageIndex == 0 ? state.pageIndex + 1 : state.pageIndex,
       );
 
-      if (state.pageCount == 0) {
-        emit(state.copyWith(
-          pageCount: employeeModel.nPages,
-        ));
-      }
+      // if (state.pageCount == 0) {
+      //   emit(state.copyWith(
+      //     pageCount: employeeModel.nPages,
+      //   ));
+      // }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       if (employeeModel.data!.isNotEmpty) {
         emit(state.copyWith(
           // submission: Submission.success,
           employeeNamesList: employeeModel.data,
           count: employeeModel.count,
+          pageCount: employeeModel.nPages,
         ));
       } else {
         emit(state.copyWith(

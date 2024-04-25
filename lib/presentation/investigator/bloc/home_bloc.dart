@@ -43,6 +43,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     /// functionality Company delete employees Data
     on<SearchForEmployeeByVideoEvent>(_onSearchForEmployeeByVideoEvent);
     on<ImageToSearchForEmployee>(_onImageToSearchForEmployee);
+    on<EditPageNumber>(_onEditPageNumber);
 
     // on<DeletePersonByNameEvent>(_onDeletePersonByNameEvent);
     on<DeletePersonByIdEvent>(_onDeletePersonByIdEvent);
@@ -55,6 +56,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   //   add(const GetSourceTypes());
   //   add(const GetModelsName());
   // }
+
+  
+  _onEditPageNumber(
+      EditPageNumber event, Emitter<HomeState> emit) async {
+    emit(state.copyWith(
+        pageIndex: event.pageIndex, submission: Submission.editing));
+
+    // add(const GetEmployeeNamesEvent());
+  }
 
   _onImageToSearchForEmployee(
       ImageToSearchForEmployee event, Emitter<HomeState> emit) async {
