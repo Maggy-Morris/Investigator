@@ -6,6 +6,7 @@ import 'package:Investigator/core/enum/enum.dart';
 // import 'package:Investigator/core/models/add_camera_model.dart';
 import 'package:Investigator/core/remote_provider/remote_provider.dart';
 
+import '../../../authentication/authentication_repository.dart';
 import '../../../core/models/add_company_model.dart';
 import '../../../core/models/employee_model.dart';
 
@@ -15,6 +16,8 @@ part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   static HomeBloc get(context) => BlocProvider.of<HomeBloc>(context);
+  String companyNameRepo =
+      AuthenticationRepository.instance.currentUser.companyName?.first ?? "";
   HomeBloc() : super(HomeState()) {
     on<HomeEvent>(_onHomeEvent);
     // on<DataEvent>(_onDataEvent);
@@ -44,6 +47,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<SearchForEmployeeByVideoEvent>(_onSearchForEmployeeByVideoEvent);
     on<ImageToSearchForEmployee>(_onImageToSearchForEmployee);
     on<EditPageNumber>(_onEditPageNumber);
+    // on<GetPaginatedFramesEvent>(_onGetPaginatedFramesEvent);
 
     // on<DeletePersonByNameEvent>(_onDeletePersonByNameEvent);
     on<DeletePersonByIdEvent>(_onDeletePersonByIdEvent);
@@ -57,9 +61,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   //   add(const GetModelsName());
   // }
 
-  
-  _onEditPageNumber(
-      EditPageNumber event, Emitter<HomeState> emit) async {
+
+  _onEditPageNumber(EditPageNumber event, Emitter<HomeState> emit) async {
     emit(state.copyWith(
         pageIndex: event.pageIndex, submission: Submission.editing));
 
@@ -82,12 +85,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(state.copyWith(
         accuracy: event.accuracy, submission: Submission.editing));
   }
+
   _onreloadSnapShots(reloadSnapShots event, Emitter<HomeState> emit) async {
     emit(state.copyWith(
         snapShots: event.snapyy, submission: Submission.editing));
   }
-
-  
 
   _onAddCompanyName(AddCompanyName event, Emitter<HomeState> emit) async {
     emit(state.copyWith(
@@ -98,12 +100,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(state.copyWith(
         imageFile: event.imageFile, submission: Submission.editing));
   }
+
   _onimagesList(imagesList event, Emitter<HomeState> emit) async {
     emit(state.copyWith(
         imagesListdata: event.imagesListdata, submission: Submission.editing));
   }
-
-  
 
   _onvideoevent(videoevent event, Emitter<HomeState> emit) async {
     emit(state.copyWith(video: event.video, submission: Submission.editing));
@@ -201,14 +202,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         .searchForpersonByVideo(
       similarityScore: state.accuracy,
       video: state.video,
-      // image: state.imageFile,
-      images:state.imagesListdata,
+      companyName: companyNameRepo,
+      images: state.imagesListdata,
       // personName: state.personName,
       // image: state.image,
     )
         .then((value) {
       if (value.found == true) {
         emit(state.copyWith(
+          pathProvided: value.global_path,
+          pageCount: value.response_count,
           submission: Submission.success,
           data: value.data,
           snapShots: value.snapshot_list,
@@ -223,11 +226,47 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     });
   }
 
+  ///paginated frames handling
 
+  // _onGetPaginatedFramesEvent(
+  //     GetPaginatedFramesEvent event, Emitter<HomeState> emit) async {
+  //   emit(state.copyWith(submission: Submission.loading));
 
+  //   try {
+  //     final employeeModel = await RemoteProvider().getPaginationPagesForFrames(
+  //       pathProvided: state.pathProvided,
+  //       pageNumber:
+  //           state.pageIndex == 0 ? state.pageIndex + 1 : state.pageIndex,
+  //     );
 
+      // if (state.pageCount == 0) {
+      //   emit(state.copyWith(
+      //     pageCount: employeeModel.nPages,
+      //   ));
+      // }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //     if (employeeModel.data!.isNotEmpty) {
+  //       emit(state.copyWith(
+  //         // submission: Submission.success,
+  //         employeeNamesList: employeeModel.data,
+  //         // count: employeeModel.count,
+  //         pageCount: employeeModel.nPages,
+  //       ));
+  //     } else {
+  //       emit(state.copyWith(
+  //         // submission: Submission.noDataFound,
+  //         employeeNamesList: [],
+  //       ));
+  //     }
+  //   } catch (e) {
+  //     debugPrint(e.toString());
 
-
+  //     emit(state.copyWith(
+  //       submission: Submission.error,
+  //       employeeNamesList: [],
+  //     ));
+  //   }
+  // }
 
 // _onUpdateRoomsEvent(
 //       UpdateRoomsEvent event, Emitter<HomeState> emit) async {
@@ -249,19 +288,4 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 //       ));
 //     }
 //   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

@@ -25,6 +25,7 @@ import '../../../authentication/authentication_repository.dart';
 import '../../../core/remote_provider/remote_data_source.dart';
 import '../../../core/widgets/drop_down_widgets.dart';
 import '../../../core/widgets/fullscreenImage.dart';
+import '../../../core/widgets/persons_per_widget.dart';
 import '../../all_employees/screens/text.dart';
 import '../../camera_controller/cubit/photo_app_cubit.dart';
 import '../bloc/group_search_bloc.dart';
@@ -859,107 +860,296 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                 ],
                               ),
 
-                              ///frames Data
-
-                              Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        child: (state.submission ==
-                                                Submission.noDataFound)
-                                            ? const Center(
-                                                child: Text(
-                                                "No data found Yet!",
-                                                style: TextStyle(
-                                                    color: AppColors.blueB,
-                                                    fontSize: 25,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              ))
-                                            : GridView.builder(
-                                                shrinkWrap: true,
-                                                physics:
-                                                    const NeverScrollableScrollPhysics(),
-                                                itemCount:
-                                                    state.snapShots.length,
-                                                gridDelegate: Responsive
-                                                        .isMobile(context)
-                                                    ? const SliverGridDelegateWithFixedCrossAxisCount(
-                                                        crossAxisCount: 1,
-                                                        crossAxisSpacing: 45,
-                                                        mainAxisSpacing: 45,
-                                                        mainAxisExtent: 350,
-                                                      )
-                                                    : Responsive.isTablet(
-                                                            context)
-                                                        ? const SliverGridDelegateWithFixedCrossAxisCount(
-                                                            crossAxisCount: 2,
-                                                            crossAxisSpacing:
-                                                                45,
-                                                            mainAxisSpacing: 45,
-                                                            mainAxisExtent: 350,
-                                                          )
-                                                        : MediaQuery.of(context)
-                                                                    .size
-                                                                    .width <
-                                                                1500
-                                                            ? SliverGridDelegateWithMaxCrossAxisExtent(
-                                                                maxCrossAxisExtent:
-                                                                    MediaQuery.of(context)
-                                                                            .size
-                                                                            .width *
-                                                                        0.24,
-                                                                crossAxisSpacing:
-                                                                    45,
-                                                                mainAxisSpacing:
-                                                                    45,
-                                                                mainAxisExtent:
-                                                                    350,
-                                                              )
-                                                            : SliverGridDelegateWithMaxCrossAxisExtent(
-                                                                maxCrossAxisExtent:
-                                                                    MediaQuery.of(context)
-                                                                            .size
-                                                                            .width *
-                                                                        0.24,
-                                                                crossAxisSpacing:
-                                                                    45,
-                                                                mainAxisSpacing:
-                                                                    45,
-                                                                mainAxisExtent:
-                                                                    350,
-                                                              ),
-                                                itemBuilder: (context, index) {
-                                                  final image =
-                                                      state.snapShots[index];
-                                                  final names =
-                                                      state.data[index];
-
-                                                  final data_time =
-                                                      state.timestamps[index];
-                                                  return imagesListWidget(
-                                                      onDownloadPressed: () {
-                                                        _downloadImage(
-                                                            data: image,
-                                                            downloadName:
-                                                                data_time);
-                                                      },
-                                                      timeText: data_time,
-                                                      image64: image,
-                                                      text: names);
-                                                },
+                              ///   paginated Frames
+                              BlocProvider.value(
+                                value: GroupSearchBloc.get(context),
+                                child: BlocBuilder<GroupSearchBloc,
+                                    GroupSearchState>(
+                                  builder: (context, state) {
+                                    ///frames Data
+                                    return state.submission ==
+                                            Submission.noDataFound
+                                        ? const Padding(
+                                            padding: EdgeInsets.all(10.0),
+                                            child: Text(
+                                              "This Person Is Not In The Video",
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                                fontWeight: FontWeight.w900,
+                                                fontSize: 25,
                                               ),
-                                      ),
-                                    ],
-                                  ),
+                                            ))
+                                        : Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: SingleChildScrollView(
+                                              child: Column(
+                                                children: [
+                                                  // Display the pagination controls
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            bottom: 15.0),
+                                                    child: CustomPagination(
+                                                      // persons: state
+                                                      //     .employeeNamesList, // Pass the list of data
+                                                      pageCount: (state
+                                                                  .pageCount /
+                                                              10)
+                                                          .ceil(), // Pass the page count
+                                                      onPageChanged:
+                                                          (int index) async {
+                                                        GroupSearchBloc.get(
+                                                                context)
+                                                            .add(EditPageNumber(
+                                                                pageIndex:
+                                                                    index));
+                                                      },
+                                                    ),
+                                                  ),
+                                                  // Display the list of data
+                                                  SizedBox(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    child: (state.submission ==
+                                                            Submission
+                                                                .noDataFound)
+                                                        ? const Center(
+                                                            child: Text(
+                                                            "No data found Yet!",
+                                                            style: TextStyle(
+                                                                color: AppColors
+                                                                    .blueB,
+                                                                fontSize: 25,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600),
+                                                          ))
+                                                        : GridView.builder(
+                                                            shrinkWrap: true,
+                                                            physics:
+                                                                const NeverScrollableScrollPhysics(),
+                                                            itemCount: state
+                                                                        .pageCount !=
+                                                                    0
+                                                                ? (state.pageIndex ==
+                                                                        (state.pageCount /
+                                                                                10)
+                                                                            .ceil())
+                                                                    ? (state.pageCount %
+                                                                                10 ==
+                                                                            0)
+                                                                        ? 10
+                                                                        : (state.pageCount %
+                                                                            10)
+                                                                    : 10
+                                                                : 0,
+                                                            gridDelegate: Responsive
+                                                                    .isMobile(
+                                                                        context)
+                                                                ? const SliverGridDelegateWithFixedCrossAxisCount(
+                                                                    crossAxisCount:
+                                                                        1,
+                                                                    crossAxisSpacing:
+                                                                        45,
+                                                                    mainAxisSpacing:
+                                                                        45,
+                                                                    mainAxisExtent:
+                                                                        350,
+                                                                  )
+                                                                : Responsive.isTablet(
+                                                                        context)
+                                                                    ? const SliverGridDelegateWithFixedCrossAxisCount(
+                                                                        crossAxisCount:
+                                                                            2,
+                                                                        crossAxisSpacing:
+                                                                            45,
+                                                                        mainAxisSpacing:
+                                                                            45,
+                                                                        mainAxisExtent:
+                                                                            350,
+                                                                      )
+                                                                    : MediaQuery.of(context).size.width <
+                                                                            1500
+                                                                        ? SliverGridDelegateWithMaxCrossAxisExtent(
+                                                                            maxCrossAxisExtent:
+                                                                                MediaQuery.of(context).size.width * 0.24,
+                                                                            crossAxisSpacing:
+                                                                                45,
+                                                                            mainAxisSpacing:
+                                                                                45,
+                                                                            mainAxisExtent:
+                                                                                350,
+                                                                          )
+                                                                        : SliverGridDelegateWithMaxCrossAxisExtent(
+                                                                            maxCrossAxisExtent:
+                                                                                MediaQuery.of(context).size.width * 0.24,
+                                                                            crossAxisSpacing:
+                                                                                45,
+                                                                            mainAxisSpacing:
+                                                                                45,
+                                                                            mainAxisExtent:
+                                                                                350,
+                                                                          ),
+                                                            itemBuilder:
+                                                                (context,
+                                                                    index) {
+                                                              final image = state
+                                                                      .snapShots[
+                                                                  (state.pageIndex == 1 || state.pageIndex == 0
+                                                                              ? 0
+                                                                              : state.pageIndex - 1) *
+                                                                          10 +
+                                                                      (index)];
+                                                              final names = state
+                                                                  .data[(state.pageIndex == 1 ||
+                                                                              state.pageIndex ==
+                                                                                  0
+                                                                          ? 0
+                                                                          : state.pageIndex -
+                                                                              1) *
+                                                                      10 +
+                                                                  (index)];
+
+                                                              final data_time = state
+                                                                      .timestamps[
+                                                                  (state.pageIndex == 1 || state.pageIndex == 0
+                                                                              ? 0
+                                                                              : state.pageIndex - 1) *
+                                                                          10 +
+                                                                      (index)];
+                                                              return imagesListWidget(
+                                                                  onDownloadPressed:
+                                                                      () {
+                                                                    _downloadImage(
+                                                                        data:
+                                                                            image,
+                                                                        downloadName:
+                                                                            data_time);
+                                                                  },
+                                                                  timeText:
+                                                                      data_time,
+                                                                  image64:
+                                                                      image,
+                                                                  imageSource:
+                                                                      "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
+                                                                  text: names);
+                                                            },
+                                                          ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                  },
                                 ),
                               ),
 
+                              ///frames Data
+
+                              // Padding(
+                              //   padding: const EdgeInsets.all(10.0),
+                              //   child: SingleChildScrollView(
+                              //     child: Column(
+                              //       children: [
+                              //         SizedBox(
+                              //           width:
+                              //               MediaQuery.of(context).size.width,
+                              //           child: (state.submission ==
+                              //                   Submission.noDataFound)
+                              //               ? const Center(
+                              //                   child: Text(
+                              //                   "No data found Yet!",
+                              //                   style: TextStyle(
+                              //                       color: AppColors.blueB,
+                              //                       fontSize: 25,
+                              //                       fontWeight:
+                              //                           FontWeight.w600),
+                              //                 ))
+                              //               : GridView.builder(
+                              //                   shrinkWrap: true,
+                              //                   physics:
+                              //                       const NeverScrollableScrollPhysics(),
+                              //                   itemCount:
+                              //                       state.snapShots.length,
+                              //                   gridDelegate: Responsive
+                              //                           .isMobile(context)
+                              //                       ? const SliverGridDelegateWithFixedCrossAxisCount(
+                              //                           crossAxisCount: 1,
+                              //                           crossAxisSpacing: 45,
+                              //                           mainAxisSpacing: 45,
+                              //                           mainAxisExtent: 350,
+                              //                         )
+                              //                       : Responsive.isTablet(
+                              //                               context)
+                              //                           ? const SliverGridDelegateWithFixedCrossAxisCount(
+                              //                               crossAxisCount: 2,
+                              //                               crossAxisSpacing:
+                              //                                   45,
+                              //                               mainAxisSpacing: 45,
+                              //                               mainAxisExtent: 350,
+                              //                             )
+                              //                           : MediaQuery.of(context)
+                              //                                       .size
+                              //                                       .width <
+                              //                                   1500
+                              //                               ? SliverGridDelegateWithMaxCrossAxisExtent(
+                              //                                   maxCrossAxisExtent:
+                              //                                       MediaQuery.of(context)
+                              //                                               .size
+                              //                                               .width *
+                              //                                           0.24,
+                              //                                   crossAxisSpacing:
+                              //                                       45,
+                              //                                   mainAxisSpacing:
+                              //                                       45,
+                              //                                   mainAxisExtent:
+                              //                                       350,
+                              //                                 )
+                              //                               : SliverGridDelegateWithMaxCrossAxisExtent(
+                              //                                   maxCrossAxisExtent:
+                              //                                       MediaQuery.of(context)
+                              //                                               .size
+                              //                                               .width *
+                              //                                           0.24,
+                              //                                   crossAxisSpacing:
+                              //                                       45,
+                              //                                   mainAxisSpacing:
+                              //                                       45,
+                              //                                   mainAxisExtent:
+                              //                                       350,
+                              //                                 ),
+                              //                   itemBuilder: (context, index) {
+                              //                     final image =
+                              //                         state.snapShots[index];
+                              //                     final names =
+                              //                         state.data[index];
+
+                              //                     final data_time =
+                              //                         state.timestamps[index];
+                              //                     return imagesListWidget(
+                              //                            imageSource:
+                              //                                         "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
+
+                              //                         onDownloadPressed: () {
+                              //                           _downloadImage(
+                              //                               data: image,
+                              //                               downloadName:
+                              //                                   data_time);
+                              //                         },
+                              //                         timeText: data_time,
+                              //                         image64: image,
+                              //                         text: names);
+                              //                   },
+                              //                 ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //   ),
                               // ),
+
+                              // // ),
                             ],
                           ),
                         if (!Responsive.isWeb(context))
@@ -1605,108 +1795,304 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                         ),
                                 ],
                               ),
+                              BlocProvider.value(
+                                value: GroupSearchBloc.get(context),
+                                child: BlocBuilder<GroupSearchBloc,
+                                    GroupSearchState>(
+                                  builder: (context, state) {
+                                    ///frames Data
+                                    return state.submission ==
+                                            Submission.noDataFound
+                                        ? const Padding(
+                                            padding: EdgeInsets.all(10.0),
+                                            child: Text(
+                                              "This Person Is Not In The Video",
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                                fontWeight: FontWeight.w900,
+                                                fontSize: 25,
+                                              ),
+                                            ))
+                                        : Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: SingleChildScrollView(
+                                              child: Column(
+                                                children: [
+                                                  // Display the pagination controls
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            bottom: 15.0),
+                                                    child: CustomPagination(
+                                                      // persons: state
+                                                      //     .employeeNamesList, // Pass the list of data
+                                                      pageCount: (state
+                                                                  .pageCount /
+                                                              10)
+                                                          .ceil(), // Pass the page count
+                                                      onPageChanged:
+                                                          (int index) async {
+                                                        GroupSearchBloc.get(
+                                                                context)
+                                                            .add(EditPageNumber(
+                                                                pageIndex:
+                                                                    index));
+                                                      },
+                                                    ),
+                                                  ),
+                                                  // Display the list of data
+                                                  SizedBox(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    child: (state.submission ==
+                                                            Submission
+                                                                .noDataFound)
+                                                        ? const Center(
+                                                            child: Text(
+                                                            "No data found Yet!",
+                                                            style: TextStyle(
+                                                                color: AppColors
+                                                                    .blueB,
+                                                                fontSize: 25,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600),
+                                                          ))
+                                                        : GridView.builder(
+                                                            shrinkWrap: true,
+                                                            physics:
+                                                                const NeverScrollableScrollPhysics(),
+                                                            itemCount: state
+                                                                        .pageCount !=
+                                                                    0
+                                                                ? (state.pageIndex ==
+                                                                        (state.pageCount /
+                                                                                10)
+                                                                            .ceil())
+                                                                    ? (state.pageCount %
+                                                                                10 ==
+                                                                            0)
+                                                                        ? 10
+                                                                        : (state.pageCount %
+                                                                            10)
+                                                                    : 10
+                                                                : 0,
+                                                            gridDelegate: Responsive
+                                                                    .isMobile(
+                                                                        context)
+                                                                ? const SliverGridDelegateWithFixedCrossAxisCount(
+                                                                    crossAxisCount:
+                                                                        1,
+                                                                    crossAxisSpacing:
+                                                                        45,
+                                                                    mainAxisSpacing:
+                                                                        45,
+                                                                    mainAxisExtent:
+                                                                        350,
+                                                                  )
+                                                                : Responsive.isTablet(
+                                                                        context)
+                                                                    ? const SliverGridDelegateWithFixedCrossAxisCount(
+                                                                        crossAxisCount:
+                                                                            2,
+                                                                        crossAxisSpacing:
+                                                                            45,
+                                                                        mainAxisSpacing:
+                                                                            45,
+                                                                        mainAxisExtent:
+                                                                            350,
+                                                                      )
+                                                                    : MediaQuery.of(context).size.width <
+                                                                            1500
+                                                                        ? SliverGridDelegateWithMaxCrossAxisExtent(
+                                                                            maxCrossAxisExtent:
+                                                                                MediaQuery.of(context).size.width * 0.24,
+                                                                            crossAxisSpacing:
+                                                                                45,
+                                                                            mainAxisSpacing:
+                                                                                45,
+                                                                            mainAxisExtent:
+                                                                                350,
+                                                                          )
+                                                                        : SliverGridDelegateWithMaxCrossAxisExtent(
+                                                                            maxCrossAxisExtent:
+                                                                                MediaQuery.of(context).size.width * 0.24,
+                                                                            crossAxisSpacing:
+                                                                                45,
+                                                                            mainAxisSpacing:
+                                                                                45,
+                                                                            mainAxisExtent:
+                                                                                350,
+                                                                          ),
+                                                            itemBuilder:
+                                                                (context,
+                                                                    index) {
+                                                              final image = state
+                                                                      .snapShots[
+                                                                  (state.pageIndex == 1 || state.pageIndex == 0
+                                                                              ? 0
+                                                                              : state.pageIndex - 1) *
+                                                                          10 +
+                                                                      (index)];
+
+                                                              //       final image = state
+                                                              // .snapShots[(state.pageIndex == 1 ||
+                                                              //             state.pageIndex ==
+                                                              //                 0
+                                                              //         ? 0
+                                                              //         : state.pageIndex -
+                                                              //             1) *
+                                                              //     10 +
+                                                              // (index == 10
+                                                              //     ? 9
+                                                              //     : index)];
+                                                              final names = state
+                                                                  .data[(state.pageIndex == 1 ||
+                                                                              state.pageIndex ==
+                                                                                  0
+                                                                          ? 0
+                                                                          : state.pageIndex -
+                                                                              1) *
+                                                                      10 +
+                                                                  (index)];
+
+                                                              final data_time = state
+                                                                      .timestamps[
+                                                                  (state.pageIndex == 1 || state.pageIndex == 0
+                                                                              ? 0
+                                                                              : state.pageIndex - 1) *
+                                                                          10 +
+                                                                      (index)];
+                                                              return imagesListWidget(
+                                                                  onDownloadPressed:
+                                                                      () {
+                                                                    _downloadImage(
+                                                                        data:
+                                                                            image,
+                                                                        downloadName:
+                                                                            data_time);
+                                                                  },
+                                                                  timeText:
+                                                                      data_time,
+                                                                  image64:
+                                                                      image,
+                                                                  imageSource:
+                                                                      "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
+                                                                  text: names);
+                                                            },
+                                                          ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                  },
+                                ),
+                              )
 
                               ///frames Data
 
-                              Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        child: (state.submission ==
-                                                Submission.noDataFound)
-                                            ? const Center(
-                                                child: Text(
-                                                "No data found Yet!",
-                                                style: TextStyle(
-                                                    color: AppColors.blueB,
-                                                    fontSize: 25,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              ))
-                                            : GridView.builder(
-                                                shrinkWrap: true,
-                                                physics:
-                                                    const NeverScrollableScrollPhysics(),
-                                                itemCount:
-                                                    state.snapShots.length,
-                                                gridDelegate: Responsive
-                                                        .isMobile(context)
-                                                    ? const SliverGridDelegateWithFixedCrossAxisCount(
-                                                        crossAxisCount: 1,
-                                                        crossAxisSpacing: 45,
-                                                        mainAxisSpacing: 45,
-                                                        mainAxisExtent: 350,
-                                                      )
-                                                    : Responsive.isTablet(
-                                                            context)
-                                                        ? const SliverGridDelegateWithFixedCrossAxisCount(
-                                                            crossAxisCount: 2,
-                                                            crossAxisSpacing:
-                                                                45,
-                                                            mainAxisSpacing: 45,
-                                                            mainAxisExtent: 350,
-                                                          )
-                                                        : MediaQuery.of(context)
-                                                                    .size
-                                                                    .width <
-                                                                1500
-                                                            ? SliverGridDelegateWithMaxCrossAxisExtent(
-                                                                maxCrossAxisExtent:
-                                                                    MediaQuery.of(context)
-                                                                            .size
-                                                                            .width *
-                                                                        0.24,
-                                                                crossAxisSpacing:
-                                                                    45,
-                                                                mainAxisSpacing:
-                                                                    45,
-                                                                mainAxisExtent:
-                                                                    350,
-                                                              )
-                                                            : SliverGridDelegateWithMaxCrossAxisExtent(
-                                                                maxCrossAxisExtent:
-                                                                    MediaQuery.of(context)
-                                                                            .size
-                                                                            .width *
-                                                                        0.24,
-                                                                crossAxisSpacing:
-                                                                    45,
-                                                                mainAxisSpacing:
-                                                                    45,
-                                                                mainAxisExtent:
-                                                                    350,
-                                                              ),
-                                                itemBuilder: (context, index) {
-                                                  final image =
-                                                      state.snapShots[index];
-                                                  final names =
-                                                      state.data[index];
+                              // Padding(
+                              //   padding: const EdgeInsets.all(10.0),
+                              //   child: SingleChildScrollView(
+                              //     child: Column(
+                              //       children: [
+                              //         SizedBox(
+                              //           width:
+                              //               MediaQuery.of(context).size.width,
+                              //           child: (state.submission ==
+                              //                   Submission.noDataFound)
+                              //               ? const Center(
+                              //                   child: Text(
+                              //                   "No data found Yet!",
+                              //                   style: TextStyle(
+                              //                       color: AppColors.blueB,
+                              //                       fontSize: 25,
+                              //                       fontWeight:
+                              //                           FontWeight.w600),
+                              //                 ))
+                              //               : GridView.builder(
+                              //                   shrinkWrap: true,
+                              //                   physics:
+                              //                       const NeverScrollableScrollPhysics(),
+                              //                   itemCount:
+                              //                       state.snapShots.length,
+                              //                   gridDelegate: Responsive
+                              //                           .isMobile(context)
+                              //                       ? const SliverGridDelegateWithFixedCrossAxisCount(
+                              //                           crossAxisCount: 1,
+                              //                           crossAxisSpacing: 45,
+                              //                           mainAxisSpacing: 45,
+                              //                           mainAxisExtent: 350,
+                              //                         )
+                              //                       : Responsive.isTablet(
+                              //                               context)
+                              //                           ? const SliverGridDelegateWithFixedCrossAxisCount(
+                              //                               crossAxisCount: 2,
+                              //                               crossAxisSpacing:
+                              //                                   45,
+                              //                               mainAxisSpacing: 45,
+                              //                               mainAxisExtent: 350,
+                              //                             )
+                              //                           : MediaQuery.of(context)
+                              //                                       .size
+                              //                                       .width <
+                              //                                   1500
+                              //                               ? SliverGridDelegateWithMaxCrossAxisExtent(
+                              //                                   maxCrossAxisExtent:
+                              //                                       MediaQuery.of(context)
+                              //                                               .size
+                              //                                               .width *
+                              //                                           0.24,
+                              //                                   crossAxisSpacing:
+                              //                                       45,
+                              //                                   mainAxisSpacing:
+                              //                                       45,
+                              //                                   mainAxisExtent:
+                              //                                       350,
+                              //                                 )
+                              //                               : SliverGridDelegateWithMaxCrossAxisExtent(
+                              //                                   maxCrossAxisExtent:
+                              //                                       MediaQuery.of(context)
+                              //                                               .size
+                              //                                               .width *
+                              //                                           0.24,
+                              //                                   crossAxisSpacing:
+                              //                                       45,
+                              //                                   mainAxisSpacing:
+                              //                                       45,
+                              //                                   mainAxisExtent:
+                              //                                       350,
+                              //                                 ),
+                              //                   itemBuilder: (context, index) {
+                              //                     final image =
+                              //                         state.snapShots[index];
+                              //                     final names =
+                              //                         state.data[index];
 
-                                                  final data_time =
-                                                      state.timestamps[index];
-                                                  return imagesListWidget(
-                                                      onDownloadPressed: () {
-                                                        _downloadImage(
-                                                            data: image,
-                                                            downloadName:
-                                                                data_time);
-                                                      },
-                                                      timeText: data_time,
-                                                      image64: image,
-                                                      text: names);
-                                                },
-                                              ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-
+                              //                     final data_time =
+                              //                         state.timestamps[index];
+                              //                     return imagesListWidget(
+                              //                         onDownloadPressed: () {
+                              //                           _downloadImage(
+                              //                               data: image,
+                              //                               downloadName:
+                              //                                   data_time);
+                              //                         },
+                              //                         timeText: data_time,
+                              //                         image64: image,
+                              //                         text: names);
+                              //                   },
+                              //                 ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //   ),
                               // ),
+
+                              // // ),
                             ],
                           ),
                       ],
@@ -1753,79 +2139,85 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
     }
   }
 
-////////////////////////////////////////////////////////////////////////////////
-//   Widget imagesListWidget({
-//     required String image64,
-//     required String text,
-//     required VoidCallback onDownloadPressed,
-//   }) {
-//     return Container(
-//       width: 300,
-//       padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-//       decoration: BoxDecoration(
-//         color: Colors.grey.withOpacity(0.3),
-//         borderRadius: BorderRadius.circular(12.0),
-//       ),
-//       child: Column(
-//         children: [
-//           ClipRRect(
-//             borderRadius: BorderRadius.circular(6.0),
-//             child: Stack(
-//               children: [
-//                 GestureDetector(
-//                   onTap: () {
-//                     Navigator.push(
-//                       context,
-//                       MaterialPageRoute(
-//                         builder: (context) => FullScreenImageFromMemory(
-//                           text: text,
-//                           imageUrl: image64,
-//                         ),
-//                       ),
-//                     );
-//                   },
-//                   child: Image.memory(
-//                     _decodeBase64Image(base64Image: image64),
-//                     width: double.infinity,
-//                     height: double.infinity,
-//                     fit: BoxFit.cover,
-//                   ),
-//                 ),
-//                 Container(
-//                   padding: const EdgeInsets.all(8),
-//                   color: Colors.black.withOpacity(0.5),
-//                   child: Text(
-//                     text,
-//                     style: const TextStyle(
-//                       color: Colors.white,
-//                       fontSize: 16,
-//                     ),
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//           // SizedBox(
-//           //   height: 50,
-//           //   width: 50,
-//           //   child: ElevatedButton(
-//           //     onPressed: onDownloadPressed,
-//           //     child: Text('Download'),
-//           //   ),
-//           // ),
-//         ],
-//       ),
-//     );
-//   }
+/////////////////////////////////////////////////////////////////////////
+  //  Widget imagesListWidget({
+  //   required String image64,
+  //   required String imageSource,
+  //   required String text,
+  //   required VoidCallback onDownloadPressed,
+  // }) {
+  //   return Container(
+  //     width: 300,
+  //     padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+  //     decoration: BoxDecoration(
+  //       color: Colors.grey.withOpacity(0.3),
+  //       borderRadius: BorderRadius.circular(12.0),
+  //     ),
+  //     child: ClipRRect(
+  //       borderRadius: BorderRadius.circular(6.0),
+  //       child: Stack(
+  //         children: [
+  //           GestureDetector(
+  //             onTap: () {
+  //               Navigator.push(
+  //                   context,
+  //                   MaterialPageRoute(
+  //                       builder: (context) => FullScreenImageFromMemory(
+  //                           text: text, imageUrl: image64)));
+  //             },
+  //             child: Image.network(
+  //               "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/$imageSource",
+  //               // Images.profileImage,
+  //               fit: BoxFit.cover,
+  //             ),
+  //             //   Image.memory(
+  //             //     _decodeBase64Image(base64Image: image64),
+  //             //     width: double.infinity,
+  //             //     height: double.infinity,
+  //             //     fit: BoxFit.cover,
+  //             //   ),
+  //           ),
+  //           Container(
+  //             padding: const EdgeInsets.all(8),
+  //             color: Colors.black.withOpacity(0.5),
+  //             child: Text(
+  //               text,
+  //               style: const TextStyle(
+  //                 color: Colors.white,
+  //                 fontSize: 16,
+  //               ),
+  //             ),
+  //           ),
+  //           Positioned(
+  //             top: 0,
+  //             right: 0,
+  //             child: Tooltip(
+  //               message: "Download This Frame",
+  //               child: IconButton(
+  //                 onPressed: onDownloadPressed,
+  //                 icon: const Icon(
+  //                   Icons.download,
+  //                   size: 45,
+  //                   color: AppColors.buttonBlue,
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
-//   Uint8List _decodeBase64Image({required String base64Image}) {
-//     final bytes = base64.decode(base64Image);
-//     return Uint8List.fromList(bytes);
-//   }
+  // Uint8List _decodeBase64Image({required String base64Image}) {
+  //   final bytes = base64.decode(base64Image);
 
-// }
+  //   return Uint8List.fromList(bytes);
+  // }
+
   Widget imagesListWidget({
     required String image64,
+    required String imageSource,
     required String text,
     required String timeText,
     required VoidCallback onDownloadPressed,
@@ -1849,13 +2241,22 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                         builder: (context) => FullScreenImageFromMemory(
                             text: text, imageUrl: image64)));
               },
-              child: Image.memory(
-                _decodeBase64Image(base64Image: image64),
+              child: Image.network(
+                "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/${imageSource}",
                 width: double.infinity,
                 height: double.infinity,
+                // Images.profileImage,
                 fit: BoxFit.cover,
               ),
             ),
+
+            //    Image.memory(
+            //     _decodeBase64Image(base64Image: image64),
+            //     width: double.infinity,
+            //     height: double.infinity,
+            //     fit: BoxFit.cover,
+            //   ),
+            // ),
             Container(
               padding: const EdgeInsets.all(8),
               color: Colors.black.withOpacity(0.5),

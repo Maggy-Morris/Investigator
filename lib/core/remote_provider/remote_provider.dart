@@ -536,12 +536,12 @@ class RemoteProvider {
     // required PlatformFile? image,
     required List<PlatformFile>? images,
     required String similarityScore,
-    // required String personName,
+    required String companyName,
   }) async {
     try {
       Map<String, String> body = {
         "similarity_score": similarityScore,
-        // "name": "personName",
+        "collection_name": companyName,
       };
 
       Map<String, dynamic>? callBack = await RemoteDataSource()
@@ -560,6 +560,36 @@ class RemoteProvider {
       }
     } catch (e) {
       return SearchByVideoAndImage();
+    }
+  }
+
+  /// Get paginted frames
+  Future<EmployeeModel> getPaginationPagesForFrames({
+    required String pathProvided,
+    required int pageNumber,
+  }) async {
+    try {
+      Map<String, dynamic> callBack = await RemoteDataSource()
+          .post(endPoint: "/qdrant/retrieve_it_all", body: {
+        "Path_privided": pathProvided,
+        "page_number": pageNumber,
+      });
+
+      if (callBack.isNotEmpty) {
+        // Extract the relevant data from the callBack
+        // List<dynamic> dataList = callBack['data'];
+        EmployeeModel general = EmployeeModel.fromJson(callBack);
+        // Map the extracted data to my EmployeeModel
+        // List<Data> employeeDataList =
+        //     dataList.map((data) => Data.fromJson(data)).toList();
+
+        return general;
+      } else {
+        return EmployeeModel();
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return EmployeeModel();
     }
   }
 

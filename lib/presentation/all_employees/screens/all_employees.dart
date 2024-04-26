@@ -116,7 +116,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                     height: 50,
                                     width: 300,
                                     child: TextFormField(
-                                      cursorColor: Colors.white,
+                                      cursorColor: Colors.black,
                                       style:
                                           const TextStyle(color: Colors.black),
                                       controller: _searchController,
@@ -761,7 +761,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                     height: 50,
                                     width: 300,
                                     child: TextFormField(
-                                      cursorColor: Colors.white,
+                                      cursorColor: Colors.black,
                                       style:
                                           const TextStyle(color: Colors.black),
                                       controller: _searchController,

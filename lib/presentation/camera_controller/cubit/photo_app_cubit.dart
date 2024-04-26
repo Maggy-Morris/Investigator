@@ -442,6 +442,7 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
   }
 
   Future<void> stopCamera() async {
+    stopPeriodicPictureCapture();
     // final _channel = WebSocketChannel.connect(
     //   // Uri.parse('ws://192.168.1.114:8765/socket.io/'),
 

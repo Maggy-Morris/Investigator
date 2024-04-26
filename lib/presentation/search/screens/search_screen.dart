@@ -1644,14 +1644,14 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                   children: [
                                     IconButton(
                                       onPressed: () {
-                                        if (state.sliderValue == null) {
-                                          FxToast.showErrorToast(
-                                            context: context,
-                                            message:
-                                                "Choose Accuracy on the SliderBar",
-                                          );
-                                          return;
-                                        }
+                                        // if (state.sliderValue == null) {
+                                        //   FxToast.showErrorToast(
+                                        //     context: context,
+                                        //     message:
+                                        //         "Choose Accuracy on the SliderBar",
+                                        //   );
+                                        //   return;
+                                        // }
                                         if (state.roomChoosen == null) {
                                           FxToast.showErrorToast(
                                             context: context,
@@ -1719,8 +1719,15 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                           vertical: 20),
                                                       child: ElevatedButton(
                                                         style: ButtonStyle(
-                                                            backgroundColor:
-                                                                MaterialStateProperty.all<
+                                                            backgroundColor: context
+                                                                    .watch<
+                                                                        PhotoAppCubit>()
+                                                                    .isStreaming
+                                                                ? MaterialStateProperty.all<
+                                                                        Color>(
+                                                                    AppColors
+                                                                        .thinkRedColor)
+                                                                : MaterialStateProperty.all<
                                                                         Color>(
                                                                     AppColors
                                                                         .babyBlue),
@@ -1747,9 +1754,14 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                                   .isStreaming
                                                               ? 'Stop Stream'
                                                               : 'Start Stream',
-                                                          style: const TextStyle(
-                                                              color:
-                                                                  Colors.black,
+                                                          style: TextStyle(
+                                                              color: context
+                                                                      .watch<
+                                                                          PhotoAppCubit>()
+                                                                      .isStreaming
+                                                                  ? Colors.white
+                                                                  : Colors
+                                                                      .black,
                                                               fontSize: 12,
                                                               fontWeight:
                                                                   FontWeight
@@ -1876,6 +1888,8 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                       context
                                           .read<PhotoAppCubit>()
                                           .stopCamera();
+
+
 
                                       context
                                           .read<PhotoAppCubit>()

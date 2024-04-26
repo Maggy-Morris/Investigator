@@ -1,6 +1,10 @@
 part of 'group_search_bloc.dart';
 
 class GroupSearchState extends Equatable {
+  final String pathProvided;
+
+  int pageIndex;
+  int pageCount;
   final String selectedOption;
 
   final bool showTextField;
@@ -13,7 +17,7 @@ class GroupSearchState extends Equatable {
   final PlatformFile? imageFile;
   final Widget? imageWidget;
   List<String> snapShots;
-    List<String> timestamps;
+  List<String> timestamps;
 
   final String accuracy;
   final Submission submission;
@@ -33,7 +37,9 @@ class GroupSearchState extends Equatable {
   final List<String> data;
 
   GroupSearchState({
-
+    this.pathProvided = "",
+    this.pageCount = 0,
+    this.pageIndex = 0,
     this.showTextField = false,
     this.roomNAMS = const [],
     this.check = false,
@@ -47,8 +53,7 @@ class GroupSearchState extends Equatable {
     this.personName = "",
     this.accuracy = '',
     this.imageWidget,
-        this.timestamps = const [],
-
+    this.timestamps = const [],
     this.snapShots = const [],
     this.data = const [],
     this.imageFile,
@@ -62,6 +67,9 @@ class GroupSearchState extends Equatable {
   });
 
   GroupSearchState copyWith({
+    String? pathProvided,
+    int? pageCount,
+    int? pageIndex,
     bool? check,
     String? selectedOption,
     List<String>? roomNAMS,
@@ -74,8 +82,7 @@ class GroupSearchState extends Equatable {
     String? userId,
     String? personName,
     String? accuracy,
-        List<String>? timestamps,
-
+    List<String>? timestamps,
     List<String>? snapShots,
     Widget? imageWidget,
     PlatformFile? video,
@@ -89,7 +96,10 @@ class GroupSearchState extends Equatable {
     List<String>? data,
   }) {
     return GroupSearchState(
-      timestamps:timestamps??this.timestamps,
+      pathProvided: pathProvided ?? this.pathProvided,
+      pageIndex: pageIndex ?? this.pageIndex,
+      pageCount: pageCount ?? this.pageCount,
+      timestamps: timestamps ?? this.timestamps,
       roomNAMS: roomNAMS ?? this.roomNAMS,
       showTextField: showTextField ?? this.showTextField,
       check: check ?? this.check,
@@ -118,7 +128,10 @@ class GroupSearchState extends Equatable {
 
   @override
   List<Object?> get props => [
-    timestamps,
+        pathProvided,
+        pageIndex,
+        pageCount,
+        timestamps,
         check,
         roomNAMS,
         showTextField,

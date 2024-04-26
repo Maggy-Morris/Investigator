@@ -131,9 +131,6 @@ class _CustomPaginationState extends State<CustomPagination> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Your main content here
-        // Display your list of data using widget.persons
-
         // Pagination controls
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,

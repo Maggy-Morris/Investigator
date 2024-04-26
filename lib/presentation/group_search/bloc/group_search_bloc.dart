@@ -4,12 +4,10 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:Investigator/core/enum/enum.dart';
-// import 'package:Investigator/core/models/add_camera_model.dart';
 import 'package:Investigator/core/remote_provider/remote_provider.dart';
 
 import '../../../core/models/add_company_model.dart';
 import '../../../core/models/employee_model.dart';
-import '../../../core/models/search_by_image_model.dart';
 import '../../../core/models/search_by_video_in_group_search.dart';
 
 part 'group_search_event.dart';
@@ -61,7 +59,12 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
     on<DeletePersonByIdEvent>(_onDeletePersonByIdEvent);
 
     on<UpdateEmployeeEvent>(_onUpdateEmployeeEvent);
+
+    on<EditPageNumber>(_onEditPageNumber);
+            on<GetPaginatedFramesEvent>(_onGetPaginatedFramesEvent);
+
   }
+
 
   _onGroupSearchEvent(
       GroupSearchEvent event, Emitter<GroupSearchState> emit) async {}
@@ -315,7 +318,7 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
         emit(state.copyWith(
           submission: Submission.success,
           data: value.data,
-          timestamps:value.timestamps,
+          timestamps: value.timestamps,
           snapShots: value.snapshot_list,
           employeeNamesList: value.dataCards,
         ));
@@ -328,6 +331,77 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
       }
     });
   }
+
+
+
+  _onEditPageNumber(
+      EditPageNumber event, Emitter<GroupSearchState> emit) async {
+    emit(state.copyWith(
+        pageIndex: event.pageIndex, submission: Submission.editing));
+
+    // add(const GetEmployeeNamesEvent());
+  }
+
+
+///paginated frames handling
+
+  _onGetPaginatedFramesEvent(
+      GetPaginatedFramesEvent event, Emitter<GroupSearchState> emit) async {
+    emit(state.copyWith(submission: Submission.loading));
+
+    try {
+      final employeeModel = await RemoteProvider().getPaginationPagesForFrames(
+        pathProvided: state.pathProvided,
+        pageNumber:
+            state.pageIndex == 0 ? state.pageIndex + 1 : state.pageIndex,
+      );
+
+      // if (state.pageCount == 0) {
+      //   emit(state.copyWith(
+      //     pageCount: employeeModel.nPages,
+      //   ));
+      // }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      if (employeeModel.data!.isNotEmpty) {
+        emit(state.copyWith(
+          // submission: Submission.success,
+          // employeeNamesList: employeeModel.data,
+          // count: employeeModel.count,
+          pageCount: employeeModel.nPages,
+        ));
+      } else {
+        emit(state.copyWith(
+          // submission: Submission.noDataFound,
+          employeeNamesList: [],
+        ));
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+
+      emit(state.copyWith(
+        submission: Submission.error,
+        employeeNamesList: [],
+      ));
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   _oncheckBox(checkBox event, Emitter<GroupSearchState> emit) async {
     emit(state.copyWith(

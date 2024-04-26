@@ -7,6 +7,21 @@ class GroupSearchEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class EditPageNumber extends GroupSearchEvent {
+  final int pageIndex;
+
+  const EditPageNumber({required this.pageIndex});
+
+  @override
+  List<Object> get props => [pageIndex];
+}
+
+class GetPaginatedFramesEvent extends GroupSearchEvent {
+  const GetPaginatedFramesEvent();
+
+  @override
+  List<Object> get props => [];
+}
 
 class selectedFiltering extends GroupSearchEvent {
   final String filterCase;
@@ -16,9 +31,6 @@ class selectedFiltering extends GroupSearchEvent {
   @override
   List<Object?> get props => [filterCase];
 }
-
-
-
 
 class AddpersonName extends GroupSearchEvent {
   final String personName;
@@ -56,7 +68,6 @@ class AdduserId extends GroupSearchEvent {
   List<Object?> get props => [userId];
 }
 
-
 class UpdateEmployeeEvent extends GroupSearchEvent {
   final String companyName;
   final String personName;
@@ -87,8 +98,6 @@ class UpdateEmployeeEvent extends GroupSearchEvent {
       ];
 }
 
-
-
 class ImageToSearchForEmployee extends GroupSearchEvent {
   final Widget imageWidget;
 
@@ -116,6 +125,7 @@ class DeletePersonByNameEvent extends GroupSearchEvent {
   @override
   List<Object?> get props => [companyName, personName];
 }
+
 class reloadTargetsData extends GroupSearchEvent {
   final List<Dataaa> Employyyy;
 
@@ -177,17 +187,13 @@ class SearchForEmployeeByVideoEvent extends GroupSearchEvent {
   List<Object?> get props => [];
 }
 
-
-
 class RadioButtonChanged extends GroupSearchEvent {
   final String selectedOption;
   final bool? showTextField;
 
-  const RadioButtonChanged({
-    required this.selectedOption,
-     this.showTextField
-  });
+  const RadioButtonChanged({required this.selectedOption, this.showTextField});
 }
+
 /////////////////////////////////////
 class checkBox extends GroupSearchEvent {
   final List<String> room_NMs;
@@ -197,6 +203,7 @@ class checkBox extends GroupSearchEvent {
   @override
   List<Object?> get props => [room_NMs];
 }
+
 ///
 
 // class GetEmployeeNames extends GroupSearchEvent {

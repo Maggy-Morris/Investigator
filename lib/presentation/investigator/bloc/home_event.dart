@@ -7,7 +7,6 @@ class HomeEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-
 class EditPageNumber extends HomeEvent {
   final int pageIndex;
 
@@ -17,11 +16,17 @@ class EditPageNumber extends HomeEvent {
   List<Object> get props => [pageIndex];
 }
 
+class GetPaginatedFramesEvent extends HomeEvent {
+  const GetPaginatedFramesEvent();
+
+  @override
+  List<Object> get props => [];
+}
 
 class ImageToSearchForEmployee extends HomeEvent {
   final Widget imageWidget;
 
-  ImageToSearchForEmployee({required this.imageWidget});
+  const ImageToSearchForEmployee({required this.imageWidget});
 
   @override
   List<Object?> get props => [imageWidget];
@@ -35,7 +40,6 @@ class CompnyNameFromSP extends HomeEvent {
   @override
   List<Object?> get props => [companyName];
 }
-
 
 class reloadSnapShots extends HomeEvent {
   final List<String> snapyy;
@@ -73,7 +77,6 @@ class imageevent extends HomeEvent {
   List<Object?> get props => [imageFile];
 }
 
-
 class imagesList extends HomeEvent {
   final List<PlatformFile>? imagesListdata;
 
@@ -82,6 +85,7 @@ class imagesList extends HomeEvent {
   @override
   List<Object?> get props => [imagesListdata];
 }
+
 class videoevent extends HomeEvent {
   final PlatformFile video;
 
@@ -179,7 +183,7 @@ class AddNewEmployee extends HomeEvent {
   // final String imageName;
   // PlatformFile? files;
 
-  AddNewEmployee(
+  const AddNewEmployee(
       {
       // this.files,
       // this.imageName,
