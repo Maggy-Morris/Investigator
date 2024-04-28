@@ -441,6 +441,9 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                             //   return;
                                             // }
                                             HomeBloc.get(context).add(
+                                                const EditPageCount(
+                                                    pageCount: 0));
+                                            HomeBloc.get(context).add(
                                                 const reloadSnapShots(
                                                     snapyy: []));
                                             HomeBloc.get(context).add(
@@ -1061,6 +1064,9 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                             //   // );
                                             //   return;
                                             // }
+                                            HomeBloc.get(context).add(
+                                                const EditPageCount(
+                                                    pageCount: 0));
                                             HomeBloc.get(context).add(
                                                 const reloadSnapShots(
                                                     snapyy: []));

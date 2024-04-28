@@ -7,6 +7,15 @@ class GroupSearchEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+
+class EditPageCount extends GroupSearchEvent {
+  final int pageCount;
+
+  const EditPageCount({required this.pageCount});
+
+  @override
+  List<Object> get props => [pageCount];
+}
 class EditPageNumber extends GroupSearchEvent {
   final int pageIndex;
 

@@ -48,6 +48,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<ImageToSearchForEmployee>(_onImageToSearchForEmployee);
     on<EditPageNumber>(_onEditPageNumber);
     // on<GetPaginatedFramesEvent>(_onGetPaginatedFramesEvent);
+        on<EditPageCount>(_onEditPageCount);
 
     // on<DeletePersonByNameEvent>(_onDeletePersonByNameEvent);
     on<DeletePersonByIdEvent>(_onDeletePersonByIdEvent);
@@ -69,6 +70,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     // add(const GetEmployeeNamesEvent());
   }
 
+ _onEditPageCount
+   (
+      EditPageCount event, Emitter<HomeState> emit) async {
+    emit(state.copyWith(
+        pageCount: event.pageCount, submission: Submission.editing));
+
+  }
   _onImageToSearchForEmployee(
       ImageToSearchForEmployee event, Emitter<HomeState> emit) async {
     emit(state.copyWith(

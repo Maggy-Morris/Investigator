@@ -395,6 +395,9 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                             //   // );
                                             //   return;
                                             // }
+                                            GroupSearchBloc.get(context).add(
+                                                const EditPageCount(
+                                                    pageCount: 0));
 
                                             GroupSearchBloc.get(context).add(
                                                 const reloadTargetsData(
@@ -1333,6 +1336,10 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                       child: ElevatedButton.icon(
                                           onPressed: () {
                                             GroupSearchBloc.get(context).add(
+                                                const EditPageCount(
+                                                    pageCount: 0));
+
+                                            GroupSearchBloc.get(context).add(
                                                 const reloadTargetsData(
                                                     Employyyy: []));
                                             GroupSearchBloc.get(context).add(
@@ -1937,17 +1944,6 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                                           10 +
                                                                       (index)];
 
-                                                              //       final image = state
-                                                              // .snapShots[(state.pageIndex == 1 ||
-                                                              //             state.pageIndex ==
-                                                              //                 0
-                                                              //         ? 0
-                                                              //         : state.pageIndex -
-                                                              //             1) *
-                                                              //     10 +
-                                                              // (index == 10
-                                                              //     ? 9
-                                                              //     : index)];
                                                               final names = state
                                                                   .data[(state.pageIndex == 1 ||
                                                                               state.pageIndex ==
@@ -2235,6 +2231,8 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
           children: [
             GestureDetector(
               onTap: () {
+                print(imageSource);
+
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -2243,6 +2241,7 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
               },
               child: Image.network(
                 "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/${imageSource}",
+
                 width: double.infinity,
                 height: double.infinity,
                 // Images.profileImage,

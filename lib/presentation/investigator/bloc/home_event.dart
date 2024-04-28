@@ -16,6 +16,16 @@ class EditPageNumber extends HomeEvent {
   List<Object> get props => [pageIndex];
 }
 
+class EditPageCount extends HomeEvent {
+  final int pageCount;
+
+  const EditPageCount({required this.pageCount});
+
+  @override
+  List<Object> get props => [pageCount];
+}
+
+
 class GetPaginatedFramesEvent extends HomeEvent {
   const GetPaginatedFramesEvent();
 

@@ -247,9 +247,6 @@ class _SettingsState extends State<Settings> {
                                           color: Colors.black,
                                         ),
                                         controller: controller,
-                                        textAlign: TextAlign
-                                            .start, // Set text alignment to start
-
                                         onChanged: (value) {
                                           SettingsBloc.get(context).add(
                                             UpdateRoomsEvent(
@@ -258,80 +255,76 @@ class _SettingsState extends State<Settings> {
                                             ),
                                           );
                                         },
-                                        decoration: InputDecoration(
+                                        decoration: const InputDecoration(
                                           border: InputBorder.none,
-                                          suffix: IconButton(
-                                            onPressed: () {
-                                              // setState(() {
-
-                                              showDialog(
-                                                context: context,
-                                                builder: (ctx) {
-                                                  return AlertDialog(
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15),
-                                                    ),
-                                                    icon: const Icon(
-                                                      Icons.warning,
-                                                      color: Colors.red,
-                                                    ),
-                                                    title: Text(
-                                                      "Are you sure you want to remove this Room?"
-                                                          .tr(),
-                                                      style: const TextStyle(
-                                                          color: Colors.black),
-                                                    ),
-                                                    actions: [
-                                                      TextButton(
-                                                          child: Text(
-                                                            "yes".tr(),
-                                                            style: const TextStyle(
-                                                                color: AppColors
-                                                                    .thinkRedColor),
-                                                          ),
-                                                          onPressed: () async {
-                                                            SettingsBloc.get(
-                                                                    context)
-                                                                .add(
-                                                              UpdateRoomsEvent(
-                                                                // roomNames: ,
-                                                                index: index,
-                                                              ),
-                                                            );
-                                                            SettingsBloc.get(
-                                                                    context)
-                                                                .add(
-                                                              const UpdateRooms(),
-                                                            );
-
-                                                            Navigator.of(ctx)
-                                                                .pop();
-                                                          }),
-                                                      TextButton(
-                                                          child: Text(
-                                                            "no".tr(),
-                                                            style: const TextStyle(
-                                                                color: AppColors
-                                                                    .green),
-                                                          ),
-                                                          onPressed: () =>
-                                                              Navigator.of(ctx)
-                                                                  .pop()),
-                                                    ],
-                                                  );
-                                                },
-                                              );
-                                            },
-                                            // },
-                                            icon: const Icon(
-                                              Icons.remove_circle,
-                                              color: Colors.red,
-                                            ),
-                                          ),
+                                          // suffix:
                                         ),
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        // setState(() {
+
+                                        showDialog(
+                                          context: context,
+                                          builder: (ctx) {
+                                            return AlertDialog(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                              ),
+                                              icon: const Icon(
+                                                Icons.warning,
+                                                color: Colors.red,
+                                              ),
+                                              title: Text(
+                                                "Are you sure you want to remove this Room?"
+                                                    .tr(),
+                                                style: const TextStyle(
+                                                    color: Colors.black),
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                    child: Text(
+                                                      "yes".tr(),
+                                                      style: const TextStyle(
+                                                          color: AppColors
+                                                              .thinkRedColor),
+                                                    ),
+                                                    onPressed: () async {
+                                                      SettingsBloc.get(context)
+                                                          .add(
+                                                        UpdateRoomsEvent(
+                                                          // roomNames: ,
+                                                          index: index,
+                                                        ),
+                                                      );
+                                                      SettingsBloc.get(context)
+                                                          .add(
+                                                        const UpdateRooms(),
+                                                      );
+
+                                                      Navigator.of(ctx).pop();
+                                                    }),
+                                                TextButton(
+                                                    child: Text(
+                                                      "no".tr(),
+                                                      style: const TextStyle(
+                                                          color:
+                                                              AppColors.green),
+                                                    ),
+                                                    onPressed: () =>
+                                                        Navigator.of(ctx)
+                                                            .pop()),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      },
+                                      // },
+                                      icon: const Icon(
+                                        Icons.remove_circle,
+                                        color: Colors.red,
                                       ),
                                     ),
                                   ],
@@ -359,7 +352,7 @@ class _SettingsState extends State<Settings> {
                         children: [
                           ElevatedButton(
                               onPressed: () async {
-                                if (state.room_names.isEmpty) {
+                                if (state.roomNames.isEmpty) {
                                   FxToast.showErrorToast(
                                     context: context,
                                     message: "please fill the room name first",
@@ -444,7 +437,6 @@ Widget _buildInputCard(
   );
 }
 
-
 // Widget _buildInputCard(
 //   String title,
 //   String value,
@@ -502,9 +494,6 @@ Widget _buildInputCard(
 //     ),
 //   );
 // }
-
-
-
 
 // import 'package:Investigator/core/enum/enum.dart';
 // import 'package:flutter/material.dart';
@@ -662,8 +651,6 @@ Widget _buildInputCard(
 //                                       icon: Icon(Icons.edit),
 //                                       onPressed: () {
 
-
-                                       
 //                                       },
 //                                     ),
 //                                   ],

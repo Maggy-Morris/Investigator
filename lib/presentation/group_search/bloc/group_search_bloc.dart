@@ -61,10 +61,10 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
     on<UpdateEmployeeEvent>(_onUpdateEmployeeEvent);
 
     on<EditPageNumber>(_onEditPageNumber);
-            on<GetPaginatedFramesEvent>(_onGetPaginatedFramesEvent);
+        on<EditPageCount>(_onEditPageCount);
 
+    // on<GetPaginatedFramesEvent>(_onGetPaginatedFramesEvent);
   }
-
 
   _onGroupSearchEvent(
       GroupSearchEvent event, Emitter<GroupSearchState> emit) async {}
@@ -318,6 +318,8 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
         emit(state.copyWith(
           submission: Submission.success,
           data: value.data,
+          pathProvided: value.global_path,
+          pageCount: value.response_count,
           timestamps: value.timestamps,
           snapShots: value.snapshot_list,
           employeeNamesList: value.dataCards,
@@ -332,8 +334,6 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
     });
   }
 
-
-
   _onEditPageNumber(
       EditPageNumber event, Emitter<GroupSearchState> emit) async {
     emit(state.copyWith(
@@ -342,66 +342,55 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
     // add(const GetEmployeeNamesEvent());
   }
 
+  _onEditPageCount
+   (
+      EditPageCount event, Emitter<GroupSearchState> emit) async {
+    emit(state.copyWith(
+        pageCount: event.pageCount, submission: Submission.editing));
 
-///paginated frames handling
-
-  _onGetPaginatedFramesEvent(
-      GetPaginatedFramesEvent event, Emitter<GroupSearchState> emit) async {
-    emit(state.copyWith(submission: Submission.loading));
-
-    try {
-      final employeeModel = await RemoteProvider().getPaginationPagesForFrames(
-        pathProvided: state.pathProvided,
-        pageNumber:
-            state.pageIndex == 0 ? state.pageIndex + 1 : state.pageIndex,
-      );
-
-      // if (state.pageCount == 0) {
-      //   emit(state.copyWith(
-      //     pageCount: employeeModel.nPages,
-      //   ));
-      // }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      if (employeeModel.data!.isNotEmpty) {
-        emit(state.copyWith(
-          // submission: Submission.success,
-          // employeeNamesList: employeeModel.data,
-          // count: employeeModel.count,
-          pageCount: employeeModel.nPages,
-        ));
-      } else {
-        emit(state.copyWith(
-          // submission: Submission.noDataFound,
-          employeeNamesList: [],
-        ));
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-
-      emit(state.copyWith(
-        submission: Submission.error,
-        employeeNamesList: [],
-      ));
-    }
   }
 
+  ///paginated frames handling
 
+//   _onGetPaginatedFramesEvent(
+//       GetPaginatedFramesEvent event, Emitter<GroupSearchState> emit) async {
+//     emit(state.copyWith(submission: Submission.loading));
 
+//     try {
+//       final employeeModel = await RemoteProvider().getPaginationPagesForFrames(
+//         pathProvided: state.pathProvided,
+//         pageNumber:
+//             state.pageIndex == 0 ? state.pageIndex + 1 : state.pageIndex,
+//       );
 
+//       // if (state.pageCount == 0) {
+//       //   emit(state.copyWith(
+//       //     pageCount: employeeModel.nPages,
+//       //   ));
+//       // }
+// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//       if (employeeModel.data!.isNotEmpty) {
+//         emit(state.copyWith(
+//           // submission: Submission.success,
+//           // employeeNamesList: employeeModel.data,
+//           // count: employeeModel.count,
+//           pageCount: employeeModel.nPages,
+//         ));
+//       } else {
+//         emit(state.copyWith(
+//           // submission: Submission.noDataFound,
+//           employeeNamesList: [],
+//         ));
+//       }
+//     } catch (e) {
+//       debugPrint(e.toString());
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+//       emit(state.copyWith(
+//         submission: Submission.error,
+//         employeeNamesList: [],
+//       ));
+//     }
+//   }
 
   _oncheckBox(checkBox event, Emitter<GroupSearchState> emit) async {
     emit(state.copyWith(

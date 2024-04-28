@@ -5,7 +5,8 @@ class SettingsState extends Equatable {
   final String companyName;
   String passwordUpdate;
     String oldpassword;
-  String room_names;
+  String roomNames;
+  
 
   
   final String image;
@@ -33,7 +34,7 @@ class SettingsState extends Equatable {
   final Submission submission;
 
   SettingsState({
-    this.room_names = "",
+    this.roomNames = "",
     this.check = false,
     this.roomNAMS = const [],
     this.selectedOption = "",
@@ -66,7 +67,7 @@ class SettingsState extends Equatable {
     List<String>? roomNAMS,
     String? selectedOption,
 
-   String? room_names,
+   String? roomNames,
     bool? showTextField,
     Widget? imageWidget,
     String? responseMessage,
@@ -92,7 +93,7 @@ class SettingsState extends Equatable {
     Submission? submission,
   }) {
     return SettingsState(
-      room_names:room_names ??this.room_names,
+      roomNames:roomNames ??this.roomNames,
       room_numbers: room_numbers ?? this.room_numbers,
       roomNAMS: roomNAMS ?? this.roomNAMS,
       selectedOption: selectedOption ?? this.selectedOption,
@@ -126,7 +127,7 @@ class SettingsState extends Equatable {
 
   @override
   List<Object?> get props => [
-    room_names,
+    roomNames,
         room_numbers,
         check,
         roomNAMS,
