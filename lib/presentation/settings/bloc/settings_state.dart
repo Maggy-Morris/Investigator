@@ -4,11 +4,9 @@ class SettingsState extends Equatable {
   final List<Data> employeeNamesList;
   final String companyName;
   String passwordUpdate;
-    String oldpassword;
-  String roomNames;
-  
+  String oldpassword;
+  String? roomNames;
 
-  
   final String image;
   final String id;
   int pageIndex;
@@ -34,7 +32,7 @@ class SettingsState extends Equatable {
   final Submission submission;
 
   SettingsState({
-    this.roomNames = "",
+    this.roomNames,
     this.check = false,
     this.roomNAMS = const [],
     this.selectedOption = "",
@@ -54,9 +52,7 @@ class SettingsState extends Equatable {
     this.isSearching = false,
     this.image = "",
     this.passwordUpdate = "",
-        this.oldpassword = "",
-
-    
+    this.oldpassword = "",
     this.companyName = "",
     this.employeeNamesList = const [],
     this.submission = Submission.initial,
@@ -66,8 +62,7 @@ class SettingsState extends Equatable {
     bool? check,
     List<String>? roomNAMS,
     String? selectedOption,
-
-   String? roomNames,
+    String? roomNames,
     bool? showTextField,
     Widget? imageWidget,
     String? responseMessage,
@@ -86,14 +81,11 @@ class SettingsState extends Equatable {
     List<Data>? employeeNamesList,
     String? companyName,
     String? passwordUpdate,
-        String? oldpassword,
-
-
-
+    String? oldpassword,
     Submission? submission,
   }) {
     return SettingsState(
-      roomNames:roomNames ??this.roomNames,
+      roomNames: roomNames ?? this.roomNames,
       room_numbers: room_numbers ?? this.room_numbers,
       roomNAMS: roomNAMS ?? this.roomNAMS,
       selectedOption: selectedOption ?? this.selectedOption,
@@ -119,15 +111,14 @@ class SettingsState extends Equatable {
       companyName: companyName ?? this.companyName,
       passwordUpdate: passwordUpdate ?? this.passwordUpdate,
 
-
-      oldpassword:oldpassword ?? this.oldpassword,
+      oldpassword: oldpassword ?? this.oldpassword,
       submission: submission ?? this.submission,
     );
   }
 
   @override
   List<Object?> get props => [
-    roomNames,
+        roomNames,
         room_numbers,
         check,
         roomNAMS,

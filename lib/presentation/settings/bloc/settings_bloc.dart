@@ -81,6 +81,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
         emit(state.copyWith(
           roomNAMS: newList,
+          ////////////////////////////////////
+          roomNames: state.roomNames,
           // room_numbers: event.room_num,
           // submission: Submission.hasData,
         ));

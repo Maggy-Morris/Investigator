@@ -537,20 +537,23 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                             shrinkWrap: true,
                                                             physics:
                                                                 const NeverScrollableScrollPhysics(),
-                                                            itemCount: state
+                                                              itemCount: state
                                                                         .pageCount !=
                                                                     0
-                                                                ? (state.pageIndex ==
-                                                                        (state.pageCount /
-                                                                                10)
-                                                                            .ceil())
+                                                                ? (state.pageCount <10)
+                                                                           
+                                                                               
                                                                     ? (state.pageCount %
-                                                                                10 ==
-                                                                            0)
-                                                                        ? 10
-                                                                        : (state.pageCount %
-                                                                            10)
-                                                                    : 10
+                                                                        10)
+                                                                    : (state.pageIndex ==
+                                                                            (state.pageCount / 10)
+                                                                                .ceil())
+                                                                        ? (state.pageCount % 10 ==
+                                                                                0)
+                                                                            ? 10
+                                                                            : (state.pageCount %
+                                                                                10)
+                                                                        : 10
                                                                 : 0,
                                                             gridDelegate: Responsive
                                                                     .isMobile(
@@ -1161,20 +1164,23 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                             shrinkWrap: true,
                                                             physics:
                                                                 const NeverScrollableScrollPhysics(),
-                                                            itemCount: state
+                                                             itemCount: state
                                                                         .pageCount !=
                                                                     0
-                                                                ? (state.pageIndex ==
-                                                                        (state.pageCount /
-                                                                                10)
-                                                                            .ceil())
+                                                                ? (state.pageCount <10)
+                                                                           
+                                                                               
                                                                     ? (state.pageCount %
-                                                                                10 ==
-                                                                            0)
-                                                                        ? 10
-                                                                        : (state.pageCount %
-                                                                            10)
-                                                                    : 10
+                                                                        10)
+                                                                    : (state.pageIndex ==
+                                                                            (state.pageCount / 10)
+                                                                                .ceil())
+                                                                        ? (state.pageCount % 10 ==
+                                                                                0)
+                                                                            ? 10
+                                                                            : (state.pageCount %
+                                                                                10)
+                                                                        : 10
                                                                 : 0,
                                                             gridDelegate: Responsive
                                                                     .isMobile(
