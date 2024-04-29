@@ -1414,19 +1414,46 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                       ? "All"
                                       : state.filterCase,
                                   onChanged: (value) {
+                                    AllEmployeesBloc.get(context)
+                                        .add(const EditPageNumber(
+                                      pageIndex: 1,
+                                    ));
+                                    // AllEmployeesBloc.get(context)
+                                    //     .add(const EditPageNumberNeutral(
+                                    //   pageIndex: 1,
+                                    // ));
+                                    // AllEmployeesBloc.get(context)
+                                    //     .add(const EditPageNumberBlackListed(
+                                    //   pageIndex: 1,
+                                    // ));
                                     if (value?.isNotEmpty ?? false) {
                                       AllEmployeesBloc.get(context).add(
                                           selectedFiltering(
                                               filterCase: value ?? ""));
                                       if (value == "All") {
+                                       
                                         AllEmployeesBloc.get(context)
                                             .add(const GetEmployeeNamesEvent());
+                                             // AllEmployeesBloc.get(context)
+                                        //     .add(const EditPageNumber(
+                                        //   pageIndex: 1,
+                                        // ));
                                       } else if (value == "Neutral") {
+                                        
                                         AllEmployeesBloc.get(context).add(
                                             const GetEmployeeNormalNamesEvent());
+                                            // AllEmployeesBloc.get(context)
+                                        //     .add(const EditPageNumberNeutral(
+                                        //   pageIndex: 1,
+                                        // ));
                                       } else if (value == "BlackListed") {
+                                        
                                         AllEmployeesBloc.get(context).add(
                                             const GetEmployeeBlackListedNamesEvent());
+                                            // AllEmployeesBloc.get(context).add(
+                                        //     const EditPageNumberBlackListed(
+                                        //   pageIndex: 1,
+                                        // ));
                                       }
                                     }
                                   },
