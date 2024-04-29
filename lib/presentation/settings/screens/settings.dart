@@ -188,28 +188,6 @@ class _SettingsState extends State<Settings> {
                             ),
                             (Responsive.isWeb(context)) ? 500 : 250,
                           ),
-                          // _buildInputCard(
-                          //   'Password',
-                          //   // Set an initial value (masked)
-                          //   "********",
-                          //   (value) {
-                          //     SettingsBloc.get(context).add(
-                          //       UpdatePasswordEvent(passwordUpd: value),
-                          //     );
-                          //   },
-                          //   false,
-                          //   IconButton(
-                          //     onPressed: () {
-                          //       // Access the password value from the controller
-                          //       // String newPassword = passwordController.text;
-                          //       // Pass the value to the bloc
-                          //       SettingsBloc.get(context).add(
-                          //         UpdatePassword(),
-                          //       );
-                          //     },
-                          //     icon: Icon(Icons.check, color: Colors.green),
-                          //   ),
-                          // ),
                           SizedBox(height: 10),
                         ],
                       ),
@@ -243,6 +221,10 @@ class _SettingsState extends State<Settings> {
                                   children: [
                                     Expanded(
                                       child: TextFormField(
+                                        textAlign: TextAlign
+                                            .start, // Set text alignment to start
+
+                                        // textDirection: TextDirection.ltr, // or TextDirection.rtl
                                         style: const TextStyle(
                                           color: Colors.black,
                                         ),
@@ -251,6 +233,13 @@ class _SettingsState extends State<Settings> {
                                           SettingsBloc.get(context).add(
                                             UpdateRoomsEvent(
                                               roomNames: value,
+                                              // index: index,
+                                            ),
+                                          );
+
+                                          SettingsBloc.get(context).add(
+                                            UpdateRoomsEventToList(
+                                              // roomNames: value,
                                               index: index,
                                             ),
                                           );
@@ -294,7 +283,7 @@ class _SettingsState extends State<Settings> {
                                                     onPressed: () async {
                                                       SettingsBloc.get(context)
                                                           .add(
-                                                        UpdateRoomsEvent(
+                                                        UpdateRoomsEventToList(
                                                           // roomNames: ,
                                                           index: index,
                                                         ),
@@ -352,7 +341,7 @@ class _SettingsState extends State<Settings> {
                         children: [
                           ElevatedButton(
                               onPressed: () async {
-                                if (state.roomNames.isEmpty) {
+                                if (state.roomNames == null) {
                                   FxToast.showErrorToast(
                                     context: context,
                                     message: "please fill the room name first",

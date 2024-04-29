@@ -16,14 +16,28 @@ class UpdateRooms extends SettingsEvent {
   List<Object> get props => [];
 }
 
+
+
 class UpdateRoomsEvent extends SettingsEvent {
   final String? roomNames;
-  final int index;
 
-  const UpdateRoomsEvent({this.roomNames, required this.index});
+  const UpdateRoomsEvent({this.roomNames});
 
   @override
-  List<Object?> get props => [roomNames, index];
+  List<Object?> get props => [roomNames];
+}
+class UpdateRoomsEventToList extends SettingsEvent {
+  // final String? roomNames;
+  final int index;
+
+  const UpdateRoomsEventToList({
+    // this.roomNames, 
+    required this.index});
+
+  @override
+  List<Object?> get props => [
+    // roomNames, 
+    index];
 }
 
 class InitialList extends SettingsEvent {

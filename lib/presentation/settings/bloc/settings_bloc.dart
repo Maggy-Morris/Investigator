@@ -20,6 +20,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   SettingsBloc() : super(SettingsState()) {
     on<SettingsEvent>((event, emit) {});
     on<UpdateRoomsEvent>(_onUpdateRoomsEvent);
+        on<UpdateRoomsEventToList>(_onUpdateRoomsEventToList);
+
 
     on<UpdateRooms>(_onUpdateRooms);
     on<InitialList>(_onInitialList);
@@ -72,17 +74,28 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     }
   }
 
+
+
+  
   _onUpdateRoomsEvent(
       UpdateRoomsEvent event, Emitter<SettingsState> emit) async {
+    emit(state.copyWith(
+          roomNames: event.roomNames,
+      submission: Submission.hasData,
+    ));
+  }
+
+  _onUpdateRoomsEventToList(
+      UpdateRoomsEventToList event, Emitter<SettingsState> emit) async {
     List<String> newList = state.roomNAMS;
-    if (event.roomNames != null) {
-      if (event.roomNames?.isNotEmpty ?? false) {
-        newList[event.index] = event.roomNames ?? "";
+    if (state.roomNames != null) {
+      if (state.roomNames?.isNotEmpty ?? false) {
+        newList[event.index] = state.roomNames ?? "";
 
         emit(state.copyWith(
           roomNAMS: newList,
           ////////////////////////////////////
-          roomNames: state.roomNames,
+          // roomNames: state.roomNames,
           // room_numbers: event.room_num,
           // submission: Submission.hasData,
         ));
@@ -128,7 +141,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       if (result.updated == true) {
         emit(state.copyWith(
             submission: Submission.success,
-            responseMessage: "Rooms Updated Successfully"
+            responseMessage: "Rooms Updated Successfully",
 
             // employeeNamesList:
             ));
