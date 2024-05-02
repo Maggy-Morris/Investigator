@@ -1,3 +1,4 @@
+import 'package:Investigator/core/models/pathes_model.dart';
 import 'package:Investigator/core/models/search_by_video.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -11,6 +12,7 @@ import 'package:Investigator/core/remote_provider/remote_data_source.dart';
 // import '../models/add_company_model.dart';
 import '../models/add_person_model.dart';
 import '../models/call_back_model.dart';
+import '../models/dashboard_models.dart';
 import '../models/delete_model.dart';
 import '../models/employee_model.dart';
 import '../models/search_by_image_model.dart';
@@ -559,6 +561,134 @@ class RemoteProvider {
       }
     } catch (e) {
       return SearchByVideoAndImage();
+    }
+  }
+
+  // Future<List<GetAllCameraCountPerHour>>
+  //     getAllCamerasCountsPerHourForDashboard({
+  //   required String cameraName,
+  //   // required String startDay,
+  //   // required String endDay,
+  //   // required String day,
+  //   // required String startMonth,
+  //   // required String endMonth,
+  //   // required String month,
+  //   // required String startYear,
+  //   // required String endYear,
+  //   // required String year,
+  //   // required String hour,
+  //   // required String minute,
+  // }) async {
+  //   Map<String, String> body = {};
+
+  //   if (cameraName.isNotEmpty) {
+  //     body["cameraname"] = cameraName;
+  //   }
+
+  //   // if (minute.isNotEmpty) {
+  //   //   body["minute"] = minute;
+  //   // }
+
+  //   // if (hour.isNotEmpty) {
+  //   //   body["hour"] = hour;
+  //   // }
+  //   // if (startDay.isNotEmpty) {
+  //   //   body["start_day"] = startDay;
+  //   // }
+  //   // if (endDay.isNotEmpty) {
+  //   //   body["end_day"] = endDay;
+  //   // }
+  //   // if (day.isNotEmpty) {
+  //   //   body["day"] = day;
+  //   // }
+  //   // if (startMonth.isNotEmpty) {
+  //   //   body["start_month"] = startMonth;
+  //   // }
+
+  //   // if (endMonth.isNotEmpty) {
+  //   //   body["end_month"] = endMonth;
+  //   // }
+  //   // if (month.isNotEmpty) {
+  //   //   body["month"] = month;
+  //   // }
+  //   // if (startYear.isNotEmpty) {
+  //   //   body["start_year"] = startYear;
+  //   // }
+  //   // if (endYear.isNotEmpty) {
+  //   //   body["end_year"] = endYear;
+  //   // }
+  //   // if (year.isNotEmpty) {
+  //   //   body["year"] = year;
+  //   // }
+
+  //   try {
+  //     List<dynamic> callBack = await RemoteDataSource()
+  //         .postWithFile(endPoint: "/allmodelsstatistics", body: body
+  //             //     {
+  //             //   "cameraname": cameraName,
+  //             //   "day": "19",
+  //             //   "month": "2",
+  //             //   "year": "2024",
+  //             // }
+  //             );
+  //     if (callBack.isNotEmpty) {
+  //       debugPrint("0-0-0-0$callBack");
+  //       List<GetAllCameraCountPerHour> callbackList = [];
+  //       for (var element in callBack) {
+  //         callbackList.add(GetAllCameraCountPerHour.fromJson(element));
+  //       }
+  //       return callbackList;
+  //     } else {
+  //       return [];
+  //     }
+  //   } catch (e) {
+  //     debugPrint(e.toString());
+  //     return [];
+  //   }
+  // }
+
+  // Future<GetAllCameraDetails> getAllCamerasDetails(
+  //     {required String cameraName}) async {
+  //   try {
+  //     var callBack = await RemoteDataSource().postWithFile(
+  //         endPoint: "/getallmodelsincam", body: {"cameraname": cameraName});
+  //     if (callBack.isNotEmpty) {
+  //       GetAllCameraDetails countsModel =
+  //           GetAllCameraDetails.fromJson(callBack);
+  //       return countsModel;
+  //     } else {
+  //       return GetAllCameraDetails();
+  //     }
+  //   } catch (e) {
+  //     debugPrint(e.toString());
+  //     return GetAllCameraDetails();
+  //   }
+  // }
+
+// get all pathes
+  Future<pathes_model> getAllPathes({
+    required String companyName,
+  }) async {
+    try {
+      Map<String, dynamic> callBack =
+          await RemoteDataSource().post(endPoint: "/history", body: {
+        "collection_name": companyName,
+      });
+
+      if (callBack.isNotEmpty) {
+        pathes_model callBackList = pathes_model.fromJson(callBack);
+        // print(callBackList);
+        return callBackList;
+      } else {
+        // Return a Future<pathes_model> with an empty list
+        return Future.value(
+            pathes_model()); // Adjust this according to your pathes_model constructor
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      // Return a Future<pathes_model> with an empty list
+      return Future.value(
+          pathes_model()); // Adjust this according to your pathes_model constructor
     }
   }
 

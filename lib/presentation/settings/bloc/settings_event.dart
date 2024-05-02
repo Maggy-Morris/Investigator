@@ -16,28 +16,23 @@ class UpdateRooms extends SettingsEvent {
   List<Object> get props => [];
 }
 
-
-
 class UpdateRoomsEvent extends SettingsEvent {
-  final String? roomNames;
+  final String? rooms;
 
-  const UpdateRoomsEvent({this.roomNames});
+  const UpdateRoomsEvent({this.rooms});
 
   @override
-  List<Object?> get props => [roomNames];
+  List<Object?> get props => [rooms];
 }
+
 class UpdateRoomsEventToList extends SettingsEvent {
-  // final String? roomNames;
+  final String? roomNames;
   final int index;
 
-  const UpdateRoomsEventToList({
-    // this.roomNames, 
-    required this.index});
+  const UpdateRoomsEventToList({this.roomNames, required this.index});
 
   @override
-  List<Object?> get props => [
-    // roomNames, 
-    index];
+  List<Object?> get props => [roomNames, index];
 }
 
 class InitialList extends SettingsEvent {
@@ -73,7 +68,6 @@ class oldPasswordEvent extends SettingsEvent {
   @override
   List<Object> get props => [oldpassword];
 }
-
 
 class UpdatePassword extends SettingsEvent {
   // final String passwordUpdate;

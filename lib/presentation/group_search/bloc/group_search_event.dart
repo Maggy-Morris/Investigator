@@ -25,12 +25,12 @@ class EditPageNumber extends GroupSearchEvent {
   List<Object> get props => [pageIndex];
 }
 
-class GetPaginatedFramesEvent extends GroupSearchEvent {
-  const GetPaginatedFramesEvent();
+// class GetPaginatedFramesEvent extends GroupSearchEvent {
+//   const GetPaginatedFramesEvent();
 
-  @override
-  List<Object> get props => [];
-}
+//   @override
+//   List<Object> get props => [];
+// }
 
 class selectedFiltering extends GroupSearchEvent {
   final String filterCase;

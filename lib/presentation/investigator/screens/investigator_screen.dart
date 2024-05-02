@@ -100,8 +100,9 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                         Text(
                           "Search for your Employee".tr(),
                           style: const TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w600,
+
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
                               color: AppColors.white),
                         ),
                         FxBox.h24,

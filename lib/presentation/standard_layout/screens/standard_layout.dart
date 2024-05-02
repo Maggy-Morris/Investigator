@@ -141,6 +141,14 @@ class StandardLayoutScreen extends StatelessWidget {
                                     ),
 
                                     NavigationRailDestination(
+                                      icon: const Icon(
+                                          Icons.manage_history_rounded),
+                                      selectedIcon: const Icon(
+                                          Icons.manage_history_rounded),
+                                      label: Text('History'.tr()),
+                                    ),
+
+                                    NavigationRailDestination(
                                       icon: const Icon(Icons.settings),
                                       selectedIcon: const Icon(
                                         Icons.settings,
@@ -319,7 +327,12 @@ class StandardLayoutScreen extends StatelessWidget {
                                     } else if (index == 3) {
                                       Routemaster.of(context)
                                           .push('/databaseSearch');
+
+
                                     } else if (index == 4) {
+                                      Routemaster.of(context).push('/history');
+                                    }
+                                     else if (index == 5) {
                                       Routemaster.of(context).push('/settings');
                                     }
                                     ///////////////////////////////////////////////////////////////////////////////

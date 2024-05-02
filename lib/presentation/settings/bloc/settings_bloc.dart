@@ -20,8 +20,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   SettingsBloc() : super(SettingsState()) {
     on<SettingsEvent>((event, emit) {});
     on<UpdateRoomsEvent>(_onUpdateRoomsEvent);
-        on<UpdateRoomsEventToList>(_onUpdateRoomsEventToList);
-
+    on<UpdateRoomsEventToList>(_onUpdateRoomsEventToList);
 
     on<UpdateRooms>(_onUpdateRooms);
     on<InitialList>(_onInitialList);
@@ -74,13 +73,10 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     }
   }
 
-
-
-  
   _onUpdateRoomsEvent(
       UpdateRoomsEvent event, Emitter<SettingsState> emit) async {
     emit(state.copyWith(
-          roomNames: event.roomNames,
+      rooms: event.rooms,
       submission: Submission.hasData,
     ));
   }
@@ -88,9 +84,9 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   _onUpdateRoomsEventToList(
       UpdateRoomsEventToList event, Emitter<SettingsState> emit) async {
     List<String> newList = state.roomNAMS;
-    if (state.roomNames != null) {
-      if (state.roomNames?.isNotEmpty ?? false) {
-        newList[event.index] = state.roomNames ?? "";
+    if (event.roomNames != null) {
+      if (event.roomNames?.isNotEmpty ?? false) {
+        newList[event.index] = event.roomNames ?? "";
 
         emit(state.copyWith(
           roomNAMS: newList,
@@ -140,11 +136,11 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       // result.updated == true
       if (result.updated == true) {
         emit(state.copyWith(
-            submission: Submission.success,
-            responseMessage: "Rooms Updated Successfully",
+          submission: Submission.success,
+          responseMessage: "Rooms Updated Successfully",
 
-            // employeeNamesList:
-            ));
+          // employeeNamesList:
+        ));
         await AuthenticationRepository.instance
             .updateRoomsNames(state.roomNAMS);
         // await AuthenticationRepository.getInstance();

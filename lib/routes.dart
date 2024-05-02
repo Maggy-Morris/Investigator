@@ -9,9 +9,12 @@ import 'package:routemaster/routemaster.dart';
 
 import 'authentication/authentication_repository.dart';
 import 'core/widgets/no_animation_page.dart';
+
 import 'presentation/all_employees/screens/all_employees.dart';
 // import 'presentation/choose_your_company/choose_your_company_screen.dart';
 import 'presentation/group_search/screens/group_search_screen.dart';
+import 'presentation/history/screens/history_details.dart';
+import 'presentation/history/screens/history_screen.dart';
 import 'presentation/investigator/screens/investigator_screen.dart';
 
 checkAuthority() {
@@ -46,6 +49,13 @@ getRoutesAdmin() {
         const NoAnimationPage(child: GroupSearchScreen()),
 
     '/search': (route) => const NoAnimationPage(child: Search()),
+    '/history': (route) => const NoAnimationPage(child: AllHistoryScreen()),
+
+    '/requestDetails': (route) => NoAnimationPage(
+            child: HistoryDetails(
+          path: route.queryParameters["path"] ?? "",
+          count: route.queryParameters["count"] ?? "",
+        )),
   };
   return adminRoutes;
 }

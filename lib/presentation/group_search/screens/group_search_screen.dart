@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:Investigator/core/models/search_by_video_in_group_search.dart';
 import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
@@ -39,7 +38,6 @@ class GroupSearchScreen extends StatefulWidget {
 
 class _GroupSearchScreenState extends State<GroupSearchScreen> {
   TextEditingController nameController = TextEditingController();
-  Widget? _image;
   CameraController? controller;
   XFile? imageFile;
   final double _min = 10;
@@ -112,8 +110,8 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                         Text(
                           "Find Targets".tr(),
                           style: const TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w600,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
                               color: AppColors.white),
                         ),
                         FxBox.h24,
@@ -472,7 +470,7 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                     Submission.noDataFound)
                                                 ? const Center(
                                                     child: Text(
-                                                    "No data found Yet!",
+                                                    "",
                                                     style: TextStyle(
                                                         color: AppColors.blueB,
                                                         fontSize: 25,
@@ -920,7 +918,7 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                                 .noDataFound)
                                                         ? const Center(
                                                             child: Text(
-                                                            "No data found Yet!",
+                                                            "",
                                                             style: TextStyle(
                                                                 color: AppColors
                                                                     .blueB,
@@ -1414,7 +1412,7 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                     Submission.noDataFound)
                                                 ? const Center(
                                                     child: Text(
-                                                    "No data found Yet!",
+                                                    "",
                                                     style: TextStyle(
                                                         color: AppColors.blueB,
                                                         fontSize: 25,
@@ -1860,7 +1858,7 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                                 .noDataFound)
                                                         ? const Center(
                                                             child: Text(
-                                                            "No data found Yet!",
+                                                            "",
                                                             style: TextStyle(
                                                                 color: AppColors
                                                                     .blueB,
