@@ -229,19 +229,21 @@ class _SettingsState extends State<Settings> {
                                       ),
                                       controller: controller,
                                       onChanged: (value) {
-                                        // SettingsBloc.get(context).add(
-                                        //   UpdateRoomsEvent(
-                                        //     rooms: value,
-                                        //     // index: index,
-                                        //   ),
-                                        // );
+                                        if (value.isNotEmpty) {
+                                          SettingsBloc.get(context).add(
+                                            UpdateRoomsEvent(
+                                              checks: true,
+                                              // index: index,
+                                            ),
+                                          );
 
-                                        SettingsBloc.get(context).add(
-                                          UpdateRoomsEventToList(
-                                            roomNames: value,
-                                            index: index,
-                                          ),
-                                        );
+                                          SettingsBloc.get(context).add(
+                                            UpdateRoomsEventToList(
+                                              roomNames: value,
+                                              index: index,
+                                            ),
+                                          );
+                                        }
                                       },
                                       decoration: const InputDecoration(
                                         border: InputBorder.none,
@@ -342,13 +344,13 @@ class _SettingsState extends State<Settings> {
                         children: [
                           ElevatedButton(
                               onPressed: () async {
-                                // if (state.rooms.isEmpty) {
-                                //   FxToast.showErrorToast(
-                                //     context: context,
-                                //     message: "please fill the room name first",
-                                //   );
-                                //   return;
-                                // }
+                                if (state.check == false) {
+                                  FxToast.showErrorToast(
+                                    context: context,
+                                    message: "please fill the room name first",
+                                  );
+                                  return;
+                                }
                                 SettingsBloc.get(context).add(
                                   const UpdateRooms(),
                                 );

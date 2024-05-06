@@ -76,8 +76,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   _onUpdateRoomsEvent(
       UpdateRoomsEvent event, Emitter<SettingsState> emit) async {
     emit(state.copyWith(
-      rooms: event.rooms,
-      submission: Submission.hasData,
+      check: event.checks,
+      // submission: Submission.hasData,
     ));
   }
 
@@ -90,8 +90,9 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
         emit(state.copyWith(
           roomNAMS: newList,
+
           ////////////////////////////////////
-          // roomNames: state.roomNames,
+          // roomNames: event.roomNames,
           // room_numbers: event.room_num,
           // submission: Submission.hasData,
         ));

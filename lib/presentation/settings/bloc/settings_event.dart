@@ -17,12 +17,12 @@ class UpdateRooms extends SettingsEvent {
 }
 
 class UpdateRoomsEvent extends SettingsEvent {
-  final String? rooms;
+  final bool? checks;
 
-  const UpdateRoomsEvent({this.rooms});
+  const UpdateRoomsEvent({this.checks});
 
   @override
-  List<Object?> get props => [rooms];
+  List<Object?> get props => [checks];
 }
 
 class UpdateRoomsEventToList extends SettingsEvent {
