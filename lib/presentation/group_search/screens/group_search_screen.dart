@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:Investigator/core/widgets/FullImageURL.dart';
 import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
@@ -24,6 +25,7 @@ import '../../../authentication/authentication_repository.dart';
 import '../../../core/remote_provider/remote_data_source.dart';
 import '../../../core/widgets/drop_down_widgets.dart';
 import '../../../core/widgets/fullscreenImage.dart';
+import '../../../core/widgets/image_downloader.dart';
 import '../../../core/widgets/persons_per_widget.dart';
 import '../../all_employees/screens/text.dart';
 import '../../camera_controller/cubit/photo_app_cubit.dart';
@@ -401,8 +403,8 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                 const reloadTargetsData(
                                                     Employyyy: []));
                                             GroupSearchBloc.get(context).add(
-                                                const reloadSnapShots(
-                                                    snapyy: []));
+                                                const reloadPath(
+                                                    path_provided: ""));
                                             GroupSearchBloc.get(context).add(
                                                 const SearchForEmployeeByVideoEvent());
                                           },
@@ -715,7 +717,7 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                                             SizedBox(
                                                                               height: 100,
                                                                               child: Image.network(
-                                                                                "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/${employee.imagePath}",
+                                                                                "http:${RemoteDataSource.baseUrlWithoutPort}8000/${employee.imagePath}",
                                                                                 fit: BoxFit.cover,
                                                                               ),
                                                                             ),
@@ -845,7 +847,7 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  (state.snapShots.isNotEmpty)
+                                  (state.pathProvided.isNotEmpty)
                                       ? const Text(
                                           "Frames Where Targets Appeard in :",
                                           style: TextStyle(
@@ -998,13 +1000,13 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                             itemBuilder:
                                                                 (context,
                                                                     index) {
-                                                              final image = state
-                                                                      .snapShots[
-                                                                  (state.pageIndex == 1 || state.pageIndex == 0
-                                                                              ? 0
-                                                                              : state.pageIndex - 1) *
-                                                                          10 +
-                                                                      (index)];
+                                                              // final image = state
+                                                              //         .snapShots[
+                                                              //     (state.pageIndex == 1 || state.pageIndex == 0
+                                                              //                 ? 0
+                                                              //                 : state.pageIndex - 1) *
+                                                              //             10 +
+                                                              //         (index)];
                                                               final names = state
                                                                   .data[(state.pageIndex == 1 ||
                                                                               state.pageIndex ==
@@ -1025,16 +1027,21 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                               return imagesListWidget(
                                                                   onDownloadPressed:
                                                                       () {
-                                                                    _downloadImage(
-                                                                        data:
-                                                                            image,
-                                                                        downloadName:
-                                                                            data_time);
+                                                                    downloadImageFromWeb(
+                                                                      imageUrl:
+                                                                          "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
+
+                                                                      // downloadName:
+                                                                      //     data_time,
+                                                                    );
+                                                                    // _downloadImage(
+                                                                    //     data:
+                                                                    //         image,
+                                                                    //     downloadName:
+                                                                    //         data_time);
                                                                   },
                                                                   timeText:
                                                                       data_time,
-                                                                  image64:
-                                                                      image,
                                                                   imageSource:
                                                                       "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
                                                                   text: names);
@@ -1343,8 +1350,8 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                 const reloadTargetsData(
                                                     Employyyy: []));
                                             GroupSearchBloc.get(context).add(
-                                                const reloadSnapShots(
-                                                    snapyy: []));
+                                                const reloadPath(
+                                                    path_provided: ""));
                                             GroupSearchBloc.get(context).add(
                                                 const SearchForEmployeeByVideoEvent());
                                           },
@@ -1657,7 +1664,7 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                                             SizedBox(
                                                                               height: 100,
                                                                               child: Image.network(
-                                                                                "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/${employee.imagePath}",
+                                                                                "http:${RemoteDataSource.baseUrlWithoutPort}8000/${employee.imagePath}",
                                                                                 fit: BoxFit.cover,
                                                                               ),
                                                                             ),
@@ -1787,7 +1794,7 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  (state.snapShots.isNotEmpty)
+                                  (state.pathProvided.isNotEmpty)
                                       ? const Text(
                                           "Frames Where Targets Appeard in :",
                                           style: TextStyle(
@@ -1938,13 +1945,13 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                             itemBuilder:
                                                                 (context,
                                                                     index) {
-                                                              final image = state
-                                                                      .snapShots[
-                                                                  (state.pageIndex == 1 || state.pageIndex == 0
-                                                                              ? 0
-                                                                              : state.pageIndex - 1) *
-                                                                          10 +
-                                                                      (index)];
+                                                              // final image = state
+                                                              //         .snapShots[
+                                                              //     (state.pageIndex == 1 || state.pageIndex == 0
+                                                              //                 ? 0
+                                                              //                 : state.pageIndex - 1) *
+                                                              //             10 +
+                                                              //         (index)];
 
                                                               final names = state
                                                                   .data[(state.pageIndex == 1 ||
@@ -1966,16 +1973,23 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                               return imagesListWidget(
                                                                   onDownloadPressed:
                                                                       () {
-                                                                    _downloadImage(
-                                                                        data:
-                                                                            image,
-                                                                        downloadName:
-                                                                            data_time);
+                                                                    downloadImageFromWeb(
+                                                                      imageUrl:
+                                                                          "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
+
+                                                                      // downloadName:
+                                                                      //     data_time,
+                                                                    );
+                                                                    // _downloadImage(
+                                                                    //     data:
+                                                                    //         image,
+                                                                    //     downloadName:
+                                                                    //         data_time);
                                                                   },
                                                                   timeText:
                                                                       data_time,
-                                                                  image64:
-                                                                      image,
+                                                                  // image64:
+                                                                  //     image,
                                                                   imageSource:
                                                                       "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
                                                                   text: names);
@@ -2164,7 +2178,7 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
   //                           text: text, imageUrl: image64)));
   //             },
   //             child: Image.network(
-  //               "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/$imageSource",
+  //               "http:${RemoteDataSource.baseUrlWithoutPort}8000/$imageSource",
   //               // Images.profileImage,
   //               fit: BoxFit.cover,
   //             ),
@@ -2214,7 +2228,7 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
   // }
 
   Widget imagesListWidget({
-    required String image64,
+    //  String? image64,
     required String imageSource,
     required String text,
     required String timeText,
@@ -2238,11 +2252,13 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => FullScreenImageFromMemory(
-                            text: text, imageUrl: image64)));
+                        builder: (context) => FullScreenImageFromUrl(
+                            text: text,
+                            imageUrl:
+                                "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageSource}")));
               },
               child: Image.network(
-                "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/${imageSource}",
+                "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageSource}",
 
                 width: double.infinity,
                 height: double.infinity,
@@ -2316,42 +2332,42 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
 //     await WebImageDownloader.downloadImageFromUInt8List(uInt8List: uint8List);
 //   }
 // }
-  _downloadImage({required String data, String downloadName = 'image'}) async {
-    if (data.isNotEmpty) {
-      try {
-        final uint8List = _decodeBase64Image(base64Image: data);
-        // first we make a request to the url like you did
-        // in the android and ios version
-        // final http.Response r = await http.get(
-        //   Uri.parse(getPhotosServerLink(imageUrl)),
-        // );
+  // _downloadImage({required String data, String downloadName = 'image'}) async {
+  //   if (data.isNotEmpty) {
+  //     try {
+  //       final uint8List = _decodeBase64Image(base64Image: data);
+  //       // first we make a request to the url like you did
+  //       // in the android and ios version
+  //       // final http.Response r = await http.get(
+  //       //   Uri.parse(getPhotosServerLink(imageUrl)),
+  //       // );
 
-        // we get the bytes from the body
-        // final data = r.bodyBytes;
-        // and encode them to base64
-        final base64data = base64Encode(uint8List);
+  //       // we get the bytes from the body
+  //       // final data = r.bodyBytes;
+  //       // and encode them to base64
+  //       final base64data = base64Encode(uint8List);
 
-        // then we create and AnchorElement with the html package
-        final a =
-            html.AnchorElement(href: 'data:image/jpeg;base64,$base64data');
+  //       // then we create and AnchorElement with the html package
+  //       final a =
+  //           html.AnchorElement(href: 'data:image/jpeg;base64,$base64data');
 
-        // set the name of the file we want the image to get
-        // downloaded to
-        a.download = '$downloadName.jpg';
+  //       // set the name of the file we want the image to get
+  //       // downloaded to
+  //       a.download = '$downloadName.jpg';
 
-        // and we click the AnchorElement which downloads the image
-        a.click();
-        // finally we remove the AnchorElement
-        a.remove();
-      } catch (e) {
-        if (kDebugMode) {
-          print(e);
-        }
-      }
-    } else {
-      EasyLoading.showError('لا يوجد صورة');
-    }
-  }
+  //       // and we click the AnchorElement which downloads the image
+  //       a.click();
+  //       // finally we remove the AnchorElement
+  //       a.remove();
+  //     } catch (e) {
+  //       if (kDebugMode) {
+  //         print(e);
+  //       }
+  //     }
+  //   } else {
+  //     EasyLoading.showError('لا يوجد صورة');
+  //   }
+  // }
 
   Widget _contactUi({
     required String name,
@@ -2398,14 +2414,14 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                         builder: (context) => FullScreenImage(
                             text: name,
                             imageUrl:
-                                "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/$imagesrc"),
+                                "http:${RemoteDataSource.baseUrlWithoutPort}8000/$imagesrc"),
                       ),
                     );
                   },
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(6.0),
                     child: Image.network(
-                      "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/$imagesrc",
+                      "http:${RemoteDataSource.baseUrlWithoutPort}8000/$imagesrc",
                       // Images.profileImage,
                       fit: BoxFit.cover,
                     ),

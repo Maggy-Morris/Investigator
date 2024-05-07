@@ -243,6 +243,13 @@ class _SettingsState extends State<Settings> {
                                               index: index,
                                             ),
                                           );
+                                        } else if (value.isEmpty) {
+                                          SettingsBloc.get(context).add(
+                                            UpdateRoomsEvent(
+                                              checks: false,
+                                              // index: index,
+                                            ),
+                                          );
                                         }
                                       },
                                       decoration: const InputDecoration(
@@ -353,6 +360,13 @@ class _SettingsState extends State<Settings> {
                                 }
                                 SettingsBloc.get(context).add(
                                   const UpdateRooms(),
+                                );
+
+                                SettingsBloc.get(context).add(
+                                  const UpdateRoomsEvent(
+                                    checks: false,
+                                    // index: index,
+                                  ),
                                 );
                               },
                               child: const Text("Add The Rooms")),

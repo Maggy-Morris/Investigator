@@ -1751,7 +1751,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                             SizedBox(
                                                                               height: 100,
                                                                               child: Image.network(
-                                                                                "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/${employee.imagePath}",
+                                                                                "http:${RemoteDataSource.baseUrlWithoutPort}8000/${employee.imagePath}",
                                                                                 fit: BoxFit.cover,
                                                                               ),
                                                                             ),
@@ -1954,14 +1954,14 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                         builder: (context) => FullScreenImage(
                             text: name,
                             imageUrl:
-                                "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/$imagesrc"),
+                                "http:${RemoteDataSource.baseUrlWithoutPort}8000/$imagesrc"),
                       ),
                     );
                   },
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(6.0),
                     child: Image.network(
-                      "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/$imagesrc",
+                      "http:${RemoteDataSource.baseUrlWithoutPort}8000/$imagesrc",
                       // Images.profileImage,
                       fit: BoxFit.cover,
                     ),

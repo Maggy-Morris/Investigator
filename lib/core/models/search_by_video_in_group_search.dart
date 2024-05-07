@@ -9,10 +9,13 @@ class SearchByVideoInGroupSearch extends Equatable {
   int? response_count;
   List<Dataaa>? dataCards;
 
-  List<String>? snapshot_list;
+  // List<String>? snapshot_list;
 
   SearchByVideoInGroupSearch(
-      {this.global_path,this.response_count,this.timestamps, this.found, this.data, this.snapshot_list});
+      {this.global_path,this.response_count,this.timestamps, this.found, this.data
+      ,
+      //  this.snapshot_list
+       });
 
   SearchByVideoInGroupSearch.fromJson(Map<String, dynamic> json) {
     found = json['Found'];
@@ -28,7 +31,7 @@ class SearchByVideoInGroupSearch extends Equatable {
         dataCards?.add(Dataaa.fromJson(v));
       });
     }
-    snapshot_list = json['snapshot_list'].cast<String>();
+    // snapshot_list = json['snapshot_list'].cast<String>();
   }
 
   Map<String, dynamic> toJson() {
@@ -45,12 +48,14 @@ class SearchByVideoInGroupSearch extends Equatable {
     data['timestamps'] = timestamps;
 
     data['data'] = this.data;
-    data['snapshot_list'] = snapshot_list;
+    // data['snapshot_list'] = snapshot_list;
     return data;
   }
 
   @override
-  List<Object?> get props => [global_path,response_count,data, found, snapshot_list, timestamps];
+  List<Object?> get props => [global_path,response_count,data, found,
+  //  snapshot_list,
+    timestamps];
 }
 
 class Dataaa {

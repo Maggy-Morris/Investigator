@@ -621,7 +621,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                                                       SizedBox(
                                                                                         height: 100,
                                                                                         child: Image.network(
-                                                                                          "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/${employee.imagePath}",
+                                                                                          "http:${RemoteDataSource.baseUrlWithoutPort}8000/${employee.imagePath}",
                                                                                           fit: BoxFit.cover,
                                                                                         ),
                                                                                       ),
@@ -1224,7 +1224,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                                                       SizedBox(
                                                                                         height: 100,
                                                                                         child: Image.network(
-                                                                                          "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/${employee.imagePath}",
+                                                                                          "http:${RemoteDataSource.baseUrlWithoutPort}8000/${employee.imagePath}",
                                                                                           fit: BoxFit.cover,
                                                                                         ),
                                                                                       ),
@@ -1995,14 +1995,14 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                         builder: (context) => FullScreenImage(
                             text: name,
                             imageUrl:
-                                "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/$imagesrc"),
+                                "http:${RemoteDataSource.baseUrlWithoutPort}8000/$imagesrc"),
                       ),
                     );
                   },
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(6.0),
                     child: Image.network(
-                      "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/$imagesrc",
+                      "http:${RemoteDataSource.baseUrlWithoutPort}8000/$imagesrc",
                       // Images.profileImage,
                       fit: BoxFit.cover,
                     ),

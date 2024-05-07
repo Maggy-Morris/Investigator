@@ -153,6 +153,17 @@ class reloadSnapShots extends GroupSearchEvent {
   List<Object?> get props => [snapyy];
 }
 
+
+
+class reloadPath extends GroupSearchEvent {
+  final String path_provided;
+
+  const reloadPath({required this.path_provided});
+
+  @override
+  List<Object?> get props => [path_provided];
+}
+
 class GetAccuracy extends GroupSearchEvent {
   final String accuracy;
 

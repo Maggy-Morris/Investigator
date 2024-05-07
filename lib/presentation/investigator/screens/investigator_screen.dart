@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:Investigator/core/widgets/FullImageURL.dart';
 import 'package:camera/camera.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -24,6 +25,7 @@ import 'dart:html' as html;
 import '../../../authentication/authentication_repository.dart';
 import '../../../core/remote_provider/remote_data_source.dart';
 import '../../../core/widgets/fullscreenImage.dart';
+import '../../../core/widgets/image_downloader.dart';
 import '../../../core/widgets/persons_per_widget.dart';
 import '../../camera_controller/cubit/photo_app_cubit.dart';
 import '../bloc/home_bloc.dart';
@@ -100,7 +102,6 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                         Text(
                           "Search for your Employee".tr(),
                           style: const TextStyle(
-
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                               color: AppColors.white),
@@ -444,9 +445,13 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                             HomeBloc.get(context).add(
                                                 const EditPageCount(
                                                     pageCount: 0));
+
                                             HomeBloc.get(context).add(
-                                                const reloadSnapShots(
-                                                    snapyy: []));
+                                                const reloadPath(
+                                                    path_provided: ""));
+                                            // HomeBloc.get(context).add(
+                                            //     const reloadSnapShots(
+                                            //         snapyy: []));
                                             HomeBloc.get(context).add(
                                                 const SearchForEmployeeByVideoEvent());
                                           },
@@ -538,12 +543,11 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                             shrinkWrap: true,
                                                             physics:
                                                                 const NeverScrollableScrollPhysics(),
-                                                              itemCount: state
+                                                            itemCount: state
                                                                         .pageCount !=
                                                                     0
-                                                                ? (state.pageCount <10)
-                                                                           
-                                                                               
+                                                                ? (state.pageCount <
+                                                                        10)
                                                                     ? (state.pageCount %
                                                                         10)
                                                                     : (state.pageIndex ==
@@ -606,13 +610,13 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                             itemBuilder:
                                                                 (context,
                                                                     index) {
-                                                              final image = state
-                                                                      .snapShots[
-                                                                  (state.pageIndex == 1 || state.pageIndex == 0
-                                                                              ? 0
-                                                                              : state.pageIndex - 1) *
-                                                                          10 +
-                                                                      (index)];
+                                                              // final image = state
+                                                              //         .snapShots[
+                                                              //     (state.pageIndex == 1 || state.pageIndex == 0
+                                                              //                 ? 0
+                                                              //                 : state.pageIndex - 1) *
+                                                              //             10 +
+                                                              //         (index)];
 
                                                               final data_time = state
                                                                   .data[(state.pageIndex == 1 ||
@@ -626,16 +630,21 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                               return imagesListWidget(
                                                                   onDownloadPressed:
                                                                       () {
-                                                                    _downloadImage(
-                                                                        data:
-                                                                            image,
-                                                                        downloadName:
-                                                                            data_time);
+                                                                    downloadImageFromWeb(
+                                                                      imageUrl:
+                                                                          "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
+
+                                                                      // downloadName:
+                                                                      //     data_time,
+                                                                    );
+                                                                    // _downloadImage(
+                                                                    //     data:
+                                                                    //         image,
+                                                                    //     downloadName:
+                                                                    //         data_time);
                                                                   },
                                                                   imageSource:
                                                                       "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
-                                                                  image64:
-                                                                      image,
                                                                   text:
                                                                       data_time);
                                                             },
@@ -1071,9 +1080,14 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                             HomeBloc.get(context).add(
                                                 const EditPageCount(
                                                     pageCount: 0));
+
                                             HomeBloc.get(context).add(
-                                                const reloadSnapShots(
-                                                    snapyy: []));
+                                                const reloadPath(
+                                                    path_provided: ""));
+
+                                            // HomeBloc.get(context).add(
+                                            //     const reloadSnapShots(
+                                            //         snapyy: []));
                                             HomeBloc.get(context).add(
                                                 const SearchForEmployeeByVideoEvent());
                                           },
@@ -1165,12 +1179,11 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                             shrinkWrap: true,
                                                             physics:
                                                                 const NeverScrollableScrollPhysics(),
-                                                             itemCount: state
+                                                            itemCount: state
                                                                         .pageCount !=
                                                                     0
-                                                                ? (state.pageCount <10)
-                                                                           
-                                                                               
+                                                                ? (state.pageCount <
+                                                                        10)
                                                                     ? (state.pageCount %
                                                                         10)
                                                                     : (state.pageIndex ==
@@ -1233,9 +1246,9 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                             itemBuilder:
                                                                 (context,
                                                                     index) {
-                                                              final image =
-                                                                  state.snapShots[
-                                                                      index];
+                                                              // final image =
+                                                              //     state.snapShots[
+                                                              //         index];
 
                                                               final data_time =
                                                                   state.data[
@@ -1243,16 +1256,21 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                               return imagesListWidget(
                                                                   onDownloadPressed:
                                                                       () {
-                                                                    _downloadImage(
-                                                                        data:
-                                                                            image,
-                                                                        downloadName:
-                                                                            data_time);
+                                                                    downloadImageFromWeb(
+                                                                      imageUrl:
+                                                                          "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
+
+                                                                      // downloadName:
+                                                                      //     data_time,
+                                                                    );
+                                                                    // _downloadImage(
+                                                                    //     data:
+                                                                    //         image,
+                                                                    //     downloadName:
+                                                                    //         data_time);
                                                                   },
                                                                   imageSource:
                                                                       "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
-                                                                  image64:
-                                                                      image,
                                                                   text:
                                                                       data_time);
                                                             },
@@ -1417,7 +1435,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
 ////////////////////////////////////////////////////////////////////////////////
 
   Widget imagesListWidget({
-    required String image64,
+    // required String image64,
     required String imageSource,
     required String text,
     required VoidCallback onDownloadPressed,
@@ -1438,11 +1456,13 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => FullScreenImageFromMemory(
-                            text: text, imageUrl: image64)));
+                        builder: (context) => FullScreenImageFromUrl(
+                            text: text,
+                            imageUrl:
+                                "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageSource}")));
               },
               child: Image.network(
-                "http:${RemoteDataSource.baseUrlWithoutPortForImages}8000/${imageSource}",
+                "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageSource}",
                 width: double.infinity,
                 height: double.infinity,
                 // Images.profileImage,
@@ -1493,40 +1513,40 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
     return Uint8List.fromList(bytes);
   }
 
-  _downloadImage({required String data, String downloadName = 'image'}) async {
-    if (data.isNotEmpty) {
-      try {
-        final uint8List = _decodeBase64Image(base64Image: data);
-        // first we make a request to the url like you did
-        // in the android and ios version
-        // final http.Response r = await http.get(
-        //   Uri.parse(getPhotosServerLink(imageUrl)),
-        // );
+  // _downloadImage({required String data, String downloadName = 'image'}) async {
+  //   if (data.isNotEmpty) {
+  //     try {
+  //       final uint8List = _decodeBase64Image(base64Image: data);
+  //       // first we make a request to the url like you did
+  //       // in the android and ios version
+  //       // final http.Response r = await http.get(
+  //       //   Uri.parse(getPhotosServerLink(imageUrl)),
+  //       // );
 
-        // we get the bytes from the body
-        // final data = r.bodyBytes;
-        // and encode them to base64
-        final base64data = base64Encode(uint8List);
+  //       // we get the bytes from the body
+  //       // final data = r.bodyBytes;
+  //       // and encode them to base64
+  //       final base64data = base64Encode(uint8List);
 
-        // then we create and AnchorElement with the html package
-        final a =
-            html.AnchorElement(href: 'data:image/jpeg;base64,$base64data');
+  //       // then we create and AnchorElement with the html package
+  //       final a =
+  //           html.AnchorElement(href: 'data:image/jpeg;base64,$base64data');
 
-        // set the name of the file we want the image to get
-        // downloaded to
-        a.download = '$downloadName.jpg';
+  //       // set the name of the file we want the image to get
+  //       // downloaded to
+  //       a.download = '$downloadName.jpg';
 
-        // and we click the AnchorElement which downloads the image
-        a.click();
-        // finally we remove the AnchorElement
-        a.remove();
-      } catch (e) {
-        if (kDebugMode) {
-          print(e);
-        }
-      }
-    } else {
-      EasyLoading.showError('لا يوجد صورة');
-    }
-  }
+  //       // and we click the AnchorElement which downloads the image
+  //       a.click();
+  //       // finally we remove the AnchorElement
+  //       a.remove();
+  //     } catch (e) {
+  //       if (kDebugMode) {
+  //         print(e);
+  //       }
+  //     }
+  //   } else {
+  //     EasyLoading.showError('لا يوجد صورة');
+  //   }
+  // }
 }

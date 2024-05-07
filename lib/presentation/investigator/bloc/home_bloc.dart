@@ -29,6 +29,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     // /// Add New Employee
 
     on<reloadSnapShots>(_onreloadSnapShots);
+        on<reloadPath>(_onreloadPath);
+
 
     on<GetAccuracy>(_onGetAccuracy);
 
@@ -98,6 +100,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(state.copyWith(
         snapShots: event.snapyy, submission: Submission.editing));
   }
+
+
+    _onreloadPath(reloadPath event, Emitter<HomeState> emit) async {
+    emit(state.copyWith(
+        pathProvided: event.path_provided, submission: Submission.editing));
+  }
+
 
   _onAddCompanyName(AddCompanyName event, Emitter<HomeState> emit) async {
     emit(state.copyWith(
@@ -222,7 +231,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           pageCount: value.response_count,
           submission: Submission.success,
           data: value.data,
-          snapShots: value.snapshot_list,
+          // snapShots: value.snapshot_list,
         ));
       } else if (value.found == false) {
         emit(state.copyWith(

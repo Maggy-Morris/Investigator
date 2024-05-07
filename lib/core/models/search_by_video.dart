@@ -8,9 +8,11 @@ class SearchByVideoAndImage extends Equatable {
   int? response_count;
 
 
-  List<String>? snapshot_list;
+  // List<String>? snapshot_list;
 
-  SearchByVideoAndImage({this.global_path,this.response_count,this.found, this.data, this.snapshot_list});
+  SearchByVideoAndImage({this.global_path,this.response_count,this.found, this.data,
+  //  this.snapshot_list
+   });
 
   SearchByVideoAndImage.fromJson(Map<String, dynamic> json) {
     found = json['Found'];
@@ -20,7 +22,7 @@ class SearchByVideoAndImage extends Equatable {
 
 
     data = json['data'].cast<String>();
-    snapshot_list = json['snapshot_list'].cast<String>();
+    // snapshot_list = json['snapshot_list'].cast<String>();
   }
 
   Map<String, dynamic> toJson() {
@@ -31,12 +33,14 @@ class SearchByVideoAndImage extends Equatable {
 
 
     data['data'] = this.data;
-    data['snapshot_list'] = snapshot_list;
+    // data['snapshot_list'] = snapshot_list;
     return data;
   }
 
   @override
-  List<Object?> get props => [global_path,response_count,data, found, snapshot_list];
+  List<Object?> get props => [global_path,response_count,data, found, 
+  // snapshot_list
+  ];
 }
 
 

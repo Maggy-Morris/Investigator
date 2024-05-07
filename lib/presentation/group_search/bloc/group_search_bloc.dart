@@ -29,6 +29,7 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
 
     // /// Add New Employee
     on<reloadSnapShots>(_onreloadSnapShots);
+    on<reloadPath>(_onreloadPath);
 
     on<reloadTargetsData>(_onreloadTargetsData);
 
@@ -61,7 +62,7 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
     on<UpdateEmployeeEvent>(_onUpdateEmployeeEvent);
 
     on<EditPageNumber>(_onEditPageNumber);
-        on<EditPageCount>(_onEditPageCount);
+    on<EditPageCount>(_onEditPageCount);
 
     // on<GetPaginatedFramesEvent>(_onGetPaginatedFramesEvent);
   }
@@ -131,6 +132,11 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
       reloadSnapShots event, Emitter<GroupSearchState> emit) async {
     emit(state.copyWith(
         snapShots: event.snapyy, submission: Submission.editing));
+  }
+
+  _onreloadPath(reloadPath event, Emitter<GroupSearchState> emit) async {
+    emit(state.copyWith(
+        pathProvided: event.path_provided, submission: Submission.editing));
   }
 
   _onAddpersonName(AddpersonName event, Emitter<GroupSearchState> emit) async {
@@ -321,7 +327,7 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
           pathProvided: value.global_path,
           pageCount: value.response_count,
           timestamps: value.timestamps,
-          snapShots: value.snapshot_list,
+          // snapShots: value.snapshot_list,
           employeeNamesList: value.dataCards,
         ));
       } else if (value.found == false) {
@@ -342,12 +348,9 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
     // add(const GetEmployeeNamesEvent());
   }
 
-  _onEditPageCount
-   (
-      EditPageCount event, Emitter<GroupSearchState> emit) async {
+  _onEditPageCount(EditPageCount event, Emitter<GroupSearchState> emit) async {
     emit(state.copyWith(
         pageCount: event.pageCount, submission: Submission.editing));
-
   }
 
   ///paginated frames handling
