@@ -15,7 +15,6 @@ class FullScreenImageFromUrl extends StatelessWidget {
       appBar: AppBar(
         iconTheme: const IconThemeData(
             color: Colors.white), // Set back button color to white
-        backgroundColor: Colors.blue, // Customize app bar if needed
         title: Text(
           text,
           style: const TextStyle(color: Colors.white),

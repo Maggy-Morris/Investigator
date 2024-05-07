@@ -426,6 +426,7 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                           )),
                                     ),
 
+                            
                               (state.submission == Submission.noDataFound)
                                   ? const Text(
                                       "No Data Found",
@@ -2252,7 +2253,7 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => FullScreenImageFromUrl(
+                        builder: (context) => FullScreenImage(
                             text: text,
                             imageUrl:
                                 "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageSource}")));

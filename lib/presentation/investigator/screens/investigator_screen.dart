@@ -1456,7 +1456,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => FullScreenImageFromUrl(
+                        builder: (context) => FullScreenImage(
                             text: text,
                             imageUrl:
                                 "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageSource}")));

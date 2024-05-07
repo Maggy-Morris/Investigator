@@ -16,7 +16,7 @@ class FullScreenImage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.grey2,
       appBar: AppBar(
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
             color: Colors.white), // Set back button color to white
 
         backgroundColor: AppColors.backGround,
@@ -30,7 +30,7 @@ class FullScreenImage extends StatelessWidget {
         child: Image.network(
           imageUrl,
           fit: BoxFit.cover,
-          color: Colors.transparent,
+          // color: Colors.transparent,
           // You can add more customization to the image widget as needed
         ),
       ),
@@ -64,7 +64,7 @@ class FullScreenImageFromMemory extends StatelessWidget {
         child: Image.memory(
           _decodeBase64Image(base64Image: imageUrl),
           fit: BoxFit.cover,
-          color: Colors.transparent,
+          // color: Colors.transparent,
           // You can add more customization to the image widget as needed
         ),
       ),
