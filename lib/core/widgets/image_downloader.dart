@@ -71,13 +71,13 @@ downloadImageFromWeb({
           anchor.remove();
         } else {
           if (kDebugMode) {
-            print('Failed to download image: ${response.statusCode}');
+            debugPrint('Failed to download image: ${response.statusCode}');
           }
           EasyLoading.showError('فشل تنزيل الصورة');
         }
       } catch (e) {
         if (kDebugMode) {
-          print('Error downloading image: $e');
+          debugPrint('Error downloading image: $e');
         }
         EasyLoading.showError('حدث خطأ أثناء تنزيل الصورة');
       }

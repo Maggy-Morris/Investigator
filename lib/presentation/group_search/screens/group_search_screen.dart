@@ -2248,7 +2248,7 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
           children: [
             GestureDetector(
               onTap: () {
-                print(imageSource);
+                debugPrint(imageSource);
 
                 Navigator.push(
                     context,

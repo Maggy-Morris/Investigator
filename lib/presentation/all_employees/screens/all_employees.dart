@@ -1372,7 +1372,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                               );
                                             }).catchError((error) {
                                           // Handle error
-                                          print("Error loading image: $error");
+                                          debugPrint("Error loading image: $error");
                                         });
                                       },
                                     );

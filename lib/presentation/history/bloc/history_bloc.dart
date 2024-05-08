@@ -128,7 +128,7 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
             AuthenticationRepository.instance.currentUser.companyName?.first,
       )
           .then((value) {
-        print(value.paths);
+        // print(value.paths);
         emit(state.copyWith(
             allPathes: value.paths, submission: Submission.hasData));
       });
