@@ -1,41 +1,72 @@
-class pathes_model {
-  List<Paths>? paths;
+import 'dart:convert';
 
-  pathes_model({this.paths});
+class pathes_model {
+  PathForImages? data;
+
+  pathes_model({this.data});
 
   pathes_model.fromJson(Map<String, dynamic> json) {
-    if (json['paths'] != null) {
-      paths = <Paths>[];
-      json['paths'].forEach((v) {
-        paths!.add(Paths.fromJson(v));
-      });
-    }
+    data =
+        json['data'] != null ? new PathForImages.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    if (paths != null) {
-      data['paths'] = paths!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
     }
     return data;
   }
 }
 
-class Paths {
-  int? count;
-  String? path;
+// class PathForImages {
+//   final int? count;
+//   final  String? filePath;
+//   final List<String>? timestamp;
 
-  Paths({this.count, this.path});
+//   PathForImages({this.count, this.filePath, this.timestamp});
 
-  Paths.fromJson(Map<String, dynamic> json) {
-    count = json['count'];
-    path = json['path'];
-  }
+//   PathForImages.fromJson(Map<String, dynamic> json) {
+//     count = json['count'];
+//     filePath = json['file_path'];
+//     timestamp = json['timestamp'].cast<String>();
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = Map<String, dynamic>();
+//     data['count'] = count;
+//     data['file_path'] = filePath;
+//     data['timestamp'] = timestamp;
+//     return data;
+//   }
+// }
+
+class PathForImages {
+  final int? count;
+  final String? filePath;
+  final List<String>? timestamp;
+
+  PathForImages({required this.count, required this.filePath, required this.timestamp});
+
+  PathForImages.fromJson(Map<String, dynamic> json)
+      : count = json['count'],
+        filePath = json['file_path'],
+        timestamp = json['timestamp'].cast<String>();
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['count'] = count;
-    data['path'] = path;
+    data['file_path'] = filePath;
+    data['timestamp'] = timestamp;
     return data;
+  }
+
+  @override
+  String toString() {
+    return jsonEncode(toJson());
+  }
+
+  static PathForImages fromString(String jsonString) {
+    return PathForImages.fromJson(jsonDecode(jsonString));
   }
 }

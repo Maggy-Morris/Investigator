@@ -1372,7 +1372,8 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                               );
                                             }).catchError((error) {
                                           // Handle error
-                                          debugPrint("Error loading image: $error");
+                                          debugPrint(
+                                              "Error loading image: $error");
                                         });
                                       },
                                     );
@@ -1415,7 +1416,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                       : state.filterCase,
                                   onChanged: (value) {
                                     AllEmployeesBloc.get(context)
-                                        .add(const EditPageNumber(
+                                        .add(const EditPager(
                                       pageIndex: 1,
                                     ));
                                     // AllEmployeesBloc.get(context)

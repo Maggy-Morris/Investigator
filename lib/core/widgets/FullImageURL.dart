@@ -1,3 +1,4 @@
+import 'package:Investigator/core/resources/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class FullScreenImageFromUrl extends StatelessWidget {
@@ -11,8 +12,10 @@ class FullScreenImageFromUrl extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey2,
       appBar: AppBar(
+        backgroundColor: AppColors.backGround,
+
         iconTheme: const IconThemeData(
             color: Colors.white), // Set back button color to white
         title: Text(
@@ -42,7 +45,6 @@ class FullScreenImageFromUrl extends StatelessWidget {
             return Text('Failed to load image');
           },
           fit: BoxFit.cover,
-          color: Colors.transparent,
           // You can add more customization to the image widget as needed
         ),
       ),

@@ -1,19 +1,17 @@
-import 'dart:typed_data';
-
 import 'package:Investigator/core/remote_provider/remote_data_source.dart';
+import 'package:Investigator/core/widgets/persons_per_widget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:chewie/chewie.dart';
 
 import 'package:routemaster/routemaster.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../../core/loader/loading_indicator.dart';
 import '../../../core/resources/app_colors.dart';
 import '../../../core/utils/responsive.dart';
-import '../../../core/widgets/badge_builder.dart';
+import '../../../core/widgets/FullImageURL.dart';
 import '../../../core/widgets/sizedbox.dart';
 // import '../../standard_layout/bloc/standard_layout_cubit.dart';
 import '../../standard_layout/screens/standard_layout.dart';
@@ -55,6 +53,23 @@ class AllHistoryScreen extends StatelessWidget {
                             ),
                           ),
                         ],
+                      ),
+                    ),
+                    FxBox.h24,
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 15.0),
+                      child: CustomPagination(
+                        // persons: state
+                        //     .employeeNamesList, // Pass the list of data
+                        pageCount: state.pageCount, // Pass the page count
+                        onPageChanged: (int index) async {
+                          ///////////////////////////
+
+                          HistoryBloc.get(context)
+                              .add(EditPageNumber(pageIndex: index));
+
+                          //////////////////////////////
+                        },
                       ),
                     ),
                     FxBox.h24,
@@ -140,101 +155,102 @@ class AllHistoryScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              FxBox.h10,
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Flexible(
-                    child: Text(
-                      name,
-                      maxLines: 3,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  Tooltip(
-                    message: "View Full History For This Request",
-                    child: IconButton(
-                        onPressed: onPressed,
-                        icon: const Icon(
-                          Icons.folder_shared_rounded,
-                          color: Color.fromARGB(255, 60, 180, 134),
-                          size: 35,
-                        )),
-                  ),
-                ],
-              ),
-
-              Flexible(
-                child: Text(
-                  date,
-                  maxLines: 3,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-
-              FxBox.h10,
-              Flexible(
-                child: Text(
-                  time,
-                  maxLines: 3,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              // FxBox.h10,
-              // getCardBadgesRow(badgesList: models ?? []),
-              FxBox.h10,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    height: 200,
-                    width: 200,
-                    child: Card(
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                  Column(
+                    children: [
+                      FxBox.h10,
+                      Text(
+                        name,
+                        maxLines: 3,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
                         ),
-                        child: _pickVideoWidget(
-                            urlFromHistory:
-                                "http:${RemoteDataSource.baseUrlWithoutPort}8000/${urlFromHistory.split("Image_Database/")[1]}")),
+                      ),
+                      FxBox.h10,
+                      Text(
+                        date,
+                        maxLines: 3,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      FxBox.h10,
+                      Text(
+                        time,
+                        maxLines: 3,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
                   ),
                   (name != "db search")
                       ? SizedBox(
-                          height: 200,
-                          width: 200,
+                          height: 100,
+                          width: 100,
                           child: Card(
                             elevation: 4,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(15),
                             ),
                             child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(15),
                               child: InkWell(
                                 onTap: () {
                                   showDialog(
                                       context: context,
                                       builder: (ctx) {
                                         return AlertDialog(
-                                            title: Text("Images Searched With"),
-                                            content: SingleChildScrollView(
-                                                // child: GridView(gridDelegate: gridDelegate),
+                                            title: const Text(
+                                                "Images Searched With"),
+                                            content:
+                                                // SingleChildScrollView(
+                                                //   child:
+                                                SizedBox(
+                                              width: 400,
+                                              height: 400,
+                                              child: GridView.builder(
+                                                gridDelegate:
+                                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                                  crossAxisCount:
+                                                      2, // Number of columns in the grid
+                                                  crossAxisSpacing:
+                                                      10, // Spacing between columns
+                                                  mainAxisSpacing:
+                                                      10, // Spacing between rows
                                                 ),
+                                                itemCount: images?.length ?? 0,
+                                                itemBuilder: (context, index) {
+                                                  // Display images from the URL in a grid
+                                                  return GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  FullScreenImageFromUrl(
+                                                                    text: name,
+                                                                    imageUrl:
+                                                                        "http:${RemoteDataSource.baseUrlWithoutPort}8000/${images[index].split("Image_Database/")[1]}",
+                                                                  )));
+                                                    },
+                                                    child: Image.network(
+                                                      "http:${RemoteDataSource.baseUrlWithoutPort}8000/${images![index].split("Image_Database/")[1]}",
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                            // ),
                                             actions: [
                                               TextButton(
                                                 onPressed: () {
-                                                  // AllEmployeesBloc.get(context).add(RadioButtonChanged(
-                                                  //   selectedOption: "",
-                                                  // ));
-
                                                   Navigator.of(context)
                                                       .pop(); // Close the dialog
                                                 },
@@ -274,41 +290,6 @@ class AllHistoryScreen extends StatelessWidget {
                                               scrollDirection: Axis.horizontal,
                                             ),
                                           ),
-                                        if (images?.isNotEmpty == true)
-                                          // Left Button
-                                          Positioned(
-                                            left: 0,
-                                            top: 110,
-                                            bottom: 110,
-                                            child: IconButton(
-                                              icon: const Icon(
-                                                Icons.arrow_left,
-                                                size: 35,
-                                              ),
-                                              onPressed: () {
-                                                // Scroll the carousel to the left
-                                                _carouselController
-                                                    .previousPage();
-                                              },
-                                            ),
-                                          ),
-                                        if (images?.isNotEmpty == true)
-                                          // Right Button
-                                          Positioned(
-                                            right: 0,
-                                            top: 110,
-                                            bottom: 110,
-                                            child: IconButton(
-                                              icon: const Icon(
-                                                Icons.arrow_right,
-                                                size: 35,
-                                              ),
-                                              onPressed: () {
-                                                // Scroll the carousel to the right
-                                                _carouselController.nextPage();
-                                              },
-                                            ),
-                                          ),
                                       ],
                                     ),
                                   ],
@@ -317,16 +298,36 @@ class AllHistoryScreen extends StatelessWidget {
                             ),
                           ),
                         )
-                      : SizedBox(),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(left: 50.0),
-                  //   child: SizedBox(
-                  //     width: 50,
-                  //     height: 50,
-                  //     child: ElevatedButton(onPressed: () {}, child: Text("S")),
-                  //   ),
-                  // )
+                      : const SizedBox(),
+                  Tooltip(
+                    message: "View Full History For This Request",
+                    child: IconButton(
+                        onPressed: onPressed,
+                        icon: const Icon(
+                          Icons.folder_shared_rounded,
+                          color: Color.fromARGB(255, 60, 180, 134),
+                          size: 35,
+                        )),
+                  ),
                 ],
+              ),
+
+              // FxBox.h10,
+              // getCardBadgesRow(badgesList: models ?? []),
+              FxBox.h10,
+              Center(
+                child: SizedBox(
+                  height: 250,
+                  width: 400,
+                  child: Card(
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: _buildVideoPlayerWidget(
+                          // urlFromHistory:
+                          "http:${RemoteDataSource.baseUrlWithoutPort}8000/${urlFromHistory.split("Image_Database/")[1]}")),
+                ),
               ),
             ],
           ),
@@ -346,12 +347,45 @@ class AllHistoryScreen extends StatelessWidget {
     }
 
     if (_controller != null) {
-      return AspectRatio(
-        aspectRatio: _controller.value.aspectRatio,
-        child: VideoPlayer(_controller),
-      );
+      return Stack(children: [
+        AspectRatio(
+            aspectRatio: _controller.value.aspectRatio,
+            child: VideoPlayer(_controller)),
+        Center(
+          child: IconButton(
+              icon: _controller.value.isPlaying
+                  ? const Icon(Icons.pause)
+                  : const Icon(Icons.play_arrow),
+              onPressed: () {
+                _controller!.value.isPlaying
+                    ? _controller.pause()
+                    : _controller.play();
+              }),
+        ),
+        VideoProgressIndicator(
+          _controller,
+          allowScrubbing: true,
+          padding: const EdgeInsets.all(10),
+        ),
+      ]);
     } else {
       return const SizedBox(); // Return an empty SizedBox if no video controller is available
     }
+  }
+
+  Widget _buildVideoPlayerWidget(String videoUrl) {
+    final videoPlayerController = VideoPlayerController.network(videoUrl);
+    final chewieController = ChewieController(
+      // aspectRatio: videoPlayerController.value.aspectRatio,
+      videoPlayerController: videoPlayerController,
+      autoPlay: false,
+      // startAt: Duration(seconds: 1),
+      autoInitialize: true,
+      looping: true,
+    );
+
+    return Chewie(
+      controller: chewieController,
+    );
   }
 }

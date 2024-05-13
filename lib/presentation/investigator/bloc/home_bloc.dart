@@ -29,8 +29,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     // /// Add New Employee
 
     on<reloadSnapShots>(_onreloadSnapShots);
-        on<reloadPath>(_onreloadPath);
-
+    on<reloadPath>(_onreloadPath);
 
     on<GetAccuracy>(_onGetAccuracy);
 
@@ -50,7 +49,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<ImageToSearchForEmployee>(_onImageToSearchForEmployee);
     on<EditPageNumber>(_onEditPageNumber);
     // on<GetPaginatedFramesEvent>(_onGetPaginatedFramesEvent);
-        on<EditPageCount>(_onEditPageCount);
+    on<EditPageCount>(_onEditPageCount);
+    on<SetTimeDuration>(_onSetTimeDuration);
 
     // on<DeletePersonByNameEvent>(_onDeletePersonByNameEvent);
     on<DeletePersonByIdEvent>(_onDeletePersonByIdEvent);
@@ -64,6 +64,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   //   add(const GetModelsName());
   // }
 
+  _onSetTimeDuration(SetTimeDuration event, Emitter<HomeState> emit) async {
+    emit(state.copyWith(
+        timeDuration: event.timeDuration, submission: Submission.editing));
+
+    // add(const GetEmployeeNamesEvent());
+  }
 
   _onEditPageNumber(EditPageNumber event, Emitter<HomeState> emit) async {
     emit(state.copyWith(
@@ -72,13 +78,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     // add(const GetEmployeeNamesEvent());
   }
 
- _onEditPageCount
-   (
-      EditPageCount event, Emitter<HomeState> emit) async {
+  _onEditPageCount(EditPageCount event, Emitter<HomeState> emit) async {
     emit(state.copyWith(
         pageCount: event.pageCount, submission: Submission.editing));
-
   }
+
   _onImageToSearchForEmployee(
       ImageToSearchForEmployee event, Emitter<HomeState> emit) async {
     emit(state.copyWith(
@@ -101,12 +105,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         snapShots: event.snapyy, submission: Submission.editing));
   }
 
-
-    _onreloadPath(reloadPath event, Emitter<HomeState> emit) async {
+  _onreloadPath(reloadPath event, Emitter<HomeState> emit) async {
     emit(state.copyWith(
         pathProvided: event.path_provided, submission: Submission.editing));
   }
-
 
   _onAddCompanyName(AddCompanyName event, Emitter<HomeState> emit) async {
     emit(state.copyWith(
@@ -256,11 +258,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   //           state.pageIndex == 0 ? state.pageIndex + 1 : state.pageIndex,
   //     );
 
-      // if (state.pageCount == 0) {
-      //   emit(state.copyWith(
-      //     pageCount: employeeModel.nPages,
-      //   ));
-      // }
+  // if (state.pageCount == 0) {
+  //   emit(state.copyWith(
+  //     pageCount: employeeModel.nPages,
+  //   ));
+  // }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //     if (employeeModel.data!.isNotEmpty) {
   //       emit(state.copyWith(

@@ -15,6 +15,7 @@ import '../models/call_back_model.dart';
 import '../models/dashboard_models.dart';
 import '../models/delete_model.dart';
 import '../models/employee_model.dart';
+import '../models/history_screen_model.dart';
 import '../models/search_by_image_model.dart';
 import '../models/search_by_video_in_group_search.dart';
 import '../models/sigup_model.dart';
@@ -564,114 +565,44 @@ class RemoteProvider {
     }
   }
 
-  // Future<List<GetAllCameraCountPerHour>>
-  //     getAllCamerasCountsPerHourForDashboard({
-  //   required String cameraName,
-  //   // required String startDay,
-  //   // required String endDay,
-  //   // required String day,
-  //   // required String startMonth,
-  //   // required String endMonth,
-  //   // required String month,
-  //   // required String startYear,
-  //   // required String endYear,
-  //   // required String year,
-  //   // required String hour,
-  //   // required String minute,
-  // }) async {
-  //   Map<String, String> body = {};
-
-  //   if (cameraName.isNotEmpty) {
-  //     body["cameraname"] = cameraName;
-  //   }
-
-  //   // if (minute.isNotEmpty) {
-  //   //   body["minute"] = minute;
-  //   // }
-
-  //   // if (hour.isNotEmpty) {
-  //   //   body["hour"] = hour;
-  //   // }
-  //   // if (startDay.isNotEmpty) {
-  //   //   body["start_day"] = startDay;
-  //   // }
-  //   // if (endDay.isNotEmpty) {
-  //   //   body["end_day"] = endDay;
-  //   // }
-  //   // if (day.isNotEmpty) {
-  //   //   body["day"] = day;
-  //   // }
-  //   // if (startMonth.isNotEmpty) {
-  //   //   body["start_month"] = startMonth;
-  //   // }
-
-  //   // if (endMonth.isNotEmpty) {
-  //   //   body["end_month"] = endMonth;
-  //   // }
-  //   // if (month.isNotEmpty) {
-  //   //   body["month"] = month;
-  //   // }
-  //   // if (startYear.isNotEmpty) {
-  //   //   body["start_year"] = startYear;
-  //   // }
-  //   // if (endYear.isNotEmpty) {
-  //   //   body["end_year"] = endYear;
-  //   // }
-  //   // if (year.isNotEmpty) {
-  //   //   body["year"] = year;
-  //   // }
-
-  //   try {
-  //     List<dynamic> callBack = await RemoteDataSource()
-  //         .postWithFile(endPoint: "/allmodelsstatistics", body: body
-  //             //     {
-  //             //   "cameraname": cameraName,
-  //             //   "day": "19",
-  //             //   "month": "2",
-  //             //   "year": "2024",
-  //             // }
-  //             );
-  //     if (callBack.isNotEmpty) {
-  //       debugPrint("0-0-0-0$callBack");
-  //       List<GetAllCameraCountPerHour> callbackList = [];
-  //       for (var element in callBack) {
-  //         callbackList.add(GetAllCameraCountPerHour.fromJson(element));
-  //       }
-  //       return callbackList;
-  //     } else {
-  //       return [];
-  //     }
-  //   } catch (e) {
-  //     debugPrint(e.toString());
-  //     return [];
-  //   }
-  // }
-
-  // Future<GetAllCameraDetails> getAllCamerasDetails(
-  //     {required String cameraName}) async {
-  //   try {
-  //     var callBack = await RemoteDataSource().postWithFile(
-  //         endPoint: "/getallmodelsincam", body: {"cameraname": cameraName});
-  //     if (callBack.isNotEmpty) {
-  //       GetAllCameraDetails countsModel =
-  //           GetAllCameraDetails.fromJson(callBack);
-  //       return countsModel;
-  //     } else {
-  //       return GetAllCameraDetails();
-  //     }
-  //   } catch (e) {
-  //     debugPrint(e.toString());
-  //     return GetAllCameraDetails();
-  //   }
-  // }
-
-// get all pathes
-  Future<pathes_model> getAllPathes({
+// get all History
+  Future<historyScreenModel> getAllPathes({
     required String companyName,
+    required int pageNumber,
   }) async {
     try {
       Map<String, dynamic> callBack =
           await RemoteDataSource().post(endPoint: "/history", body: {
+        "collection_name": companyName,
+        "page_number": pageNumber,
+      });
+
+      if (callBack.isNotEmpty) {
+        historyScreenModel callBackList = historyScreenModel.fromJson(callBack);
+        // print(callBackList);
+        return callBackList;
+      } else {
+        // Return a Future<pathes_model> with an empty list
+        return Future.value(
+            historyScreenModel()); // Adjust this according to your pathes_model constructor
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      // Return a Future<pathes_model> with an empty list
+      return Future.value(
+          historyScreenModel()); // Adjust this according to your pathes_model constructor
+    }
+  }
+
+  // get all pathes
+  Future<pathes_model> getHistoryDetails({
+    required String companyName,
+    required String video_Path,
+  }) async {
+    try {
+      Map<String, dynamic> callBack =
+          await RemoteDataSource().post(endPoint: "/history_files", body: {
+        "video_path": video_Path,
         "collection_name": companyName,
       });
 
@@ -949,4 +880,105 @@ class RemoteProvider {
 //       return GetAllCameraDetails();
 //     }
 //   }
+
+  // Future<List<GetAllCameraCountPerHour>>
+  //     getAllCamerasCountsPerHourForDashboard({
+  //   required String cameraName,
+  //   // required String startDay,
+  //   // required String endDay,
+  //   // required String day,
+  //   // required String startMonth,
+  //   // required String endMonth,
+  //   // required String month,
+  //   // required String startYear,
+  //   // required String endYear,
+  //   // required String year,
+  //   // required String hour,
+  //   // required String minute,
+  // }) async {
+  //   Map<String, String> body = {};
+
+  //   if (cameraName.isNotEmpty) {
+  //     body["cameraname"] = cameraName;
+  //   }
+
+  //   // if (minute.isNotEmpty) {
+  //   //   body["minute"] = minute;
+  //   // }
+
+  //   // if (hour.isNotEmpty) {
+  //   //   body["hour"] = hour;
+  //   // }
+  //   // if (startDay.isNotEmpty) {
+  //   //   body["start_day"] = startDay;
+  //   // }
+  //   // if (endDay.isNotEmpty) {
+  //   //   body["end_day"] = endDay;
+  //   // }
+  //   // if (day.isNotEmpty) {
+  //   //   body["day"] = day;
+  //   // }
+  //   // if (startMonth.isNotEmpty) {
+  //   //   body["start_month"] = startMonth;
+  //   // }
+
+  //   // if (endMonth.isNotEmpty) {
+  //   //   body["end_month"] = endMonth;
+  //   // }
+  //   // if (month.isNotEmpty) {
+  //   //   body["month"] = month;
+  //   // }
+  //   // if (startYear.isNotEmpty) {
+  //   //   body["start_year"] = startYear;
+  //   // }
+  //   // if (endYear.isNotEmpty) {
+  //   //   body["end_year"] = endYear;
+  //   // }
+  //   // if (year.isNotEmpty) {
+  //   //   body["year"] = year;
+  //   // }
+
+  //   try {
+  //     List<dynamic> callBack = await RemoteDataSource()
+  //         .postWithFile(endPoint: "/allmodelsstatistics", body: body
+  //             //     {
+  //             //   "cameraname": cameraName,
+  //             //   "day": "19",
+  //             //   "month": "2",
+  //             //   "year": "2024",
+  //             // }
+  //             );
+  //     if (callBack.isNotEmpty) {
+  //       debugPrint("0-0-0-0$callBack");
+  //       List<GetAllCameraCountPerHour> callbackList = [];
+  //       for (var element in callBack) {
+  //         callbackList.add(GetAllCameraCountPerHour.fromJson(element));
+  //       }
+  //       return callbackList;
+  //     } else {
+  //       return [];
+  //     }
+  //   } catch (e) {
+  //     debugPrint(e.toString());
+  //     return [];
+  //   }
+  // }
+
+  // Future<GetAllCameraDetails> getAllCamerasDetails(
+  //     {required String cameraName}) async {
+  //   try {
+  //     var callBack = await RemoteDataSource().postWithFile(
+  //         endPoint: "/getallmodelsincam", body: {"cameraname": cameraName});
+  //     if (callBack.isNotEmpty) {
+  //       GetAllCameraDetails countsModel =
+  //           GetAllCameraDetails.fromJson(callBack);
+  //       return countsModel;
+  //     } else {
+  //       return GetAllCameraDetails();
+  //     }
+  //   } catch (e) {
+  //     debugPrint(e.toString());
+  //     return GetAllCameraDetails();
+  //   }
+  // }
 }

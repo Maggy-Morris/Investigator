@@ -7,14 +7,11 @@ class AllEmployeesEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-
-
 class RadioButtonChanged extends AllEmployeesEvent {
   final String selectedOption;
   final bool? showTextField;
 
-  const RadioButtonChanged(
-      {required this.selectedOption,  this.showTextField});
+  const RadioButtonChanged({required this.selectedOption, this.showTextField});
 }
 
 class Check extends AllEmployeesEvent {
@@ -44,6 +41,17 @@ class ImageWidget extends AllEmployeesEvent {
   List<Object?> get props => [imageWidget];
 }
 
+
+
+
+class EditPager extends AllEmployeesEvent {
+  final int pageIndex;
+
+  const EditPager({required this.pageIndex});
+
+  @override
+  List<Object> get props => [pageIndex];
+}
 class EditPageNumber extends AllEmployeesEvent {
   final int pageIndex;
 
@@ -52,7 +60,6 @@ class EditPageNumber extends AllEmployeesEvent {
   @override
   List<Object> get props => [pageIndex];
 }
-
 
 class EditPageNumberBlackListed extends AllEmployeesEvent {
   final int pageIndex;
@@ -87,7 +94,6 @@ class AddpersonName extends AllEmployeesEvent {
   @override
   List<Object?> get props => [personName];
 }
-
 
 class selectedFiltering extends AllEmployeesEvent {
   final String filterCase;

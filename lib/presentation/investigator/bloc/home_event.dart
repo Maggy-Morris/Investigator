@@ -7,6 +7,19 @@ class HomeEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+
+
+
+
+
+class SetTimeDuration extends HomeEvent {
+  final int timeDuration;
+
+  const SetTimeDuration({required this.timeDuration});
+
+  @override
+  List<Object> get props => [timeDuration];
+}
 class EditPageNumber extends HomeEvent {
   final int pageIndex;
 

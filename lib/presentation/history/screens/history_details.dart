@@ -3,11 +3,12 @@ import 'dart:typed_data';
 
 // import 'package:Investigator/core/widgets/fullscreenImage.dart';
 // import 'package:easy_localization/easy_localization.dart';
+import 'package:Investigator/core/widgets/FullImageURL.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:http/http.dart' as http;
+// import 'package:flutter_easyloading/flutter_easyloading.dart';
+// import 'package:http/http.dart' as http;
 // import 'package:luminalens/core/enum/enum.dart';
 // import 'package:luminalens/core/loader/loading_indicator.dart';
 // import 'package:luminalens/core/remote_provider/remote_data_source.dart';
@@ -37,9 +38,11 @@ import '../bloc/history_bloc.dart';
 
 class HistoryDetails extends StatefulWidget {
   final String path;
-  final String count;
+  // final String count;
 
-  const HistoryDetails({Key? key, required this.path, required this.count})
+  const HistoryDetails({Key? key, required this.path
+      // , required this.count
+      })
       : super(key: key);
 
   @override
@@ -256,40 +259,12 @@ class _CameraDetailsState extends State<HistoryDetails> {
                                                               itemBuilder:
                                                                   (context,
                                                                       index) {
-                                                                // final image = state
-                                                                //         .snapShots[
-                                                                //     (state.pageIndex == 1 || state.pageIndex == 0
-                                                                //                 ? 0
-                                                                //                 : state.pageIndex - 1) *
-                                                                //             10 +
-                                                                //         (index)];
-
-                                                                // final names = state
-                                                                //     .data[(state.pageIndex == 1 ||
-                                                                //                 state.pageIndex ==
-                                                                //                     0
-                                                                //             ? 0
-                                                                //             : state.pageIndex -
-                                                                //                 1) *
-                                                                //         10 +
-                                                                //     (index)];
-
-                                                                // final data_time = state
-                                                                //         .timestamps[
-                                                                //     (state.pageIndex == 1 || state.pageIndex == 0
-                                                                //                 ? 0
-                                                                //                 : state.pageIndex - 1) *
-                                                                //             10 +
-                                                                //         (index)];
                                                                 return imagesListWidget(
                                                                   onDownloadPressed:
                                                                       () {
                                                                     downloadImageFromWeb(
                                                                       imageUrl:
                                                                           "${state.pathForImages.filePath?.split('/').sublist(1, state.pathForImages.filePath!.split('/').length - 1).join('/')}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
-
-                                                                      // downloadName:
-                                                                      //     data_time,
                                                                     );
                                                                   },
                                                                   // timeText:
@@ -344,13 +319,15 @@ class _CameraDetailsState extends State<HistoryDetails> {
           children: [
             GestureDetector(
               onTap: () {
-                print(imageSource);
+                // print(imageSource);
 
-                // Navigator.push(
-                //     context,
-                // MaterialPageRoute(
-                //     builder: (context) => FullScreenImageFromMemory(
-                //         text: text, imageUrl: image64)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => FullScreenImageFromUrl(
+                            text: text ?? "",
+                            imageUrl:
+                                "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageSource}")));
               },
               child: Image.network(
                 "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageSource}",

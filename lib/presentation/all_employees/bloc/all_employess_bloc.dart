@@ -53,6 +53,7 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
     on<EditPageNumber>(_onEditPageNumber);
     on<EditPageNumberBlackListed>(_onEditPageNumberBlackListed);
     on<EditPageNumberNeutral>(_onEditPageNumberNeutral);
+    on<EditPager>(_onEditPager);
 
 //edit
 
@@ -84,6 +85,13 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
   _oncheckBox(checkBox event, Emitter<AllEmployeesState> emit) async {
     emit(state.copyWith(
         roomNAMS: event.room_NMs, submission: Submission.editing));
+  }
+
+  _onEditPager(EditPager event, Emitter<AllEmployeesState> emit) async {
+    emit(state.copyWith(
+        pageIndex: event.pageIndex,
+        // pageCount: state.pageCount,
+        submission: Submission.editing));
   }
 
   _onEditPageNumber(

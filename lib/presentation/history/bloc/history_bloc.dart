@@ -16,7 +16,10 @@ part 'history_state.dart';
 class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
   static HistoryBloc get(context) => BlocProvider.of<HistoryBloc>(context);
 
-  HistoryBloc() : super( HistoryState(pathForImages: PathForImages(count: 0, filePath: "" ,timestamp: []))) {
+  HistoryBloc()
+      : super(HistoryState(
+            pathForImages:
+                PathForImages(count: 0, filePath: "", timestamp: []))) {
     /// Main Events
     on<HistoryEvent>(_onHistoryEvent);
     on<PathesDataEvent>(_onPathesDataEvent);
@@ -109,27 +112,20 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
   // }
 
   _onPathesDataEvent(PathesDataEvent event, Emitter<HistoryState> emit) async {
-    // try {
-    //   await RemoteProvider().getAllCamerasNames().then((value) {
-    //     emit(state.copyWith(allCameras: value));
-    //   });
-    //   // if (state.allCameras.isNotEmpty) {
-    //   //   add(const CameraGetAllCamerasCounts());
-    //   // }
-    // } catch (_) {
-    //   emit(state.copyWith(allCameras: []));
-    // }
     emit(state.copyWith(submission: Submission.loading));
     try {
       await RemoteProvider()
           .getAllPathes(
+        pageNumber: state.pageIndex == 0 ? 1 : state.pageIndex,
         companyName:
             AuthenticationRepository.instance.currentUser.companyName?.first,
       )
           .then((value) {
         // print(value.paths);
         emit(state.copyWith(
-            allHistory: value.data, submission: Submission.hasData));
+            pageCount: value.nPages,
+            allHistory: value.data,
+            submission: Submission.hasData));
       });
     } catch (_) {
       emit(state
@@ -139,16 +135,6 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
 
   _onEditvideoPathForHistory(
       EditvideoPathForHistory event, Emitter<HistoryState> emit) async {
-    // try {
-    //   await RemoteProvider().getAllCamerasNames().then((value) {
-    //     emit(state.copyWith(allCameras: value));
-    //   });
-    //   // if (state.allCameras.isNotEmpty) {
-    //   //   add(const CameraGetAllCamerasCounts());
-    //   // }
-    // } catch (_) {
-    //   emit(state.copyWith(allCameras: []));
-    // }
     emit(state.copyWith(submission: Submission.loading));
     try {
       await RemoteProvider()
@@ -172,7 +158,7 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
     emit(state.copyWith(
         pageIndex: event.pageIndex, submission: Submission.editing));
 
-    // add(const GetEmployeeNamesEvent());
+    add(const PathesDataEvent());
   }
 
   _onEditPathProvided(
