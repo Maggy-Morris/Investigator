@@ -7,6 +7,19 @@ class HistoryEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+
+class EditvideoPathForHistory extends HistoryEvent {
+  final String videoPathForHistory;
+
+  const EditvideoPathForHistory({required this.videoPathForHistory});
+
+  @override
+  List<Object> get props => [videoPathForHistory];
+}
+
+
+
+
 class EditPathProvided extends HistoryEvent {
   final String pathProvided;
 
@@ -40,6 +53,7 @@ class PathesDataEvent extends HistoryEvent {
   @override
   List<Object?> get props => [];
 }
+
 
 // class VideoStreamChanged extends HistoryEvent {
 //   final Uint8List videoStream;

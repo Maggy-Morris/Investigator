@@ -56,8 +56,8 @@ class _CameraDetailsState extends State<HistoryDetails> {
       body: BlocProvider(
         create: (context) => HistoryBloc()
           // ..add(CameraDetailsEvent(cameraName: widget.cameraName)),
-          ..add(EditPathProvided(pathProvided: widget.path))
-          ..add(EditPageCount(pageCount: int.parse(widget.count))),
+          ..add(EditvideoPathForHistory(videoPathForHistory: widget.path)),
+        // ..add(EditPageCount(pageCount: int.parse(widget.count)))
 
         // ..add(const CameraInitializeDate()),
         // ..add(GetVehicleDashboardData(cameraName: widget.cameraName))
@@ -83,7 +83,8 @@ class _CameraDetailsState extends State<HistoryDetails> {
           },
           child: BlocBuilder<HistoryBloc, HistoryState>(
             buildWhen: (previous, current) {
-              return previous.pathProvided != current.pathProvided;
+              return previous.pathForImages.filePath !=
+                  current.pathForImages.filePath;
             },
             builder: (context, state) {
               // if (state.singleCameraDetails.isEmpty) {
@@ -158,7 +159,8 @@ class _CameraDetailsState extends State<HistoryDetails> {
                                                     // persons: state
                                                     //     .employeeNamesList, // Pass the list of data
                                                     pageCount: (state
-                                                                .pageCount /
+                                                                .pathForImages
+                                                                .count! /
                                                             10)
                                                         .ceil(), // Pass the page count
                                                     onPageChanged:
@@ -196,17 +198,20 @@ class _CameraDetailsState extends State<HistoryDetails> {
                                                               physics:
                                                                   const NeverScrollableScrollPhysics(),
                                                               itemCount: state
-                                                                          .pageCount !=
+                                                                          .pathForImages
+                                                                          .count !=
                                                                       0
-                                                                  ? (state.pageCount <
+                                                                  ? (state.pathForImages
+                                                                              .count! <
                                                                           10)
-                                                                      ? (state.pageCount %
+                                                                      ? (state.pathForImages
+                                                                              .count! %
                                                                           10)
                                                                       : (state.pageIndex ==
-                                                                              (state.pageCount / 10).ceil())
-                                                                          ? (state.pageCount % 10 == 0)
+                                                                              (state.pathForImages.count! / 10).ceil())
+                                                                          ? (state.pathForImages.count! % 10 == 0)
                                                                               ? 10
-                                                                              : (state.pageCount % 10)
+                                                                              : (state.pathForImages.count! % 10)
                                                                           : 10
                                                                   : 0,
                                                               gridDelegate: Responsive
@@ -281,7 +286,7 @@ class _CameraDetailsState extends State<HistoryDetails> {
                                                                       () {
                                                                     downloadImageFromWeb(
                                                                       imageUrl:
-                                                                          "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
+                                                                          "${state.pathForImages.filePath?.split('/').sublist(1, state.pathForImages.filePath!.split('/').length - 1).join('/')}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
 
                                                                       // downloadName:
                                                                       //     data_time,
@@ -291,7 +296,7 @@ class _CameraDetailsState extends State<HistoryDetails> {
                                                                   //     data_time,
                                                                   // image64: image,
                                                                   imageSource:
-                                                                      "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
+                                                                      "${state.pathForImages.filePath?.split('/').sublist(1, state.pathForImages.filePath!.split('/').length - 1).join('/')}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
                                                                   // text: names
                                                                 );
                                                               },
@@ -416,11 +421,6 @@ class _CameraDetailsState extends State<HistoryDetails> {
 
     return Uint8List.fromList(bytes);
   }
-
-
-
-
-
 
   Widget _commonText(String text) {
     return Padding(
