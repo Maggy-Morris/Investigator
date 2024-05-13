@@ -49,12 +49,12 @@ getRoutesAdmin() {
         const NoAnimationPage(child: GroupSearchScreen()),
 
     '/search': (route) => const NoAnimationPage(child: Search()),
-    '/history': (route) => const NoAnimationPage(child: AllHistoryScreen()),
+    '/history': (route) => NoAnimationPage(child: AllHistoryScreen()),
 
     '/requestDetails': (route) => NoAnimationPage(
             child: HistoryDetails(
-          path: route.queryParameters["path"] ?? "",
-          count: route.queryParameters["count"] ?? "",
+          path: route.queryParameters["process"] ?? "",
+          // count: route.queryParameters["count"] ?? "",
         )),
   };
   return adminRoutes;
