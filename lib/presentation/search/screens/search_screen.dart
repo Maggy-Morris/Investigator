@@ -151,12 +151,9 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  FxBox.h24,
                                   if (Responsive.isWeb(context))
                                     Column(
                                       children: [
-                                        FxBox.h24,
-
                                         // Here to search for an Employee in the database
                                         // BlocBuilder<SearchByImageBloc,
                                         //     SearchByImageState>(
@@ -229,13 +226,13 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                       //  state.imageWidget
                                                       _image ??
                                                           SizedBox(
-                                                            width: 400,
-                                                            height: 400,
+                                                            width: 350,
+                                                            height: 350,
                                                             child: Image.asset(
                                                               'assets/images/person-search.png',
                                                               // width: double.infinity,
                                                               // height: 200,
-                                                              fit: BoxFit.cover,
+                                                              // fit: BoxFit.cover,
                                                             ),
                                                           ),
                                                 ),
@@ -835,7 +832,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                               'assets/images/person-search.png',
                                                               // width: double.infinity,
                                                               // height: 200,
-                                                              fit: BoxFit.cover,
+                                                              // fit: BoxFit.cover,
                                                             ),
                                                       ),
                                                       Positioned(
@@ -1446,7 +1443,8 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                     Center(
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 50.0, vertical: 20),
+                                          horizontal: 50.0,
+                                        ),
                                         child: SfRangeSliderTheme(
                                           data: SfRangeSliderThemeData(
                                             activeTrackColor: Colors.white,
@@ -1888,8 +1886,6 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                       context
                                           .read<PhotoAppCubit>()
                                           .stopCamera();
-
-
 
                                       context
                                           .read<PhotoAppCubit>()

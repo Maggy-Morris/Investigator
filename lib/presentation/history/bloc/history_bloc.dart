@@ -43,75 +43,6 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
   // late StreamSubscription<Uint8List> videoStreamSubscription;
   _onHistoryEvent(HistoryEvent event, Emitter<HistoryState> emit) {}
 
-  // _onCameraInitializeDate(
-  //     CameraInitializeDate event, Emitter<HistoryState> emit) {}
-
-  // _onCameraDetailsEvent(
-  //     CameraDetailsEvent event, Emitter<HistoryState> emit) async {
-  //   emit(state
-  //       .copyWith(singleCameraDetails: [], submission: Submission.loading));
-  //   try {
-  //     await RemoteProvider()
-  //         .getAllCamerasDetails(cameraName: event.cameraName)
-  //         .then((value) {
-  //       emit(state.copyWith(
-  //         singleCameraDetails: [value],
-  //         // submission: Submission.success
-  //       ));
-
-  //       /// get models Data
-  //       // if(state.singleCameraDetails.first.models?.contains("")??false) {
-  //       add(GetModelsChartsData(
-  //           modelsList: value.models ?? [], cameraName: event.cameraName));
-  //       // }
-  //     });
-  //   } catch (_) {
-  //     emit(state
-  //         .copyWith(singleCameraDetails: [], submission: Submission.error));
-  //   }
-
-  //   ///
-  //   // onStreamVideo(event.cameraName);
-  //   ///
-  //   // await RemoteProvider()
-  //   //     .getDisplayStream(cameraName: event.cameraName).then((value) {
-  //   //   add(VideoStreamChanged(videoStream: value));
-  //   //   // emit(state.copyWith(
-  //   //   //       videoStream: value, submission: Submission.success));
-  //   // });
-  // }
-
-  // _onGetModelsChartsData(
-  //     GetModelsChartsData event, Emitter<HistoryState> emit) async {
-  //   emit(state.copyWith(submission: Submission.loading));
-  //   try {
-  //     await RemoteProvider()
-  //         .getAllCamerasCountsPerHourForDashboard(
-  //       cameraName: event.cameraName,
-  //       // minute: state.selectedMinute,
-  //       // hour: state.selectedHour,
-  //       // startDay: state.selectedStartDay,
-  //       // endDay: state.selectedEndDay,
-  //       // day: state.selectedDay,
-  //       // startMonth: state.selectedStartMonth,
-  //       // endMonth: state.selectedEndMonth,
-  //       // month: state.selectedMonth,
-  //       // startYear: state.selectedStartYear,
-  //       // endYear: state.selectedEndYear,
-  //       // year: state.selectedYear,
-  //     )
-  //         .then((value) {
-  //       emit(state.copyWith(
-  //         camerasCountsPerHour: [value],
-  //         //  submission: Submission.success
-  //       ));
-  //     });
-  //   } catch (_) {
-  //     emit(state
-  //         .copyWith(camerasCountsPerHour: [], submission: Submission.error));
-  //   }
-  // }
-
   _onPathesDataEvent(PathesDataEvent event, Emitter<HistoryState> emit) async {
     emit(state.copyWith(submission: Submission.loading));
     try {
@@ -123,14 +54,20 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
       )
           .then((value) {
         // print(value.paths);
-        emit(state.copyWith(
-            pageCount: value.nPages,
-            allHistory: value.data,
-            submission: Submission.hasData));
+        if (value.data!.isNotEmpty) {
+          emit(state.copyWith(
+              pageCount: value.nPages,
+              allHistory: value.data,
+              submission: Submission.hasData));
+        } else {
+          emit(state.copyWith(
+              // videoPathForHistory: event.videoPathForHistory,
+              allHistory: [],
+              submission: Submission.noDataFound));
+        }
       });
     } catch (_) {
-      emit(state
-          .copyWith(camerasDetails: [], submission: Submission.noDataFound));
+      emit(state.copyWith(allHistory: [], submission: Submission.noDataFound));
     }
   }
 
@@ -146,14 +83,15 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
       )
           .then((value) {
         // print(value.paths);
-        emit(state.copyWith(
-            // videoPathForHistory: event.videoPathForHistory,
-            pathForImages: value.data,
-            submission: Submission.hasData));
+          emit(state.copyWith(
+              // videoPathForHistory: event.videoPathForHistory,
+              pathForImages: value.data,
+              submission: Submission.hasData));
+       
       });
     } catch (_) {
-      emit(state
-          .copyWith(camerasDetails: [], submission: Submission.noDataFound));
+      emit(state.copyWith(
+          pathForImages: null, submission: Submission.noDataFound));
     }
   }
 

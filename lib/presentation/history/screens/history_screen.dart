@@ -32,7 +32,11 @@ class AllHistoryScreen extends StatelessWidget {
       body: BlocProvider(
         create: (context) => HistoryBloc()..add(const PathesDataEvent()),
         child: BlocListener<HistoryBloc, HistoryState>(
-          listener: (context, state) {},
+          listener: (context, state) {
+            if (state.submission == Submission.loading) {
+              loadingIndicator();
+            }
+          },
           child: BlocBuilder<HistoryBloc, HistoryState>(
             builder: (context, state) {
               // if (state.submission == Submission.loading) {
@@ -118,7 +122,7 @@ class AllHistoryScreen extends StatelessWidget {
                         ),
                       ),
                       FxBox.h24,
-                      (state.allHistory.isNotEmpty)
+                      (state.submission != Submission.noDataFound)
                           ? Wrap(
                               children: _responsiveCardList(
                                 context: context,
@@ -127,16 +131,17 @@ class AllHistoryScreen extends StatelessWidget {
                             )
                           : Column(
                               children: [
-                                FxBox.h24,
-                                FxBox.h24,
-                                FxBox.h24,
-
-                                loadingIndicator()
-                                // const Text(
-                                //   "No History Yet!",
-                                //   style: TextStyle(
-                                //       color: Colors.red, fontSize: 30),
-                                // ),
+                                Center(
+                                  child: const Text(
+                                    "No History Yet!",
+                                    style: TextStyle(
+                                        color: Colors.red, fontSize: 30),
+                                  ),
+                                ),
+                                FxBox.h56,
+                                FxBox.h56,
+                                FxBox.h56,
+                                FxBox.h56,
                               ],
                             ),
                     ],
@@ -440,7 +445,7 @@ class AllHistoryScreen extends StatelessWidget {
       videoPlayerController: videoPlayerController,
       autoPlay: false,
       // startAt: Duration(seconds: 1),
-      autoInitialize: false,
+      autoInitialize: true,
       looping: true,
     );
 

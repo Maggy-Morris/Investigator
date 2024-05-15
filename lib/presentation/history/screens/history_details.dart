@@ -35,7 +35,7 @@ class HistoryDetails extends StatefulWidget {
 ///
 
 class _HistoryDetails extends State<HistoryDetails> {
-  final CarouselController _carouselController = CarouselController();
+  // final CarouselController _carouselController = CarouselController();
 
   late ScrollController _scrollController;
   @override
@@ -64,11 +64,6 @@ class _HistoryDetails extends State<HistoryDetails> {
           ..add(EditvideoPathForHistory(videoPathForHistory: widget.path)),
         // ..add(EditPageCount(pageCount: int.parse(widget.count)))
 
-        // ..add(const CameraInitializeDate()),
-        // ..add(GetVehicleDashboardData(cameraName: widget.cameraName))
-        // ..add(GetGenderDashboardData(cameraName: widget.cameraName))
-        // ..add(GetAgeDashboardData(cameraName: widget.cameraName))
-        // ..add(GetViolenceDashboardData(cameraName: widget.cameraName)),
         child: BlocListener<HistoryBloc, HistoryState>(
           listener: (context, state) {
             if (state.submission == Submission.success) {
@@ -607,7 +602,7 @@ class _HistoryDetails extends State<HistoryDetails> {
       autoPlay: false,
       startAt: Duration(seconds: secondsGiven),
       autoInitialize: true,
-      looping: true,
+      // looping: true,
     );
 
     return Chewie(
