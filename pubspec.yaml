@@ -69,6 +69,7 @@ dependencies:
   carousel_slider: ^4.2.1
   easy_sidemenu: ^0.6.0
   chewie: ^1.7.5
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:

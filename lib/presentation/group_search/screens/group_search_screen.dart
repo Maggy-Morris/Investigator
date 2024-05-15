@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:Investigator/core/widgets/FullImageURL.dart';
 import 'package:camera/camera.dart';
+import 'package:chewie/chewie.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -116,7 +117,7 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                               fontWeight: FontWeight.bold,
                               color: AppColors.white),
                         ),
-                        FxBox.h24,
+                        FxBox.h10,
                         const Tooltip(
                           message:
                               "Choose The Accuracy You Want To Search For A Person With Using The SliderBar \n        Note That If the Video Resolution Is Bad Try to Choose Low Accuracy ",
@@ -133,8 +134,8 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                 children: [
                                   Center(
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 50.0, vertical: 20),
+                                      padding: const EdgeInsets.only(
+                                          right: 50.0, left: 50.0, bottom: 10),
                                       child: SfRangeSliderTheme(
                                         data: SfRangeSliderThemeData(
                                           activeTrackColor: Colors.white,
@@ -194,48 +195,46 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                     ),
                                   ),
                                   FxBox.h16,
-                                  Padding(
-                                    padding: const EdgeInsets.all(15.0),
-                                    child: SizedBox(
-                                      width: 295,
-                                      child:
-                                          singleSelectGenericDropdown<String>(
-                                        // titleName: "Filter By:",
-                                        isEnabled: true,
-                                        isRequired: false,
-                                        filled: true,
-                                        // showSearch: true,
-                                        selectedItem: state.filterCase.isEmpty
-                                            ? "Filter By :"
-                                            : state.filterCase,
-                                        onChanged: (value) {
-                                          if (value?.isNotEmpty ?? false) {
-                                            GroupSearchBloc.get(context).add(
-                                                selectedFiltering(
-                                                    filterCase: value ?? ""));
-                                            // if (value == "All") {
-                                            //   GroupSearchBloc.get(context)
-                                            //       .add(const GetEmployeeNamesEvent());
-                                            // } else if (value == "Normal") {
-                                            //   GroupSearchBloc.get(context).add(
-                                            //       const GetEmployeeNormalNamesEvent());
-                                            // } else if (value == "BlackListed") {
-                                            //   GroupSearchBloc.get(context).add(
-                                            //       const GetEmployeeBlackListedNamesEvent());
-                                            // }
-                                          }
-                                        },
-                                        itemsList: [
-                                          "All",
-                                          "Neutral",
-                                          "BlackListed"
-                                        ],
-                                      ),
-                                    ),
-                                  ),
                                 ],
                               ),
-
+                              Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: SizedBox(
+                                  width: 295,
+                                  child: singleSelectGenericDropdown<String>(
+                                    // titleName: "Filter By:",
+                                    isEnabled: true,
+                                    isRequired: false,
+                                    filled: true,
+                                    // showSearch: true,
+                                    selectedItem: state.filterCase.isEmpty
+                                        ? "Filter By :"
+                                        : state.filterCase,
+                                    onChanged: (value) {
+                                      if (value?.isNotEmpty ?? false) {
+                                        GroupSearchBloc.get(context).add(
+                                            selectedFiltering(
+                                                filterCase: value ?? ""));
+                                        // if (value == "All") {
+                                        //   GroupSearchBloc.get(context)
+                                        //       .add(const GetEmployeeNamesEvent());
+                                        // } else if (value == "Normal") {
+                                        //   GroupSearchBloc.get(context).add(
+                                        //       const GetEmployeeNormalNamesEvent());
+                                        // } else if (value == "BlackListed") {
+                                        //   GroupSearchBloc.get(context).add(
+                                        //       const GetEmployeeBlackListedNamesEvent());
+                                        // }
+                                      }
+                                    },
+                                    itemsList: [
+                                      "All",
+                                      "Neutral",
+                                      "BlackListed"
+                                    ],
+                                  ),
+                                ),
+                              ),
                               // Here to search for an Employee in the database
                               Row(
                                 mainAxisAlignment:
@@ -245,7 +244,7 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                     message: "Upload a video",
                                     child: SizedBox(
                                       height: 300,
-                                      width: 300,
+                                      width: 700,
                                       child: Card(
                                         elevation: 4,
                                         shape: RoundedRectangleBorder(
@@ -264,24 +263,62 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                               AspectRatio(
                                                 aspectRatio: _controller!
                                                     .value.aspectRatio,
-                                                child:
-                                                    VideoPlayer(_controller!),
+                                                child: Stack(children: [
+                                                  Chewie(
+                                                    controller:
+                                                        ChewieController(
+                                                      aspectRatio: _controller
+                                                          ?.value.aspectRatio,
+                                                      videoPlayerController:
+                                                          _controller!,
+                                                      autoPlay: false,
+                                                      startAt: Duration(
+                                                          seconds: state
+                                                              .timeDuration),
+                                                      autoInitialize: true,
+                                                      looping: true,
+                                                    ),
+                                                  ),
+                                                  Positioned(
+                                                    top: 0,
+                                                    right: 0,
+                                                    child: Tooltip(
+                                                      message:
+                                                          "Upload Another Video",
+                                                      child: IconButton(
+                                                        onPressed: () {
+                                                          _pickVideo().then(
+                                                              (PlatformFile?
+                                                                  videoFile) {
+                                                            if (videoFile !=
+                                                                null) {
+                                                              GroupSearchBloc.get(
+                                                                      context)
+                                                                  .add(videoevent(
+                                                                      video:
+                                                                          videoFile));
+                                                            }
+                                                          });
+                                                        },
+                                                        icon: const Icon(
+                                                          Icons.upload,
+                                                          size: 45,
+                                                          color: AppColors
+                                                              .buttonBlue,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ]),
                                               )
+                                            // AspectRatio(
+                                            //   aspectRatio: _controller!
+                                            //       .value.aspectRatio,
+                                            //   child:
+                                            //       VideoPlayer(_controller!),
+                                            // )
                                             else
-                                              Image.asset(
-                                                'assets/images/iconVid.png',
-                                                width: double.infinity,
-                                                height: double.infinity,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            Positioned(
-                                              left: 1,
-                                              right: 1,
-                                              top: 1,
-                                              bottom: 1,
-                                              child: GestureDetector(
-                                                // child: Text(""),
-
+                                              GestureDetector(
                                                 onTap: () {
                                                   _pickVideo().then(
                                                       (PlatformFile?
@@ -295,8 +332,36 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                     }
                                                   });
                                                 },
+                                                child: Image.asset(
+                                                  'assets/images/iconVid.png',
+                                                  // width: double.infinity,
+                                                  // height: double.infinity,
+                                                  // fit: BoxFit.cover,
+                                                ),
                                               ),
-                                            )
+                                            // Positioned(
+                                            //   left: 1,
+                                            //   right: 1,
+                                            //   top: 1,
+                                            //   bottom: 1,
+                                            //   child: GestureDetector(
+                                            //     // child: Text(""),
+
+                                            //     onTap: () {
+                                            //       _pickVideo().then(
+                                            //           (PlatformFile?
+                                            //               videoFile) {
+                                            //         if (videoFile != null) {
+                                            //           GroupSearchBloc.get(
+                                            //                   context)
+                                            //               .add(videoevent(
+                                            //                   video:
+                                            //                       videoFile));
+                                            //         }
+                                            //       });
+                                            //     },
+                                            //   ),
+                                            // )
                                           ],
                                         ),
                                       ),
@@ -426,7 +491,6 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                           )),
                                     ),
 
-                            
                               (state.submission == Submission.noDataFound)
                                   ? const Text(
                                       "No Data Found",
@@ -888,34 +952,13 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                             child: SingleChildScrollView(
                                               child: Column(
                                                 children: [
-                                                  // Display the pagination controls
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            bottom: 15.0),
-                                                    child: CustomPagination(
-                                                      // persons: state
-                                                      //     .employeeNamesList, // Pass the list of data
-                                                      pageCount: (state
-                                                                  .pageCount /
-                                                              10)
-                                                          .ceil(), // Pass the page count
-                                                      onPageChanged:
-                                                          (int index) async {
-                                                        GroupSearchBloc.get(
-                                                                context)
-                                                            .add(EditPageNumber(
-                                                                pageIndex:
-                                                                    index));
-                                                      },
-                                                    ),
-                                                  ),
                                                   // Display the list of data
                                                   SizedBox(
                                                     width:
                                                         MediaQuery.of(context)
                                                             .size
                                                             .width,
+                                                    height: 300,
                                                     child: (state.submission ==
                                                             Submission
                                                                 .noDataFound)
@@ -930,10 +973,12 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                                     FontWeight
                                                                         .w600),
                                                           ))
-                                                        : GridView.builder(
+                                                        : ListView.builder(
                                                             shrinkWrap: true,
+                                                            scrollDirection:
+                                                                Axis.horizontal,
                                                             physics:
-                                                                const NeverScrollableScrollPhysics(),
+                                                                const AlwaysScrollableScrollPhysics(),
                                                             itemCount: state
                                                                         .pageCount !=
                                                                     0
@@ -951,53 +996,6 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                                                 10)
                                                                         : 10
                                                                 : 0,
-                                                            gridDelegate: Responsive
-                                                                    .isMobile(
-                                                                        context)
-                                                                ? const SliverGridDelegateWithFixedCrossAxisCount(
-                                                                    crossAxisCount:
-                                                                        1,
-                                                                    crossAxisSpacing:
-                                                                        45,
-                                                                    mainAxisSpacing:
-                                                                        45,
-                                                                    mainAxisExtent:
-                                                                        350,
-                                                                  )
-                                                                : Responsive.isTablet(
-                                                                        context)
-                                                                    ? const SliverGridDelegateWithFixedCrossAxisCount(
-                                                                        crossAxisCount:
-                                                                            2,
-                                                                        crossAxisSpacing:
-                                                                            45,
-                                                                        mainAxisSpacing:
-                                                                            45,
-                                                                        mainAxisExtent:
-                                                                            350,
-                                                                      )
-                                                                    : MediaQuery.of(context).size.width <
-                                                                            1500
-                                                                        ? SliverGridDelegateWithMaxCrossAxisExtent(
-                                                                            maxCrossAxisExtent:
-                                                                                MediaQuery.of(context).size.width * 0.24,
-                                                                            crossAxisSpacing:
-                                                                                45,
-                                                                            mainAxisSpacing:
-                                                                                45,
-                                                                            mainAxisExtent:
-                                                                                350,
-                                                                          )
-                                                                        : SliverGridDelegateWithMaxCrossAxisExtent(
-                                                                            maxCrossAxisExtent:
-                                                                                MediaQuery.of(context).size.width * 0.24,
-                                                                            crossAxisSpacing:
-                                                                                45,
-                                                                            mainAxisSpacing:
-                                                                                45,
-                                                                            mainAxisExtent:
-                                                                                350,
-                                                                          ),
                                                             itemBuilder:
                                                                 (context,
                                                                     index) {
@@ -1025,29 +1023,84 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                                               : state.pageIndex - 1) *
                                                                           10 +
                                                                       (index)];
-                                                              return imagesListWidget(
-                                                                  onDownloadPressed:
-                                                                      () {
-                                                                    downloadImageFromWeb(
-                                                                      imageUrl:
-                                                                          "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
+                                                              return Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        10.0),
+                                                                child:
+                                                                    imagesListWidget(
+                                                                        onTap:
+                                                                            () {
+                                                                          List<String>
+                                                                              parts =
+                                                                              data_time.split(RegExp(r'[:.]'));
 
-                                                                      // downloadName:
-                                                                      //     data_time,
-                                                                    );
-                                                                    // _downloadImage(
-                                                                    //     data:
-                                                                    //         image,
-                                                                    //     downloadName:
-                                                                    //         data_time);
-                                                                  },
-                                                                  timeText:
-                                                                      data_time,
-                                                                  imageSource:
-                                                                      "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
-                                                                  text: names);
+                                                                          int hours =
+                                                                              int.parse(parts[0]);
+                                                                          int minutes =
+                                                                              int.parse(parts[1]);
+                                                                          int seconds =
+                                                                              int.parse(parts[2]);
+
+                                                                          // Calculate the total duration in seconds
+                                                                          int totalSeconds = hours * 3600 +
+                                                                              minutes * 60 +
+                                                                              seconds;
+                                                                          GroupSearchBloc.get(context)
+                                                                              .add(SetTimeDuration(timeDuration: totalSeconds));
+
+                                                                          ///////////////////////////////////////////////////////////////
+                                                                          debugPrint(
+                                                                              totalSeconds.toString());
+                                                                        },
+                                                                        onDownloadPressed:
+                                                                            () {
+                                                                          downloadImageFromWeb(
+                                                                            imageUrl:
+                                                                                "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
+
+                                                                            // downloadName:
+                                                                            //     data_time,
+                                                                          );
+                                                                          // _downloadImage(
+                                                                          //     data:
+                                                                          //         image,
+                                                                          //     downloadName:
+                                                                          //         data_time);
+                                                                        },
+                                                                        timeText:
+                                                                            data_time,
+                                                                        imageSource:
+                                                                            "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
+                                                                        text:
+                                                                            names),
+                                                              );
                                                             },
                                                           ),
+                                                  ),
+
+                                                  // Display the pagination controls
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            bottom: 15.0),
+                                                    child: CustomPagination(
+                                                      // persons: state
+                                                      //     .employeeNamesList, // Pass the list of data
+                                                      pageCount: (state
+                                                                  .pageCount /
+                                                              10)
+                                                          .ceil(), // Pass the page count
+                                                      onPageChanged:
+                                                          (int index) async {
+                                                        GroupSearchBloc.get(
+                                                                context)
+                                                            .add(EditPageNumber(
+                                                                pageIndex:
+                                                                    index));
+                                                      },
+                                                    ),
                                                   ),
                                                 ],
                                               ),
@@ -1833,34 +1886,13 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                             child: SingleChildScrollView(
                                               child: Column(
                                                 children: [
-                                                  // Display the pagination controls
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            bottom: 15.0),
-                                                    child: CustomPagination(
-                                                      // persons: state
-                                                      //     .employeeNamesList, // Pass the list of data
-                                                      pageCount: (state
-                                                                  .pageCount /
-                                                              10)
-                                                          .ceil(), // Pass the page count
-                                                      onPageChanged:
-                                                          (int index) async {
-                                                        GroupSearchBloc.get(
-                                                                context)
-                                                            .add(EditPageNumber(
-                                                                pageIndex:
-                                                                    index));
-                                                      },
-                                                    ),
-                                                  ),
                                                   // Display the list of data
                                                   SizedBox(
                                                     width:
                                                         MediaQuery.of(context)
                                                             .size
                                                             .width,
+                                                    height: 300,
                                                     child: (state.submission ==
                                                             Submission
                                                                 .noDataFound)
@@ -1875,10 +1907,12 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                                     FontWeight
                                                                         .w600),
                                                           ))
-                                                        : GridView.builder(
+                                                        : ListView.builder(
                                                             shrinkWrap: true,
+                                                            scrollDirection:
+                                                                Axis.horizontal,
                                                             physics:
-                                                                const NeverScrollableScrollPhysics(),
+                                                                const AlwaysScrollableScrollPhysics(),
                                                             itemCount: state
                                                                         .pageCount !=
                                                                     0
@@ -1896,53 +1930,6 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                                                 10)
                                                                         : 10
                                                                 : 0,
-                                                            gridDelegate: Responsive
-                                                                    .isMobile(
-                                                                        context)
-                                                                ? const SliverGridDelegateWithFixedCrossAxisCount(
-                                                                    crossAxisCount:
-                                                                        1,
-                                                                    crossAxisSpacing:
-                                                                        45,
-                                                                    mainAxisSpacing:
-                                                                        45,
-                                                                    mainAxisExtent:
-                                                                        350,
-                                                                  )
-                                                                : Responsive.isTablet(
-                                                                        context)
-                                                                    ? const SliverGridDelegateWithFixedCrossAxisCount(
-                                                                        crossAxisCount:
-                                                                            2,
-                                                                        crossAxisSpacing:
-                                                                            45,
-                                                                        mainAxisSpacing:
-                                                                            45,
-                                                                        mainAxisExtent:
-                                                                            350,
-                                                                      )
-                                                                    : MediaQuery.of(context).size.width <
-                                                                            1500
-                                                                        ? SliverGridDelegateWithMaxCrossAxisExtent(
-                                                                            maxCrossAxisExtent:
-                                                                                MediaQuery.of(context).size.width * 0.24,
-                                                                            crossAxisSpacing:
-                                                                                45,
-                                                                            mainAxisSpacing:
-                                                                                45,
-                                                                            mainAxisExtent:
-                                                                                350,
-                                                                          )
-                                                                        : SliverGridDelegateWithMaxCrossAxisExtent(
-                                                                            maxCrossAxisExtent:
-                                                                                MediaQuery.of(context).size.width * 0.24,
-                                                                            crossAxisSpacing:
-                                                                                45,
-                                                                            mainAxisSpacing:
-                                                                                45,
-                                                                            mainAxisExtent:
-                                                                                350,
-                                                                          ),
                                                             itemBuilder:
                                                                 (context,
                                                                     index) {
@@ -1971,31 +1958,80 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                                               : state.pageIndex - 1) *
                                                                           10 +
                                                                       (index)];
-                                                              return imagesListWidget(
-                                                                  onDownloadPressed:
-                                                                      () {
-                                                                    downloadImageFromWeb(
-                                                                      imageUrl:
-                                                                          "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
+                                                              return Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        10.0),
+                                                                child: imagesListWidget(
+                                                                    onTap: () {
+                                                                      List<String>
+                                                                          parts =
+                                                                          data_time
+                                                                              .split(RegExp(r'[:.]'));
 
-                                                                      // downloadName:
-                                                                      //     data_time,
-                                                                    );
-                                                                    // _downloadImage(
-                                                                    //     data:
-                                                                    //         image,
-                                                                    //     downloadName:
-                                                                    //         data_time);
-                                                                  },
-                                                                  timeText:
-                                                                      data_time,
-                                                                  // image64:
-                                                                  //     image,
-                                                                  imageSource:
-                                                                      "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
-                                                                  text: names);
+                                                                      int hours =
+                                                                          int.parse(
+                                                                              parts[0]);
+                                                                      int minutes =
+                                                                          int.parse(
+                                                                              parts[1]);
+                                                                      int seconds =
+                                                                          int.parse(
+                                                                              parts[2]);
+
+                                                                      // Calculate the total duration in seconds
+                                                                      int totalSeconds = hours *
+                                                                              3600 +
+                                                                          minutes *
+                                                                              60 +
+                                                                          seconds;
+                                                                      GroupSearchBloc.get(
+                                                                              context)
+                                                                          .add(SetTimeDuration(
+                                                                              timeDuration: totalSeconds));
+
+                                                                      ///////////////////////////////////////////////////////////////
+                                                                      debugPrint(
+                                                                          totalSeconds
+                                                                              .toString());
+                                                                    },
+                                                                    onDownloadPressed: () {
+                                                                      downloadImageFromWeb(
+                                                                        imageUrl:
+                                                                            "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
+                                                                      );
+                                                                    },
+                                                                    timeText: data_time,
+                                                                    // image64:
+                                                                    //     image,
+                                                                    imageSource: "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
+                                                                    text: names),
+                                                              );
                                                             },
                                                           ),
+                                                  ),
+                                                  // Display the pagination controls
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            bottom: 15.0),
+                                                    child: CustomPagination(
+                                                      // persons: state
+                                                      //     .employeeNamesList, // Pass the list of data
+                                                      pageCount: (state
+                                                                  .pageCount /
+                                                              10)
+                                                          .ceil(), // Pass the page count
+                                                      onPageChanged:
+                                                          (int index) async {
+                                                        GroupSearchBloc.get(
+                                                                context)
+                                                            .add(EditPageNumber(
+                                                                pageIndex:
+                                                                    index));
+                                                      },
+                                                    ),
                                                   ),
                                                 ],
                                               ),
@@ -2004,108 +2040,6 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                   },
                                 ),
                               )
-
-                              ///frames Data
-
-                              // Padding(
-                              //   padding: const EdgeInsets.all(10.0),
-                              //   child: SingleChildScrollView(
-                              //     child: Column(
-                              //       children: [
-                              //         SizedBox(
-                              //           width:
-                              //               MediaQuery.of(context).size.width,
-                              //           child: (state.submission ==
-                              //                   Submission.noDataFound)
-                              //               ? const Center(
-                              //                   child: Text(
-                              //                   "No data found Yet!",
-                              //                   style: TextStyle(
-                              //                       color: AppColors.blueB,
-                              //                       fontSize: 25,
-                              //                       fontWeight:
-                              //                           FontWeight.w600),
-                              //                 ))
-                              //               : GridView.builder(
-                              //                   shrinkWrap: true,
-                              //                   physics:
-                              //                       const NeverScrollableScrollPhysics(),
-                              //                   itemCount:
-                              //                       state.snapShots.length,
-                              //                   gridDelegate: Responsive
-                              //                           .isMobile(context)
-                              //                       ? const SliverGridDelegateWithFixedCrossAxisCount(
-                              //                           crossAxisCount: 1,
-                              //                           crossAxisSpacing: 45,
-                              //                           mainAxisSpacing: 45,
-                              //                           mainAxisExtent: 350,
-                              //                         )
-                              //                       : Responsive.isTablet(
-                              //                               context)
-                              //                           ? const SliverGridDelegateWithFixedCrossAxisCount(
-                              //                               crossAxisCount: 2,
-                              //                               crossAxisSpacing:
-                              //                                   45,
-                              //                               mainAxisSpacing: 45,
-                              //                               mainAxisExtent: 350,
-                              //                             )
-                              //                           : MediaQuery.of(context)
-                              //                                       .size
-                              //                                       .width <
-                              //                                   1500
-                              //                               ? SliverGridDelegateWithMaxCrossAxisExtent(
-                              //                                   maxCrossAxisExtent:
-                              //                                       MediaQuery.of(context)
-                              //                                               .size
-                              //                                               .width *
-                              //                                           0.24,
-                              //                                   crossAxisSpacing:
-                              //                                       45,
-                              //                                   mainAxisSpacing:
-                              //                                       45,
-                              //                                   mainAxisExtent:
-                              //                                       350,
-                              //                                 )
-                              //                               : SliverGridDelegateWithMaxCrossAxisExtent(
-                              //                                   maxCrossAxisExtent:
-                              //                                       MediaQuery.of(context)
-                              //                                               .size
-                              //                                               .width *
-                              //                                           0.24,
-                              //                                   crossAxisSpacing:
-                              //                                       45,
-                              //                                   mainAxisSpacing:
-                              //                                       45,
-                              //                                   mainAxisExtent:
-                              //                                       350,
-                              //                                 ),
-                              //                   itemBuilder: (context, index) {
-                              //                     final image =
-                              //                         state.snapShots[index];
-                              //                     final names =
-                              //                         state.data[index];
-
-                              //                     final data_time =
-                              //                         state.timestamps[index];
-                              //                     return imagesListWidget(
-                              //                         onDownloadPressed: () {
-                              //                           _downloadImage(
-                              //                               data: image,
-                              //                               downloadName:
-                              //                                   data_time);
-                              //                         },
-                              //                         timeText: data_time,
-                              //                         image64: image,
-                              //                         text: names);
-                              //                   },
-                              //                 ),
-                              //         ),
-                              //       ],
-                              //     ),
-                              //   ),
-                              // ),
-
-                              // // ),
                             ],
                           ),
                       ],
@@ -2143,7 +2077,7 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
 
       _controller = VideoPlayerController.network(url)
         ..initialize().then((_) {
-          _controller!.play();
+          _controller?.pause();
         });
 
       return videoFile; // Return the picked video file
@@ -2152,88 +2086,13 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
     }
   }
 
-/////////////////////////////////////////////////////////////////////////
-  //  Widget imagesListWidget({
-  //   required String image64,
-  //   required String imageSource,
-  //   required String text,
-  //   required VoidCallback onDownloadPressed,
-  // }) {
-  //   return Container(
-  //     width: 300,
-  //     padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-  //     decoration: BoxDecoration(
-  //       color: Colors.grey.withOpacity(0.3),
-  //       borderRadius: BorderRadius.circular(12.0),
-  //     ),
-  //     child: ClipRRect(
-  //       borderRadius: BorderRadius.circular(6.0),
-  //       child: Stack(
-  //         children: [
-  //           GestureDetector(
-  //             onTap: () {
-  //               Navigator.push(
-  //                   context,
-  //                   MaterialPageRoute(
-  //                       builder: (context) => FullScreenImageFromMemory(
-  //                           text: text, imageUrl: image64)));
-  //             },
-  //             child: Image.network(
-  //               "http:${RemoteDataSource.baseUrlWithoutPort}8000/$imageSource",
-  //               // Images.profileImage,
-  //               fit: BoxFit.cover,
-  //             ),
-  //             //   Image.memory(
-  //             //     _decodeBase64Image(base64Image: image64),
-  //             //     width: double.infinity,
-  //             //     height: double.infinity,
-  //             //     fit: BoxFit.cover,
-  //             //   ),
-  //           ),
-  //           Container(
-  //             padding: const EdgeInsets.all(8),
-  //             color: Colors.black.withOpacity(0.5),
-  //             child: Text(
-  //               text,
-  //               style: const TextStyle(
-  //                 color: Colors.white,
-  //                 fontSize: 16,
-  //               ),
-  //             ),
-  //           ),
-  //           Positioned(
-  //             top: 0,
-  //             right: 0,
-  //             child: Tooltip(
-  //               message: "Download This Frame",
-  //               child: IconButton(
-  //                 onPressed: onDownloadPressed,
-  //                 icon: const Icon(
-  //                   Icons.download,
-  //                   size: 45,
-  //                   color: AppColors.buttonBlue,
-  //                 ),
-  //               ),
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // Uint8List _decodeBase64Image({required String base64Image}) {
-  //   final bytes = base64.decode(base64Image);
-
-  //   return Uint8List.fromList(bytes);
-  // }
-
   Widget imagesListWidget({
     //  String? image64,
     required String imageSource,
     required String text,
     required String timeText,
     required VoidCallback onDownloadPressed,
+    required Function() onTap,
   }) {
     return Container(
       width: 300,
@@ -2246,25 +2105,18 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
         borderRadius: BorderRadius.circular(6.0),
         child: Stack(
           children: [
-            GestureDetector(
-              onTap: () {
-                debugPrint(imageSource);
+            Tooltip(
+              message: "Go To Frame In Video",
+              child: GestureDetector(
+                onTap: onTap,
+                child: Image.network(
+                  "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageSource}",
 
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => FullScreenImage(
-                            text: text,
-                            imageUrl:
-                                "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageSource}")));
-              },
-              child: Image.network(
-                "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageSource}",
-
-                width: double.infinity,
-                height: double.infinity,
-                // Images.profileImage,
-                fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: double.infinity,
+                  // Images.profileImage,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
 
@@ -2286,6 +2138,33 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                 ),
               ),
             ),
+
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Tooltip(
+                message: "Open Image",
+                child: IconButton(
+                  onPressed: () {
+                    debugPrint(imageSource);
+
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => FullScreenImage(
+                                text: text,
+                                imageUrl:
+                                    "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageSource}")));
+                  },
+                  icon: const Icon(
+                    Icons.crop_free_sharp,
+                    size: 45,
+                    color: AppColors.buttonBlue,
+                  ),
+                ),
+              ),
+            ),
+
             Positioned(
               top: 0,
               right: 0,
@@ -2303,15 +2182,18 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
             ),
             Positioned(
               bottom: 0,
-              right: 0,
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                color: Colors.black.withOpacity(0.5),
-                child: Text(
-                  timeText,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
+              left: 0,
+              child: GestureDetector(
+                onTap: onTap,
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  color: Colors.black.withOpacity(0.5),
+                  child: Text(
+                    timeText,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
               ),
@@ -2327,48 +2209,6 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
 
     return Uint8List.fromList(bytes);
   }
-
-//   Future<void> _downloadImage({required String image64}) async {
-//     final uint8List = _decodeBase64Image(base64Image: image64);
-//     await WebImageDownloader.downloadImageFromUInt8List(uInt8List: uint8List);
-//   }
-// }
-  // _downloadImage({required String data, String downloadName = 'image'}) async {
-  //   if (data.isNotEmpty) {
-  //     try {
-  //       final uint8List = _decodeBase64Image(base64Image: data);
-  //       // first we make a request to the url like you did
-  //       // in the android and ios version
-  //       // final http.Response r = await http.get(
-  //       //   Uri.parse(getPhotosServerLink(imageUrl)),
-  //       // );
-
-  //       // we get the bytes from the body
-  //       // final data = r.bodyBytes;
-  //       // and encode them to base64
-  //       final base64data = base64Encode(uint8List);
-
-  //       // then we create and AnchorElement with the html package
-  //       final a =
-  //           html.AnchorElement(href: 'data:image/jpeg;base64,$base64data');
-
-  //       // set the name of the file we want the image to get
-  //       // downloaded to
-  //       a.download = '$downloadName.jpg';
-
-  //       // and we click the AnchorElement which downloads the image
-  //       a.click();
-  //       // finally we remove the AnchorElement
-  //       a.remove();
-  //     } catch (e) {
-  //       if (kDebugMode) {
-  //         print(e);
-  //       }
-  //     }
-  //   } else {
-  //     EasyLoading.showError('لا يوجد صورة');
-  //   }
-  // }
 
   Widget _contactUi({
     required String name,
@@ -2578,30 +2418,3 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
     );
   }
 }
-
-// Stack(
-//         fit: StackFit.expand,
-//         children: [
-//         ClipRRect(
-//           borderRadius: BorderRadius.circular(6.0),
-//           child: Image.memory(
-//             _decodeBase64Image(base64Image: image64),
-//             fit: BoxFit.cover,
-//           ),
-//         ),
-//         Positioned(
-//           bottom: 0,
-//           left: 0,
-//           child: Container(
-//             padding: EdgeInsets.all(8),
-//             color: Colors.black.withOpacity(0.5),
-//             child: Text(
-//               'Your Texttttttttttttttttttttttttttttttttttttt',
-//               style: TextStyle(
-//                 color: Colors.white,
-//                 fontSize: 16,
-//               ),
-//             ),
-//           ),
-//         ),
-//       ])

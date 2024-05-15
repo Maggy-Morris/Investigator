@@ -8,6 +8,15 @@ class GroupSearchEvent extends Equatable {
 }
 
 
+class SetTimeDuration extends GroupSearchEvent {
+  final int timeDuration;
+
+  const SetTimeDuration({required this.timeDuration});
+
+  @override
+  List<Object> get props => [timeDuration];
+}
+
 class EditPageCount extends GroupSearchEvent {
   final int pageCount;
 

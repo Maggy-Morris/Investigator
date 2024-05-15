@@ -35,6 +35,7 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
     on<EditPageCount>(_onEditPageCount);
     on<EditPathProvided>(_onEditPathProvided);
     on<EditvideoPathForHistory>(_onEditvideoPathForHistory);
+    on<SecondsGivenFromVideoEvent>(_onSecondsGivenFromVideoEvent);
 
     /// Date
     // on<CameraInitializeDate>(_onCameraInitializeDate);
@@ -146,7 +147,9 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
           .then((value) {
         // print(value.paths);
         emit(state.copyWith(
-            pathForImages: value.data, submission: Submission.hasData));
+            // videoPathForHistory: event.videoPathForHistory,
+            pathForImages: value.data,
+            submission: Submission.hasData));
       });
     } catch (_) {
       emit(state
@@ -172,6 +175,13 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
   _onEditPageCount(EditPageCount event, Emitter<HistoryState> emit) async {
     emit(state.copyWith(
         pageCount: event.pageCount, submission: Submission.editing));
+  }
+
+  _onSecondsGivenFromVideoEvent(
+      SecondsGivenFromVideoEvent event, Emitter<HistoryState> emit) async {
+    emit(state.copyWith(
+        secondsGivenFromVideo: event.secondsGivenFromVideo,
+        submission: Submission.editing));
   }
 
   // _onVideoStreamChanged(

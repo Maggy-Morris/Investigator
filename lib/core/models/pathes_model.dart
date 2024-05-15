@@ -19,27 +19,7 @@ class pathes_model {
   }
 }
 
-// class PathForImages {
-//   final int? count;
-//   final  String? filePath;
-//   final List<String>? timestamp;
 
-//   PathForImages({this.count, this.filePath, this.timestamp});
-
-//   PathForImages.fromJson(Map<String, dynamic> json) {
-//     count = json['count'];
-//     filePath = json['file_path'];
-//     timestamp = json['timestamp'].cast<String>();
-//   }
-
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = Map<String, dynamic>();
-//     data['count'] = count;
-//     data['file_path'] = filePath;
-//     data['timestamp'] = timestamp;
-//     return data;
-//   }
-// }
 
 class PathForImages {
   final int? count;

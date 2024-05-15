@@ -8,6 +8,20 @@ class HistoryEvent extends Equatable {
 }
 
 
+
+
+
+class SecondsGivenFromVideoEvent extends HistoryEvent {
+  final int secondsGivenFromVideo;
+
+  const SecondsGivenFromVideoEvent({required this.secondsGivenFromVideo});
+
+  @override
+  List<Object> get props => [secondsGivenFromVideo];
+}
+
+
+
 class EditvideoPathForHistory extends HistoryEvent {
   final String videoPathForHistory;
 
@@ -16,7 +30,6 @@ class EditvideoPathForHistory extends HistoryEvent {
   @override
   List<Object> get props => [videoPathForHistory];
 }
-
 
 
 

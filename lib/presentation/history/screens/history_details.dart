@@ -1,61 +1,63 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-// import 'package:Investigator/core/widgets/fullscreenImage.dart';
-// import 'package:easy_localization/easy_localization.dart';
 import 'package:Investigator/core/widgets/FullImageURL.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:chewie/chewie.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:flutter_easyloading/flutter_easyloading.dart';
-// import 'package:http/http.dart' as http;
-// import 'package:luminalens/core/enum/enum.dart';
-// import 'package:luminalens/core/loader/loading_indicator.dart';
-// import 'package:luminalens/core/remote_provider/remote_data_source.dart';
-// import 'package:luminalens/core/resources/app_colors.dart';
-// import 'package:luminalens/core/utils/responsive.dart';
-// import 'package:luminalens/core/widgets/badge_builder.dart';
-// import 'package:luminalens/core/widgets/sizedbox.dart';
-// import 'package:luminalens/presentation/all_cameras/bloc/camera_bloc.dart';
-// import 'package:luminalens/presentation/standard_layout/screens/standard_layout.dart';
-// import 'package:month_picker_dialog/month_picker_dialog.dart';
-
-import 'dart:html' as html;
-// import 'dart:ui_web' as ui;
+import 'package:video_player/video_player.dart';
 
 import '../../../core/enum/enum.dart';
-import '../../../core/loader/loading_indicator.dart';
 import '../../../core/remote_provider/remote_data_source.dart';
 import '../../../core/resources/app_colors.dart';
 import '../../../core/utils/responsive.dart';
-// import '../../../core/widgets/badge_builder.dart';
 import '../../../core/widgets/image_downloader.dart';
 import '../../../core/widgets/persons_per_widget.dart';
 import '../../../core/widgets/sizedbox.dart';
 import '../../../core/widgets/toast/toast.dart';
-import '../../standard_layout/screens/standard_layout.dart';
 import '../bloc/history_bloc.dart';
 
 class HistoryDetails extends StatefulWidget {
   final String path;
   // final String count;
+  final List<String> images;
 
-  const HistoryDetails({Key? key, required this.path
-      // , required this.count
-      })
+  const HistoryDetails({Key? key, required this.path, required this.images})
       : super(key: key);
 
   @override
-  State<HistoryDetails> createState() => _CameraDetailsState();
+  State<HistoryDetails> createState() => _HistoryDetails();
 }
 
 /// correct place to load iFrame
 ///
 
-class _CameraDetailsState extends State<HistoryDetails> {
+class _HistoryDetails extends State<HistoryDetails> {
+  final CarouselController _carouselController = CarouselController();
+
+  late ScrollController _scrollController;
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return StandardLayoutScreen(
+    return Scaffold(
+      backgroundColor: AppColors.backGround,
+      appBar: AppBar(
+        backgroundColor: AppColors.backGround,
+
+        iconTheme: const IconThemeData(
+            color: Colors.white), // Set back button color to white
+        title: const Text(
+          "History Details",
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
       body: BlocProvider(
         create: (context) => HistoryBloc()
           // ..add(CameraDetailsEvent(cameraName: widget.cameraName)),
@@ -85,10 +87,10 @@ class _CameraDetailsState extends State<HistoryDetails> {
             }
           },
           child: BlocBuilder<HistoryBloc, HistoryState>(
-            buildWhen: (previous, current) {
-              return previous.pathForImages.filePath !=
-                  current.pathForImages.filePath;
-            },
+            // buildWhen: (previous, current) {
+            // return previous.videoPathForHistory !=
+            //     current.videoPathForHistory;
+            // },
             builder: (context, state) {
               // if (state.singleCameraDetails.isEmpty) {
               //   return Center(child: loadingIndicator());
@@ -96,197 +98,350 @@ class _CameraDetailsState extends State<HistoryDetails> {
 
               return BlocBuilder<HistoryBloc, HistoryState>(
                 builder: (context, state) {
-                  return Card(
-                    margin: const EdgeInsets.all(20),
-                    color: AppColors.backGround,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            /// Live Preview
-                            // Card(
-                            //   child: Container(
-                            //     width: MediaQuery.of(context).size.width,
-                            //     height: 500,
-                            //     padding: const EdgeInsets.all(10.0),
-                            //     // width: Responsive.isMobile(context)
-                            //     //     ? MediaQuery.of(context).size.width
-                            //     //     : MediaQuery.of(context).size.width * 0.2,
-                            //     child: iframeWidget,
-                            //   ),
-                            // ),
-                            // FxBox.h24,
-                            // SizedBox(
-                            //   width: double.infinity,
-                            //   child: Text(state.pathProvided,
-                            //       style: const TextStyle(
-                            //           color: Colors.white,
-                            //           fontSize: 20,
-                            //           fontWeight: FontWeight.bold)),
-                            // ),
-
-                            FxBox.h24,
-
-                            FxBox.h24,
-                            BlocProvider.value(
-                              value: HistoryBloc.get(context),
-                              child: BlocBuilder<HistoryBloc, HistoryState>(
-                                builder: (context, state) {
-                                  return state.submission ==
-                                          Submission.noDataFound
-                                      ? const Padding(
-                                          padding: EdgeInsets.all(10.0),
-                                          child: Text(
-                                            "No Data Available",
-                                            style: TextStyle(
-                                              color: Colors.red,
-                                              fontWeight: FontWeight.w900,
-                                              fontSize: 25,
-                                            ),
-                                          ))
-                                      : Padding(
-                                          padding: const EdgeInsets.all(10.0),
-                                          child: SingleChildScrollView(
-                                            child: Column(
+                  return Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: widget.images.isNotEmpty
+                                ? MainAxisAlignment.spaceAround
+                                : MainAxisAlignment.center,
+                            children: [
+                              widget.images.isNotEmpty
+                                  ? SizedBox(
+                                      height:
+                                          widget.images.length == 1 ? 200 : 300,
+                                      width: 300,
+                                      child: Card(
+                                        elevation: 4,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          child: InkWell(
+                                            onTap: () {
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (ctx) {
+                                                    return AlertDialog(
+                                                        title: const Text(
+                                                            "Images Searched With"),
+                                                        content:
+                                                            // SingleChildScrollView(
+                                                            //   child:
+                                                            SizedBox(
+                                                          width: 400,
+                                                          height: 400,
+                                                          child:
+                                                              GridView.builder(
+                                                            gridDelegate:
+                                                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                                              crossAxisCount:
+                                                                  2, // Number of columns in the grid
+                                                              crossAxisSpacing:
+                                                                  10, // Spacing between columns
+                                                              mainAxisSpacing:
+                                                                  10, // Spacing between rows
+                                                            ),
+                                                            itemCount: widget
+                                                                .images.length,
+                                                            itemBuilder:
+                                                                (context,
+                                                                    index) {
+                                                              // Display images from the URL in a grid
+                                                              return GestureDetector(
+                                                                onTap: () {
+                                                                  Navigator.push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                          builder: (context) => FullScreenImageFromUrl(
+                                                                                text: "",
+                                                                                imageUrl: "http:${RemoteDataSource.baseUrlWithoutPort}8000/${widget.images[index].split("Image_Database/")[1]}",
+                                                                              )));
+                                                                },
+                                                                child: Image
+                                                                    .network(
+                                                                  "http:${RemoteDataSource.baseUrlWithoutPort}8000/${widget.images[index].split("Image_Database/")[1]}",
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                ),
+                                                              );
+                                                            },
+                                                          ),
+                                                        ),
+                                                        // ),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop(); // Close the dialog
+                                                            },
+                                                            child: const Text(
+                                                              'Cancel',
+                                                              style: TextStyle(
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ]);
+                                                  });
+                                            },
+                                            child: Stack(
                                               children: [
-                                                // Display the pagination controls
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          bottom: 15.0),
-                                                  child: CustomPagination(
-                                                    // persons: state
-                                                    //     .employeeNamesList, // Pass the list of data
-                                                    pageCount: (state
-                                                                .pathForImages
-                                                                .count! /
-                                                            10)
-                                                        .ceil(), // Pass the page count
-                                                    onPageChanged:
-                                                        (int index) async {
-                                                      HistoryBloc.get(context)
-                                                          .add(EditPageNumber(
-                                                              pageIndex:
-                                                                  index));
+                                                if (widget.images.isNotEmpty)
+                                                  ListView.builder(
+                                                    scrollDirection:
+                                                        Axis.vertical,
+                                                    itemCount:
+                                                        widget.images.length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      final imageUrl =
+                                                          widget.images[index];
+                                                      return Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(10.0),
+                                                        child: Image.network(
+                                                          "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageUrl.split("Image_Database/")[1]}",
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      );
                                                     },
                                                   ),
-                                                ),
-                                                // Display the list of data
-                                                SizedBox(
-                                                  width: MediaQuery.of(context)
-                                                      .size
-                                                      .width,
-                                                  child:
-                                                      (state.submission ==
-                                                              Submission
-                                                                  .noDataFound)
-                                                          ? const Center(
-                                                              child: Text(
-                                                              "No data found Yet!",
-                                                              style: TextStyle(
-                                                                  color:
-                                                                      AppColors
-                                                                          .blueB,
-                                                                  fontSize: 25,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600),
-                                                            ))
-                                                          : GridView.builder(
-                                                              shrinkWrap: true,
-                                                              physics:
-                                                                  const NeverScrollableScrollPhysics(),
-                                                              itemCount: state
-                                                                          .pathForImages
-                                                                          .count !=
-                                                                      0
-                                                                  ? (state.pathForImages
-                                                                              .count! <
-                                                                          10)
-                                                                      ? (state.pathForImages
-                                                                              .count! %
-                                                                          10)
-                                                                      : (state.pageIndex ==
-                                                                              (state.pathForImages.count! / 10).ceil())
-                                                                          ? (state.pathForImages.count! % 10 == 0)
-                                                                              ? 10
-                                                                              : (state.pathForImages.count! % 10)
-                                                                          : 10
-                                                                  : 0,
-                                                              gridDelegate: Responsive
-                                                                      .isMobile(
-                                                                          context)
-                                                                  ? const SliverGridDelegateWithFixedCrossAxisCount(
-                                                                      crossAxisCount:
-                                                                          1,
-                                                                      crossAxisSpacing:
-                                                                          45,
-                                                                      mainAxisSpacing:
-                                                                          45,
-                                                                      mainAxisExtent:
-                                                                          350,
-                                                                    )
-                                                                  : Responsive.isTablet(
-                                                                          context)
-                                                                      ? const SliverGridDelegateWithFixedCrossAxisCount(
-                                                                          crossAxisCount:
-                                                                              2,
-                                                                          crossAxisSpacing:
-                                                                              45,
-                                                                          mainAxisSpacing:
-                                                                              45,
-                                                                          mainAxisExtent:
-                                                                              350,
-                                                                        )
-                                                                      : MediaQuery.of(context).size.width <
-                                                                              1500
-                                                                          ? SliverGridDelegateWithMaxCrossAxisExtent(
-                                                                              maxCrossAxisExtent: MediaQuery.of(context).size.width * 0.24,
-                                                                              crossAxisSpacing: 45,
-                                                                              mainAxisSpacing: 45,
-                                                                              mainAxisExtent: 350,
-                                                                            )
-                                                                          : SliverGridDelegateWithMaxCrossAxisExtent(
-                                                                              maxCrossAxisExtent: MediaQuery.of(context).size.width * 0.24,
-                                                                              crossAxisSpacing: 45,
-                                                                              mainAxisSpacing: 45,
-                                                                              mainAxisExtent: 350,
-                                                                            ),
-                                                              itemBuilder:
-                                                                  (context,
-                                                                      index) {
-                                                                return imagesListWidget(
-                                                                  onDownloadPressed:
-                                                                      () {
-                                                                    downloadImageFromWeb(
-                                                                      imageUrl:
-                                                                          "${state.pathForImages.filePath?.split('/').sublist(1, state.pathForImages.filePath!.split('/').length - 1).join('/')}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
-                                                                    );
-                                                                  },
-                                                                  // timeText:
-                                                                  //     data_time,
-                                                                  // image64: image,
-                                                                  imageSource:
-                                                                      "${state.pathForImages.filePath?.split('/').sublist(1, state.pathForImages.filePath!.split('/').length - 1).join('/')}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
-                                                                  // text: names
-                                                                );
-                                                              },
-                                                            ),
-                                                ),
                                               ],
                                             ),
                                           ),
-                                        );
-                                },
+                                        ),
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                              Center(
+                                child: SizedBox(
+                                  height: 300,
+                                  width: 700,
+                                  child: Card(
+                                      elevation: 4,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: _buildVideoPlayerWidget(
+                                          // urlFromHistory:
+                                          "http:${RemoteDataSource.baseUrlWithoutPort}8000/${widget.path.split("Image_Database/")[1]}",
+                                          state.secondsGivenFromVideo)),
+                                ),
                               ),
+                            ],
+                          ),
+                          FxBox.h16,
+                          BlocProvider.value(
+                            value: HistoryBloc.get(context),
+                            child: BlocBuilder<HistoryBloc, HistoryState>(
+                              builder: (context, state) {
+                                return state.submission ==
+                                        Submission.noDataFound
+                                    ? const Padding(
+                                        padding: EdgeInsets.all(10.0),
+                                        child: Text(
+                                          "No Data Available",
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.w900,
+                                            fontSize: 25,
+                                          ),
+                                        ))
+                                    : Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: SingleChildScrollView(
+                                          child: Column(
+                                            children: [
+                                              // Display the pagination controls
+
+                                              // Display the list of data
+                                              SizedBox(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                height: 200,
+                                                child:
+                                                    (state.submission ==
+                                                            Submission
+                                                                .noDataFound)
+                                                        ? const Center(
+                                                            child: Text(
+                                                            "No data found Yet!",
+                                                            style: TextStyle(
+                                                                color: AppColors
+                                                                    .blueB,
+                                                                fontSize: 25,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600),
+                                                          ))
+                                                        : Row(
+                                                            children: [
+                                                              IconButton(
+                                                                icon:
+                                                                    const Icon(
+                                                                  Icons
+                                                                      .arrow_back_ios_new_outlined,
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
+                                                                onPressed: () {
+                                                                  _scrollController
+                                                                      .animateTo(
+                                                                    _scrollController
+                                                                            .offset -
+                                                                        400, // Adjust as needed
+                                                                    duration: const Duration(
+                                                                        milliseconds:
+                                                                            500),
+                                                                    curve: Curves
+                                                                        .easeInOut,
+                                                                  );
+                                                                },
+                                                              ),
+                                                              Expanded(
+                                                                child: ListView
+                                                                    .builder(
+                                                                  controller:
+                                                                      _scrollController,
+                                                                  scrollDirection:
+                                                                      Axis.horizontal,
+                                                                  shrinkWrap:
+                                                                      true,
+                                                                  physics:
+                                                                      const AlwaysScrollableScrollPhysics(),
+                                                                  itemCount: state
+                                                                              .pathForImages
+                                                                              .count !=
+                                                                          0
+                                                                      ? (state.pathForImages.count! <
+                                                                              10)
+                                                                          ? (state.pathForImages.count! %
+                                                                              10)
+                                                                          : (state.pageIndex == (state.pathForImages.count! / 10).ceil())
+                                                                              ? (state.pathForImages.count! % 10 == 0)
+                                                                                  ? 10
+                                                                                  : (state.pathForImages.count! % 10)
+                                                                              : 10
+                                                                      : 0,
+                                                                  itemBuilder:
+                                                                      (context,
+                                                                          index) {
+                                                                    final data_time = state
+                                                                        .pathForImages
+                                                                        .timestamp?[(state.pageIndex == 1 || state.pageIndex == 0
+                                                                                ? 0
+                                                                                : state.pageIndex - 1) *
+                                                                            10 +
+                                                                        (index)];
+                                                                    return SizedBox(
+                                                                      height:
+                                                                          200,
+                                                                      child:
+                                                                          Padding(
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            10.0),
+                                                                        child:
+                                                                            imagesListWidget(
+                                                                          onTapTime:
+                                                                              () {
+                                                                            List<String>
+                                                                                parts =
+                                                                                data_time!.split(RegExp(r'[:.]'));
+
+                                                                            int hours =
+                                                                                int.parse(parts[0]);
+                                                                            int minutes =
+                                                                                int.parse(parts[1]);
+                                                                            int seconds =
+                                                                                int.parse(parts[2]);
+
+                                                                            // Calculate the total duration in seconds
+                                                                            int totalSeconds = hours * 3600 +
+                                                                                minutes * 60 +
+                                                                                seconds;
+                                                                            HistoryBloc.get(context).add(SecondsGivenFromVideoEvent(secondsGivenFromVideo: totalSeconds));
+                                                                          },
+                                                                          timeText:
+                                                                              data_time ?? "",
+                                                                          onDownloadPressed:
+                                                                              () {
+                                                                            downloadImageFromWeb(
+                                                                              imageUrl: "${state.pathForImages.filePath?.split('/').sublist(1, state.pathForImages.filePath!.split('/').length - 1).join('/')}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
+                                                                            );
+                                                                          },
+                                                                          imageSource:
+                                                                              "${state.pathForImages.filePath?.split('/').sublist(1, state.pathForImages.filePath!.split('/').length - 1).join('/')}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                ),
+                                                              ),
+                                                              IconButton(
+                                                                icon:
+                                                                    const Icon(
+                                                                  Icons
+                                                                      .arrow_forward_ios_outlined,
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
+                                                                onPressed: () {
+                                                                  // Handle scrolling to the right
+                                                                  _scrollController
+                                                                      .animateTo(
+                                                                    _scrollController
+                                                                            .offset +
+                                                                        400, // Adjust as needed
+                                                                    duration: const Duration(
+                                                                        milliseconds:
+                                                                            500),
+                                                                    curve: Curves
+                                                                        .easeInOut,
+                                                                  );
+                                                                },
+                                                              ),
+                                                            ],
+                                                          ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 15.0),
+                                                child: CustomPagination(
+                                                  // persons: state
+                                                  //     .employeeNamesList, // Pass the list of data
+                                                  pageCount: (state
+                                                              .pathForImages
+                                                              .count! /
+                                                          10)
+                                                      .ceil(), // Pass the page count
+                                                  onPageChanged:
+                                                      (int index) async {
+                                                    HistoryBloc.get(context)
+                                                        .add(EditPageNumber(
+                                                            pageIndex: index));
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                              },
                             ),
-                            FxBox.h24,
-                          ],
-                        ),
+                          ),
+                          FxBox.h24,
+                        ],
                       ),
                     ),
                   );
@@ -303,8 +458,9 @@ class _CameraDetailsState extends State<HistoryDetails> {
     String? image64,
     required String imageSource,
     String? text,
-    String? timeText,
+    required String timeText,
     required VoidCallback onDownloadPressed,
+    required Function()? onTapTime,
   }) {
     return Container(
       width: 300,
@@ -317,25 +473,29 @@ class _CameraDetailsState extends State<HistoryDetails> {
         borderRadius: BorderRadius.circular(6.0),
         child: Stack(
           children: [
-            GestureDetector(
-              onTap: () {
+            Tooltip(
+              message: "Go To Frame In Video",
+              child: GestureDetector(
+                onTap: onTapTime,
+                // () {
                 // print(imageSource);
 
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => FullScreenImageFromUrl(
-                            text: text ?? "",
-                            imageUrl:
-                                "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageSource}")));
-              },
-              child: Image.network(
-                "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageSource}",
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => FullScreenImageFromUrl(
+                //             text: text ?? "",
+                //             imageUrl:
+                //                 "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageSource}")));
+                // },
+                child: Image.network(
+                  "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageSource}",
 
-                width: double.infinity,
-                height: double.infinity,
-                // Images.profileImage,
-                fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: double.infinity,
+                  // Images.profileImage,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
 
@@ -372,21 +532,47 @@ class _CameraDetailsState extends State<HistoryDetails> {
                 ),
               ),
             ),
-            // Positioned(
-            //   bottom: 0,
-            //   right: 0,
-            //   child: Container(
-            //     padding: const EdgeInsets.all(8),
-            //     color: Colors.black.withOpacity(0.5),
-            //     child: Text(
-            //       timeText,
-            //       style: const TextStyle(
-            //         color: Colors.white,
-            //         fontSize: 16,
-            //       ),
-            //     ),
-            //   ),
-            // ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Tooltip(
+                message: "Open Image",
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => FullScreenImageFromUrl(
+                                text: text ?? "",
+                                imageUrl:
+                                    "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageSource}")));
+                  },
+                  icon: const Icon(
+                    Icons.crop_free_sharp,
+                    size: 45,
+                    color: AppColors.buttonBlue,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              child: InkWell(
+                onTap: onTapTime,
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  color: Colors.black.withOpacity(0.5),
+                  child: Text(
+                    timeText,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -411,5 +597,28 @@ class _CameraDetailsState extends State<HistoryDetails> {
         ),
       ),
     );
+  }
+
+  Widget _buildVideoPlayerWidget(String videoUrl, int secondsGiven) {
+    final videoPlayerController = VideoPlayerController.network(videoUrl);
+    final chewieController = ChewieController(
+      aspectRatio: videoPlayerController.value.aspectRatio,
+      videoPlayerController: videoPlayerController,
+      autoPlay: false,
+      startAt: Duration(seconds: secondsGiven),
+      autoInitialize: true,
+      looping: true,
+    );
+
+    return Chewie(
+      controller: chewieController,
+    );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+
+    super.dispose();
   }
 }

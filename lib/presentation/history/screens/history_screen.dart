@@ -1,3 +1,5 @@
+import 'package:Investigator/core/enum/enum.dart';
+import 'package:Investigator/core/loader/loading_indicator.dart';
 import 'package:Investigator/core/remote_provider/remote_data_source.dart';
 import 'package:Investigator/core/widgets/persons_per_widget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -5,6 +7,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:chewie/chewie.dart';
+import 'package:shimmer/shimmer.dart';
 
 import 'package:routemaster/routemaster.dart';
 import 'package:video_player/video_player.dart';
@@ -16,6 +19,7 @@ import '../../../core/widgets/sizedbox.dart';
 // import '../../standard_layout/bloc/standard_layout_cubit.dart';
 import '../../standard_layout/screens/standard_layout.dart';
 import '../bloc/history_bloc.dart';
+import 'history_details.dart';
 
 class AllHistoryScreen extends StatelessWidget {
   AllHistoryScreen({Key? key}) : super(key: key);
@@ -27,74 +31,121 @@ class AllHistoryScreen extends StatelessWidget {
     return StandardLayoutScreen(
       body: BlocProvider(
         create: (context) => HistoryBloc()..add(const PathesDataEvent()),
-        child: BlocBuilder<HistoryBloc, HistoryState>(
-          builder: (context, state) {
-            return Card(
-              margin: const EdgeInsets.all(20),
-              color: AppColors.backGround,
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    FxBox.h24,
-                    SizedBox(
-                      width: double.infinity,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "History".tr(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    FxBox.h24,
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 15.0),
-                      child: CustomPagination(
-                        // persons: state
-                        //     .employeeNamesList, // Pass the list of data
-                        pageCount: state.pageCount, // Pass the page count
-                        onPageChanged: (int index) async {
-                          ///////////////////////////
-
-                          HistoryBloc.get(context)
-                              .add(EditPageNumber(pageIndex: index));
-
-                          //////////////////////////////
-                        },
-                      ),
-                    ),
-                    FxBox.h24,
-                    (state.allHistory.isNotEmpty)
-                        ? Wrap(
-                            children: _responsiveCardList(
-                              context: context,
-                              state: state,
-                            ),
-                          )
-                        : Column(
-                            children: [
-                              FxBox.h24,
-                              const Text(
-                                "No History Yet!",
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 30),
+        child: BlocListener<HistoryBloc, HistoryState>(
+          listener: (context, state) {},
+          child: BlocBuilder<HistoryBloc, HistoryState>(
+            builder: (context, state) {
+              // if (state.submission == Submission.loading) {
+              //   return Center(
+              //     child: GridView.builder(
+              //         itemCount: 6,
+              //         itemBuilder: (context, index) {
+              //           return Shimmer.fromColors(
+              //             baseColor: const Color.fromARGB(255, 110, 101, 101),
+              //             highlightColor: const Color.fromARGB(255, 70, 63, 63),
+              //             child: SizedBox(
+              //               // height: 200,
+              //               width: Responsive.isMobile(context)
+              //                   ? MediaQuery.of(context).size.width
+              //                   : Responsive.isTablet(context)
+              //                       ? MediaQuery.of(context).size.width * 0.45
+              //                       : MediaQuery.of(context).size.width * 0.35,
+              //               child: Padding(
+              //                 padding: const EdgeInsets.all(8.0),
+              //                 child: _dataOfCamera(
+              //                   onPressed: () {},
+              //                   images: [],
+              //                   urlFromHistory: "",
+              //                   date: "",
+              //                   time: "",
+              //                   name: "",
+              //                   context: context,
+              //                 ),
+              //               ),
+              //             ),
+              //           );
+              //         },
+              //         gridDelegate:
+              //             const SliverGridDelegateWithFixedCrossAxisCount(
+              //           crossAxisCount: 2,
+              //           childAspectRatio: 1,
+              //           crossAxisSpacing: 17,
+              //           mainAxisSpacing: 10,
+              //         )),
+              //   );
+              // } else {
+              return Card(
+                margin: const EdgeInsets.all(20),
+                color: AppColors.backGround,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15)),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      FxBox.h24,
+                      SizedBox(
+                        width: double.infinity,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "History".tr(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
                               ),
-                            ],
-                          ),
-                  ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      FxBox.h24,
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 15.0),
+                        child: CustomPagination(
+                          // persons: state
+                          //     .employeeNamesList, // Pass the list of data
+                          pageCount: state.pageCount, // Pass the page count
+                          onPageChanged: (int index) async {
+                            ///////////////////////////
+
+                            HistoryBloc.get(context)
+                                .add(EditPageNumber(pageIndex: index));
+
+                            //////////////////////////////
+                          },
+                        ),
+                      ),
+                      FxBox.h24,
+                      (state.allHistory.isNotEmpty)
+                          ? Wrap(
+                              children: _responsiveCardList(
+                                context: context,
+                                state: state,
+                              ),
+                            )
+                          : Column(
+                              children: [
+                                FxBox.h24,
+                                FxBox.h24,
+                                FxBox.h24,
+
+                                loadingIndicator()
+                                // const Text(
+                                //   "No History Yet!",
+                                //   style: TextStyle(
+                                //       color: Colors.red, fontSize: 30),
+                                // ),
+                              ],
+                            ),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
+              );
+              // }
+            },
+          ),
         ),
       ),
     );
@@ -115,13 +166,22 @@ class AllHistoryScreen extends StatelessWidget {
               // height: 200,
               child: _dataOfCamera(
                   onPressed: () {
-                    Routemaster.of(context).push(
-                      "/requestDetails",
-                      queryParameters: {
-                        "process": state.allHistory[index].videoPath ?? "",
-                        // "timeStamp": state.allHistory[index].timestamp ?? "",
-                      },
-                    );
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => HistoryDetails(
+                                  path: state.allHistory[index].videoPath ?? "",
+                                  images:
+                                      state.allHistory[index].imagePaths ?? [],
+                                )));
+
+                    // Routemaster.of(context).push(
+                    //   "/requestDetails",
+                    //   queryParameters: {
+                    //     "process": state.allHistory[index].videoPath ?? "",
+                    //     // "timeStamp": state.allHistory[index].timestamp ?? "",
+                    //   },
+                    // );
                   },
                   images: state.allHistory[index].imagePaths,
                   urlFromHistory: state.allHistory[index].videoPath ?? "",
@@ -336,42 +396,42 @@ class AllHistoryScreen extends StatelessWidget {
     );
   }
 
-  Widget _pickVideoWidget({required String? urlFromHistory}) {
-    VideoPlayerController? _controller;
+  // Widget _pickVideoWidget({required String? urlFromHistory}) {
+  //   VideoPlayerController? _controller;
 
-    if (urlFromHistory != null && urlFromHistory.isNotEmpty) {
-      _controller = VideoPlayerController.network(urlFromHistory)
-        ..initialize().then((_) {
-          _controller!.pause();
-        });
-    }
+  //   if (urlFromHistory != null && urlFromHistory.isNotEmpty) {
+  //     _controller = VideoPlayerController.network(urlFromHistory)
+  //       ..initialize().then((_) {
+  //         _controller!.pause();
+  //       });
+  //   }
 
-    if (_controller != null) {
-      return Stack(children: [
-        AspectRatio(
-            aspectRatio: _controller.value.aspectRatio,
-            child: VideoPlayer(_controller)),
-        Center(
-          child: IconButton(
-              icon: _controller.value.isPlaying
-                  ? const Icon(Icons.pause)
-                  : const Icon(Icons.play_arrow),
-              onPressed: () {
-                _controller!.value.isPlaying
-                    ? _controller.pause()
-                    : _controller.play();
-              }),
-        ),
-        VideoProgressIndicator(
-          _controller,
-          allowScrubbing: true,
-          padding: const EdgeInsets.all(10),
-        ),
-      ]);
-    } else {
-      return const SizedBox(); // Return an empty SizedBox if no video controller is available
-    }
-  }
+  //   if (_controller != null) {
+  //     return Stack(children: [
+  //       AspectRatio(
+  //           aspectRatio: _controller.value.aspectRatio,
+  //           child: VideoPlayer(_controller)),
+  //       Center(
+  //         child: IconButton(
+  //             icon: _controller.value.isPlaying
+  //                 ? const Icon(Icons.pause)
+  //                 : const Icon(Icons.play_arrow),
+  //             onPressed: () {
+  //               _controller!.value.isPlaying
+  //                   ? _controller.pause()
+  //                   : _controller.play();
+  //             }),
+  //       ),
+  //       VideoProgressIndicator(
+  //         _controller,
+  //         allowScrubbing: true,
+  //         padding: const EdgeInsets.all(10),
+  //       ),
+  //     ]);
+  //   } else {
+  //     return const SizedBox(); // Return an empty SizedBox if no video controller is available
+  //   }
+  // }
 
   Widget _buildVideoPlayerWidget(String videoUrl) {
     final videoPlayerController = VideoPlayerController.network(videoUrl);
@@ -380,7 +440,7 @@ class AllHistoryScreen extends StatelessWidget {
       videoPlayerController: videoPlayerController,
       autoPlay: false,
       // startAt: Duration(seconds: 1),
-      autoInitialize: true,
+      autoInitialize: false,
       looping: true,
     );
 

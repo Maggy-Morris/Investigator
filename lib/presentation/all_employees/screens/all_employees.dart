@@ -121,7 +121,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                           const TextStyle(color: Colors.black),
                                       controller: _searchController,
                                       decoration: InputDecoration(
-                                        hintText: 'Search For Employee'.tr(),
+                                        hintText: 'Search For Targets'.tr(),
                                         hintStyle: const TextStyle(
                                           color: Colors.black,
                                           fontSize: 15,
@@ -246,7 +246,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                       title: const SizedBox(
                                                         width: 500,
                                                         child: Text(
-                                                          "Add Employee",
+                                                          "Add Target",
                                                           style: TextStyle(
                                                               color: AppColors
                                                                   .white),
@@ -738,7 +738,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                     );
                                   },
                                   child: const Text(
-                                    "Add Employee",
+                                    "Add Target",
                                     style: TextStyle(
                                       fontSize: 16,
                                       color: Colors.white,
@@ -766,7 +766,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                           const TextStyle(color: Colors.black),
                                       controller: _searchController,
                                       decoration: InputDecoration(
-                                        hintText: 'Search For Employee'.tr(),
+                                        hintText: 'Search For Targets'.tr(),
                                         hintStyle: const TextStyle(
                                           color: Colors.black,
                                           fontSize: 15,
@@ -897,7 +897,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                       title: const SizedBox(
                                                         width: 500,
                                                         child: Text(
-                                                          "Add Employee",
+                                                          "Add Target",
                                                           style: TextStyle(
                                                               color: AppColors
                                                                   .white),
@@ -1379,7 +1379,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                     );
                                   },
                                   child: const Text(
-                                    "Add Employee",
+                                    "Add Target",
                                     style: TextStyle(
                                       fontSize: 16,
                                       color: Colors.white,

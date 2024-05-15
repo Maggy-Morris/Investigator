@@ -2,7 +2,7 @@ part of 'group_search_bloc.dart';
 
 class GroupSearchState extends Equatable {
   final String pathProvided;
-
+  final int timeDuration;
   int pageIndex;
   int pageCount;
   final String selectedOption;
@@ -37,6 +37,7 @@ class GroupSearchState extends Equatable {
   final List<String> data;
 
   GroupSearchState({
+    this.timeDuration = 0,
     this.pathProvided = "",
     this.pageCount = 0,
     this.pageIndex = 0,
@@ -67,6 +68,7 @@ class GroupSearchState extends Equatable {
   });
 
   GroupSearchState copyWith({
+    int? timeDuration,
     String? pathProvided,
     int? pageCount,
     int? pageIndex,
@@ -96,6 +98,7 @@ class GroupSearchState extends Equatable {
     List<String>? data,
   }) {
     return GroupSearchState(
+      timeDuration: timeDuration ?? this.timeDuration,
       pathProvided: pathProvided ?? this.pathProvided,
       pageIndex: pageIndex ?? this.pageIndex,
       pageCount: pageCount ?? this.pageCount,
@@ -128,6 +131,7 @@ class GroupSearchState extends Equatable {
 
   @override
   List<Object?> get props => [
+        timeDuration,
         pathProvided,
         pageIndex,
         pageCount,

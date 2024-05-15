@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:Investigator/core/widgets/FullImageURL.dart';
 import 'package:camera/camera.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:chewie/chewie.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -27,6 +28,7 @@ import '../../../core/remote_provider/remote_data_source.dart';
 import '../../../core/widgets/fullscreenImage.dart';
 import '../../../core/widgets/image_downloader.dart';
 import '../../../core/widgets/persons_per_widget.dart';
+import '../../../core/widgets/videoPlayer.dart';
 import '../../camera_controller/cubit/photo_app_cubit.dart';
 import '../bloc/home_bloc.dart';
 
@@ -56,9 +58,18 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
   VideoPlayerController? _controller;
   bool _loading = false;
 
+  // late ScrollController _scrollController;
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _scrollController = ScrollController();
+  // }
+
   @override
   void dispose() {
     _controller?.dispose();
+    // _scrollController.dispose();
+
     super.dispose();
   }
 
@@ -100,13 +111,13 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                     child: Column(
                       children: [
                         Text(
-                          "Search for your Employee".tr(),
+                          "Search for your Targets".tr(),
                           style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                               color: AppColors.white),
                         ),
-                        FxBox.h24,
+                        FxBox.h10,
                         const Tooltip(
                           message:
                               "Choose The Accuracy You Want To Search For A Person With Using The SliderBar \n        Note That If the Video Resolution Is Bad Try to Choose Low Accuracy ",
@@ -121,8 +132,8 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                             children: [
                               Center(
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 50.0, vertical: 20),
+                                  padding: const EdgeInsets.only(
+                                      right: 50.0, left: 50.0, bottom: 10),
                                   child: SfRangeSliderTheme(
                                     data: SfRangeSliderThemeData(
                                       activeTrackColor: Colors.white,
@@ -190,10 +201,10 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                 children: [
                                   // Images Carasol
                                   Tooltip(
-                                    message: "Upload Image or Multiple Images",
+                                    message: "Upload Image or Images",
                                     child: SizedBox(
                                       height: 300,
-                                      width: 300,
+                                      width: 250,
                                       child: Card(
                                         elevation: 4,
                                         shape: RoundedRectangleBorder(
@@ -345,47 +356,77 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                   ),
 
                                   // Uploading Videos
-                                  Tooltip(
-                                    message: "Upload a video",
-                                    child: SizedBox(
-                                      height: 300,
-                                      width: 300,
-                                      child: Card(
-                                        elevation: 4,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                        child: Stack(
-                                          fit: StackFit.expand,
-                                          children: [
-                                            if (_loading)
-                                              Center(
-                                                child:
-                                                    loadingIndicator(), // Display circular progress indicator while loading
-                                              )
-                                            else if (_controller != null)
-                                              AspectRatio(
-                                                aspectRatio: _controller!
-                                                    .value.aspectRatio,
-                                                child:
-                                                    VideoPlayer(_controller!),
-                                              )
-                                            else
-                                              Image.asset(
-                                                'assets/images/iconVid.png',
-                                                width: double.infinity,
-                                                height: double.infinity,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            Positioned(
-                                              left: 1,
-                                              right: 1,
-                                              top: 1,
-                                              bottom: 1,
+                                  SizedBox(
+                                    height: 300,
+                                    width: 600,
+                                    child: Card(
+                                      elevation: 4,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Stack(
+                                        fit: StackFit.expand,
+                                        children: [
+                                          if (_loading)
+                                            Center(
+                                              child:
+                                                  loadingIndicator(), // Display circular progress indicator while loading
+                                            )
+                                          else if (_controller != null)
+                                            AspectRatio(
+                                              aspectRatio: _controller!
+                                                  .value.aspectRatio,
+                                              child: Stack(children: [
+                                                Chewie(
+                                                  controller: ChewieController(
+                                                    aspectRatio: _controller
+                                                        ?.value.aspectRatio,
+                                                    videoPlayerController:
+                                                        _controller!,
+                                                    autoPlay: false,
+                                                    startAt: Duration(
+                                                        seconds:
+                                                            state.timeDuration),
+                                                    autoInitialize: true,
+                                                    looping: true,
+                                                  ),
+                                                ),
+                                                Positioned(
+                                                  top: 0,
+                                                  right: 0,
+                                                  child: Tooltip(
+                                                    message:
+                                                        "Upload Another Video",
+                                                    child: IconButton(
+                                                      onPressed: () {
+                                                        _pickVideo().then(
+                                                            (PlatformFile?
+                                                                videoFile) {
+                                                          if (videoFile !=
+                                                              null) {
+                                                            HomeBloc.get(
+                                                                    context)
+                                                                .add(videoevent(
+                                                                    video:
+                                                                        videoFile));
+                                                          }
+                                                        });
+                                                      },
+                                                      icon: const Icon(
+                                                        Icons.upload,
+                                                        size: 45,
+                                                        color: AppColors
+                                                            .buttonBlue,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ]),
+                                            )
+                                          else
+                                            Tooltip(
+                                              message: "Upload a video",
                                               child: GestureDetector(
-                                                // child: Text(""),
-
                                                 onTap: () {
                                                   _pickVideo().then(
                                                       (PlatformFile?
@@ -398,10 +439,15 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                     }
                                                   });
                                                 },
+                                                child: Image.asset(
+                                                  'assets/images/iconVid.png',
+                                                  // width: double.infinity,
+                                                  // height: double.infinity,
+                                                  // fit: BoxFit.cover,
+                                                ),
                                               ),
-                                            )
-                                          ],
-                                        ),
+                                            ),
+                                        ],
                                       ),
                                     ),
                                   ),
@@ -498,6 +544,180 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                             child: SingleChildScrollView(
                                               child: Column(
                                                 children: [
+                                                  // Display the list of data
+                                                  SizedBox(
+                                                    width:
+                                                        // 200,
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    height: 300,
+                                                    child: (state.submission ==
+                                                            Submission
+                                                                .noDataFound)
+                                                        ? const Center(
+                                                            child: Text(
+                                                            "No data found Yet!",
+                                                            style: TextStyle(
+                                                                color: AppColors
+                                                                    .blueB,
+                                                                fontSize: 25,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600),
+                                                          ))
+                                                        // : Row(
+                                                        //     children: [
+                                                        // state.pathProvided
+                                                        //         .isNotEmpty
+                                                        //     ? IconButton(
+                                                        //         icon:
+                                                        //             const Icon(
+                                                        //           Icons
+                                                        //               .arrow_back_ios_new_outlined,
+                                                        //           color: Colors
+                                                        //               .white,
+                                                        //         ),
+                                                        //         onPressed:
+                                                        //             () {
+                                                        //           _scrollController
+                                                        //               .animateTo(
+                                                        //             _scrollController.offset -
+                                                        //                 400, // Adjust as needed
+                                                        //             duration:
+                                                        //                 const Duration(milliseconds: 500),
+                                                        //             curve:
+                                                        //                 Curves.easeInOut,
+                                                        //           );
+                                                        //         },
+                                                        //       )
+                                                        //     : SizedBox(),
+                                                        : ListView.builder(
+                                                            scrollDirection:
+                                                                Axis.horizontal,
+                                                            shrinkWrap: true,
+                                                            physics:
+                                                                const AlwaysScrollableScrollPhysics(),
+                                                            itemCount: state
+                                                                        .pageCount !=
+                                                                    0
+                                                                ? (state.pageCount <
+                                                                        10)
+                                                                    ? (state.pageCount %
+                                                                        10)
+                                                                    : (state.pageIndex ==
+                                                                            (state.pageCount / 10)
+                                                                                .ceil())
+                                                                        ? (state.pageCount % 10 ==
+                                                                                0)
+                                                                            ? 10
+                                                                            : (state.pageCount %
+                                                                                10)
+                                                                        : 10
+                                                                : 0,
+                                                            itemBuilder:
+                                                                (context,
+                                                                    index) {
+                                                              // final image = state
+                                                              //         .snapShots[
+                                                              //     (state.pageIndex == 1 || state.pageIndex == 0
+                                                              //                 ? 0
+                                                              //                 : state.pageIndex - 1) *
+                                                              //             10 +
+                                                              //         (index)];
+
+                                                              final data_time = state
+                                                                  .data[(state.pageIndex == 1 ||
+                                                                              state.pageIndex ==
+                                                                                  0
+                                                                          ? 0
+                                                                          : state.pageIndex -
+                                                                              1) *
+                                                                      10 +
+                                                                  (index)];
+                                                              return SizedBox(
+                                                                height: 300,
+                                                                child: Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          10.0),
+                                                                  child: imagesListWidget(
+                                                                      onTap: () {
+                                                                        List<String>
+                                                                            parts =
+                                                                            data_time.split(RegExp(r'[:.]'));
+
+                                                                        int hours =
+                                                                            int.parse(parts[0]);
+                                                                        int minutes =
+                                                                            int.parse(parts[1]);
+                                                                        int seconds =
+                                                                            int.parse(parts[2]);
+
+                                                                        // Calculate the total duration in seconds
+                                                                        int totalSeconds = hours *
+                                                                                3600 +
+                                                                            minutes *
+                                                                                60 +
+                                                                            seconds;
+                                                                        HomeBloc.get(context).add(SetTimeDuration(
+                                                                            timeDuration:
+                                                                                totalSeconds));
+
+                                                                        ///////////////////////////////////////////////////////////////
+                                                                        debugPrint(
+                                                                            totalSeconds.toString());
+                                                                      },
+                                                                      onDownloadPressed: () {
+                                                                        downloadImageFromWeb(
+                                                                          imageUrl:
+                                                                              "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
+
+                                                                          // downloadName:
+                                                                          //     data_time,
+                                                                        );
+                                                                        // _downloadImage(
+                                                                        //     data:
+                                                                        //         image,
+                                                                        //     downloadName:
+                                                                        //         data_time);
+                                                                      },
+                                                                      imageSource: "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
+                                                                      text: data_time),
+                                                                ),
+                                                              );
+                                                            },
+                                                          ),
+                                                    // state.pathProvided
+                                                    //         .isNotEmpty
+                                                    //     ? IconButton(
+                                                    //         icon:
+                                                    //             const Icon(
+                                                    //           Icons
+                                                    //               .arrow_forward_ios_outlined,
+                                                    //           color: Colors
+                                                    //               .white,
+                                                    //         ),
+                                                    //         onPressed:
+                                                    //             () {
+                                                    //           // Handle scrolling to the right
+                                                    //           _scrollController
+                                                    //               .animateTo(
+                                                    //             _scrollController.offset +
+                                                    //                 400, // Adjust as needed
+                                                    //             duration:
+                                                    //                 const Duration(milliseconds: 500),
+                                                    //             curve:
+                                                    //                 Curves.easeInOut,
+                                                    //           );
+                                                    //         },
+                                                    //       )
+                                                    //     : SizedBox(),
+                                                    //   ],
+                                                    // ),
+                                                  ),
+
                                                   // Display the pagination controls
                                                   Padding(
                                                     padding:
@@ -519,137 +739,6 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                       },
                                                     ),
                                                   ),
-                                                  // Display the list of data
-                                                  SizedBox(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    child: (state.submission ==
-                                                            Submission
-                                                                .noDataFound)
-                                                        ? const Center(
-                                                            child: Text(
-                                                            "No data found Yet!",
-                                                            style: TextStyle(
-                                                                color: AppColors
-                                                                    .blueB,
-                                                                fontSize: 25,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600),
-                                                          ))
-                                                        : GridView.builder(
-                                                            shrinkWrap: true,
-                                                            physics:
-                                                                const NeverScrollableScrollPhysics(),
-                                                            itemCount: state
-                                                                        .pageCount !=
-                                                                    0
-                                                                ? (state.pageCount <
-                                                                        10)
-                                                                    ? (state.pageCount %
-                                                                        10)
-                                                                    : (state.pageIndex ==
-                                                                            (state.pageCount / 10)
-                                                                                .ceil())
-                                                                        ? (state.pageCount % 10 ==
-                                                                                0)
-                                                                            ? 10
-                                                                            : (state.pageCount %
-                                                                                10)
-                                                                        : 10
-                                                                : 0,
-                                                            gridDelegate: Responsive
-                                                                    .isMobile(
-                                                                        context)
-                                                                ? const SliverGridDelegateWithFixedCrossAxisCount(
-                                                                    crossAxisCount:
-                                                                        1,
-                                                                    crossAxisSpacing:
-                                                                        45,
-                                                                    mainAxisSpacing:
-                                                                        45,
-                                                                    mainAxisExtent:
-                                                                        350,
-                                                                  )
-                                                                : Responsive.isTablet(
-                                                                        context)
-                                                                    ? const SliverGridDelegateWithFixedCrossAxisCount(
-                                                                        crossAxisCount:
-                                                                            2,
-                                                                        crossAxisSpacing:
-                                                                            45,
-                                                                        mainAxisSpacing:
-                                                                            45,
-                                                                        mainAxisExtent:
-                                                                            350,
-                                                                      )
-                                                                    : MediaQuery.of(context).size.width <
-                                                                            1500
-                                                                        ? SliverGridDelegateWithMaxCrossAxisExtent(
-                                                                            maxCrossAxisExtent:
-                                                                                MediaQuery.of(context).size.width * 0.24,
-                                                                            crossAxisSpacing:
-                                                                                45,
-                                                                            mainAxisSpacing:
-                                                                                45,
-                                                                            mainAxisExtent:
-                                                                                350,
-                                                                          )
-                                                                        : SliverGridDelegateWithMaxCrossAxisExtent(
-                                                                            maxCrossAxisExtent:
-                                                                                MediaQuery.of(context).size.width * 0.24,
-                                                                            crossAxisSpacing:
-                                                                                45,
-                                                                            mainAxisSpacing:
-                                                                                45,
-                                                                            mainAxisExtent:
-                                                                                350,
-                                                                          ),
-                                                            itemBuilder:
-                                                                (context,
-                                                                    index) {
-                                                              // final image = state
-                                                              //         .snapShots[
-                                                              //     (state.pageIndex == 1 || state.pageIndex == 0
-                                                              //                 ? 0
-                                                              //                 : state.pageIndex - 1) *
-                                                              //             10 +
-                                                              //         (index)];
-
-                                                              final data_time = state
-                                                                  .data[(state.pageIndex == 1 ||
-                                                                              state.pageIndex ==
-                                                                                  0
-                                                                          ? 0
-                                                                          : state.pageIndex -
-                                                                              1) *
-                                                                      10 +
-                                                                  (index)];
-                                                              return imagesListWidget(
-                                                                  onDownloadPressed:
-                                                                      () {
-                                                                    downloadImageFromWeb(
-                                                                      imageUrl:
-                                                                          "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
-
-                                                                      // downloadName:
-                                                                      //     data_time,
-                                                                    );
-                                                                    // _downloadImage(
-                                                                    //     data:
-                                                                    //         image,
-                                                                    //     downloadName:
-                                                                    //         data_time);
-                                                                  },
-                                                                  imageSource:
-                                                                      "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
-                                                                  text:
-                                                                      data_time);
-                                                            },
-                                                          ),
-                                                  ),
                                                 ],
                                               ),
                                             ),
@@ -657,123 +746,6 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                   },
                                 ),
                               )
-
-                              ///frames Data
-                              // state.submission == Submission.noDataFound
-                              //     ? const Padding(
-                              //         padding: EdgeInsets.all(10.0),
-                              //         child: Text(
-                              //           "This Person Is Not In The Video",
-                              //           style: TextStyle(
-                              //             color: Colors.red,
-                              //             fontWeight: FontWeight.w900,
-                              //             fontSize: 25,
-                              //           ),
-                              //         ))
-                              //     : Padding(
-                              //         padding: const EdgeInsets.all(10.0),
-                              //         child: SingleChildScrollView(
-                              //           child: Column(
-                              //             children: [
-                              //               SizedBox(
-                              //                 width: MediaQuery.of(context)
-                              //                     .size
-                              //                     .width,
-                              //                 child: (state.submission ==
-                              //                         Submission.noDataFound)
-                              //                     ? const Center(
-                              //                         child: Text(
-                              //                         "No data found Yet!",
-                              //                         style: TextStyle(
-                              //                             color:
-                              //                                 AppColors.blueB,
-                              //                             fontSize: 25,
-                              //                             fontWeight:
-                              //                                 FontWeight.w600),
-                              //                       ))
-                              //                     : GridView.builder(
-                              //                         shrinkWrap: true,
-                              //                         physics:
-                              //                             const NeverScrollableScrollPhysics(),
-                              //                         itemCount: state
-                              //                             .snapShots.length,
-                              //                         gridDelegate: Responsive
-                              //                                 .isMobile(context)
-                              //                             ? const SliverGridDelegateWithFixedCrossAxisCount(
-                              //                                 crossAxisCount: 1,
-                              //                                 crossAxisSpacing:
-                              //                                     45,
-                              //                                 mainAxisSpacing:
-                              //                                     45,
-                              //                                 mainAxisExtent:
-                              //                                     350,
-                              //                               )
-                              //                             : Responsive.isTablet(
-                              //                                     context)
-                              //                                 ? const SliverGridDelegateWithFixedCrossAxisCount(
-                              //                                     crossAxisCount:
-                              //                                         2,
-                              //                                     crossAxisSpacing:
-                              //                                         45,
-                              //                                     mainAxisSpacing:
-                              //                                         45,
-                              //                                     mainAxisExtent:
-                              //                                         350,
-                              //                                   )
-                              //                                 : MediaQuery.of(context)
-                              //                                             .size
-                              //                                             .width <
-                              //                                         1500
-                              //                                     ? SliverGridDelegateWithMaxCrossAxisExtent(
-                              //                                         maxCrossAxisExtent:
-                              //                                             MediaQuery.of(context).size.width *
-                              //                                                 0.24,
-                              //                                         crossAxisSpacing:
-                              //                                             45,
-                              //                                         mainAxisSpacing:
-                              //                                             45,
-                              //                                         mainAxisExtent:
-                              //                                             350,
-                              //                                       )
-                              //                                     : SliverGridDelegateWithMaxCrossAxisExtent(
-                              //                                         maxCrossAxisExtent:
-                              //                                             MediaQuery.of(context).size.width *
-                              //                                                 0.24,
-                              //                                         crossAxisSpacing:
-                              //                                             45,
-                              //                                         mainAxisSpacing:
-                              //                                             45,
-                              //                                         mainAxisExtent:
-                              //                                             350,
-                              //                                       ),
-                              //                         itemBuilder:
-                              //                             (context, index) {
-                              //                           final image = state
-                              //                               .snapShots[index];
-
-                              //                           final data_time =
-                              //                               state.data[index];
-                              //                           return imagesListWidget(
-                              //                               onDownloadPressed:
-                              //                                   () {
-                              //                                 _downloadImage(
-                              //                                     data: image,
-                              //                                     downloadName:
-                              //                                         data_time);
-                              //                               },
-                              //                               imageSource:
-                              //                                   "${state.pageIndex}${index +1}.png",
-                              //                               image64: image,
-                              //                               text: data_time);
-                              //                         },
-                              //                       ),
-                              //               ),
-                              //             ],
-                              //           ),
-                              //         ),
-                              //       ),
-
-                              // ),
                             ],
                           ),
                         if (!Responsive.isWeb(context))
@@ -1006,35 +978,77 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                             AspectRatio(
                                               aspectRatio: _controller!
                                                   .value.aspectRatio,
-                                              child: VideoPlayer(_controller!),
+                                              child: Stack(children: [
+                                                Chewie(
+                                                  controller: ChewieController(
+                                                    aspectRatio: _controller
+                                                        ?.value.aspectRatio,
+                                                    videoPlayerController:
+                                                        _controller!,
+                                                    autoPlay: false,
+                                                    startAt: Duration(
+                                                        seconds:
+                                                            state.timeDuration),
+                                                    autoInitialize: true,
+                                                    looping: true,
+                                                  ),
+                                                ),
+                                                Positioned(
+                                                  top: 0,
+                                                  right: 0,
+                                                  child: Tooltip(
+                                                    message:
+                                                        "Upload Another Video",
+                                                    child: IconButton(
+                                                      onPressed: () {
+                                                        _pickVideo().then(
+                                                            (PlatformFile?
+                                                                videoFile) {
+                                                          if (videoFile !=
+                                                              null) {
+                                                            HomeBloc.get(
+                                                                    context)
+                                                                .add(videoevent(
+                                                                    video:
+                                                                        videoFile));
+                                                          }
+                                                        });
+                                                      },
+                                                      icon: const Icon(
+                                                        Icons.upload,
+                                                        size: 45,
+                                                        color: AppColors
+                                                            .buttonBlue,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ]),
                                             )
                                           else
-                                            Image.asset(
-                                              'assets/images/iconVid.png',
-                                              width: double.infinity,
-                                              height: double.infinity,
-                                              fit: BoxFit.cover,
+                                            Tooltip(
+                                              message: "Upload a video",
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  _pickVideo().then(
+                                                      (PlatformFile?
+                                                          videoFile) {
+                                                    if (videoFile != null) {
+                                                      HomeBloc.get(context).add(
+                                                          videoevent(
+                                                              video:
+                                                                  videoFile));
+                                                    }
+                                                  });
+                                                },
+                                                child: Image.asset(
+                                                  'assets/images/iconVid.png',
+                                                  // width: double.infinity,
+                                                  // height: double.infinity,
+                                                  // fit: BoxFit.cover,
+                                                ),
+                                              ),
                                             ),
-                                          Positioned(
-                                            left: 1,
-                                            right: 1,
-                                            top: 1,
-                                            bottom: 1,
-                                            child: GestureDetector(
-                                              // child: Text(""),
-
-                                              onTap: () {
-                                                _pickVideo().then(
-                                                    (PlatformFile? videoFile) {
-                                                  if (videoFile != null) {
-                                                    HomeBloc.get(context).add(
-                                                        videoevent(
-                                                            video: videoFile));
-                                                  }
-                                                });
-                                              },
-                                            ),
-                                          )
                                         ],
                                       ),
                                     ),
@@ -1131,261 +1145,149 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                             ))
                                         : Padding(
                                             padding: const EdgeInsets.all(10.0),
-                                            child: SingleChildScrollView(
-                                              child: Column(
-                                                children: [
-                                                  // Display the pagination controls
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            bottom: 15.0),
-                                                    child: CustomPagination(
-                                                      // persons: state
-                                                      //     .employeeNamesList, // Pass the list of data
-                                                      pageCount: (state
-                                                                  .pageCount /
-                                                              10)
-                                                          .ceil(), // Pass the page count
-                                                      onPageChanged:
-                                                          (int index) async {
-                                                        HomeBloc.get(context)
-                                                            .add(EditPageNumber(
-                                                                pageIndex:
-                                                                    index));
-                                                      },
-                                                    ),
-                                                  ),
-                                                  // Display the list of data
-                                                  SizedBox(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    child: (state.submission ==
-                                                            Submission
-                                                                .noDataFound)
-                                                        ? const Center(
-                                                            child: Text(
-                                                            "No data found Yet!",
-                                                            style: TextStyle(
-                                                                color: AppColors
-                                                                    .blueB,
-                                                                fontSize: 25,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600),
-                                                          ))
-                                                        : GridView.builder(
-                                                            shrinkWrap: true,
-                                                            physics:
-                                                                const NeverScrollableScrollPhysics(),
-                                                            itemCount: state
-                                                                        .pageCount !=
-                                                                    0
-                                                                ? (state.pageCount <
-                                                                        10)
-                                                                    ? (state.pageCount %
-                                                                        10)
-                                                                    : (state.pageIndex ==
-                                                                            (state.pageCount / 10)
-                                                                                .ceil())
-                                                                        ? (state.pageCount % 10 ==
-                                                                                0)
-                                                                            ? 10
-                                                                            : (state.pageCount %
-                                                                                10)
-                                                                        : 10
-                                                                : 0,
-                                                            gridDelegate: Responsive
-                                                                    .isMobile(
-                                                                        context)
-                                                                ? const SliverGridDelegateWithFixedCrossAxisCount(
-                                                                    crossAxisCount:
-                                                                        1,
-                                                                    crossAxisSpacing:
-                                                                        45,
-                                                                    mainAxisSpacing:
-                                                                        45,
-                                                                    mainAxisExtent:
-                                                                        350,
-                                                                  )
-                                                                : Responsive.isTablet(
-                                                                        context)
-                                                                    ? const SliverGridDelegateWithFixedCrossAxisCount(
-                                                                        crossAxisCount:
-                                                                            2,
-                                                                        crossAxisSpacing:
-                                                                            45,
-                                                                        mainAxisSpacing:
-                                                                            45,
-                                                                        mainAxisExtent:
-                                                                            350,
-                                                                      )
-                                                                    : MediaQuery.of(context).size.width <
-                                                                            1500
-                                                                        ? SliverGridDelegateWithMaxCrossAxisExtent(
-                                                                            maxCrossAxisExtent:
-                                                                                MediaQuery.of(context).size.width * 0.24,
-                                                                            crossAxisSpacing:
-                                                                                45,
-                                                                            mainAxisSpacing:
-                                                                                45,
-                                                                            mainAxisExtent:
-                                                                                350,
-                                                                          )
-                                                                        : SliverGridDelegateWithMaxCrossAxisExtent(
-                                                                            maxCrossAxisExtent:
-                                                                                MediaQuery.of(context).size.width * 0.24,
-                                                                            crossAxisSpacing:
-                                                                                45,
-                                                                            mainAxisSpacing:
-                                                                                45,
-                                                                            mainAxisExtent:
-                                                                                350,
-                                                                          ),
-                                                            itemBuilder:
-                                                                (context,
-                                                                    index) {
-                                                              // final image =
-                                                              //     state.snapShots[
-                                                              //         index];
+                                            child: Column(
+                                              children: [
+                                                // Display the list of data
+                                                SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                                  height: 300,
+                                                  child:
+                                                      (state.submission ==
+                                                              Submission
+                                                                  .noDataFound)
+                                                          ? const Center(
+                                                              child: Text(
+                                                              "No data found Yet!",
+                                                              style: TextStyle(
+                                                                  color:
+                                                                      AppColors
+                                                                          .blueB,
+                                                                  fontSize: 25,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600),
+                                                            ))
+                                                          : ListView.builder(
+                                                              scrollDirection:
+                                                                  Axis.horizontal,
+                                                              shrinkWrap: true,
+                                                              physics:
+                                                                  const AlwaysScrollableScrollPhysics(),
+                                                              itemCount: state
+                                                                          .pageCount !=
+                                                                      0
+                                                                  ? (state.pageCount <
+                                                                          10)
+                                                                      ? (state.pageCount %
+                                                                          10)
+                                                                      : (state.pageIndex ==
+                                                                              (state.pageCount / 10).ceil())
+                                                                          ? (state.pageCount % 10 == 0)
+                                                                              ? 10
+                                                                              : (state.pageCount % 10)
+                                                                          : 10
+                                                                  : 0,
+                                                              itemBuilder:
+                                                                  (context,
+                                                                      index) {
+                                                                // final image = state
+                                                                //         .snapShots[
+                                                                //     (state.pageIndex == 1 || state.pageIndex == 0
+                                                                //                 ? 0
+                                                                //                 : state.pageIndex - 1) *
+                                                                //             10 +
+                                                                //         (index)];
 
-                                                              final data_time =
-                                                                  state.data[
-                                                                      index];
-                                                              return imagesListWidget(
-                                                                  onDownloadPressed:
-                                                                      () {
-                                                                    downloadImageFromWeb(
-                                                                      imageUrl:
-                                                                          "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
+                                                                final data_time = state
+                                                                    .data[(state.pageIndex == 1 || state.pageIndex == 0
+                                                                            ? 0
+                                                                            : state.pageIndex -
+                                                                                1) *
+                                                                        10 +
+                                                                    (index)];
+                                                                return SizedBox(
+                                                                  height: 300,
+                                                                  child:
+                                                                      Padding(
+                                                                    padding:
+                                                                        const EdgeInsets
+                                                                            .all(
+                                                                            10.0),
+                                                                    child: imagesListWidget(
+                                                                        onTap: () {
+                                                                          List<String>
+                                                                              parts =
+                                                                              data_time.split(RegExp(r'[:.]'));
 
-                                                                      // downloadName:
-                                                                      //     data_time,
-                                                                    );
-                                                                    // _downloadImage(
-                                                                    //     data:
-                                                                    //         image,
-                                                                    //     downloadName:
-                                                                    //         data_time);
-                                                                  },
-                                                                  imageSource:
-                                                                      "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
-                                                                  text:
-                                                                      data_time);
-                                                            },
-                                                          ),
+                                                                          int hours =
+                                                                              int.parse(parts[0]);
+                                                                          int minutes =
+                                                                              int.parse(parts[1]);
+                                                                          int seconds =
+                                                                              int.parse(parts[2]);
+
+                                                                          // Calculate the total duration in seconds
+                                                                          int totalSeconds = hours * 3600 +
+                                                                              minutes * 60 +
+                                                                              seconds;
+                                                                          HomeBloc.get(context)
+                                                                              .add(SetTimeDuration(timeDuration: totalSeconds));
+
+                                                                          ///////////////////////////////////////////////////////////////
+                                                                          debugPrint(
+                                                                              totalSeconds.toString());
+                                                                        },
+                                                                        onDownloadPressed: () {
+                                                                          downloadImageFromWeb(
+                                                                            imageUrl:
+                                                                                "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
+
+                                                                            // downloadName:
+                                                                            //     data_time,
+                                                                          );
+                                                                          // _downloadImage(
+                                                                          //     data:
+                                                                          //         image,
+                                                                          //     downloadName:
+                                                                          //         data_time);
+                                                                        },
+                                                                        imageSource: "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
+                                                                        text: data_time),
+                                                                  ),
+                                                                );
+                                                              },
+                                                            ),
+                                                ),
+
+                                                // Display the pagination controls
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 15.0),
+                                                  child: CustomPagination(
+                                                    // persons: state
+                                                    //     .employeeNamesList, // Pass the list of data
+                                                    pageCount: (state
+                                                                .pageCount /
+                                                            10)
+                                                        .ceil(), // Pass the page count
+                                                    onPageChanged:
+                                                        (int index) async {
+                                                      HomeBloc.get(context).add(
+                                                          EditPageNumber(
+                                                              pageIndex:
+                                                                  index));
+                                                    },
                                                   ),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             ),
                                           );
                                   },
                                 ),
                               )
-                              // : const Text(""),
-
-                              // Padding(
-                              //   padding: const EdgeInsets.all(10.0),
-                              //   child: SingleChildScrollView(
-                              //     child: Column(
-                              //       children: [
-                              //         SizedBox(
-                              //           width:
-                              //               MediaQuery.of(context).size.width,
-                              //           child: (state.submission ==
-                              //                   Submission.noDataFound)
-                              //               ? const Center(
-                              //                   child: Text(
-                              //                   "No data found Yet!",
-                              //                   style: TextStyle(
-                              //                       color: AppColors.blueB,
-                              //                       fontSize: 25,
-                              //                       fontWeight:
-                              //                           FontWeight.w600),
-                              //                 ))
-                              //               : GridView.builder(
-                              //                   shrinkWrap: true,
-                              //                   physics:
-                              //                       const NeverScrollableScrollPhysics(),
-                              //                   itemCount:
-                              //                       state.snapShots.length,
-                              //                   gridDelegate: Responsive
-                              //                           .isMobile(context)
-                              //                       ? const SliverGridDelegateWithFixedCrossAxisCount(
-                              //                           crossAxisCount: 1,
-                              //                           crossAxisSpacing: 45,
-                              //                           mainAxisSpacing: 45,
-                              //                           mainAxisExtent: 350,
-                              //                         )
-                              //                       : Responsive.isTablet(
-                              //                               context)
-                              //                           ? const SliverGridDelegateWithFixedCrossAxisCount(
-                              //                               crossAxisCount: 2,
-                              //                               crossAxisSpacing:
-                              //                                   45,
-                              //                               mainAxisSpacing: 45,
-                              //                               mainAxisExtent: 350,
-                              //                             )
-                              //                           : MediaQuery.of(context)
-                              //                                       .size
-                              //                                       .width <
-                              //                                   1500
-                              //                               ? SliverGridDelegateWithMaxCrossAxisExtent(
-                              //                                   maxCrossAxisExtent:
-                              //                                       MediaQuery.of(context)
-                              //                                               .size
-                              //                                               .width *
-                              //                                           0.24,
-                              //                                   crossAxisSpacing:
-                              //                                       45,
-                              //                                   mainAxisSpacing:
-                              //                                       45,
-                              //                                   mainAxisExtent:
-                              //                                       350,
-                              //                                 )
-                              //                               : SliverGridDelegateWithMaxCrossAxisExtent(
-                              //                                   maxCrossAxisExtent:
-                              //                                       MediaQuery.of(context)
-                              //                                               .size
-                              //                                               .width *
-                              //                                           0.24,
-                              //                                   crossAxisSpacing:
-                              //                                       45,
-                              //                                   mainAxisSpacing:
-                              //                                       45,
-                              //                                   mainAxisExtent:
-                              //                                       350,
-                              //                                 ),
-                              //                   itemBuilder: (context, index) {
-                              //                     final image =
-                              //                         state.snapShots[index];
-
-                              //                     final data_time =
-                              //                         state.data[index];
-                              //                     return imagesListWidget(
-                              //                         onDownloadPressed: () {
-                              //                           final uint8List =
-                              //                               _decodeBase64Image(
-                              //                                   base64Image:
-                              //                                       image);
-
-                              //                           _downloadImage(
-                              //                               data: image,
-                              //                               downloadName:
-                              //                                   data_time);
-                              //                         },
-                              //                         imageSource:
-                              //                             "state.imageSource",
-                              //                         image64: image,
-                              //                         text: data_time);
-                              //                   },
-                              //                 ),
-                              //         ),
-                              //       ],
-                              //     ),
-                              //   ),
-                              // ),
                             ],
                           ),
                       ],
@@ -1401,19 +1303,22 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
   }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-  Future<PlatformFile?> _pickVideo() async {
+  Future<PlatformFile?> _pickVideo(
+      // {required int? timeDuratioin}
+      ) async {
     // replace this later
-    setState(() {
-      _loading = true;
-    });
+
+    // setState(() {
+    //   _loading = true;
+    // });
 
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.video,
     );
 
-    setState(() {
-      _loading = false;
-    });
+    // setState(() {
+    //   _loading = false;
+    // });
 
     if (result != null) {
       final videoFile = result.files.first;
@@ -1423,7 +1328,9 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
 
       _controller = VideoPlayerController.network(url)
         ..initialize().then((_) {
-          _controller!.play();
+          // timeDuratioin == null
+          _controller?.pause();
+          // : _controller!.seekTo(Duration(seconds: timeDuratioin));
         });
 
       return videoFile; // Return the picked video file
@@ -1436,6 +1343,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
 
   Widget imagesListWidget({
     // required String image64,
+    required Function() onTap,
     required String imageSource,
     required String text,
     required VoidCallback onDownloadPressed,
@@ -1451,38 +1359,73 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
         borderRadius: BorderRadius.circular(6.0),
         child: Stack(
           children: [
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => FullScreenImage(
-                            text: text,
-                            imageUrl:
-                                "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageSource}")));
-              },
-              child: Image.network(
-                "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageSource}",
-                width: double.infinity,
-                height: double.infinity,
-                // Images.profileImage,
-                fit: BoxFit.cover,
+            Tooltip(
+              message: "Go To Frame In Video",
+              child: GestureDetector(
+                onTap: onTap,
+                // () {
+
+                //   Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //           builder: (context) => FullScreenImage(
+                //               text: text,
+                //               imageUrl:
+                //                   "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageSource}")));
+                // },
+                child: Image.network(
+                  "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageSource}",
+                  width: double.infinity,
+                  height: double.infinity,
+                  // Images.profileImage,
+                  fit: BoxFit.cover,
+                ),
+                //     Image.memory(
+                //   _decodeBase64Image(base64Image: image64),
+                //   width: double.infinity,
+                //   height: double.infinity,
+                //   fit: BoxFit.cover,
+                // ),
               ),
-              //     Image.memory(
-              //   _decodeBase64Image(base64Image: image64),
-              //   width: double.infinity,
-              //   height: double.infinity,
-              //   fit: BoxFit.cover,
-              // ),
             ),
-            Container(
-              padding: const EdgeInsets.all(8),
-              color: Colors.black.withOpacity(0.5),
-              child: Text(
-                text,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
+            Positioned(
+              bottom: 0,
+              left: 0,
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                color: Colors.black.withOpacity(0.5),
+                child: GestureDetector(
+                  onTap: onTap,
+                  child: Text(
+                    text,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Tooltip(
+                message: "Open Image",
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => FullScreenImage(
+                                text: text,
+                                imageUrl:
+                                    "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageSource}")));
+                  },
+                  icon: const Icon(
+                    Icons.crop_free_sharp,
+                    size: 45,
+                    color: AppColors.buttonBlue,
+                  ),
                 ),
               ),
             ),
