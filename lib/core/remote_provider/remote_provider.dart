@@ -572,9 +572,40 @@ class RemoteProvider {
   }) async {
     try {
       Map<String, dynamic> callBack =
-          await RemoteDataSource().post(endPoint: "/history", body: {
+          await RemoteDataSource().post(endPoint: "/qdrant/history", body: {
         "collection_name": companyName,
         "page_number": pageNumber,
+      });
+
+      if (callBack.isNotEmpty) {
+        historyScreenModel callBackList = historyScreenModel.fromJson(callBack);
+        // print(callBackList);
+        return callBackList;
+      } else {
+        // Return a Future<pathes_model> with an empty list
+        return Future.value(
+            historyScreenModel()); // Adjust this according to your pathes_model constructor
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      // Return a Future<pathes_model> with an empty list
+      return Future.value(
+          historyScreenModel()); // Adjust this according to your pathes_model constructor
+    }
+  }
+
+// get Filtered History
+  Future<historyScreenModel> getFilteredHistory({
+    required String companyName,
+    required int pageNumber,
+    required String date,
+  }) async {
+    try {
+      Map<String, dynamic> callBack = await RemoteDataSource()
+          .post(endPoint: "/qdrant/history_search", body: {
+        "collection_name": companyName,
+        "page_number": pageNumber,
+        "date": date,
       });
 
       if (callBack.isNotEmpty) {
@@ -600,8 +631,8 @@ class RemoteProvider {
     required String video_Path,
   }) async {
     try {
-      Map<String, dynamic> callBack =
-          await RemoteDataSource().post(endPoint: "/history_files", body: {
+      Map<String, dynamic> callBack = await RemoteDataSource()
+          .post(endPoint: "/qdrant/history_files", body: {
         "video_path": video_Path,
         "collection_name": companyName,
       });

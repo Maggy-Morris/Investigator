@@ -32,16 +32,72 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
     // on<CameraGetAllCamerasStatistics>(_onCameraGetAllCamerasStatistics);
     //Stop processing camera
     on<EditPageNumber>(_onEditPageNumber);
+    on<EditPageNumberInsideHistoryDetails>(
+        _onEditPageNumberInsideHistoryDetails);
+
     on<EditPageCount>(_onEditPageCount);
     on<EditPathProvided>(_onEditPathProvided);
     on<EditvideoPathForHistory>(_onEditvideoPathForHistory);
     on<SecondsGivenFromVideoEvent>(_onSecondsGivenFromVideoEvent);
 
     /// Date
-    // on<CameraInitializeDate>(_onCameraInitializeDate);
+    on<SearchByDay>(_onSearchByDay);
+    on<SearchByMonth>(_onSearchByMonth);
+    on<SearchByYear>(_onSearchByYear);
+
+    on<FilterSearchDataEvent>(_onFilterSearchDataEvent);
+    on<EditPageNumberFiltered>(_onEditPageNumberFiltered);
   }
   // late StreamSubscription<Uint8List> videoStreamSubscription;
   _onHistoryEvent(HistoryEvent event, Emitter<HistoryState> emit) {}
+
+  _onSearchByDay(SearchByDay event, Emitter<HistoryState> emit) {
+    emit(state.copyWith(
+        selectedDay: event.selectedDay, submission: Submission.editing));
+  }
+
+  _onSearchByMonth(SearchByMonth event, Emitter<HistoryState> emit) {
+    emit(state.copyWith(
+        selectedMonth: event.selectedMonth, submission: Submission.editing));
+  }
+
+  _onSearchByYear(SearchByYear event, Emitter<HistoryState> emit) {
+    emit(state.copyWith(
+        selectedYear: event.selectedYear, submission: Submission.editing));
+  }
+
+////////////////////////////////////////////////////////////////////////////////
+  _onFilterSearchDataEvent(
+      FilterSearchDataEvent event, Emitter<HistoryState> emit) async {
+    emit(state.copyWith(submission: Submission.loading));
+    try {
+      await RemoteProvider()
+          .getFilteredHistory(
+        pageNumber: state.pageIndex == 0 ? 1 : state.pageIndex,
+        companyName:
+            AuthenticationRepository.instance.currentUser.companyName?.first,
+        date:
+            "${state.selectedYear}-${state.selectedMonth}-${state.selectedDay}",
+      )
+          .then((value) {
+        // print(value.paths);
+        if (value.data!.isNotEmpty) {
+          emit(state.copyWith(
+              pageCount: value.nPages,
+              allHistory: value.data,
+              submission: Submission.hasData));
+        } else {
+          emit(state.copyWith(
+              // videoPathForHistory: event.videoPathForHistory,
+              allHistory: [],
+              submission: Submission.noDataFound));
+        }
+      });
+    } catch (_) {
+      emit(state.copyWith(allHistory: [], submission: Submission.noDataFound));
+    }
+  }
+  //////////////////////////////////////////////////////////////////////////////
 
   _onPathesDataEvent(PathesDataEvent event, Emitter<HistoryState> emit) async {
     emit(state.copyWith(submission: Submission.loading));
@@ -83,11 +139,10 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
       )
           .then((value) {
         // print(value.paths);
-          emit(state.copyWith(
-              // videoPathForHistory: event.videoPathForHistory,
-              pathForImages: value.data,
-              submission: Submission.hasData));
-       
+        emit(state.copyWith(
+            // videoPathForHistory: event.videoPathForHistory,
+            pathForImages: value.data,
+            submission: Submission.hasData));
       });
     } catch (_) {
       emit(state.copyWith(
@@ -100,6 +155,21 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
         pageIndex: event.pageIndex, submission: Submission.editing));
 
     add(const PathesDataEvent());
+  }
+
+  _onEditPageNumberInsideHistoryDetails(
+      EditPageNumberInsideHistoryDetails event,
+      Emitter<HistoryState> emit) async {
+    emit(state.copyWith(
+        pageIndex: event.pageIndex, submission: Submission.editing));
+  }
+
+  _onEditPageNumberFiltered(
+      EditPageNumberFiltered event, Emitter<HistoryState> emit) async {
+    emit(state.copyWith(
+        pageIndex: event.pageIndex, submission: Submission.editing));
+
+    add(const FilterSearchDataEvent());
   }
 
   _onEditPathProvided(

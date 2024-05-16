@@ -1,6 +1,12 @@
 part of 'history_bloc.dart';
 
 class HistoryState extends Equatable {
+  final String selectedDay;
+  final String selectedMonth;
+  final String selectedYear;
+
+
+
   final List<History> allHistory;
   final String videoPathForHistory;
   final int secondsGivenFromVideo;
@@ -26,6 +32,8 @@ class HistoryState extends Equatable {
   // final List<int> videoStream;
 
   const HistoryState({
+    this.selectedDay = "",
+      this.selectedMonth = "",  this.selectedYear= "",
     this.secondsGivenFromVideo = 0,
     required this.pathForImages,
     this.videoPathForHistory = "",
@@ -51,6 +59,11 @@ class HistoryState extends Equatable {
   });
 
   HistoryState copyWith({
+    String? selectedDay,
+    String? selectedMonth,
+    String? selectedYear,
+
+
     int? secondsGivenFromVideo,
     PathForImages? pathForImages,
     String? videoPathForHistory,
@@ -88,6 +101,10 @@ class HistoryState extends Equatable {
     // List<int>? videoStream,
   }) {
     return HistoryState(
+      selectedDay: selectedDay ?? this.selectedDay,
+
+      selectedMonth:selectedMonth ?? this.selectedMonth,
+      selectedYear:selectedYear?? this.selectedYear,
       secondsGivenFromVideo:
           secondsGivenFromVideo ?? this.secondsGivenFromVideo,
       pathForImages: pathForImages ?? this.pathForImages,
@@ -118,7 +135,11 @@ class HistoryState extends Equatable {
 
   @override
   List<Object?> get props => [
-        secondsGivenFromVideo,
+        selectedDay,
+        selectedMonth,
+        selectedYear,
+        
+         secondsGivenFromVideo,
         pathForImages,
         videoPathForHistory,
         allHistory,

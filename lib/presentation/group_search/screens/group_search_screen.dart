@@ -55,11 +55,11 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
 
   //////////////////////////////////////////////////////
   VideoPlayerController? _controller;
-  bool _loading = false;
 
   @override
   void dispose() {
-    _controller?.dispose();
+    // _controller?.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -256,12 +256,15 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                       child: Stack(
                                         fit: StackFit.expand,
                                         children: [
-                                          if (_loading)
-                                            Center(
-                                              child:
-                                                  loadingIndicator(), // Display circular progress indicator while loading
-                                            )
-                                          else if (_controller != null)
+                                          // if (_controller
+                                          //         ?.value.isInitialized ==
+                                          //     true)
+                                          //   Center(
+                                          //     child:
+                                          //         loadingIndicator(), // Display circular progress indicator while loading
+                                          //   )
+                                          // else
+                                           if (_controller != null)
                                             AspectRatio(
                                               aspectRatio: _controller!
                                                   .value.aspectRatio,
@@ -277,7 +280,7 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                         seconds:
                                                             state.timeDuration),
                                                     autoInitialize: true,
-                                                    looping: true,
+                                                    looping: false,
                                                   ),
                                                 ),
                                                 Positioned(
@@ -1197,12 +1200,15 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                       child: Stack(
                                         fit: StackFit.expand,
                                         children: [
-                                          if (_loading)
-                                            Center(
-                                              child:
-                                                  loadingIndicator(), // Display circular progress indicator while loading
-                                            )
-                                          else if (_controller != null)
+                                          // if (_controller
+                                          //         ?.value.isInitialized ==
+                                          //     false)
+                                          //   Center(
+                                          //     child:
+                                          //         loadingIndicator(), // Display circular progress indicator while loading
+                                          //   )
+                                          // else
+                                          if (_controller != null)
                                             AspectRatio(
                                               aspectRatio: _controller!
                                                   .value.aspectRatio,
@@ -1218,7 +1224,7 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                         seconds:
                                                             state.timeDuration),
                                                     autoInitialize: true,
-                                                    looping: true,
+                                                    looping: false,
                                                   ),
                                                 ),
                                                 Positioned(
@@ -1996,26 +2002,17 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<PlatformFile?> _pickVideo() async {
-    // replace this later
-    setState(() {
-      _loading = true;
-    });
-
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.video,
     );
-
-    setState(() {
-      _loading = false;
-    });
 
     if (result != null) {
       final videoFile = result.files.first;
       final Uint8List videoBytes = videoFile.bytes!;
       final blob = html.Blob([videoBytes]);
       final url = html.Url.createObjectUrlFromBlob(blob);
-
-      _controller = VideoPlayerController.network(url)
+      final uri = Uri.parse(url);
+      _controller = VideoPlayerController.networkUrl(uri)
         ..initialize().then((_) {
           _controller?.pause();
         });

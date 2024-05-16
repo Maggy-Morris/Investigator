@@ -56,7 +56,6 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
 
   //////////////////////////////////////////////////////
   VideoPlayerController? _controller;
-  bool _loading = false;
 
   ScrollController _scrollController = ScrollController();
 
@@ -359,12 +358,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                       child: Stack(
                                         fit: StackFit.expand,
                                         children: [
-                                          if (_loading)
-                                            Center(
-                                              child:
-                                                  loadingIndicator(), // Display circular progress indicator while loading
-                                            )
-                                          else if (_controller != null)
+                                          if (_controller != null)
                                             AspectRatio(
                                               aspectRatio: _controller!
                                                   .value.aspectRatio,
@@ -380,7 +374,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                         seconds:
                                                             state.timeDuration),
                                                     autoInitialize: true,
-                                                    looping: true,
+                                                    looping: false,
                                                   ),
                                                 ),
                                                 Positioned(
@@ -446,7 +440,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                 ],
                               ),
 
-                              FxBox.h16,
+                              FxBox.h60,
                               state.submission == Submission.loading
                                   ? loadingIndicator()
                                   : Center(
@@ -966,12 +960,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                       child: Stack(
                                         fit: StackFit.expand,
                                         children: [
-                                          if (_loading)
-                                            Center(
-                                              child:
-                                                  loadingIndicator(), // Display circular progress indicator while loading
-                                            )
-                                          else if (_controller != null)
+                                          if (_controller != null)
                                             AspectRatio(
                                               aspectRatio: _controller!
                                                   .value.aspectRatio,
@@ -987,7 +976,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                         seconds:
                                                             state.timeDuration),
                                                     autoInitialize: true,
-                                                    looping: true,
+                                                    looping: false,
                                                   ),
                                                 ),
                                                 Positioned(
@@ -1357,19 +1346,9 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
   Future<PlatformFile?> _pickVideo(
       // {required int? timeDuratioin}
       ) async {
-    // replace this later
-
-    // setState(() {
-    //   _loading = true;
-    // });
-
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.video,
     );
-
-    // setState(() {
-    //   _loading = false;
-    // });
 
     if (result != null) {
       final videoFile = result.files.first;
@@ -1546,7 +1525,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
 
   @override
   void dispose() {
-    _controller?.dispose();
+    // _controller?.dispose();
     _scrollController.dispose();
 
     super.dispose();

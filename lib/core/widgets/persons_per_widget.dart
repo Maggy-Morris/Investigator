@@ -106,7 +106,6 @@
 //   // );
 
 import 'package:flutter/material.dart';
-import 'package:Investigator/core/models/employee_model.dart';
 import 'package:Investigator/core/resources/app_colors.dart';
 
 class CustomPagination extends StatefulWidget {
@@ -114,7 +113,7 @@ class CustomPagination extends StatefulWidget {
   final int pageCount; // Changed this to int directly
   final Function(int pageIndex) onPageChanged;
 
-  CustomPagination({
+  const CustomPagination({super.key, 
     // required this.persons,
     required this.pageCount, // Updated this to directly accept an int value
     required this.onPageChanged,

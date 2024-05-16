@@ -7,9 +7,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:chewie/chewie.dart';
-import 'package:shimmer/shimmer.dart';
 
-import 'package:routemaster/routemaster.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../core/resources/app_colors.dart';
@@ -88,17 +86,101 @@ class AllHistoryScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       FxBox.h24,
-                      SizedBox(
-                        width: double.infinity,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               "History".tr(),
                               style: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 20,
+                                fontSize: 22,
                                 fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Flexible(
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                      // topLeft:
+                                      Radius.circular(15.0), // Curved side
+                                      // bottomLeft:
+                                      //     Radius.circular(15.0), // Square side
+                                    ),
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  showDatePicker(
+                                    context: context,
+                                    lastDate: DateTime(3000),
+                                    firstDate: DateTime(2020),
+                                  ).then(
+                                    (value) {
+                                      if (value != null) {
+                                        // CameraBloc.get(context).add(
+                                        //     const CameraAddHour(
+                                        //         selectedHour: ""));
+                                        // CameraBloc.get(context).add(
+                                        //     const CameraAddMinute(
+                                        //         selectedMinute: ""));
+                                        // CameraBloc.get(context).add(
+                                        //   const CameraAddStartDay(
+                                        //       selectedStartDay: ""),
+                                        // );
+                                        // CameraBloc.get(context).add(
+                                        //   const CameraAddStartMonth(
+                                        //       selectedStartMonth: ""),
+                                        // );
+                                        // CameraBloc.get(context).add(
+                                        //   const CameraAddStartYear(
+                                        //       selectedStartYear: ""),
+                                        // );
+
+                                        // CameraBloc.get(context).add(
+                                        //   const CameraAddEndDay(
+                                        //       selectedEndDay: ""),
+                                        // );
+                                        // CameraBloc.get(context).add(
+                                        //   const CameraAddEndMonth(
+                                        //       selectedEndMonth: ""),
+                                        // );
+                                        // CameraBloc.get(context).add(
+                                        //   const CameraAddEndYear(
+                                        //       selectedEndYear: ""),
+                                        // );
+
+                                        HistoryBloc.get(context).add(
+                                            SearchByDay(
+                                                selectedDay: "${value.day}"));
+
+                                        HistoryBloc.get(context).add(
+                                            SearchByMonth(
+                                                selectedMonth:
+                                                    "${value.month}"));
+
+                                        HistoryBloc.get(context).add(
+                                            SearchByYear(
+                                                selectedYear: "${value.year}"));
+
+                                        HistoryBloc.get(context)
+                                            .add(const FilterSearchDataEvent());
+                                        HistoryBloc.get(context).add(
+                                            const EditPageNumberFiltered(
+                                                pageIndex: 1));
+                                      }
+                                    },
+                                  );
+                                },
+                                child: Text(
+                                  (state.selectedDay.isEmpty)
+                                      ? "Date Filtration".tr()
+                                      : "${state.selectedDay}/${state.selectedMonth}/${state.selectedYear}",
+                                  style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600),
+                                ),
                               ),
                             ),
                           ],
@@ -107,19 +189,34 @@ class AllHistoryScreen extends StatelessWidget {
                       FxBox.h24,
                       Padding(
                         padding: const EdgeInsets.only(bottom: 15.0),
-                        child: CustomPagination(
+                        child:
+                            //  BlocBuilder<HistoryBloc, HistoryState>(
+                            //   // buildWhen: (previous, current) =>
+                            //   //     previous.pageCount != current.pageCount,
+                            //   builder: (context, state) {
+                            //     return
+                            CustomPagination(
+                          // defaultValue: state.pageIndex,
                           // persons: state
                           //     .employeeNamesList, // Pass the list of data
                           pageCount: state.pageCount, // Pass the page count
+
                           onPageChanged: (int index) async {
                             ///////////////////////////
-
-                            HistoryBloc.get(context)
-                                .add(EditPageNumber(pageIndex: index));
-
+                            if (state.selectedDay.isNotEmpty) {
+                              HistoryBloc.get(context).add(
+                                  EditPageNumberFiltered(pageIndex: index));
+                            } else {
+                              HistoryBloc.get(context)
+                                  .add(EditPageNumber(pageIndex: index));
+                            }
                             //////////////////////////////
                           },
+                          key: ValueKey<String>(
+                              "${state.selectedDay}"), // Use state.pageIndex as ValueKey
                         ),
+                        // },
+                        // ),
                       ),
                       FxBox.h24,
                       (state.submission != Submission.noDataFound)
@@ -131,8 +228,8 @@ class AllHistoryScreen extends StatelessWidget {
                             )
                           : Column(
                               children: [
-                                Center(
-                                  child: const Text(
+                                const Center(
+                                  child: Text(
                                     "No History Yet!",
                                     style: TextStyle(
                                         color: Colors.red, fontSize: 30),
@@ -439,14 +536,17 @@ class AllHistoryScreen extends StatelessWidget {
   // }
 
   Widget _buildVideoPlayerWidget(String videoUrl) {
-    final videoPlayerController = VideoPlayerController.network(videoUrl);
+    // final videoPlayerController = VideoPlayerController.network(videoUrl);
+
+    final videoPlayerController =
+        VideoPlayerController.networkUrl(Uri.parse(videoUrl));
     final chewieController = ChewieController(
-      // aspectRatio: videoPlayerController.value.aspectRatio,
+      aspectRatio: videoPlayerController.value.aspectRatio,
       videoPlayerController: videoPlayerController,
       autoPlay: false,
       // startAt: Duration(seconds: 1),
       autoInitialize: true,
-      looping: true,
+      looping: false,
     );
 
     return Chewie(
