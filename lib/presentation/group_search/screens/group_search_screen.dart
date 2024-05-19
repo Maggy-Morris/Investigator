@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:Investigator/core/widgets/FullImageURL.dart';
+import 'package:Investigator/core/widgets/slider_widget.dart';
 import 'package:camera/camera.dart';
 import 'package:chewie/chewie.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -140,65 +141,17 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                 children: [
                                   Center(
                                     child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          right: 50.0, left: 50.0, bottom: 5),
-                                      child: SfRangeSliderTheme(
-                                        data: SfRangeSliderThemeData(
-                                          activeTrackColor: Colors.white,
-                                          activeLabelStyle: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12,
-                                              fontStyle: FontStyle.italic),
-                                          inactiveLabelStyle: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12,
-                                              fontStyle: FontStyle.italic),
-                                        ),
-                                        child: SfSlider(
-                                          enableTooltip: true,
-                                          activeColor: const Color.fromRGBO(
-                                              214, 221, 224, 1),
-                                          min: _min,
-                                          max: _max,
-                                          value: _value,
-                                          interval:
-                                              18, // Assuming interval is 1
-                                          showTicks: true,
-                                          showLabels: true,
-
-                                          onChanged: (dynamic newValue) {
+                                        padding: const EdgeInsets.only(
+                                            right: 50.0, left: 50.0, bottom: 5),
+                                        child: SliderWidget(
+                                          showLabelFormatter: true,
+                                          onChanged: (newValue) {
                                             GroupSearchBloc.get(context).add(
                                                 GetAccuracy(
                                                     accuracy: (newValue / 100)
                                                         .toString()));
-                                            setState(() {
-                                              _value = newValue;
-                                            });
                                           },
-                                          labelFormatterCallback:
-                                              (dynamic value,
-                                                  String formattedValue) {
-                                            // Map numeric values to custom string labels
-                                            switch (value.toInt()) {
-                                              case 10:
-                                                return 'Low';
-                                              case 28:
-                                                return 'Medium';
-                                              case 46:
-                                                return 'High';
-                                              case 64:
-                                                return 'Very High';
-                                              case 82:
-                                                return 'Extreme';
-                                              case 100:
-                                                return 'Identical';
-                                              default:
-                                                return ''; // Return empty string for other values
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                    ),
+                                        )),
                                   ),
                                 ],
                               ),
@@ -264,7 +217,7 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                           //         loadingIndicator(), // Display circular progress indicator while loading
                                           //   )
                                           // else
-                                           if (_controller != null)
+                                          if (_controller != null)
                                             AspectRatio(
                                               aspectRatio: _controller!
                                                   .value.aspectRatio,
@@ -1082,65 +1035,17 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                 children: [
                                   Center(
                                     child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          right: 50.0, left: 50.0, bottom: 5),
-                                      child: SfRangeSliderTheme(
-                                        data: SfRangeSliderThemeData(
-                                          activeTrackColor: Colors.white,
-                                          activeLabelStyle: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12,
-                                              fontStyle: FontStyle.italic),
-                                          inactiveLabelStyle: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12,
-                                              fontStyle: FontStyle.italic),
-                                        ),
-                                        child: SfSlider(
-                                          enableTooltip: true,
-                                          activeColor: const Color.fromRGBO(
-                                              214, 221, 224, 1),
-                                          min: _min,
-                                          max: _max,
-                                          value: _value,
-                                          interval:
-                                              18, // Assuming interval is 1
-                                          showTicks: true,
-                                          showLabels: true,
-
-                                          onChanged: (dynamic newValue) {
+                                        padding: const EdgeInsets.only(
+                                            right: 50.0, left: 50.0, bottom: 5),
+                                        child: SliderWidget(
+                                          onChanged: (newValue) {
                                             GroupSearchBloc.get(context).add(
                                                 GetAccuracy(
                                                     accuracy: (newValue / 100)
                                                         .toString()));
-                                            setState(() {
-                                              _value = newValue;
-                                            });
                                           },
-                                          // labelFormatterCallback:
-                                          //     (dynamic value,
-                                          //         String formattedValue) {
-                                          //   // Map numeric values to custom string labels
-                                          //   switch (value.toInt()) {
-                                          //     case 10:
-                                          //       return 'Low';
-                                          //     case 28:
-                                          //       return 'Medium';
-                                          //     case 46:
-                                          //       return 'High';
-                                          //     case 64:
-                                          //       return 'Very High';
-                                          //     case 82:
-                                          //       return 'Extreme';
-                                          //     case 100:
-                                          //       return 'Identical';
-                                          //     default:
-                                          //       return ''; // Return empty string for other values
-                                          //   }
-                                          // },
+                                        )
                                         ),
-                                      ),
-                                    ),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(15.0),

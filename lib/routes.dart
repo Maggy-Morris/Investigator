@@ -53,8 +53,9 @@ getRoutesAdmin() {
 
     '/requestDetails': (route) => NoAnimationPage(
             child: HistoryDetails(
+          pathsended: "",
           path: route.queryParameters["process"] ?? "",
-          images: [],
+          images: const[],
           // route.queryParameters["images"] ,
           // count: route.queryParameters["count"] ?? "",
         )),

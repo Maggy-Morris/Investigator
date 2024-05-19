@@ -104,9 +104,9 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   @override
   void didUpdateWidget(covariant VideoPlayerWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.secondsGiven != oldWidget.secondsGiven) {
-      _seekToNewPosition();
-    }
+    // if (widget.secondsGiven != oldWidget.secondsGiven) {
+    _seekToNewPosition();
+    // }
   }
 
   Future<void> _initializePlayer() async {

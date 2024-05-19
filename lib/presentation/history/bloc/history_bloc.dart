@@ -85,9 +85,12 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
           emit(state.copyWith(
               pageCount: value.nPages,
               allHistory: value.data,
-              submission: Submission.hasData));
+              submission: Submission.hasData,
+              ), 
+              );
         } else {
           emit(state.copyWith(
+              pageCount: 0,
               // videoPathForHistory: event.videoPathForHistory,
               allHistory: [],
               submission: Submission.noDataFound));

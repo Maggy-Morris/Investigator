@@ -273,7 +273,9 @@ class AllHistoryScreen extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => HistoryDetails(
-                                  path: state.allHistory[index].videoPath ?? "",
+                                  pathsended:
+                                      state.allHistory[index].videoPath ?? "",
+                                  path: state.allHistory[index].videoUrl ?? "",
                                   images:
                                       state.allHistory[index].imagePaths ?? [],
                                 )));
@@ -287,7 +289,7 @@ class AllHistoryScreen extends StatelessWidget {
                     // );
                   },
                   images: state.allHistory[index].imagePaths,
-                  urlFromHistory: state.allHistory[index].videoPath ?? "",
+                  urlFromHistory: state.allHistory[index].videoUrl ?? "",
                   date: state.allHistory[index].timestamp?.split("_")[0] ?? "",
                   time: state.allHistory[index].timestamp?.split("_")[1] ?? "",
                   name: state.allHistory[index].function ?? "",
@@ -489,8 +491,10 @@ class AllHistoryScreen extends StatelessWidget {
                       ),
                       child: VideoPlayerWidget(
                           // urlFromHistory:
-                          videoUrl:
-                              "http:${RemoteDataSource.baseUrlWithoutPort}8000/${urlFromHistory.split("Image_Database/")[1]}")),
+                          // videoUrl: state.,
+                          videoUrl: urlFromHistory
+                          // "http:${RemoteDataSource.baseUrlWithoutPort}8000/${urlFromHistory.split("Image_Database/")[1]}"
+                          )),
                 ),
               ),
             ],
@@ -499,5 +503,4 @@ class AllHistoryScreen extends StatelessWidget {
       ),
     );
   }
-
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:Investigator/core/widgets/slider_widget.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
@@ -1445,64 +1446,15 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                         padding: const EdgeInsets.symmetric(
                                           horizontal: 50.0,
                                         ),
-                                        child: SfRangeSliderTheme(
-                                          data: SfRangeSliderThemeData(
-                                            activeTrackColor: Colors.white,
-                                            activeLabelStyle: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 12,
-                                                fontStyle: FontStyle.italic),
-                                            inactiveLabelStyle: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 12,
-                                                fontStyle: FontStyle.italic),
-                                          ),
-                                          child: SfSlider(
-                                            enableTooltip: true,
-                                            activeColor: const Color.fromRGBO(
-                                                214, 221, 224, 1),
-                                            min: _min,
-                                            max: _max,
-                                            value: _value,
-                                            interval:
-                                                18, // Assuming interval is 1
-                                            showTicks: true,
-                                            showLabels: true,
-
-                                            onChanged: (dynamic newValue) {
-                                              context
-                                                  .read<PhotoAppCubit>()
-                                                  .sliderControl(
-                                                      sliderVal:
-                                                          (newValue / 100)
-                                                              .toString());
-
-                                              setState(() {
-                                                _value = newValue;
-                                              });
-                                            },
-                                            labelFormatterCallback:
-                                                (dynamic value,
-                                                    String formattedValue) {
-                                              // Map numeric values to custom string labels
-                                              switch (value.toInt()) {
-                                                case 10:
-                                                  return 'Low';
-                                                case 28:
-                                                  return 'Medium';
-                                                case 46:
-                                                  return 'High';
-                                                case 64:
-                                                  return 'Very High';
-                                                case 82:
-                                                  return 'Extreme';
-                                                case 100:
-                                                  return 'Identical';
-                                                default:
-                                                  return ''; // Return empty string for other values
-                                              }
-                                            },
-                                          ),
+                                        child: SliderWidget(
+                                          onChanged: (newValue) {
+                                            context
+                                                .read<PhotoAppCubit>()
+                                                .sliderControl(
+                                                    sliderVal: (newValue / 100)
+                                                        .toString());
+                                          },
+                                          showLabelFormatter: true,
                                         ),
                                       ),
                                     ),
@@ -1575,63 +1527,14 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 50.0, vertical: 20),
-                                        child: SfRangeSliderTheme(
-                                          data: SfRangeSliderThemeData(
-                                            activeTrackColor: Colors.white,
-                                            activeLabelStyle: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 12,
-                                                fontStyle: FontStyle.italic),
-                                            inactiveLabelStyle: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 12,
-                                                fontStyle: FontStyle.italic),
-                                          ),
-                                          child: SfSlider(
-                                            enableTooltip: true,
-                                            activeColor: const Color.fromRGBO(
-                                                214, 221, 224, 1),
-                                            min: _min,
-                                            max: _max,
-                                            value: _value,
-                                            interval:
-                                                18, // Assuming interval is 1
-                                            showTicks: true,
-                                            showLabels: true,
-
-                                            onChanged: (dynamic newValue) {
-                                              context
-                                                  .read<PhotoAppCubit>()
-                                                  .sliderControl(
-                                                      sliderVal:
-                                                          (newValue / 100)
-                                                              .toString());
-
-                                              setState(() {
-                                                _value = newValue;
-                                              });
-                                            },
-                                            // labelFormatterCallback: (dynamic value,
-                                            //     String formattedValue) {
-                                            //   // Map numeric values to custom string labels
-                                            //   switch (value.toInt()) {
-                                            //     case 10:
-                                            //       return 'L';
-                                            //     case 28:
-                                            //       return 'M';
-                                            //     case 46:
-                                            //       return 'H';
-                                            //     case 64:
-                                            //       return 'V-H';
-                                            //     case 82:
-                                            //       return 'E';
-                                            //     case 100:
-                                            //       return 'I';
-                                            //     default:
-                                            //       return ''; // Return empty string for other values
-                                            //   }
-                                            // },
-                                          ),
+                                        child: SliderWidget(
+                                          onChanged: (newValue) {
+                                            context
+                                                .read<PhotoAppCubit>()
+                                                .sliderControl(
+                                                    sliderVal: (newValue / 100)
+                                                        .toString());
+                                          },
                                         ),
                                       ),
                                     ),

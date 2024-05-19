@@ -1,20 +1,23 @@
-import 'dart:convert';
-import 'dart:typed_data';
+// import 'dart:convert';
+// import 'dart:typed_data';
 import 'dart:html' as html;
 
 import 'package:Investigator/core/widgets/FullImageURL.dart';
-import 'package:chewie/chewie.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
+import 'package:carousel_slider/carousel_controller.dart';
+import 'package:carousel_slider/carousel_options.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+// import 'package:chewie/chewie.dart';
+// import 'package:file_picker/file_picker.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:video_player/video_player.dart';
+// import 'package:video_player/video_player.dart';
 
 import '../../../core/enum/enum.dart';
-import '../../../core/loader/loading_indicator.dart';
+// import '../../../core/loader/loading_indicator.dart';
 import '../../../core/remote_provider/remote_data_source.dart';
 import '../../../core/resources/app_colors.dart';
-import '../../../core/utils/responsive.dart';
+// import '../../../core/utils/responsive.dart';
 import '../../../core/widgets/image_downloader.dart';
 import '../../../core/widgets/persons_per_widget.dart';
 import '../../../core/widgets/sizedbox.dart';
@@ -24,10 +27,14 @@ import '../bloc/history_bloc.dart';
 
 class HistoryDetails extends StatefulWidget {
   final String path;
-  // final String count;
+  final String pathsended;
   final List<String> images;
 
-  const HistoryDetails({Key? key, required this.path, required this.images})
+  const HistoryDetails(
+      {Key? key,
+      required this.path,
+      required this.pathsended,
+      required this.images})
       : super(key: key);
 
   @override
@@ -37,7 +44,7 @@ class HistoryDetails extends StatefulWidget {
 /// correct place to load iFrame
 
 class _HistoryDetails extends State<HistoryDetails> {
-  // final CarouselController _carouselController = CarouselController();
+  final CarouselController _carouselController = CarouselController();
 
   late ScrollController _scrollController;
   @override
@@ -63,7 +70,8 @@ class _HistoryDetails extends State<HistoryDetails> {
       body: BlocProvider(
         create: (context) => HistoryBloc()
           // ..add(CameraDetailsEvent(cameraName: widget.cameraName)),
-          ..add(EditvideoPathForHistory(videoPathForHistory: widget.path)),
+          ..add(
+              EditvideoPathForHistory(videoPathForHistory: widget.pathsended)),
         // ..add(EditPageCount(pageCount: int.parse(widget.count)))
 
         child: BlocListener<HistoryBloc, HistoryState>(
@@ -151,7 +159,7 @@ class _HistoryDetails extends State<HistoryDetails> {
                                                             child:
                                                                 Image.network(
                                                               "http:${RemoteDataSource.baseUrlWithoutPort}8000/${widget.images[index].split("Image_Database/")[1]}",
-                                                              fit: BoxFit.cover,
+                                                              // fit: BoxFit.cover,
                                                             ),
                                                           );
                                                         },
@@ -175,27 +183,58 @@ class _HistoryDetails extends State<HistoryDetails> {
                                               });
                                         },
                                         child: Stack(
+                                          fit: StackFit.expand,
                                           children: [
+                                            // Convert the list of image URLs into Image widgets
                                             if (widget.images.isNotEmpty)
-                                              ListView.builder(
-                                                scrollDirection: Axis.vertical,
-                                                itemCount: widget.images.length,
-                                                itemBuilder: (context, index) {
-                                                  final imageUrl =
-                                                      widget.images[index];
-                                                  return Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            10.0),
-                                                    child: Image.network(
-                                                      "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageUrl.split("Image_Database/")[1]}",
-                                                      fit: BoxFit.cover,
-                                                    ),
+                                              CarouselSlider(
+                                                carouselController:
+                                                    _carouselController,
+                                                items: widget.images
+                                                    .map((imageUrl) {
+                                                  return Image.network(
+                                                    "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageUrl.split("Image_Database/")[1]}",
+                                                    fit: BoxFit.cover,
                                                   );
-                                                },
+                                                }).toList(),
+                                                options: CarouselOptions(
+                                                  aspectRatio: 16 / 9,
+                                                  viewportFraction: 0.8,
+                                                  enableInfiniteScroll: false,
+                                                  reverse: false,
+                                                  autoPlay: true,
+                                                  enlargeCenterPage: true,
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                ),
                                               ),
                                           ],
                                         ),
+                                        // Stack(
+                                        //   children: [
+                                        //     if (widget.images.isNotEmpty)
+
+                                        //       ListView.builder(
+                                        //         scrollDirection: Axis.vertical,
+                                        //         itemCount: widget.images.length,
+                                        //         itemBuilder: (context, index) {
+                                        //           final imageUrl =
+                                        //               widget.images[index];
+                                        //           return Padding(
+                                        //             padding:
+                                        //                 const EdgeInsets.all(
+                                        //                     10.0),
+                                        //             child: Image.network(
+                                        //               "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageUrl.split("Image_Database/")[1]}",
+                                        //               fit: BoxFit.cover,
+                                        //               width: double.infinity,
+                                        //               height: double.infinity,
+                                        //             ),
+                                        //           );
+                                        //         },
+                                        //       ),
+                                        //   ],
+                                        // ),
                                       ),
                                     ),
                                   ),
@@ -206,16 +245,17 @@ class _HistoryDetails extends State<HistoryDetails> {
                               height: 300,
                               width: 700,
                               child: Card(
-                                  elevation: 4,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: VideoPlayerWidget(
-                                      // urlFromHistory:
-                                      videoUrl:
-                                          "http:${RemoteDataSource.baseUrlWithoutPort}8000/${widget.path.split("Image_Database/")[1]}",
-                                      secondsGiven:
-                                          state.secondsGivenFromVideo)),
+                                elevation: 4,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: VideoPlayerWidget(
+                                  // urlFromHistory:
+                                  videoUrl: widget.path,
+                                  // "http:${RemoteDataSource.baseUrlWithoutPort}8000/${widget.path.split("Image_Database/")[1]}",
+                                  secondsGiven: state.secondsGivenFromVideo,
+                                ),
+                              ),
                             ),
                           ),
                         ],
@@ -562,7 +602,6 @@ class _HistoryDetails extends State<HistoryDetails> {
       ),
     );
   }
-
 
   @override
   void dispose() {

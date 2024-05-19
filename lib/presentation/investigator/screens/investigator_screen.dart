@@ -28,6 +28,7 @@ import '../../../core/remote_provider/remote_data_source.dart';
 import '../../../core/widgets/fullscreenImage.dart';
 import '../../../core/widgets/image_downloader.dart';
 import '../../../core/widgets/persons_per_widget.dart';
+import '../../../core/widgets/slider_widget.dart';
 import '../../../core/widgets/videoPlayer.dart';
 import '../../camera_controller/cubit/photo_app_cubit.dart';
 import '../bloc/home_bloc.dart';
@@ -125,61 +126,13 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(
                                       right: 50.0, left: 50.0, bottom: 15),
-                                  child: SfRangeSliderTheme(
-                                    data: SfRangeSliderThemeData(
-                                      activeTrackColor: Colors.white,
-                                      activeLabelStyle: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                          fontStyle: FontStyle.italic),
-                                      inactiveLabelStyle: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                          fontStyle: FontStyle.italic),
-                                    ),
-                                    child: SfSlider(
-                                      enableTooltip: true,
-                                      activeColor: const Color.fromRGBO(
-                                          214, 221, 224, 1),
-                                      min: _min,
-                                      max: _max,
-                                      value: _value,
-                                      //  state.accuracy.isEmpty
-                                      //     ? 10
-                                      //     : state.accuracy.toString(),
-                                      interval: 18, // Assuming interval is 1
-                                      showTicks: true,
-                                      showLabels: true,
-
-                                      onChanged: (dynamic newValue) {
-                                        HomeBloc.get(context).add(GetAccuracy(
-                                            accuracy:
-                                                (newValue / 100).toString()));
-                                        setState(() {
-                                          _value = newValue;
-                                        });
-                                      },
-                                      labelFormatterCallback: (dynamic value,
-                                          String formattedValue) {
-                                        // Map numeric values to custom string labels
-                                        switch (value.toInt()) {
-                                          case 10:
-                                            return 'Low';
-                                          case 28:
-                                            return 'Medium';
-                                          case 46:
-                                            return 'High';
-                                          case 64:
-                                            return 'Very High';
-                                          case 82:
-                                            return 'Extreme';
-                                          case 100:
-                                            return 'Identical';
-                                          default:
-                                            return ''; // Return empty string for other values
-                                        }
-                                      },
-                                    ),
+                                  child: SliderWidget(
+                                    onChanged: (newValue) {
+                                      HomeBloc.get(context).add(GetAccuracy(
+                                          accuracy:
+                                              (newValue / 100).toString()));
+                                    },
+                                    showLabelFormatter: true,
                                   ),
                                 ),
                               ),
@@ -746,58 +699,12 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 50.0, vertical: 20),
-                                  child: SfRangeSliderTheme(
-                                    data: SfRangeSliderThemeData(
-                                      activeTrackColor: Colors.white,
-                                      activeLabelStyle: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                          fontStyle: FontStyle.italic),
-                                      inactiveLabelStyle: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                          fontStyle: FontStyle.italic),
-                                    ),
-                                    child: SfSlider(
-                                      enableTooltip: true,
-                                      activeColor: const Color.fromRGBO(
-                                          214, 221, 224, 1),
-                                      min: _min,
-                                      max: _max,
-                                      value: _value,
-                                      interval: 18, // Assuming interval is 1
-                                      showTicks: true,
-                                      showLabels: true,
-
-                                      onChanged: (dynamic newValue) {
-                                        HomeBloc.get(context).add(GetAccuracy(
-                                            accuracy:
-                                                (newValue / 100).toString()));
-                                        setState(() {
-                                          _value = newValue;
-                                        });
-                                      },
-                                      // labelFormatterCallback: (dynamic value,
-                                      //     String formattedValue) {
-                                      //   // Map numeric values to custom string labels
-                                      //   switch (value.toInt()) {
-                                      //     case 10:
-                                      //       return 'Low';
-                                      //     case 28:
-                                      //       return 'Medium';
-                                      //     case 46:
-                                      //       return 'High';
-                                      //     case 64:
-                                      //       return 'Very High';
-                                      //     case 82:
-                                      //       return 'Extreme';
-                                      //     case 100:
-                                      //       return 'Identical';
-                                      //     default:
-                                      //       return ''; // Return empty string for other values
-                                      //   }
-                                      // },
-                                    ),
+                                  child: SliderWidget(
+                                    onChanged: (newValue) {
+                                      HomeBloc.get(context).add(GetAccuracy(
+                                          accuracy:
+                                              (newValue / 100).toString()));
+                                    },
                                   ),
                                 ),
                               ),
