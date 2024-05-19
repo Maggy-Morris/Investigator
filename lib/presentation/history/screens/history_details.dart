@@ -19,6 +19,7 @@ import '../../../core/widgets/image_downloader.dart';
 import '../../../core/widgets/persons_per_widget.dart';
 import '../../../core/widgets/sizedbox.dart';
 import '../../../core/widgets/toast/toast.dart';
+import '../../../core/widgets/video_player_widget.dart';
 import '../bloc/history_bloc.dart';
 
 class HistoryDetails extends StatefulWidget {
@@ -209,10 +210,12 @@ class _HistoryDetails extends State<HistoryDetails> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
-                                  child: _buildVideoPlayerWidget(
+                                  child: VideoPlayerWidget(
                                       // urlFromHistory:
-                                      "http:${RemoteDataSource.baseUrlWithoutPort}8000/${widget.path.split("Image_Database/")[1]}",
-                                      state.secondsGivenFromVideo)),
+                                      videoUrl:
+                                          "http:${RemoteDataSource.baseUrlWithoutPort}8000/${widget.path.split("Image_Database/")[1]}",
+                                      secondsGiven:
+                                          state.secondsGivenFromVideo)),
                             ),
                           ),
                         ],
@@ -560,80 +563,6 @@ class _HistoryDetails extends State<HistoryDetails> {
     );
   }
 
-  // Uint8List _decodeBase64Image({required String base64Image}) {
-  //   final bytes = base64.decode(base64Image);
-
-  //   return Uint8List.fromList(bytes);
-  // }
-
-  // Widget _commonText(String text) {
-  //   return Padding(
-  //     padding: EdgeInsets.symmetric(
-  //       vertical: Responsive.isMobile(context) ? 8.0 : 0.0,
-  //     ),
-  //     child: Text(
-  //       text,
-  //       style: const TextStyle(
-  //         fontWeight: FontWeight.w600,
-  //       ),
-  //     ),
-  //   );
-  // }
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-  // Future<PlatformFile?> _pickVideo(
-  //     {required VideoPlayerController? controller_}) async {
-  //   // replace this later
-  //   FilePickerResult? result = await FilePicker.platform.pickFiles(
-  //     type: FileType.video,
-  //   );
-
-  //   if (result != null) {
-  //     final videoFile = result.files.first;
-  //     final Uint8List videoBytes = videoFile.bytes!;
-  //     final blob = html.Blob([videoBytes]);
-  //     final url = html.Url.createObjectUrlFromBlob(blob);
-
-  //     controller_ = VideoPlayerController.network(url)
-  //       ..initialize().then((_) {
-  //         // timeDuratioin == null
-  //         controller_?.pause();
-  //         // : _controller!.seekTo(Duration(seconds: timeDuratioin));
-  //       });
-
-  //     return videoFile; // Return the picked video file
-  //   } else {
-  //     return null; // Return null if no file is picked
-  //   }
-  // }
-
-  Widget _buildVideoPlayerWidget(
-    String videoUrl,
-    int secondsGiven,
-  ) {
-    final videoPlayerController = VideoPlayerController.network(videoUrl);
-    final chewieController = ChewieController(
-      aspectRatio: videoPlayerController.value.aspectRatio,
-      videoPlayerController: videoPlayerController,
-      autoPlay: false,
-      startAt: Duration(seconds: secondsGiven),
-      autoInitialize: true,
-      // looping: true,
-    );
-
-    return (chewieController.videoPlayerController.dataSource.isEmpty)
-        ? Center(
-            child: loadingIndicator(
-              color: AppColors.buttonBlue,
-            ), // Display circular progress indicator while loading
-          )
-        :
-        //                                 :
-
-        Chewie(
-            controller: chewieController,
-          );
-  }
 
   @override
   void dispose() {

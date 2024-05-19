@@ -18,6 +18,7 @@ import '../../../core/widgets/sizedbox.dart';
 import '../../standard_layout/screens/standard_layout.dart';
 import '../bloc/history_bloc.dart';
 import 'history_details.dart';
+import '../../../core/widgets/video_player_widget.dart';
 
 class AllHistoryScreen extends StatelessWidget {
   AllHistoryScreen({Key? key}) : super(key: key);
@@ -486,9 +487,10 @@ class AllHistoryScreen extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: _buildVideoPlayerWidget(
+                      child: VideoPlayerWidget(
                           // urlFromHistory:
-                          "http:${RemoteDataSource.baseUrlWithoutPort}8000/${urlFromHistory.split("Image_Database/")[1]}")),
+                          videoUrl:
+                              "http:${RemoteDataSource.baseUrlWithoutPort}8000/${urlFromHistory.split("Image_Database/")[1]}")),
                 ),
               ),
             ],
@@ -498,59 +500,4 @@ class AllHistoryScreen extends StatelessWidget {
     );
   }
 
-  // Widget _pickVideoWidget({required String? urlFromHistory}) {
-  //   VideoPlayerController? _controller;
-
-  //   if (urlFromHistory != null && urlFromHistory.isNotEmpty) {
-  //     _controller = VideoPlayerController.network(urlFromHistory)
-  //       ..initialize().then((_) {
-  //         _controller!.pause();
-  //       });
-  //   }
-
-  //   if (_controller != null) {
-  //     return Stack(children: [
-  //       AspectRatio(
-  //           aspectRatio: _controller.value.aspectRatio,
-  //           child: VideoPlayer(_controller)),
-  //       Center(
-  //         child: IconButton(
-  //             icon: _controller.value.isPlaying
-  //                 ? const Icon(Icons.pause)
-  //                 : const Icon(Icons.play_arrow),
-  //             onPressed: () {
-  //               _controller!.value.isPlaying
-  //                   ? _controller.pause()
-  //                   : _controller.play();
-  //             }),
-  //       ),
-  //       VideoProgressIndicator(
-  //         _controller,
-  //         allowScrubbing: true,
-  //         padding: const EdgeInsets.all(10),
-  //       ),
-  //     ]);
-  //   } else {
-  //     return const SizedBox(); // Return an empty SizedBox if no video controller is available
-  //   }
-  // }
-
-  Widget _buildVideoPlayerWidget(String videoUrl) {
-    // final videoPlayerController = VideoPlayerController.network(videoUrl);
-
-    final videoPlayerController =
-        VideoPlayerController.networkUrl(Uri.parse(videoUrl));
-    final chewieController = ChewieController(
-      aspectRatio: videoPlayerController.value.aspectRatio,
-      videoPlayerController: videoPlayerController,
-      autoPlay: false,
-      // startAt: Duration(seconds: 1),
-      autoInitialize: true,
-      looping: false,
-    );
-
-    return Chewie(
-      controller: chewieController,
-    );
-  }
 }

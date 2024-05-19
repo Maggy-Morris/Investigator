@@ -70,7 +70,6 @@ dependencies:
   easy_sidemenu: ^0.6.0
   chewie: ^1.7.5
   shimmer: ^3.0.0
-  flick_video_player: ^0.8.0
 
 dev_dependencies:
   flutter_test:
