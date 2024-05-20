@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:Investigator/core/widgets/FullImageURL.dart';
+import 'package:Investigator/core/widgets/flutter_pagination/flutter_pagination.dart';
 import 'package:Investigator/core/widgets/slider_widget.dart';
 import 'package:camera/camera.dart';
 import 'package:chewie/chewie.dart';
@@ -580,14 +581,14 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                   ),
 
                                                   // Display the pagination controls
-                                                  CustomPagination(
+                                                  FlutterPagination(
                                                     // persons: state
                                                     //     .employeeNamesList, // Pass the list of data
-                                                    pageCount: (state
+                                                    listCount: (state
                                                                 .pageCount /
                                                             10)
                                                         .ceil(), // Pass the page count
-                                                    onPageChanged:
+                                                    onSelectCallback:
                                                         (int index) async {
                                                       GroupSearchBloc.get(
                                                               context)
@@ -1448,14 +1449,14 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                     padding:
                                                         const EdgeInsets.only(
                                                             bottom: 15.0),
-                                                    child: CustomPagination(
+                                                    child: FlutterPagination(
                                                       // persons: state
                                                       //     .employeeNamesList, // Pass the list of data
-                                                      pageCount: (state
+                                                      listCount: (state
                                                                   .pageCount /
                                                               10)
                                                           .ceil(), // Pass the page count
-                                                      onPageChanged:
+                                                      onSelectCallback:
                                                           (int index) async {
                                                         GroupSearchBloc.get(
                                                                 context)

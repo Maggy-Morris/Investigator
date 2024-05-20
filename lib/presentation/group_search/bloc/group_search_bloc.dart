@@ -63,8 +63,7 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
 
     on<EditPageNumber>(_onEditPageNumber);
     on<EditPageCount>(_onEditPageCount);
-        on<SetTimeDuration>(_onSetTimeDuration);
-
+    on<SetTimeDuration>(_onSetTimeDuration);
 
     // on<GetPaginatedFramesEvent>(_onGetPaginatedFramesEvent);
   }
@@ -78,8 +77,10 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
   //   add(const GetModelsName());
   // }
 
-  
-  _onSetTimeDuration(SetTimeDuration event, Emitter<GroupSearchState> emit) async {
+  _onSetTimeDuration(
+      SetTimeDuration event, Emitter<GroupSearchState> emit) async {
+    emit(state.copyWith(timeDuration: 0, submission: Submission.editing));
+
     emit(state.copyWith(
         timeDuration: event.timeDuration, submission: Submission.editing));
 

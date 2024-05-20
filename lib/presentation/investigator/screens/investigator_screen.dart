@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:Investigator/core/widgets/FullImageURL.dart';
+import 'package:Investigator/core/widgets/flutter_pagination/flutter_pagination.dart';
 import 'package:camera/camera.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:chewie/chewie.dart';
@@ -217,7 +218,9 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                 child: Stack(
                                                   fit: StackFit.expand,
                                                   children: [
-                                                    _images?.isNotEmpty == true
+                                                    state.imagesListdata
+                                                                ?.isNotEmpty ==
+                                                            true
                                                         ? CarouselSlider(
                                                             carouselController:
                                                                 _carouselController,
@@ -250,7 +253,12 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                   ],
                                                 ),
                                               ),
-                                              _images?.isNotEmpty == true
+                                              state.imagesListdata
+                                                              ?.isNotEmpty ==
+                                                          true &&
+                                                      state.imagesListdata
+                                                              ?.length !=
+                                                          1
                                                   ?
                                                   // Left Button
                                                   Positioned(
@@ -271,7 +279,12 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                     )
                                                   : const Positioned(
                                                       child: Text("")),
-                                              _images?.isNotEmpty == true
+                                              state.imagesListdata
+                                                              ?.isNotEmpty ==
+                                                          true &&
+                                                      state.imagesListdata
+                                                              ?.length !=
+                                                          1
                                                   ?
                                                   // Right Button
                                                   Positioned(
@@ -667,14 +680,14 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                     padding:
                                                         const EdgeInsets.only(
                                                             bottom: 15.0),
-                                                    child: CustomPagination(
+                                                    child: FlutterPagination(
                                                       // persons: state
                                                       //     .employeeNamesList, // Pass the list of data
-                                                      pageCount: (state
+                                                      listCount: (state
                                                                   .pageCount /
                                                               10)
                                                           .ceil(), // Pass the page count
-                                                      onPageChanged:
+                                                      onSelectCallback:
                                                           (int index) async {
                                                         HomeBloc.get(context)
                                                             .add(EditPageNumber(
@@ -778,7 +791,9 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                               child: Stack(
                                                 fit: StackFit.expand,
                                                 children: [
-                                                  _images?.isNotEmpty == true
+                                                  state.imagesListdata
+                                                              ?.isNotEmpty ==
+                                                          true
                                                       ? CarouselSlider(
                                                           carouselController:
                                                               _carouselController,
@@ -809,7 +824,11 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                 ],
                                               ),
                                             ),
-                                            _images?.isNotEmpty == true
+                                            state.imagesListdata?.isNotEmpty ==
+                                                        true &&
+                                                    state.imagesListdata
+                                                            ?.length !=
+                                                        1
                                                 ?
                                                 // Left Button
                                                 Positioned(
@@ -830,7 +849,11 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                   )
                                                 : const Positioned(
                                                     child: Text("")),
-                                            _images?.isNotEmpty == true
+                                            state.imagesListdata?.isNotEmpty ==
+                                                        true &&
+                                                    state.imagesListdata
+                                                            ?.length !=
+                                                        1
                                                 ?
                                                 // Right Button
                                                 Positioned(
@@ -1213,14 +1236,14 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                   padding:
                                                       const EdgeInsets.only(
                                                           bottom: 15.0),
-                                                  child: CustomPagination(
+                                                  child: FlutterPagination(
                                                     // persons: state
                                                     //     .employeeNamesList, // Pass the list of data
-                                                    pageCount: (state
+                                                    listCount: (state
                                                                 .pageCount /
                                                             10)
                                                         .ceil(), // Pass the page count
-                                                    onPageChanged:
+                                                    onSelectCallback:
                                                         (int index) async {
                                                       HomeBloc.get(context).add(
                                                           EditPageNumber(

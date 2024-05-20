@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:Investigator/core/widgets/flutter_pagination/flutter_pagination.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
@@ -210,15 +211,14 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                   onPressed: () async {
                                     // Load the image file from the assets directory
                                     rootBundle
-                                        .load(
-                                            'assets/images/imagepickWhite.png')
+                                        .load('assets/images/person_.png')
                                         .then(
                                       (imageData) {
                                         Uint8List uint8List =
                                             imageData.buffer.asUint8List();
 
                                         PlatformFile imageFile = PlatformFile(
-                                          name: 'imagepickWhite.png',
+                                          name: 'person_.png',
                                           size: uint8List.lengthInBytes,
                                           bytes: uint8List,
                                         );
@@ -364,7 +364,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                               },
                                                             ),
 
-                                                            FxBox.h24,
+                                                            FxBox.h16,
                                                             if (state
                                                                     .imageFile !=
                                                                 null)
@@ -383,7 +383,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                                         )
                                                                       : loadingIndicator() // Show circular progress indicator while loading
                                                                   ),
-                                                            FxBox.h24,
+                                                            FxBox.h16,
 
                                                             Row(
                                                               mainAxisAlignment:
@@ -474,8 +474,6 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                                               ],
                                                             ),
 
-                                                            const SizedBox(
-                                                                height: 24),
                                                             //////////////////////////////////////
 
                                                             Padding(
@@ -839,15 +837,14 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                   onPressed: () async {
                                     // Load the image file from the assets directory
                                     rootBundle
-                                        .load(
-                                            'assets/images/imagepickWhite.png')
+                                        .load('assets/images/person_.png')
                                         .then(
                                       (imageData) {
                                         Uint8List uint8List =
                                             imageData.buffer.asUint8List();
 
                                         PlatformFile imageFile = PlatformFile(
-                                          name: 'imagepickWhite.png',
+                                          name: 'person_.png',
                                           size: uint8List.lengthInBytes,
                                           bytes: uint8List,
                                         );
@@ -862,7 +859,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                         ));
                                         // // Load the image file from the assets directory
                                         // ByteData imageData = await rootBundle.load(
-                                        //     'assets/images/imagepickWhite.png');
+                                        //     'assets/images/person_.png');
 
                                         // // Create a Uint8List from the image bytes
                                         // Uint8List uint8List =
@@ -871,7 +868,7 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                         // // Create a PlatformFile object with the correct properties
                                         // PlatformFile imageFile =
                                         // PlatformFile(
-                                        //   name: 'imagepickWhite.png',
+                                        //   name: 'person_.png',
                                         //   size: uint8List
                                         //       .lengthInBytes, // The size of the image file in bytes
                                         //   bytes:
@@ -1475,12 +1472,12 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                       Padding(
                                         padding:
                                             const EdgeInsets.only(bottom: 15.0),
-                                        child: CustomPagination(
+                                        child: FlutterPagination(
                                           // persons: state
                                           //     .employeeNamesList, // Pass the list of data
-                                          pageCount: state
+                                          listCount: state
                                               .pageCount, // Pass the page count
-                                          onPageChanged: (int index) async {
+                                          onSelectCallback: (int index) async {
                                             ///////////////////////////
                                             if (state.filterCase == "All") {
                                               AllEmployeesBloc.get(context).add(

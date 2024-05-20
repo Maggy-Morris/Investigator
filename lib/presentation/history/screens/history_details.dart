@@ -18,6 +18,7 @@ import '../../../core/enum/enum.dart';
 import '../../../core/remote_provider/remote_data_source.dart';
 import '../../../core/resources/app_colors.dart';
 // import '../../../core/utils/responsive.dart';
+import '../../../core/widgets/flutter_pagination/flutter_pagination.dart';
 import '../../../core/widgets/image_downloader.dart';
 import '../../../core/widgets/persons_per_widget.dart';
 import '../../../core/widgets/sizedbox.dart';
@@ -208,6 +209,51 @@ class _HistoryDetails extends State<HistoryDetails> {
                                                       Axis.horizontal,
                                                 ),
                                               ),
+
+                                            widget.images.isNotEmpty == true &&
+                                                    widget.images.length != 1
+                                                ?
+                                                // Left Button
+                                                Positioned(
+                                                    left: 0,
+                                                    top: 110,
+                                                    bottom: 110,
+                                                    child: IconButton(
+                                                      icon: const Icon(
+                                                        Icons.arrow_left,
+                                                        size: 35,
+                                                      ),
+                                                      onPressed: () {
+                                                        // Scroll the carousel to the left
+                                                        _carouselController
+                                                            .previousPage();
+                                                      },
+                                                    ),
+                                                  )
+                                                : const Positioned(
+                                                    child: Text("")),
+                                            widget.images.isNotEmpty == true &&
+                                                    widget.images.length != 1
+                                                ?
+                                                // Right Button
+                                                Positioned(
+                                                    right: 0,
+                                                    top: 110,
+                                                    bottom: 110,
+                                                    child: IconButton(
+                                                      icon: const Icon(
+                                                        Icons.arrow_right,
+                                                        size: 35,
+                                                      ),
+                                                      onPressed: () {
+                                                        // Scroll the carousel to the right
+                                                        _carouselController
+                                                            .nextPage();
+                                                      },
+                                                    ),
+                                                  )
+                                                : const Positioned(
+                                                    child: Text("")),
                                           ],
                                         ),
                                         // Stack(
@@ -309,8 +355,8 @@ class _HistoryDetails extends State<HistoryDetails> {
                                                             icon: const Icon(
                                                               Icons
                                                                   .arrow_back_ios_new_outlined,
-                                                              color:
-                                                                  Colors.white,
+                                                              color: AppColors
+                                                                  .buttonBlue,
                                                             ),
                                                             onPressed: () {
                                                               _scrollController
@@ -420,8 +466,8 @@ class _HistoryDetails extends State<HistoryDetails> {
                                                             icon: const Icon(
                                                               Icons
                                                                   .arrow_forward_ios_outlined,
-                                                              color:
-                                                                  Colors.white,
+                                                              color: AppColors
+                                                                  .buttonBlue,
                                                             ),
                                                             onPressed: () {
                                                               // Handle scrolling to the right
@@ -445,14 +491,15 @@ class _HistoryDetails extends State<HistoryDetails> {
                                           Padding(
                                             padding: const EdgeInsets.only(
                                                 bottom: 15.0),
-                                            child: CustomPagination(
+                                            child: FlutterPagination(
                                               // persons: state
                                               //     .employeeNamesList, // Pass the list of data
-                                              pageCount: (state.pathForImages
+                                              listCount: (state.pathForImages
                                                           .count! /
                                                       10)
                                                   .ceil(), // Pass the page count
-                                              onPageChanged: (int index) async {
+                                              onSelectCallback:
+                                                  (int index) async {
                                                 HistoryBloc.get(context).add(
                                                     EditPageNumberInsideHistoryDetails(
                                                         pageIndex: index));

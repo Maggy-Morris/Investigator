@@ -34,16 +34,16 @@ class NumberButton extends StatelessWidget {
           color: isSelected ? selectionColor : notSelectedColor,
           borderRadius: BorderRadius.circular(_transformSize(8.0)),
         ),
+        alignment: AlignmentDirectional.center,
         child: Center(
           child: Text(
             buttonText,
             style: TextStyle(
               fontSize: _transformSize(18.0),
-              color: isSelected ? Colors.white : Colors.black,
+              color: isSelected ? Colors.black : Colors.black,
             ),
           ),
         ),
-        alignment: AlignmentDirectional.center,
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:Investigator/core/enum/enum.dart';
 import 'package:Investigator/core/loader/loading_indicator.dart';
 import 'package:Investigator/core/remote_provider/remote_data_source.dart';
+import 'package:Investigator/core/widgets/flutter_pagination/flutter_pagination.dart';
 import 'package:Investigator/core/widgets/persons_per_widget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -196,13 +197,13 @@ class AllHistoryScreen extends StatelessWidget {
                             //   //     previous.pageCount != current.pageCount,
                             //   builder: (context, state) {
                             //     return
-                            CustomPagination(
+                            FlutterPagination(
                           // defaultValue: state.pageIndex,
                           // persons: state
                           //     .employeeNamesList, // Pass the list of data
-                          pageCount: state.pageCount, // Pass the page count
+                          listCount: state.pageCount, // Pass the page count
 
-                          onPageChanged: (int index) async {
+                          onSelectCallback: (int index) async {
                             ///////////////////////////
                             if (state.selectedDay.isNotEmpty) {
                               HistoryBloc.get(context).add(
@@ -214,7 +215,7 @@ class AllHistoryScreen extends StatelessWidget {
                             //////////////////////////////
                           },
                           key: ValueKey<String>(
-                              "${state.selectedDay}"), // Use state.pageIndex as ValueKey
+                              state.selectedDay), // Use state.pageIndex as ValueKey
                         ),
                         // },
                         // ),

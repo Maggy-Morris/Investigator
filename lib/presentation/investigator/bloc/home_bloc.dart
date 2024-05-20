@@ -65,6 +65,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   // }
 
   _onSetTimeDuration(SetTimeDuration event, Emitter<HomeState> emit) async {
+    emit(state.copyWith(timeDuration: 0, submission: Submission.editing));
     emit(state.copyWith(
         timeDuration: event.timeDuration, submission: Submission.editing));
 

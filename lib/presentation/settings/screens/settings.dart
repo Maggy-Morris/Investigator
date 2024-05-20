@@ -262,7 +262,6 @@ class _SettingsState extends State<Settings> {
                                         ),
                                     IconButton(
                                       onPressed: () {
-                                        // setState(() {
 
                                         showDialog(
                                           context: context,

@@ -82,12 +82,13 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
           .then((value) {
         // print(value.paths);
         if (value.data!.isNotEmpty) {
-          emit(state.copyWith(
+          emit(
+            state.copyWith(
               pageCount: value.nPages,
               allHistory: value.data,
               submission: Submission.hasData,
-              ), 
-              );
+            ),
+          );
         } else {
           emit(state.copyWith(
               pageCount: 0,
@@ -190,6 +191,8 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
 
   _onSecondsGivenFromVideoEvent(
       SecondsGivenFromVideoEvent event, Emitter<HistoryState> emit) async {
+    emit(state.copyWith(
+        secondsGivenFromVideo: 0, submission: Submission.editing));
     emit(state.copyWith(
         secondsGivenFromVideo: event.secondsGivenFromVideo,
         submission: Submission.editing));
