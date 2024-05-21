@@ -8,6 +8,7 @@ import 'package:Investigator/core/remote_provider/remote_provider.dart';
 
 import '../../../core/models/add_company_model.dart';
 import '../../../core/models/employee_model.dart';
+import '../../../core/models/paginated_groupSearch_in_video.dart';
 import '../../../core/models/search_by_video_in_group_search.dart';
 
 part 'group_search_event.dart';
@@ -48,6 +49,9 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
 
     /// functionality Company delete employees Data
     on<SearchForEmployeeByVideoEvent>(_onSearchForEmployeeByVideoEvent);
+    on<PaginatedSearchForEmployeeByVideoEvent>(
+        _onPaginatedSearchForEmployeeByVideoEvent);
+
     on<ImageToSearchForEmployee>(_onImageToSearchForEmployee);
 
     /// Add New Employee
@@ -64,6 +68,9 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
     on<EditPageNumber>(_onEditPageNumber);
     on<EditPageCount>(_onEditPageCount);
     on<SetTimeDuration>(_onSetTimeDuration);
+
+    on<EditPageNumberPaginationTargetsData>(
+        _onEditPageNumberPaginationTargetsData);
 
     // on<GetPaginatedFramesEvent>(_onGetPaginatedFramesEvent);
   }
@@ -315,6 +322,16 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
     });
   }
 
+  _onEditPageNumberPaginationTargetsData(
+      EditPageNumberPaginationTargetsData event,
+      Emitter<GroupSearchState> emit) async {
+    emit(state.copyWith(
+        pageIndexForTargets: event.pageIndexForTargets,
+        submission: Submission.editing));
+
+    add(const PaginatedSearchForEmployeeByVideoEvent());
+  }
+
 /////////////////////////////////////////////
 
   ///search by video and
@@ -323,6 +340,10 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
     emit(state.copyWith(submission: Submission.loading));
     await RemoteProvider()
         .searchForpersonByVideoGroupSearch(
+      // pageNumber: (state.pageIndexForTargets == 0
+      //         ? state.pageIndexForTargets + 1
+      //         : state.pageIndexForTargets)
+      //     .toString(),
       similarityScore: state.accuracy,
       video: state.video,
       filterCase: state.filterCase,
@@ -333,18 +354,60 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
         .then((value) {
       if (value.found == true) {
         emit(state.copyWith(
+          // pageCountForTargets: value.n_page,
           submission: Submission.success,
           data: value.data,
           pathProvided: value.global_path,
           pageCount: value.response_count,
           timestamps: value.timestamps,
           // snapShots: value.snapshot_list,
-          employeeNamesList: value.dataCards,
+          // employeeNamesList: value.dataCards,
         ));
+        add(const PaginatedSearchForEmployeeByVideoEvent());
       } else if (value.found == false) {
         emit(state.copyWith(
           data: [],
           snapShots: [],
+          submission: Submission.noDataFound,
+        ));
+      }
+    });
+  }
+
+  _onPaginatedSearchForEmployeeByVideoEvent(
+      PaginatedSearchForEmployeeByVideoEvent event,
+      Emitter<GroupSearchState> emit) async {
+    // emit(state.copyWith(submission: Submission.loading));
+    await RemoteProvider()
+        .paginateSearchForpersonByVideoGroupSearch(
+      pageNumber: state.pageIndexForTargets == 0
+          ? state.pageIndexForTargets + 1
+          : state.pageIndexForTargets,
+      data: state.data,
+      // similarityScore: state.accuracy,
+      // video: state.video,
+      // filterCase: state.filterCase,
+      companyName:
+          AuthenticationRepository.instance.currentUser.companyName?.first ??
+              "",
+    )
+        .then((value) {
+      if (value.dataCards != []) {
+        emit(state.copyWith(
+          pageCountForTargets: value.n_page,
+          submission: Submission.hasData,
+          // data: value.data,
+          // pathProvided: value.global_path,
+          // pageCount: value.response_count,
+          // timestamps: value.timestamps,
+          // snapShots: value.snapshot_list,
+          employeeNamesList: value.dataCards,
+        ));
+      } else if (value.dataCards == []) {
+        emit(state.copyWith(
+          data: [],
+          employeeNamesList: [],
+          // snapShots: [],
           submission: Submission.noDataFound,
         ));
       }

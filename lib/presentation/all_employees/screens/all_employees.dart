@@ -96,14 +96,114 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        Text(
-                          "All people ($companyNameRepo)".tr(),
-                          style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.white),
+                        Row(
+                          // mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Spacer(
+                              flex: 2,
+                            ), // Adds space between the text and the form
+
+                            Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                "All people ($companyNameRepo)".tr(),
+                                style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.white),
+                              ),
+                            ),
+                            const Spacer(), // Adds space between the text and the form
+
+                            ///search field
+                            if (Responsive.isWeb(context))
+                              Form(
+                                child: SizedBox(
+                                  height: 50,
+                                  width: 300,
+                                  child: TextFormField(
+                                    cursorColor: Colors.black,
+                                    style: const TextStyle(color: Colors.black),
+                                    controller: _searchController,
+                                    decoration: InputDecoration(
+                                      hintText: 'Search For Targets'.tr(),
+                                      hintStyle: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      fillColor: Colors
+                                          .white, // Set the fill color to white
+                                      filled: true, //
+                                      suffixIcon: state.isSearching
+                                          ? IconButton(
+                                              icon: const Icon(Icons.search),
+                                              onPressed: () {
+                                                AllEmployeesBloc.get(context)
+                                                    .add(
+                                                  GetPersonByNameEvent(
+                                                    companyName:
+                                                        companyNameRepo,
+                                                    personName:
+                                                        _searchController.text,
+                                                  ),
+                                                );
+                                              },
+                                            )
+                                          : null,
+
+                                      ///search Toggle
+                                      prefixIcon: IconButton(
+                                        icon: state.isSearching
+                                            ? const Icon(
+                                                Icons.close,
+                                                color: Colors.red,
+                                              )
+                                            : const Icon(Icons.search),
+                                        onPressed: () async {
+                                          state.isSearching = !state
+                                              .isSearching; // Toggle the search state
+                                          if (!state.isSearching) {
+                                            _searchController.clear();
+                                          }
+
+                                          if (state.isSearching) {
+                                            AllEmployeesBloc.get(context).add(
+                                              GetPersonByNameEvent(
+                                                companyName: companyNameRepo,
+                                                personName:
+                                                    _searchController.text,
+                                              ),
+                                            );
+                                          } else {
+                                            if (state.filterCase == "All") {
+                                              AllEmployeesBloc.get(context).add(
+                                                  const EditPageNumber(
+                                                      pageIndex: 1));
+                                            } else if (state.filterCase ==
+                                                "Neutral") {
+                                              AllEmployeesBloc.get(context).add(
+                                                  const GetEmployeeNormalNamesEvent());
+                                            } else if (state.filterCase ==
+                                                "BlackListed") {
+                                              AllEmployeesBloc.get(context).add(
+                                                  const GetEmployeeBlackListedNamesEvent());
+                                            } else {
+                                              AllEmployeesBloc.get(context).add(
+                                                  const EditPageNumber(
+                                                      pageIndex: 1));
+                                            }
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
-                        FxBox.h24,
                         if (Responsive.isWeb(context))
                           SizedBox(
                             width: double.infinity,
@@ -111,102 +211,93 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                ///search field
-                                Form(
-                                  child: SizedBox(
-                                    height: 50,
-                                    width: 300,
-                                    child: TextFormField(
-                                      cursorColor: Colors.black,
-                                      style:
-                                          const TextStyle(color: Colors.black),
-                                      controller: _searchController,
-                                      decoration: InputDecoration(
-                                        hintText: 'Search For Targets'.tr(),
-                                        hintStyle: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 15,
-                                        ),
-                                        border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                        fillColor: Colors
-                                            .white, // Set the fill color to white
-                                        filled: true, //
-                                        prefixIcon: state.isSearching
-                                            ? IconButton(
-                                                icon: const Icon(Icons.search),
-                                                onPressed: () {
-                                                  AllEmployeesBloc.get(context)
-                                                      .add(
-                                                    GetPersonByNameEvent(
-                                                      companyName:
-                                                          companyNameRepo,
-                                                      personName:
-                                                          _searchController
-                                                              .text,
-                                                    ),
-                                                  );
-                                                },
-                                              )
-                                            : null,
-
-                                        ///search Toggle
-                                        suffixIcon: IconButton(
-                                          icon: state.isSearching
-                                              ? const Icon(Icons.close)
-                                              : const Icon(Icons.search),
-                                          onPressed: () async {
-                                            state.isSearching = !state
-                                                .isSearching; // Toggle the search state
-                                            if (!state.isSearching) {
-                                              _searchController.clear();
-                                            }
-
-                                            if (state.isSearching) {
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Filter By : ",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: (Responsive.isWeb(context))
+                                            ? 25
+                                            : 17,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: SizedBox(
+                                        width: 170,
+                                        child:
+                                            singleSelectGenericDropdown<String>(
+                                          // titleName: "Filter By:",
+                                          isEnabled: true,
+                                          isRequired: false,
+                                          filled: true,
+                                          // showSearch: true,
+                                          selectedItem:
+                                              state.filterCase!.isEmpty
+                                                  ? "All"
+                                                  : state.filterCase,
+                                          onChanged: (value) {
+                                            AllEmployeesBloc.get(context)
+                                                .add(const EditPager(
+                                              pageIndex: 1,
+                                            ));
+                                            // AllEmployeesBloc.get(context)
+                                            //     .add(const EditPageNumberNeutral(
+                                            //   pageIndex: 1,
+                                            // ));
+                                            // AllEmployeesBloc.get(context)
+                                            //     .add(const EditPageNumberBlackListed(
+                                            //   pageIndex: 1,
+                                            // ));
+                                            if (value?.isNotEmpty ?? false) {
                                               AllEmployeesBloc.get(context).add(
-                                                GetPersonByNameEvent(
-                                                  companyName: companyNameRepo,
-                                                  personName:
-                                                      _searchController.text,
-                                                ),
-                                              );
-                                            } else {
-                                              if (state.filterCase == "All") {
-                                                AllEmployeesBloc.get(context)
-                                                    .add(const EditPageNumber(
-                                                        pageIndex: 1));
-                                              } else if (state.filterCase ==
-                                                  "Neutral") {
+                                                  selectedFiltering(
+                                                      filterCase: value ?? ""));
+                                              if (value == "All") {
+                                                AllEmployeesBloc.get(context).add(
+                                                    const GetEmployeeNamesEvent());
+                                                // AllEmployeesBloc.get(context)
+                                                //     .add(const EditPageNumber(
+                                                //   pageIndex: 1,
+                                                // ));
+                                              } else if (value == "Neutral") {
                                                 AllEmployeesBloc.get(context).add(
                                                     const GetEmployeeNormalNamesEvent());
-                                              } else if (state.filterCase ==
+                                                // AllEmployeesBloc.get(context)
+                                                //     .add(const EditPageNumberNeutral(
+                                                //   pageIndex: 1,
+                                                // ));
+                                              } else if (value ==
                                                   "BlackListed") {
                                                 AllEmployeesBloc.get(context).add(
                                                     const GetEmployeeBlackListedNamesEvent());
-                                              } else {
-                                                AllEmployeesBloc.get(context)
-                                                    .add(const EditPageNumber(
-                                                        pageIndex: 1));
+                                                // AllEmployeesBloc.get(context).add(
+                                                //     const EditPageNumberBlackListed(
+                                                //   pageIndex: 1,
+                                                // ));
                                               }
                                             }
                                           },
+                                          itemsList: [
+                                            "All",
+                                            "Neutral",
+                                            "BlackListed"
+                                          ],
                                         ),
                                       ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-
                                 // Add Employee Button
-                                FxBox.h24,
+
                                 MaterialButton(
                                   height: 55,
-                                  minWidth: 210,
+                                  minWidth: 300,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15.0),
                                   ),
-                                  color: AppColors.grey2,
+                                  color: AppColors.babyBlue,
                                   //  Color.fromARGB(255, 143, 188, 211),
                                   onPressed: () async {
                                     // Load the image file from the assets directory
@@ -739,8 +830,8 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                     "Add Target",
                                     style: TextStyle(
                                       fontSize: 16,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500,
+                                      color: AppColors.blueBlack,
+                                      fontWeight: FontWeight.w900,
                                     ),
                                   ),
                                 ),
@@ -828,11 +919,11 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
 
                                 MaterialButton(
                                   height: 55,
-                                  minWidth: 210,
+                                  minWidth: 300,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15.0),
                                   ),
-                                  color: AppColors.grey2,
+                                  color: AppColors.babyBlue,
                                   //  Color.fromARGB(255, 143, 188, 211),
                                   onPressed: () async {
                                     // Load the image file from the assets directory
@@ -1375,89 +1466,100 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                       },
                                     );
                                   },
-                                  child: const Text(
-                                    "Add Target",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
+                                  child: const Text("Add Target",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: AppColors.blueBlack,
+                                        fontWeight: FontWeight.w900,
+                                      )),
                                 ),
+
+                                FxBox.h24,
+
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Filter By : ",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: (Responsive.isWeb(context))
+                                            ? 25
+                                            : 17,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: SizedBox(
+                                        width: 170,
+                                        child:
+                                            singleSelectGenericDropdown<String>(
+                                          // titleName: "Filter By:",
+                                          isEnabled: true,
+                                          isRequired: false,
+                                          filled: true,
+                                          // showSearch: true,
+                                          selectedItem:
+                                              state.filterCase!.isEmpty
+                                                  ? "All"
+                                                  : state.filterCase,
+                                          onChanged: (value) {
+                                            AllEmployeesBloc.get(context)
+                                                .add(const EditPager(
+                                              pageIndex: 1,
+                                            ));
+                                            // AllEmployeesBloc.get(context)
+                                            //     .add(const EditPageNumberNeutral(
+                                            //   pageIndex: 1,
+                                            // ));
+                                            // AllEmployeesBloc.get(context)
+                                            //     .add(const EditPageNumberBlackListed(
+                                            //   pageIndex: 1,
+                                            // ));
+                                            if (value?.isNotEmpty ?? false) {
+                                              AllEmployeesBloc.get(context).add(
+                                                  selectedFiltering(
+                                                      filterCase: value ?? ""));
+                                              if (value == "All") {
+                                                AllEmployeesBloc.get(context).add(
+                                                    const GetEmployeeNamesEvent());
+                                                // AllEmployeesBloc.get(context)
+                                                //     .add(const EditPageNumber(
+                                                //   pageIndex: 1,
+                                                // ));
+                                              } else if (value == "Neutral") {
+                                                AllEmployeesBloc.get(context).add(
+                                                    const GetEmployeeNormalNamesEvent());
+                                                // AllEmployeesBloc.get(context)
+                                                //     .add(const EditPageNumberNeutral(
+                                                //   pageIndex: 1,
+                                                // ));
+                                              } else if (value ==
+                                                  "BlackListed") {
+                                                AllEmployeesBloc.get(context).add(
+                                                    const GetEmployeeBlackListedNamesEvent());
+                                                // AllEmployeesBloc.get(context).add(
+                                                //     const EditPageNumberBlackListed(
+                                                //   pageIndex: 1,
+                                                // ));
+                                              }
+                                            }
+                                          },
+                                          itemsList: [
+                                            "All",
+                                            "Neutral",
+                                            "BlackListed"
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
                                 // }),
                               ],
                             ),
                           ),
                         FxBox.h24,
-                        Row(
-                          children: [
-                            Text(
-                              "Filter By : ",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: (Responsive.isWeb(context)) ? 25 : 17,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: SizedBox(
-                                width: 170,
-                                child: singleSelectGenericDropdown<String>(
-                                  // titleName: "Filter By:",
-                                  isEnabled: true,
-                                  isRequired: false,
-                                  filled: true,
-                                  // showSearch: true,
-                                  selectedItem: state.filterCase!.isEmpty
-                                      ? "All"
-                                      : state.filterCase,
-                                  onChanged: (value) {
-                                    AllEmployeesBloc.get(context)
-                                        .add(const EditPager(
-                                      pageIndex: 1,
-                                    ));
-                                    // AllEmployeesBloc.get(context)
-                                    //     .add(const EditPageNumberNeutral(
-                                    //   pageIndex: 1,
-                                    // ));
-                                    // AllEmployeesBloc.get(context)
-                                    //     .add(const EditPageNumberBlackListed(
-                                    //   pageIndex: 1,
-                                    // ));
-                                    if (value?.isNotEmpty ?? false) {
-                                      AllEmployeesBloc.get(context).add(
-                                          selectedFiltering(
-                                              filterCase: value ?? ""));
-                                      if (value == "All") {
-                                        AllEmployeesBloc.get(context)
-                                            .add(const GetEmployeeNamesEvent());
-                                        // AllEmployeesBloc.get(context)
-                                        //     .add(const EditPageNumber(
-                                        //   pageIndex: 1,
-                                        // ));
-                                      } else if (value == "Neutral") {
-                                        AllEmployeesBloc.get(context).add(
-                                            const GetEmployeeNormalNamesEvent());
-                                        // AllEmployeesBloc.get(context)
-                                        //     .add(const EditPageNumberNeutral(
-                                        //   pageIndex: 1,
-                                        // ));
-                                      } else if (value == "BlackListed") {
-                                        AllEmployeesBloc.get(context).add(
-                                            const GetEmployeeBlackListedNamesEvent());
-                                        // AllEmployeesBloc.get(context).add(
-                                        //     const EditPageNumberBlackListed(
-                                        //   pageIndex: 1,
-                                        // ));
-                                      }
-                                    }
-                                  },
-                                  itemsList: ["All", "Neutral", "BlackListed"],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
                         BlocProvider.value(
                           value: AllEmployeesBloc.get(context),
                           child:

@@ -16,6 +16,7 @@ import '../models/dashboard_models.dart';
 import '../models/delete_model.dart';
 import '../models/employee_model.dart';
 import '../models/history_screen_model.dart';
+import '../models/paginated_groupSearch_in_video.dart';
 import '../models/search_by_image_model.dart';
 import '../models/search_by_video_in_group_search.dart';
 import '../models/sigup_model.dart';
@@ -505,13 +506,17 @@ class RemoteProvider {
     required String similarityScore,
     required String filterCase,
     required String companyName,
+    // required String pageNumber,
   }) async {
     try {
       Map<String, String> body = {
         "collection_name": companyName,
         "similarity_score": similarityScore,
         "search_type": filterCase,
+        // "page_number": pageNumber,
       };
+      // debugPrint("body");
+      //       debugPrint(body);
 
       Map<String, dynamic>? callBack =
           await RemoteDataSource().postMultiPartFiles(
@@ -522,6 +527,8 @@ class RemoteProvider {
         ],
       );
 
+      // debugPrint(callBack);
+
       if (callBack != null) {
         return SearchByVideoInGroupSearch.fromJson(callBack);
       } else {
@@ -530,6 +537,66 @@ class RemoteProvider {
     } catch (e) {
       return SearchByVideoInGroupSearch();
     }
+  }
+
+////////////////////////
+  ///Pagination Search for person in the database by Video
+  Future<PaginatedSearchByVideoInGroupSearch>
+      paginateSearchForpersonByVideoGroupSearch({
+    // required PlatformFile? video,
+    // required String similarityScore,
+    required List<String> data,
+    required String companyName,
+    required int pageNumber,
+  }) async {
+    try {
+      Map<String, dynamic> callBack = await RemoteDataSource().post(
+        endPoint: "/qdrant/paginate_search_in_video",
+        body: {
+          "collection_name": companyName,
+          // "similarity_score": similarityScore,
+          "data": data,
+          "page_number": pageNumber,
+        },
+      );
+
+      if (callBack.isNotEmpty) {
+        return PaginatedSearchByVideoInGroupSearch.fromJson(callBack);
+      } else {
+        return PaginatedSearchByVideoInGroupSearch();
+      }
+    } catch (e) {
+      return PaginatedSearchByVideoInGroupSearch();
+    }
+
+    //   Map<String, String> body = {
+    //     "collection_name": companyName,
+    //     "similarity_score": similarityScore,
+    //     "search_type": filterCase,
+    //     // "page_number": pageNumber,
+    //   };
+    //   // debugPrint("body");
+    //   //       debugPrint(body);
+
+    //   Map<String, dynamic>? callBack =
+    //       await RemoteDataSource().postMultiPartFiles(
+    //     endPoint: "/search_in_video",
+    //     body: body,
+    //     files: [
+    //       video!,
+    //     ],
+    //   );
+
+    //   // debugPrint(callBack);
+
+    //   if (callBack != null) {
+    //     return SearchByVideoInGroupSearch.fromJson(callBack);
+    //   } else {
+    //     return SearchByVideoInGroupSearch();
+    //   }
+    // } catch (e) {
+    //   return SearchByVideoInGroupSearch();
+    // }
   }
 
   ///Search for person in the database by Video

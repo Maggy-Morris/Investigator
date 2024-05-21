@@ -4,7 +4,13 @@ class GroupSearchState extends Equatable {
   final String pathProvided;
   final int timeDuration;
   int pageIndex;
+
+  int pageIndexForTargets;
+
+  
   int pageCount;
+    int pageCountForTargets;
+
   final String selectedOption;
 
   final bool showTextField;
@@ -40,6 +46,8 @@ class GroupSearchState extends Equatable {
     this.timeDuration = 0,
     this.pathProvided = "",
     this.pageCount = 0,
+    this.pageCountForTargets = 0,
+    this.pageIndexForTargets = 0,
     this.pageIndex = 0,
     this.showTextField = false,
     this.roomNAMS = const [],
@@ -71,7 +79,9 @@ class GroupSearchState extends Equatable {
     int? timeDuration,
     String? pathProvided,
     int? pageCount,
+    int? pageCountForTargets,
     int? pageIndex,
+    int? pageIndexForTargets,
     bool? check,
     String? selectedOption,
     List<String>? roomNAMS,
@@ -98,10 +108,13 @@ class GroupSearchState extends Equatable {
     List<String>? data,
   }) {
     return GroupSearchState(
+
       timeDuration: timeDuration ?? this.timeDuration,
       pathProvided: pathProvided ?? this.pathProvided,
       pageIndex: pageIndex ?? this.pageIndex,
+      pageIndexForTargets : pageIndexForTargets ?? this.pageIndexForTargets,
       pageCount: pageCount ?? this.pageCount,
+      pageCountForTargets:pageCountForTargets??this.pageCountForTargets,
       timestamps: timestamps ?? this.timestamps,
       roomNAMS: roomNAMS ?? this.roomNAMS,
       showTextField: showTextField ?? this.showTextField,
@@ -134,7 +147,9 @@ class GroupSearchState extends Equatable {
         timeDuration,
         pathProvided,
         pageIndex,
+        pageIndexForTargets,
         pageCount,
+        pageCountForTargets,
         timestamps,
         check,
         roomNAMS,

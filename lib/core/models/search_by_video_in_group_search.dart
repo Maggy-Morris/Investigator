@@ -1,49 +1,57 @@
 import 'package:equatable/equatable.dart';
-import 'package:file_picker/file_picker.dart';
 
 class SearchByVideoInGroupSearch extends Equatable {
   bool? found;
   List<String>? data;
   List<String>? timestamps;
-  String? global_path;  
+  String? global_path;
   int? response_count;
-  List<Dataaa>? dataCards;
+  // List<Dataaa>? dataCards;
+
+  // int? n_page;
+  int? count;
 
   // List<String>? snapshot_list;
 
-  SearchByVideoInGroupSearch(
-      {this.global_path,this.response_count,this.timestamps, this.found, this.data
-      ,
-      //  this.snapshot_list
-       });
+  SearchByVideoInGroupSearch({
+    // this.n_page,
+    this.count,
+    this.global_path,
+    this.response_count,
+    this.timestamps,
+    this.found,
+    this.data,
+    //  this.snapshot_list
+  });
 
   SearchByVideoInGroupSearch.fromJson(Map<String, dynamic> json) {
+    // n_page = json['n_page'];
+    count = json['count'];
     found = json['Found'];
     data = json['data'].cast<String>();
     timestamps = json['timestamps'].cast<String>();
-     global_path = json['global_path'];
+    global_path = json['global_path'];
     response_count = json['response_count'];
 
-
-    if (json['data_cards'] != []) {
-      dataCards = <Dataaa>[];
-      json['data_cards'].forEach((v) {
-        dataCards?.add(Dataaa.fromJson(v));
-      });
-    }
+    // if (json['data_cards'] != []) {
+    //   dataCards = <Dataaa>[];
+    //   json['data_cards'].forEach((v) {
+    //     dataCards?.add(Dataaa.fromJson(v));
+    //   });
+    // }
     // snapshot_list = json['snapshot_list'].cast<String>();
   }
 
   Map<String, dynamic> toJson() {
-
     final Map<String, dynamic> data = Map<String, dynamic>();
-    if (this.dataCards != null) {
-      data['data_cards'] = this.dataCards!.map((v) => v.toJson()).toList();
-    }
+    // if (this.dataCards != null) {
+    //   data['data_cards'] = this.dataCards!.map((v) => v.toJson()).toList();
+    // }
+    // data['n_page'] = n_page;
+    data['count'] = count;
     data['Found'] = found;
-     data['global_path'] = global_path;
+    data['global_path'] = global_path;
     data['response_count'] = response_count;
-
 
     data['timestamps'] = timestamps;
 
@@ -53,55 +61,64 @@ class SearchByVideoInGroupSearch extends Equatable {
   }
 
   @override
-  List<Object?> get props => [global_path,response_count,data, found,
-  //  snapshot_list,
-    timestamps];
+  List<Object?> get props => [
+        // n_page, count,
+        global_path, response_count, data, found,
+        //  snapshot_list,
+        timestamps
+      ];
 }
 
-class Dataaa {
-  String? sId;
-  String? email;
-  String? imagePath;
-  String? name;
-  String? phone;
-  String? userId;
-  String? blackListed;
-  List<String>? roomsAccesseble;
+// class Dataaa {
+//   String? sId;
+//   String? email;
+//   String? imagePath;
+//   String? name;
+//   String? phone;
+//   String? userId;
+//   String? blackListed;
+//   List<String>? roomsAccesseble;
 
-  Dataaa(
-      {this.roomsAccesseble,
-      this.sId,
-      this.blackListed,
-      this.email,
-      this.imagePath,
-      this.name,
-      this.phone,
-      this.userId});
+//   Dataaa(
+//       {this.roomsAccesseble,
+//       this.sId,
+//       this.blackListed,
+//       this.email,
+//       this.imagePath,
+//       this.name,
+//       this.phone,
+//       this.userId});
 
-  Dataaa.fromJson(Map<String, dynamic> json) {
-    roomsAccesseble =
-        json['IAM'] != null ? List<String>.from(json['IAM']) : null;
+//   Dataaa.fromJson(Map<String, dynamic> json) {
+//     roomsAccesseble =
+//         json['IAM'] != null ? List<String>.from(json['IAM']) : null;
 
-    blackListed = json['blacklisted'];
-    sId = json['_id'];
-    email = json['email'];
-    imagePath = json['image_path'];
-    name = json['name'];
-    phone = json['phone'];
-    userId = json['user_id'];
-  }
+//     blackListed = json['blacklisted'];
+//     sId = json['_id'];
+//     email = json['email'];
+//     imagePath = json['image_path'];
+//     name = json['name'];
+//     phone = json['phone'];
+//     userId = json['user_id'];
+//   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['IAM'] = roomsAccesseble;
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = <String, dynamic>{};
+//     data['IAM'] = roomsAccesseble;
 
-    data['blacklisted'] = blackListed;
-    data['_id'] = sId;
-    data['email'] = email;
-    data['image_path'] = imagePath;
-    data['name'] = name;
-    data['phone'] = phone;
-    data['user_id'] = userId;
-    return data;
-  }
-}
+//     data['blacklisted'] = blackListed;
+//     data['_id'] = sId;
+//     data['email'] = email;
+//     data['image_path'] = imagePath;
+//     data['name'] = name;
+//     data['phone'] = phone;
+//     data['user_id'] = userId;
+//     return data;
+//   }
+// }
+
+
+
+
+
+

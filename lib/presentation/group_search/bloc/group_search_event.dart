@@ -7,7 +7,6 @@ class GroupSearchEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-
 class SetTimeDuration extends GroupSearchEvent {
   final int timeDuration;
 
@@ -25,6 +24,7 @@ class EditPageCount extends GroupSearchEvent {
   @override
   List<Object> get props => [pageCount];
 }
+
 class EditPageNumber extends GroupSearchEvent {
   final int pageIndex;
 
@@ -32,6 +32,16 @@ class EditPageNumber extends GroupSearchEvent {
 
   @override
   List<Object> get props => [pageIndex];
+}
+
+class EditPageNumberPaginationTargetsData extends GroupSearchEvent {
+  final int pageIndexForTargets;
+
+  const EditPageNumberPaginationTargetsData(
+      {required this.pageIndexForTargets});
+
+  @override
+  List<Object> get props => [pageIndexForTargets];
 }
 
 // class GetPaginatedFramesEvent extends GroupSearchEvent {
@@ -162,8 +172,6 @@ class reloadSnapShots extends GroupSearchEvent {
   List<Object?> get props => [snapyy];
 }
 
-
-
 class reloadPath extends GroupSearchEvent {
   final String path_provided;
 
@@ -207,6 +215,13 @@ class videoevent extends GroupSearchEvent {
 
   @override
   List<Object?> get props => [video];
+}
+
+class PaginatedSearchForEmployeeByVideoEvent extends GroupSearchEvent {
+  const PaginatedSearchForEmployeeByVideoEvent();
+
+  @override
+  List<Object?> get props => [];
 }
 
 class SearchForEmployeeByVideoEvent extends GroupSearchEvent {
