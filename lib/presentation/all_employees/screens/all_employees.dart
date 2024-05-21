@@ -1500,6 +1500,8 @@ class _AllEmployeesScreenState extends State<AllEmployeesScreen> {
                                             }
                                             //////////////////////////////
                                           },
+                                          key: ValueKey<String>(
+                                              state.filterCase ?? ""),
                                         ),
                                       ),
                                       // Display the list of data

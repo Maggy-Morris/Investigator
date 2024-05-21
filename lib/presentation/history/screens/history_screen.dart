@@ -168,9 +168,9 @@ class AllHistoryScreen extends StatelessWidget {
 
                                         HistoryBloc.get(context)
                                             .add(const FilterSearchDataEvent());
-                                        HistoryBloc.get(context).add(
-                                            const EditPageNumberFiltered(
-                                                pageIndex: 1));
+                                        // HistoryBloc.get(context).add(
+                                        //     const EditPageNumberFiltered(
+                                        //         pageIndex: 1));
                                       }
                                     },
                                   );
@@ -188,6 +188,36 @@ class AllHistoryScreen extends StatelessWidget {
                           ],
                         ),
                       ),
+                      state.selectedDay.isNotEmpty
+                          ? Padding(
+                              padding: const EdgeInsets.only(right: 60.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  TextButton(
+                                      onPressed: () {
+                                        HistoryBloc.get(context).add(
+                                            const SearchByDay(selectedDay: ""));
+
+                                        HistoryBloc.get(context).add(
+                                            const SearchByMonth(
+                                                selectedMonth: ""));
+
+                                        HistoryBloc.get(context).add(
+                                            const SearchByYear(
+                                                selectedYear: ""));
+
+                                        HistoryBloc.get(context)
+                                            .add(const PathesDataEvent());
+                                      },
+                                      child: const Text(
+                                        "Clear Filter",
+                                        style: TextStyle(color: Colors.red),
+                                      )),
+                                ],
+                              ),
+                            )
+                          : const SizedBox(),
                       FxBox.h24,
                       Padding(
                         padding: const EdgeInsets.only(bottom: 15.0),
@@ -214,8 +244,8 @@ class AllHistoryScreen extends StatelessWidget {
                             }
                             //////////////////////////////
                           },
-                          key: ValueKey<String>(
-                              state.selectedDay), // Use state.pageIndex as ValueKey
+                          key: ValueKey<String>(state
+                              .selectedDay), // Use state.pageIndex as ValueKey
                         ),
                         // },
                         // ),

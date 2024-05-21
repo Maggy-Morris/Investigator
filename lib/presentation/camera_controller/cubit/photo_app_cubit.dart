@@ -269,7 +269,7 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
       AuthenticationRepository.instance.currentUser.companyName?.first ?? "";
 
   // late CameraController controller;
-  late Timer _periodicTimer;
+  Timer? _periodicTimer;
 
   bool isStreaming = false;
   bool isSecurityBreachChecked = false; // New variable to store checkbox state
@@ -400,7 +400,7 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
       securityBreach: false,
       textAccuracy: [],
     ));
-    _periodicTimer.cancel();
+    _periodicTimer?.cancel();
     // _channel.sink.close();
   }
 
@@ -450,7 +450,7 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
     // );
 
     if (state.controller?.value.isInitialized ?? false) {
-      _periodicTimer.cancel();
+      _periodicTimer?.cancel();
       // _channel.sink.close();
 
       await state.controller?.dispose();

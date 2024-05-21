@@ -406,7 +406,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                 ],
                               ),
 
-                              FxBox.h60,
+                              FxBox.h24,
                               state.submission == Submission.loading
                                   ? loadingIndicator()
                                   : Center(
@@ -503,176 +503,185 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                         MediaQuery.of(context)
                                                             .size
                                                             .width,
-                                                    height: 300,
-                                                    child: (state.submission ==
-                                                            Submission
-                                                                .noDataFound)
-                                                        ? const Center(
-                                                            child: Text(
-                                                            "No data found Yet!",
-                                                            style: TextStyle(
-                                                                color: AppColors
-                                                                    .blueB,
-                                                                fontSize: 25,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600),
-                                                          ))
-                                                        : Row(
-                                                            children: [
-                                                              state.pathProvided
-                                                                      .isNotEmpty
-                                                                  ? IconButton(
-                                                                      icon:
-                                                                          const Icon(
-                                                                        Icons
-                                                                            .arrow_back_ios_new_outlined,
-                                                                        color: Colors
-                                                                            .white,
-                                                                      ),
-                                                                      onPressed:
-                                                                          () {
-                                                                        _scrollController
-                                                                            .animateTo(
-                                                                          _scrollController.offset -
-                                                                              400, // Adjust as needed
-                                                                          duration:
-                                                                              const Duration(milliseconds: 500),
-                                                                          curve:
-                                                                              Curves.easeInOut,
-                                                                        );
-                                                                        // _scrollController
-                                                                        //     .animateTo(
-                                                                        //   _scrollController.offset -
-                                                                        //       MediaQuery.of(context).size.width, // Adjust the offset as needed
-                                                                        //   duration:
-                                                                        //       const Duration(milliseconds: 500),
-                                                                        //   curve:
-                                                                        //       Curves.easeInOut,
-                                                                        // );
-                                                                      },
-                                                                    )
-                                                                  : const SizedBox(),
-                                                              Expanded(
-                                                                child: ListView
-                                                                    .builder(
-                                                                  scrollDirection:
-                                                                      Axis.horizontal,
-                                                                  shrinkWrap:
-                                                                      true,
-                                                                  physics:
-                                                                      const AlwaysScrollableScrollPhysics(),
-                                                                  itemCount: state
-                                                                              .pageCount !=
-                                                                          0
-                                                                      ? (state.pageCount <
-                                                                              10)
-                                                                          ? (state.pageCount %
-                                                                              10)
-                                                                          : (state.pageIndex == (state.pageCount / 10).ceil())
-                                                                              ? (state.pageCount % 10 == 0)
-                                                                                  ? 10
-                                                                                  : (state.pageCount % 10)
-                                                                              : 10
-                                                                      : 0,
-                                                                  itemBuilder:
-                                                                      (context,
-                                                                          index) {
-                                                                    // final image = state
-                                                                    //         .snapShots[
-                                                                    //     (state.pageIndex == 1 || state.pageIndex == 0
-                                                                    //                 ? 0
-                                                                    //                 : state.pageIndex - 1) *
-                                                                    //             10 +
-                                                                    //         (index)];
-
-                                                                    final data_time = state
-                                                                        .data[(state.pageIndex == 1 || state.pageIndex == 0
-                                                                                ? 0
-                                                                                : state.pageIndex - 1) *
-                                                                            10 +
-                                                                        (index)];
-                                                                    return SizedBox(
-                                                                      height:
-                                                                          300,
-                                                                      child:
-                                                                          Padding(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            10.0),
-                                                                        child: imagesListWidget(
-                                                                            onTap: () {
-                                                                              List<String> parts = data_time.split(RegExp(r'[:.]'));
-
-                                                                              int hours = int.parse(parts[0]);
-                                                                              int minutes = int.parse(parts[1]);
-                                                                              int seconds = int.parse(parts[2]);
-
-                                                                              // Calculate the total duration in seconds
-                                                                              int totalSeconds = hours * 3600 + minutes * 60 + seconds;
-                                                                              HomeBloc.get(context).add(SetTimeDuration(timeDuration: totalSeconds));
-
-                                                                              ///////////////////////////////////////////////////////////////
-                                                                              debugPrint(totalSeconds.toString());
-                                                                            },
-                                                                            onDownloadPressed: () {
-                                                                              downloadImageFromWeb(
-                                                                                imageUrl: "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
-
-                                                                                // downloadName:
-                                                                                //     data_time,
-                                                                              );
-                                                                              // _downloadImage(
-                                                                              //     data:
-                                                                              //         image,
-                                                                              //     downloadName:
-                                                                              //         data_time);
-                                                                            },
-                                                                            imageSource: "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
-                                                                            text: data_time),
-                                                                      ),
-                                                                    );
-                                                                  },
-                                                                  controller:
-                                                                      _scrollController, // Assign the ScrollController here
+                                                    height: state.pathProvided
+                                                            .isNotEmpty
+                                                        ? 300
+                                                        : 10,
+                                                    child: Row(
+                                                      children: [
+                                                        state.pathProvided
+                                                                .isNotEmpty
+                                                            ? IconButton(
+                                                                icon:
+                                                                    const Icon(
+                                                                  Icons
+                                                                      .arrow_back_ios_new_outlined,
+                                                                  color: Colors
+                                                                      .white,
                                                                 ),
-                                                              ),
-                                                              state.pathProvided
-                                                                      .isNotEmpty
-                                                                  ? IconButton(
-                                                                      icon:
-                                                                          const Icon(
-                                                                        Icons
-                                                                            .arrow_forward_ios_outlined,
-                                                                        color: Colors
-                                                                            .white,
-                                                                      ),
-                                                                      onPressed:
-                                                                          () {
-                                                                        // Handle scrolling to the right
-                                                                        _scrollController
-                                                                            .animateTo(
-                                                                          _scrollController.offset +
-                                                                              400, // Adjust as needed
-                                                                          duration:
-                                                                              const Duration(milliseconds: 500),
-                                                                          curve:
-                                                                              Curves.easeInOut,
-                                                                        );
-                                                                        // _scrollController
-                                                                        //     .animateTo(
-                                                                        //   _scrollController.offset +
-                                                                        //       MediaQuery.of(context).size.width, // Adjust the offset as needed
-                                                                        //   duration:
-                                                                        //       const Duration(milliseconds: 500),
-                                                                        //   curve:
-                                                                        //       Curves.easeInOut,
-                                                                        // );
+                                                                onPressed: () {
+                                                                  _scrollController
+                                                                      .animateTo(
+                                                                    _scrollController
+                                                                            .offset -
+                                                                        400, // Adjust as needed
+                                                                    duration: const Duration(
+                                                                        milliseconds:
+                                                                            500),
+                                                                    curve: Curves
+                                                                        .easeInOut,
+                                                                  );
+                                                                  // _scrollController
+                                                                  //     .animateTo(
+                                                                  //   _scrollController.offset -
+                                                                  //       MediaQuery.of(context).size.width, // Adjust the offset as needed
+                                                                  //   duration:
+                                                                  //       const Duration(milliseconds: 500),
+                                                                  //   curve:
+                                                                  //       Curves.easeInOut,
+                                                                  // );
+                                                                },
+                                                              )
+                                                            : const SizedBox(),
+                                                        Expanded(
+                                                          child:
+                                                              ListView.builder(
+                                                            scrollDirection:
+                                                                Axis.horizontal,
+                                                            shrinkWrap: true,
+                                                            physics:
+                                                                const AlwaysScrollableScrollPhysics(),
+                                                            itemCount: state
+                                                                        .pageCount !=
+                                                                    0
+                                                                ? (state.pageCount <
+                                                                        10)
+                                                                    ? (state.pageCount %
+                                                                        10)
+                                                                    : (state.pageIndex ==
+                                                                            (state.pageCount / 10)
+                                                                                .ceil())
+                                                                        ? (state.pageCount % 10 ==
+                                                                                0)
+                                                                            ? 10
+                                                                            : (state.pageCount %
+                                                                                10)
+                                                                        : 10
+                                                                : 0,
+                                                            itemBuilder:
+                                                                (context,
+                                                                    index) {
+                                                              // final image = state
+                                                              //         .snapShots[
+                                                              //     (state.pageIndex == 1 || state.pageIndex == 0
+                                                              //                 ? 0
+                                                              //                 : state.pageIndex - 1) *
+                                                              //             10 +
+                                                              //         (index)];
+
+                                                              final data_time = state
+                                                                  .data[(state.pageIndex == 1 ||
+                                                                              state.pageIndex ==
+                                                                                  0
+                                                                          ? 0
+                                                                          : state.pageIndex -
+                                                                              1) *
+                                                                      10 +
+                                                                  (index)];
+                                                              return SizedBox(
+                                                                height: 300,
+                                                                child: Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          10.0),
+                                                                  child: imagesListWidget(
+                                                                      onTap: () {
+                                                                        List<String>
+                                                                            parts =
+                                                                            data_time.split(RegExp(r'[:.]'));
+
+                                                                        int hours =
+                                                                            int.parse(parts[0]);
+                                                                        int minutes =
+                                                                            int.parse(parts[1]);
+                                                                        int seconds =
+                                                                            int.parse(parts[2]);
+
+                                                                        // Calculate the total duration in seconds
+                                                                        int totalSeconds = hours *
+                                                                                3600 +
+                                                                            minutes *
+                                                                                60 +
+                                                                            seconds;
+                                                                        HomeBloc.get(context).add(SetTimeDuration(
+                                                                            timeDuration:
+                                                                                totalSeconds));
+
+                                                                        ///////////////////////////////////////////////////////////////
+                                                                        debugPrint(
+                                                                            totalSeconds.toString());
                                                                       },
-                                                                    )
-                                                                  : const SizedBox(),
-                                                            ],
+                                                                      onDownloadPressed: () {
+                                                                        downloadImageFromWeb(
+                                                                          imageUrl:
+                                                                              "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
+
+                                                                          // downloadName:
+                                                                          //     data_time,
+                                                                        );
+                                                                        // _downloadImage(
+                                                                        //     data:
+                                                                        //         image,
+                                                                        //     downloadName:
+                                                                        //         data_time);
+                                                                      },
+                                                                      imageSource: "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
+                                                                      text: data_time),
+                                                                ),
+                                                              );
+                                                            },
+                                                            controller:
+                                                                _scrollController, // Assign the ScrollController here
                                                           ),
+                                                        ),
+                                                        state.pathProvided
+                                                                .isNotEmpty
+                                                            ? IconButton(
+                                                                icon:
+                                                                    const Icon(
+                                                                  Icons
+                                                                      .arrow_forward_ios_outlined,
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
+                                                                onPressed: () {
+                                                                  // Handle scrolling to the right
+                                                                  _scrollController
+                                                                      .animateTo(
+                                                                    _scrollController
+                                                                            .offset +
+                                                                        400, // Adjust as needed
+                                                                    duration: const Duration(
+                                                                        milliseconds:
+                                                                            500),
+                                                                    curve: Curves
+                                                                        .easeInOut,
+                                                                  );
+                                                                  // _scrollController
+                                                                  //     .animateTo(
+                                                                  //   _scrollController.offset +
+                                                                  //       MediaQuery.of(context).size.width, // Adjust the offset as needed
+                                                                  //   duration:
+                                                                  //       const Duration(milliseconds: 500),
+                                                                  //   curve:
+                                                                  //       Curves.easeInOut,
+                                                                  // );
+                                                                },
+                                                              )
+                                                            : const SizedBox(),
+                                                      ],
+                                                    ),
                                                   ),
 
                                                   // Display the pagination controls
@@ -694,6 +703,8 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                                 pageIndex:
                                                                     index));
                                                       },
+                                                      key: ValueKey<String>(
+                                                          state.pathProvided),
                                                     ),
                                                   ),
                                                 ],
@@ -1068,167 +1079,176 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                   width: MediaQuery.of(context)
                                                       .size
                                                       .width,
-                                                  height: 300,
-                                                  child:
-                                                      (state.submission ==
-                                                              Submission
-                                                                  .noDataFound)
-                                                          ? const Center(
-                                                              child: Text(
-                                                              "No data found Yet!",
-                                                              style: TextStyle(
-                                                                  color:
-                                                                      AppColors
-                                                                          .blueB,
-                                                                  fontSize: 25,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600),
-                                                            ))
-                                                          : Row(
-                                                              children: [
-                                                                state.pathProvided
-                                                                        .isNotEmpty
-                                                                    ? IconButton(
-                                                                        icon:
-                                                                            const Icon(
-                                                                          Icons
-                                                                              .arrow_back_ios_new_outlined,
-                                                                          color:
-                                                                              Colors.white,
-                                                                        ),
-                                                                        onPressed:
+                                                  height: state.pathProvided
+                                                          .isNotEmpty
+                                                      ? 300
+                                                      : 10,
+                                                  child: Row(
+                                                    children: [
+                                                      state.pathProvided
+                                                              .isNotEmpty
+                                                          ? IconButton(
+                                                              icon: const Icon(
+                                                                Icons
+                                                                    .arrow_back_ios_new_outlined,
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                              onPressed: () {
+                                                                _scrollController
+                                                                    .animateTo(
+                                                                  _scrollController
+                                                                          .offset -
+                                                                      400, // Adjust as needed
+                                                                  duration: const Duration(
+                                                                      milliseconds:
+                                                                          500),
+                                                                  curve: Curves
+                                                                      .easeInOut,
+                                                                );
+                                                              },
+                                                            )
+                                                          : const SizedBox(),
+                                                      Expanded(
+                                                        child: ListView.builder(
+                                                          scrollDirection:
+                                                              Axis.horizontal,
+                                                          shrinkWrap: true,
+                                                          physics:
+                                                              const AlwaysScrollableScrollPhysics(),
+                                                          itemCount: state
+                                                                      .pageCount !=
+                                                                  0
+                                                              ? (state.pageCount <
+                                                                      10)
+                                                                  ? (state.pageCount %
+                                                                      10)
+                                                                  : (state.pageIndex ==
+                                                                          (state.pageCount / 10)
+                                                                              .ceil())
+                                                                      ? (state.pageCount % 10 ==
+                                                                              0)
+                                                                          ? 10
+                                                                          : (state.pageCount %
+                                                                              10)
+                                                                      : 10
+                                                              : 0,
+                                                          itemBuilder:
+                                                              (context, index) {
+                                                            // final image = state
+                                                            //         .snapShots[
+                                                            //     (state.pageIndex == 1 || state.pageIndex == 0
+                                                            //                 ? 0
+                                                            //                 : state.pageIndex - 1) *
+                                                            //             10 +
+                                                            //         (index)];
+
+                                                            final data_time = state
+                                                                .data[(state.pageIndex ==
+                                                                                1 ||
+                                                                            state.pageIndex ==
+                                                                                0
+                                                                        ? 0
+                                                                        : state.pageIndex -
+                                                                            1) *
+                                                                    10 +
+                                                                (index)];
+                                                            return SizedBox(
+                                                              height: 300,
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        10.0),
+                                                                child:
+                                                                    imagesListWidget(
+                                                                        onTap:
                                                                             () {
-                                                                          _scrollController
-                                                                              .animateTo(
-                                                                            _scrollController.offset -
-                                                                                400, // Adjust as needed
-                                                                            duration:
-                                                                                const Duration(milliseconds: 500),
-                                                                            curve:
-                                                                                Curves.easeInOut,
-                                                                          );
+                                                                          List<String>
+                                                                              parts =
+                                                                              data_time.split(RegExp(r'[:.]'));
+
+                                                                          int hours =
+                                                                              int.parse(parts[0]);
+                                                                          int minutes =
+                                                                              int.parse(parts[1]);
+                                                                          int seconds =
+                                                                              int.parse(parts[2]);
+
+                                                                          // Calculate the total duration in seconds
+                                                                          int totalSeconds = hours * 3600 +
+                                                                              minutes * 60 +
+                                                                              seconds;
+                                                                          HomeBloc.get(context)
+                                                                              .add(SetTimeDuration(timeDuration: totalSeconds));
+
+                                                                          ///////////////////////////////////////////////////////////////
+                                                                          debugPrint(
+                                                                              totalSeconds.toString());
                                                                         },
-                                                                      )
-                                                                    : const SizedBox(),
-                                                                Expanded(
-                                                                  child: ListView
-                                                                      .builder(
-                                                                    scrollDirection:
-                                                                        Axis.horizontal,
-                                                                    shrinkWrap:
-                                                                        true,
-                                                                    physics:
-                                                                        const AlwaysScrollableScrollPhysics(),
-                                                                    itemCount: state.pageCount !=
-                                                                            0
-                                                                        ? (state.pageCount <
-                                                                                10)
-                                                                            ? (state.pageCount %
-                                                                                10)
-                                                                            : (state.pageIndex == (state.pageCount / 10).ceil())
-                                                                                ? (state.pageCount % 10 == 0)
-                                                                                    ? 10
-                                                                                    : (state.pageCount % 10)
-                                                                                : 10
-                                                                        : 0,
-                                                                    itemBuilder:
-                                                                        (context,
-                                                                            index) {
-                                                                      // final image = state
-                                                                      //         .snapShots[
-                                                                      //     (state.pageIndex == 1 || state.pageIndex == 0
-                                                                      //                 ? 0
-                                                                      //                 : state.pageIndex - 1) *
-                                                                      //             10 +
-                                                                      //         (index)];
-
-                                                                      final data_time = state
-                                                                          .data[(state.pageIndex == 1 || state.pageIndex == 0 ? 0 : state.pageIndex - 1) *
-                                                                              10 +
-                                                                          (index)];
-                                                                      return SizedBox(
-                                                                        height:
-                                                                            300,
-                                                                        child:
-                                                                            Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              10.0),
-                                                                          child: imagesListWidget(
-                                                                              onTap: () {
-                                                                                List<String> parts = data_time.split(RegExp(r'[:.]'));
-
-                                                                                int hours = int.parse(parts[0]);
-                                                                                int minutes = int.parse(parts[1]);
-                                                                                int seconds = int.parse(parts[2]);
-
-                                                                                // Calculate the total duration in seconds
-                                                                                int totalSeconds = hours * 3600 + minutes * 60 + seconds;
-                                                                                HomeBloc.get(context).add(SetTimeDuration(timeDuration: totalSeconds));
-
-                                                                                ///////////////////////////////////////////////////////////////
-                                                                                debugPrint(totalSeconds.toString());
-                                                                              },
-                                                                              onDownloadPressed: () {
-                                                                                downloadImageFromWeb(
-                                                                                  imageUrl: "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
-
-                                                                                  // downloadName:
-                                                                                  //     data_time,
-                                                                                );
-                                                                                // _downloadImage(
-                                                                                //     data:
-                                                                                //         image,
-                                                                                //     downloadName:
-                                                                                //         data_time);
-                                                                              },
-                                                                              imageSource: "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
-                                                                              text: data_time),
-                                                                        ),
-                                                                      );
-                                                                    },
-
-                                                                    controller:
-                                                                        _scrollController, // Assign the ScrollController here
-                                                                  ),
-                                                                ),
-                                                                state.pathProvided
-                                                                        .isNotEmpty
-                                                                    ? IconButton(
-                                                                        icon:
-                                                                            const Icon(
-                                                                          Icons
-                                                                              .arrow_forward_ios_outlined,
-                                                                          color:
-                                                                              Colors.white,
-                                                                        ),
-                                                                        onPressed:
+                                                                        onDownloadPressed:
                                                                             () {
-                                                                          // Handle scrolling to the right
-                                                                          _scrollController
-                                                                              .animateTo(
-                                                                            _scrollController.offset +
-                                                                                400, // Adjust as needed
-                                                                            duration:
-                                                                                const Duration(milliseconds: 500),
-                                                                            curve:
-                                                                                Curves.easeInOut,
+                                                                          downloadImageFromWeb(
+                                                                            imageUrl:
+                                                                                "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
+
+                                                                            // downloadName:
+                                                                            //     data_time,
                                                                           );
-                                                                          // _scrollController
-                                                                          //     .animateTo(
-                                                                          //   _scrollController.offset +
-                                                                          //       MediaQuery.of(context).size.width, // Adjust the offset as needed
-                                                                          //   duration:
-                                                                          //       const Duration(milliseconds: 500),
-                                                                          //   curve:
-                                                                          //       Curves.easeInOut,
-                                                                          // );
+                                                                          // _downloadImage(
+                                                                          //     data:
+                                                                          //         image,
+                                                                          //     downloadName:
+                                                                          //         data_time);
                                                                         },
-                                                                      )
-                                                                    : const SizedBox(),
-                                                              ],
-                                                            ),
+                                                                        imageSource:
+                                                                            "${state.pathProvided}/${state.pageIndex == 1 || state.pageIndex == 0 ? "" : state.pageIndex - 1}${index + 1 == 10 ? 9 : index + 1}.png",
+                                                                        text:
+                                                                            data_time),
+                                                              ),
+                                                            );
+                                                          },
+
+                                                          controller:
+                                                              _scrollController, // Assign the ScrollController here
+                                                        ),
+                                                      ),
+                                                      state.pathProvided
+                                                              .isNotEmpty
+                                                          ? IconButton(
+                                                              icon: const Icon(
+                                                                Icons
+                                                                    .arrow_forward_ios_outlined,
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                              onPressed: () {
+                                                                // Handle scrolling to the right
+                                                                _scrollController
+                                                                    .animateTo(
+                                                                  _scrollController
+                                                                          .offset +
+                                                                      400, // Adjust as needed
+                                                                  duration: const Duration(
+                                                                      milliseconds:
+                                                                          500),
+                                                                  curve: Curves
+                                                                      .easeInOut,
+                                                                );
+                                                                // _scrollController
+                                                                //     .animateTo(
+                                                                //   _scrollController.offset +
+                                                                //       MediaQuery.of(context).size.width, // Adjust the offset as needed
+                                                                //   duration:
+                                                                //       const Duration(milliseconds: 500),
+                                                                //   curve:
+                                                                //       Curves.easeInOut,
+                                                                // );
+                                                              },
+                                                            )
+                                                          : const SizedBox(),
+                                                    ],
+                                                  ),
                                                 ),
 
                                                 // Display the pagination controls
@@ -1250,6 +1270,8 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                               pageIndex:
                                                                   index));
                                                     },
+                                                    key: ValueKey<String>(
+                                                        state.pathProvided),
                                                   ),
                                                 ),
                                               ],

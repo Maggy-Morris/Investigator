@@ -133,7 +133,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   Future<void> _seekToNewPosition() async {
     if (widget.secondsGiven != null) {
       await _videoPlayerController
-          .seekTo(Duration(seconds: widget.secondsGiven!));
+          .seekTo(Duration(seconds: widget.secondsGiven??0));
       // setState(() {
       //   // Update the state to trigger a rebuild if necessary
       // });

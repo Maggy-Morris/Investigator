@@ -73,6 +73,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   _onEditPageNumber(EditPageNumber event, Emitter<HomeState> emit) async {
+    emit(state.copyWith(pageIndex: 1, submission: Submission.editing));
     emit(state.copyWith(
         pageIndex: event.pageIndex, submission: Submission.editing));
 
