@@ -73,7 +73,7 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
         providers: [
           BlocProvider(
             create: (context) => GroupSearchBloc(),
-              // ..add(PaginatedSearchForEmployeeByVideoEvent()),
+            // ..add(PaginatedSearchForEmployeeByVideoEvent()),
           ),
           BlocProvider(
             create: (context) => PhotoAppCubit(),
@@ -341,6 +341,10 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                             GroupSearchBloc.get(context).add(
                                                 const EditPageCount(
                                                     pageCount: 0));
+
+                                            GroupSearchBloc.get(context).add(
+                                                const EditPageCountPaginated(
+                                                    pageCountForTargets: 0));
 
                                             GroupSearchBloc.get(context).add(
                                                 const reloadTargetsData(
@@ -682,8 +686,8 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                               index));
                                                   //////////////////////////
                                                 },
-                                                // key: ValueKey<String>(
-                                                //     state.filterCase ?? ""),
+                                                key: ValueKey<String>(
+                                                    state.pathProvided),
                                               ),
                                             ),
 
@@ -1267,6 +1271,9 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                                 const EditPageCount(
                                                     pageCount: 0));
 
+                                            GroupSearchBloc.get(context).add(
+                                                const EditPageCountPaginated(
+                                                    pageCountForTargets: 0));
                                             GroupSearchBloc.get(context).add(
                                                 const reloadTargetsData(
                                                     Employyyy: []));

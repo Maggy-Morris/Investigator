@@ -7,9 +7,24 @@ class HomeEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class SubmessionError extends HomeEvent {
+  final Submission submission;
+  final String message;
 
+  const SubmessionError({required this.submission, required this.message});
 
+  @override
+  List<Object> get props => [submission, message];
+}
 
+class loadingEvent extends HomeEvent {
+  final bool load;
+
+  const loadingEvent({ required this.load});
+
+  @override
+  List<Object> get props => [load];
+}
 
 
 class SetTimeDuration extends HomeEvent {
@@ -20,6 +35,7 @@ class SetTimeDuration extends HomeEvent {
   @override
   List<Object> get props => [timeDuration];
 }
+
 class EditPageNumber extends HomeEvent {
   final int pageIndex;
 
@@ -37,7 +53,6 @@ class EditPageCount extends HomeEvent {
   @override
   List<Object> get props => [pageCount];
 }
-
 
 class GetPaginatedFramesEvent extends HomeEvent {
   const GetPaginatedFramesEvent();
@@ -73,8 +88,6 @@ class reloadSnapShots extends HomeEvent {
   List<Object?> get props => [snapyy];
 }
 
-
-
 class reloadPath extends HomeEvent {
   final String path_provided;
 
@@ -83,6 +96,7 @@ class reloadPath extends HomeEvent {
   @override
   List<Object?> get props => [path_provided];
 }
+
 class GetAccuracy extends HomeEvent {
   final String accuracy;
 

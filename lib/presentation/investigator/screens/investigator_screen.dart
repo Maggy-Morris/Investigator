@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:image/image.dart' as img;
 
 import 'package:Investigator/core/widgets/FullImageURL.dart';
 import 'package:Investigator/core/widgets/flutter_pagination/flutter_pagination.dart';
@@ -51,6 +52,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
   final double _min = 10;
   final double _max = 100;
   double _value = 10;
+
   // bool _isBackCamera = true;
   String companyNameRepo =
       AuthenticationRepository.instance.currentUser.companyName?.first ?? "";
@@ -163,6 +165,10 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                             children: [
                                               GestureDetector(
                                                 onTap: () async {
+                                                  HomeBloc.get(context).add(
+                                                    loadingEvent(load: true),
+                                                  );
+
                                                   await FilePicker.platform
                                                       .pickFiles(
                                                     type: FileType.image,
@@ -175,38 +181,82 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                       List<Widget> images = [];
                                                       for (var imageFile
                                                           in result.files) {
-                                                        final image = imageFile
-                                                                    .bytes !=
-                                                                null
-                                                            ? Image.memory(
-                                                                imageFile
-                                                                    .bytes!,
+                                                        final Uint8List?
+                                                            imageBytes =
+                                                            imageFile.bytes;
+
+                                                        if (imageBytes !=
+                                                            null) {
+                                                          // Decode the image
+                                                          final img.Image?
+                                                              image =
+                                                              img.decodeImage(
+                                                                  imageBytes);
+
+                                                          if (image != null) {
+                                                            if (image.width >=
+                                                                    300 &&
+                                                                image.height >=
+                                                                    300) {
+                                                              final imageWidget =
+                                                                  Image.memory(
+                                                                imageBytes,
                                                                 fit: BoxFit
                                                                     .cover,
-                                                              )
-                                                            : loadingIndicator();
+                                                              );
 
-                                                        images.add(image);
+                                                              images.add(
+                                                                  imageWidget);
 
-                                                        HomeBloc.get(context)
-                                                            .add(
-                                                          imagesList(
-                                                              imagesListdata:
-                                                                  result.files),
-                                                        );
-                                                        // Process each selected image file
-                                                        HomeBloc.get(context)
-                                                            .add(
-                                                          ImageToSearchForEmployee(
-                                                              imageWidget:
-                                                                  image),
-                                                        );
-                                                        HomeBloc.get(context)
-                                                            .add(
-                                                          imageevent(
-                                                              imageFile:
-                                                                  imageFile),
-                                                        );
+                                                              HomeBloc.get(
+                                                                      context)
+                                                                  .add(
+                                                                imagesList(
+                                                                    imagesListdata:
+                                                                        result
+                                                                            .files),
+                                                              );
+                                                              // Process each selected image file
+                                                              HomeBloc.get(
+                                                                      context)
+                                                                  .add(
+                                                                ImageToSearchForEmployee(
+                                                                    imageWidget:
+                                                                        imageWidget),
+                                                              );
+                                                              HomeBloc.get(
+                                                                      context)
+                                                                  .add(
+                                                                imageevent(
+                                                                    imageFile:
+                                                                        imageFile),
+                                                              );
+
+                                                              HomeBloc.get(
+                                                                      context)
+                                                                  .add(
+                                                                const loadingEvent(
+                                                                    load:
+                                                                        false),
+                                                              );
+                                                            } else {
+                                                              // Show a message to the user
+                                                              FxToast.showErrorToast(
+                                                                  message:
+                                                                      "Image resolution is too low. Minimum required is 300x300.",
+                                                                  context:
+                                                                      context);
+
+                                                              HomeBloc.get(
+                                                                      context)
+                                                                  .add(
+                                                                const loadingEvent(
+                                                                    load:
+                                                                        false),
+                                                              );
+                                                            }
+                                                          }
+                                                        }
                                                       }
 
                                                       setState(() {
@@ -218,38 +268,43 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                 child: Stack(
                                                   fit: StackFit.expand,
                                                   children: [
-                                                    state.imagesListdata
-                                                                ?.isNotEmpty ==
-                                                            true
-                                                        ? CarouselSlider(
-                                                            carouselController:
-                                                                _carouselController,
-                                                            items:
-                                                                _images ?? [],
-                                                            options:
-                                                                CarouselOptions(
-                                                              aspectRatio:
-                                                                  16 / 9,
-                                                              viewportFraction:
-                                                                  0.8,
-                                                              enableInfiniteScroll:
-                                                                  false,
-                                                              reverse: false,
-                                                              autoPlay: true,
-                                                              enlargeCenterPage:
-                                                                  true,
-                                                              scrollDirection:
-                                                                  Axis.horizontal,
+                                                    if (state.load == true)
+                                                      loadingIndicator(
+                                                          color: AppColors
+                                                              .buttonBlue),
+                                                    if (state.load == false)
+                                                      state.imagesListdata
+                                                                  ?.isNotEmpty ==
+                                                              true
+                                                          ? CarouselSlider(
+                                                              carouselController:
+                                                                  _carouselController,
+                                                              items:
+                                                                  _images ?? [],
+                                                              options:
+                                                                  CarouselOptions(
+                                                                aspectRatio:
+                                                                    16 / 9,
+                                                                viewportFraction:
+                                                                    0.8,
+                                                                enableInfiniteScroll:
+                                                                    false,
+                                                                reverse: false,
+                                                                autoPlay: true,
+                                                                enlargeCenterPage:
+                                                                    true,
+                                                                scrollDirection:
+                                                                    Axis.horizontal,
+                                                              ),
+                                                            )
+                                                          : Image.asset(
+                                                              'assets/images/imagepick.png',
+                                                              width: double
+                                                                  .infinity,
+                                                              height: double
+                                                                  .infinity,
+                                                              fit: BoxFit.cover,
                                                             ),
-                                                          )
-                                                        : Image.asset(
-                                                            'assets/images/imagepick.png',
-                                                            width:
-                                                                double.infinity,
-                                                            height:
-                                                                double.infinity,
-                                                            fit: BoxFit.cover,
-                                                          ),
                                                   ],
                                                 ),
                                               ),
@@ -305,6 +360,21 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                     )
                                                   : const Positioned(
                                                       child: Text("")),
+                                              Positioned(
+                                                top: 0,
+                                                child: Tooltip(
+                                                  message:
+                                                      "Images Less Than 300x300 In Resolution Will Be Dismissed",
+                                                  child: IconButton(
+                                                    icon: const Icon(
+                                                      Icons.info_outline,
+                                                      color: AppColors.black,
+                                                      size: 30,
+                                                    ),
+                                                    onPressed: () {},
+                                                  ),
+                                                ),
+                                              )
                                             ],
                                           ),
                                         ),
@@ -754,6 +824,10 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                           children: [
                                             GestureDetector(
                                               onTap: () async {
+                                                HomeBloc.get(context).add(
+                                                  loadingEvent(load: true),
+                                                );
+
                                                 await FilePicker.platform
                                                     .pickFiles(
                                                   type: FileType.image,
@@ -765,32 +839,77 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                     List<Widget> images = [];
                                                     for (var imageFile
                                                         in result.files) {
-                                                      final image = imageFile
-                                                                  .bytes !=
-                                                              null
-                                                          ? Image.memory(
-                                                              imageFile.bytes!,
+                                                      final Uint8List?
+                                                          imageBytes =
+                                                          imageFile.bytes;
+
+                                                      if (imageBytes != null) {
+                                                        // Decode the image
+                                                        final img.Image? image =
+                                                            img.decodeImage(
+                                                                imageBytes);
+
+                                                        if (image != null) {
+                                                          if (image.width >=
+                                                                  300 &&
+                                                              image.height >=
+                                                                  300) {
+                                                            final imageWidget =
+                                                                Image.memory(
+                                                              imageBytes,
                                                               fit: BoxFit.cover,
-                                                            )
-                                                          : loadingIndicator();
+                                                            );
 
-                                                      images.add(image);
+                                                            images.add(
+                                                                imageWidget);
 
-                                                      HomeBloc.get(context).add(
-                                                        imagesList(
-                                                            imagesListdata:
-                                                                result.files),
-                                                      );
-                                                      // Process each selected image file
-                                                      HomeBloc.get(context).add(
-                                                        ImageToSearchForEmployee(
-                                                            imageWidget: image),
-                                                      );
-                                                      HomeBloc.get(context).add(
-                                                        imageevent(
-                                                            imageFile:
-                                                                imageFile),
-                                                      );
+                                                            HomeBloc.get(
+                                                                    context)
+                                                                .add(
+                                                              imagesList(
+                                                                  imagesListdata:
+                                                                      result
+                                                                          .files),
+                                                            );
+                                                            // Process each selected image file
+                                                            HomeBloc.get(
+                                                                    context)
+                                                                .add(
+                                                              ImageToSearchForEmployee(
+                                                                  imageWidget:
+                                                                      imageWidget),
+                                                            );
+                                                            HomeBloc.get(
+                                                                    context)
+                                                                .add(
+                                                              imageevent(
+                                                                  imageFile:
+                                                                      imageFile),
+                                                            );
+
+                                                            HomeBloc.get(
+                                                                    context)
+                                                                .add(
+                                                              const loadingEvent(
+                                                                  load: false),
+                                                            );
+                                                          } else {
+                                                            // Show a message to the user
+                                                            FxToast.showErrorToast(
+                                                                message:
+                                                                    "Image resolution is too low. Minimum required is 300x300.",
+                                                                context:
+                                                                    context);
+
+                                                            HomeBloc.get(
+                                                                    context)
+                                                                .add(
+                                                              const loadingEvent(
+                                                                  load: false),
+                                                            );
+                                                          }
+                                                        }
+                                                      }
                                                     }
 
                                                     setState(() {
@@ -802,36 +921,43 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                               child: Stack(
                                                 fit: StackFit.expand,
                                                 children: [
-                                                  state.imagesListdata
-                                                              ?.isNotEmpty ==
-                                                          true
-                                                      ? CarouselSlider(
-                                                          carouselController:
-                                                              _carouselController,
-                                                          items: _images ?? [],
-                                                          options:
-                                                              CarouselOptions(
-                                                            aspectRatio: 16 / 9,
-                                                            viewportFraction:
-                                                                0.8,
-                                                            enableInfiniteScroll:
-                                                                false,
-                                                            reverse: false,
-                                                            autoPlay: true,
-                                                            enlargeCenterPage:
-                                                                true,
-                                                            scrollDirection:
-                                                                Axis.horizontal,
+                                                  if (state.load == true)
+                                                    loadingIndicator(
+                                                        color: AppColors
+                                                            .buttonBlue),
+                                                  if (state.load == false)
+                                                    state.imagesListdata
+                                                                ?.isNotEmpty ==
+                                                            true
+                                                        ? CarouselSlider(
+                                                            carouselController:
+                                                                _carouselController,
+                                                            items:
+                                                                _images ?? [],
+                                                            options:
+                                                                CarouselOptions(
+                                                              aspectRatio:
+                                                                  16 / 9,
+                                                              viewportFraction:
+                                                                  0.8,
+                                                              enableInfiniteScroll:
+                                                                  false,
+                                                              reverse: false,
+                                                              autoPlay: true,
+                                                              enlargeCenterPage:
+                                                                  true,
+                                                              scrollDirection:
+                                                                  Axis.horizontal,
+                                                            ),
+                                                          )
+                                                        : Image.asset(
+                                                            'assets/images/imagepick.png',
+                                                            width:
+                                                                double.infinity,
+                                                            height:
+                                                                double.infinity,
+                                                            fit: BoxFit.cover,
                                                           ),
-                                                        )
-                                                      : Image.asset(
-                                                          'assets/images/imagepick.png',
-                                                          width:
-                                                              double.infinity,
-                                                          height:
-                                                              double.infinity,
-                                                          fit: BoxFit.cover,
-                                                        ),
                                                 ],
                                               ),
                                             ),
@@ -885,6 +1011,21 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                   )
                                                 : const Positioned(
                                                     child: Text("")),
+                                            Positioned(
+                                              top: 0,
+                                              child: Tooltip(
+                                                message:
+                                                    "Images Less Than 300x300 In Resolution Will Be Dismissed",
+                                                child: IconButton(
+                                                  icon: const Icon(
+                                                    Icons.info_outline,
+                                                    color: AppColors.black,
+                                                    size: 30,
+                                                  ),
+                                                  onPressed: () {},
+                                                ),
+                                              ),
+                                            )
                                           ],
                                         ),
                                       ),
@@ -1473,6 +1614,31 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
   //   } else {
   //     EasyLoading.showError('لا يوجد صورة');
   //   }
+  // }
+
+  // Future<Uint8List?> pickImageWithResolution(
+  //     {required int minWidth, required int minHeight}) async {
+  //   final picker = ImagePicker();
+  //   final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+  //   if (pickedFile != null) {
+  //     final Uint8List imageBytes = await pickedFile.readAsBytes();
+
+  //     // Decode the image
+  //     final img.Image? image = img.decodeImage(imageBytes);
+
+  //     if (image != null) {
+  //       if (image.width >= minWidth && image.height >= minHeight) {
+  //         return imageBytes;
+  //       } else {
+  //         // Show a message or handle the error that image resolution is too low
+  //         print(
+  //             "Image resolution is too low. Minimum required is ${minWidth}x${minHeight}");
+  //         return null;
+  //       }
+  //     }
+  //   }
+  //   return null;
   // }
 
   @override

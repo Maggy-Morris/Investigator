@@ -1,7 +1,9 @@
 part of 'home_bloc.dart';
 
 class HomeState extends Equatable {
-    final int timeDuration;
+  final String responseMessage;
+  final bool load;
+  final int timeDuration;
 
   final String pathProvided;
 
@@ -25,6 +27,8 @@ class HomeState extends Equatable {
   final List<String> data;
 
   HomeState({
+    this.load = false,
+    this.responseMessage = '',
     this.timeDuration = 0,
     this.pathProvided = "",
     this.pageCount = 0,
@@ -45,6 +49,8 @@ class HomeState extends Equatable {
   });
 
   HomeState copyWith({
+    bool? load,
+    String? responseMessage,
     int? timeDuration,
     String? pathProvided,
     int? pageCount,
@@ -64,6 +70,8 @@ class HomeState extends Equatable {
     List<String>? data,
   }) {
     return HomeState(
+      load : load ?? this.load,
+      responseMessage: responseMessage ?? this.responseMessage,
       timeDuration: timeDuration ?? this.timeDuration,
       pathProvided: pathProvided ?? this.pathProvided,
       pageIndex: pageIndex ?? this.pageIndex,
@@ -86,7 +94,9 @@ class HomeState extends Equatable {
 
   @override
   List<Object?> get props => [
-    timeDuration,
+    load,
+        responseMessage,
+        timeDuration,
         pathProvided,
         pageIndex,
         pageCount,

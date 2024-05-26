@@ -358,7 +358,7 @@ class AllHistoryScreen extends StatelessWidget {
                     children: [
                       FxBox.h10,
                       Text(
-                        name,
+                        name != "db search" ? name : "Database Search",
                         maxLines: 3,
                         style: const TextStyle(
                           fontSize: 20,
@@ -521,7 +521,8 @@ class AllHistoryScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: VideoPlayerWidget(
-                          // urlFromHistory:
+                          key: ValueKey<String>(
+                              urlFromHistory), // urlFromHistory:
                           // videoUrl: state.,
                           videoUrl: urlFromHistory
                           // "http:${RemoteDataSource.baseUrlWithoutPort}8000/${urlFromHistory.split("Image_Database/")[1]}"

@@ -25,6 +25,15 @@ class EditPageCount extends GroupSearchEvent {
   List<Object> get props => [pageCount];
 }
 
+
+class EditPageCountPaginated extends GroupSearchEvent {
+  final int pageCountForTargets;
+
+  const EditPageCountPaginated({required this.pageCountForTargets});
+
+  @override
+  List<Object> get props => [pageCountForTargets];
+}
 class EditPageNumber extends GroupSearchEvent {
   final int pageIndex;
 

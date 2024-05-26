@@ -110,8 +110,8 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
           ),
           children: [
             SizedBox(
-              width: 1100,
-              height: 500,
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
               child: TabBarView(
                 // clipBehavior: Clip.antiAliasWithSaveLayer,
                 controller: tabController,

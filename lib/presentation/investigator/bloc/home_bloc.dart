@@ -22,6 +22,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomeEvent>(_onHomeEvent);
     // on<DataEvent>(_onDataEvent);
 
+    on<SubmessionError>(_onSubmessionError);
+
     /// change fields events
     on<AddCompanyEvent>(_onAddCompanyEvent);
     on<DeleteCompanyEvent>(_onDeleteCompanyEvent);
@@ -51,7 +53,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     // on<GetPaginatedFramesEvent>(_onGetPaginatedFramesEvent);
     on<EditPageCount>(_onEditPageCount);
     on<SetTimeDuration>(_onSetTimeDuration);
-
+    on<loadingEvent>(_onloadingEvent);
     // on<DeletePersonByNameEvent>(_onDeletePersonByNameEvent);
     on<DeletePersonByIdEvent>(_onDeletePersonByIdEvent);
   }
@@ -63,6 +65,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   //   add(const GetSourceTypes());
   //   add(const GetModelsName());
   // }
+
+  _onloadingEvent(loadingEvent event, Emitter<HomeState> emit) async {
+    emit(state.copyWith(
+      load: event.load,
+    ));
+  }
+
+  _onSubmessionError(SubmessionError event, Emitter<HomeState> emit) async {
+    emit(state.copyWith(
+        submission: event.submission, responseMessage: event.message));
+  }
 
   _onSetTimeDuration(SetTimeDuration event, Emitter<HomeState> emit) async {
     emit(state.copyWith(timeDuration: 0, submission: Submission.editing));

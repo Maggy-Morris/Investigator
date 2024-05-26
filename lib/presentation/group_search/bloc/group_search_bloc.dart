@@ -66,6 +66,9 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
     on<UpdateEmployeeEvent>(_onUpdateEmployeeEvent);
 
     on<EditPageNumber>(_onEditPageNumber);
+    on<EditPageCountPaginated>(_onEditPageCountPaginated);
+
+    
     on<EditPageCount>(_onEditPageCount);
     on<SetTimeDuration>(_onSetTimeDuration);
 
@@ -413,6 +416,20 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
       }
     });
   }
+
+
+  
+
+
+  
+  _onEditPageCountPaginated(
+      EditPageCountPaginated event, Emitter<GroupSearchState> emit) async {
+    emit(state.copyWith(
+        pageCountForTargets: event.pageCountForTargets, submission: Submission.editing));
+
+    // add(const GetEmployeeNamesEvent());
+  }
+
 
   _onEditPageNumber(
       EditPageNumber event, Emitter<GroupSearchState> emit) async {
