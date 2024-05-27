@@ -166,7 +166,8 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                               GestureDetector(
                                                 onTap: () async {
                                                   HomeBloc.get(context).add(
-                                                    loadingEvent(load: true),
+                                                    const loadingEvent(
+                                                        load: true),
                                                   );
 
                                                   await FilePicker.platform
@@ -175,6 +176,11 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                     allowMultiple: true,
                                                   )
                                                       .then((result) {
+                                                    HomeBloc.get(context).add(
+                                                      const loadingEvent(
+                                                          load: false),
+                                                    );
+
                                                     if (result != null &&
                                                         result
                                                             .files.isNotEmpty) {
@@ -217,28 +223,28 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                                             .files),
                                                               );
                                                               // Process each selected image file
-                                                              HomeBloc.get(
-                                                                      context)
-                                                                  .add(
-                                                                ImageToSearchForEmployee(
-                                                                    imageWidget:
-                                                                        imageWidget),
-                                                              );
-                                                              HomeBloc.get(
-                                                                      context)
-                                                                  .add(
-                                                                imageevent(
-                                                                    imageFile:
-                                                                        imageFile),
-                                                              );
+                                                              // HomeBloc.get(
+                                                              //         context)
+                                                              //     .add(
+                                                              //   ImageToSearchForEmployee(
+                                                              //       imageWidget:
+                                                              //           imageWidget),
+                                                              // );
+                                                              // HomeBloc.get(
+                                                              //         context)
+                                                              //     .add(
+                                                              //   imageevent(
+                                                              //       imageFile:
+                                                              //           imageFile),
+                                                              // );
 
-                                                              HomeBloc.get(
-                                                                      context)
-                                                                  .add(
-                                                                const loadingEvent(
-                                                                    load:
-                                                                        false),
-                                                              );
+                                                              // HomeBloc.get(
+                                                              //         context)
+                                                              //     .add(
+                                                              //   const loadingEvent(
+                                                              //       load:
+                                                              //           false),
+                                                              // );
                                                             } else {
                                                               // Show a message to the user
                                                               FxToast.showErrorToast(
@@ -247,72 +253,84 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                                   context:
                                                                       context);
 
-                                                              HomeBloc.get(
-                                                                      context)
-                                                                  .add(
-                                                                const loadingEvent(
-                                                                    load:
-                                                                        false),
-                                                              );
+                                                              // HomeBloc.get(
+                                                              //         context)
+                                                              //     .add(
+                                                              //   const loadingEvent(
+                                                              //       load:
+                                                              //           false),
+                                                              // );
                                                             }
                                                           }
                                                         }
                                                       }
 
-                                                      setState(() {
-                                                        _images = images;
-                                                      });
+                                                      HomeBloc.get(context).add(
+                                                          ImageListWidget(
+                                                              imageWidgetss:
+                                                                  images));
+
+                                                      // HomeBloc.get(context).add(
+                                                      //   const loadingEvent(
+                                                      //       load: false),
+                                                      // );
                                                     }
                                                   });
+
+                                                  // HomeBloc.get(context).add(
+                                                  //   const loadingEvent(
+                                                  //       load: false),
+                                                  // );
                                                 },
                                                 child: Stack(
                                                   fit: StackFit.expand,
                                                   children: [
-                                                    if (state.load == true)
-                                                      loadingIndicator(
-                                                          color: AppColors
-                                                              .buttonBlue),
-                                                    if (state.load == false)
-                                                      state.imagesListdata
-                                                                  ?.isNotEmpty ==
-                                                              true
-                                                          ? CarouselSlider(
-                                                              carouselController:
-                                                                  _carouselController,
-                                                              items:
-                                                                  _images ?? [],
-                                                              options:
-                                                                  CarouselOptions(
-                                                                aspectRatio:
-                                                                    16 / 9,
-                                                                viewportFraction:
-                                                                    0.8,
-                                                                enableInfiniteScroll:
-                                                                    false,
-                                                                reverse: false,
-                                                                autoPlay: true,
-                                                                enlargeCenterPage:
-                                                                    true,
-                                                                scrollDirection:
-                                                                    Axis.horizontal,
+                                                    state.load == true
+                                                        ? loadingIndicator(
+                                                            color: AppColors
+                                                                .buttonBlue)
+                                                        : state.imageWidgetss
+                                                                    .isNotEmpty ==
+                                                                true
+                                                            ? CarouselSlider(
+                                                                carouselController:
+                                                                    _carouselController,
+                                                                items: state
+                                                                    .imageWidgetss,
+                                                                options:
+                                                                    CarouselOptions(
+                                                                  aspectRatio:
+                                                                      16 / 9,
+                                                                  viewportFraction:
+                                                                      0.8,
+                                                                  enableInfiniteScroll:
+                                                                      false,
+                                                                  reverse:
+                                                                      false,
+                                                                  autoPlay:
+                                                                      true,
+                                                                  enlargeCenterPage:
+                                                                      true,
+                                                                  scrollDirection:
+                                                                      Axis.horizontal,
+                                                                ),
+                                                              )
+                                                            : Image.asset(
+                                                                'assets/images/imagepick.png',
+                                                                width: double
+                                                                    .infinity,
+                                                                height: double
+                                                                    .infinity,
+                                                                fit: BoxFit
+                                                                    .cover,
                                                               ),
-                                                            )
-                                                          : Image.asset(
-                                                              'assets/images/imagepick.png',
-                                                              width: double
-                                                                  .infinity,
-                                                              height: double
-                                                                  .infinity,
-                                                              fit: BoxFit.cover,
-                                                            ),
                                                   ],
                                                 ),
                                               ),
-                                              state.imagesListdata
-                                                              ?.isNotEmpty ==
+                                              state.imageWidgetss.isNotEmpty ==
                                                           true &&
-                                                      state.imagesListdata
-                                                              ?.length !=
+                                                      state.imageWidgetss
+                                                              .length !=
                                                           1
                                                   ?
                                                   // Left Button
@@ -334,11 +352,10 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                     )
                                                   : const Positioned(
                                                       child: Text("")),
-                                              state.imagesListdata
-                                                              ?.isNotEmpty ==
+                                              state.imageWidgetss.isNotEmpty ==
                                                           true &&
-                                                      state.imagesListdata
-                                                              ?.length !=
+                                                      state.imageWidgetss
+                                                              .length !=
                                                           1
                                                   ?
                                                   // Right Button
@@ -360,6 +377,8 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                     )
                                                   : const Positioned(
                                                       child: Text("")),
+
+                                              //info Button
                                               Positioned(
                                                 top: 0,
                                                 child: Tooltip(
@@ -482,7 +501,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                   : Center(
                                       child: ElevatedButton.icon(
                                           onPressed: () {
-                                            if (state.imageWidget == null) {
+                                            if (state.imageWidgetss.isEmpty) {
                                               FxToast.showErrorToast(
                                                 context: context,
                                                 message:
@@ -825,7 +844,8 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                             GestureDetector(
                                               onTap: () async {
                                                 HomeBloc.get(context).add(
-                                                  loadingEvent(load: true),
+                                                  const loadingEvent(
+                                                      load: true),
                                                 );
 
                                                 await FilePicker.platform
@@ -834,6 +854,11 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                   allowMultiple: true,
                                                 )
                                                     .then((result) {
+                                                  HomeBloc.get(context).add(
+                                                    const loadingEvent(
+                                                        load: false),
+                                                  );
+
                                                   if (result != null &&
                                                       result.files.isNotEmpty) {
                                                     List<Widget> images = [];
@@ -872,27 +897,28 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                                           .files),
                                                             );
                                                             // Process each selected image file
-                                                            HomeBloc.get(
-                                                                    context)
-                                                                .add(
-                                                              ImageToSearchForEmployee(
-                                                                  imageWidget:
-                                                                      imageWidget),
-                                                            );
-                                                            HomeBloc.get(
-                                                                    context)
-                                                                .add(
-                                                              imageevent(
-                                                                  imageFile:
-                                                                      imageFile),
-                                                            );
+                                                            // HomeBloc.get(
+                                                            //         context)
+                                                            //     .add(
+                                                            //   ImageToSearchForEmployee(
+                                                            //       imageWidget:
+                                                            //           imageWidget),
+                                                            // );
+                                                            // HomeBloc.get(
+                                                            //         context)
+                                                            //     .add(
+                                                            //   imageevent(
+                                                            //       imageFile:
+                                                            //           imageFile),
+                                                            // );
 
-                                                            HomeBloc.get(
-                                                                    context)
-                                                                .add(
-                                                              const loadingEvent(
-                                                                  load: false),
-                                                            );
+                                                            // HomeBloc.get(
+                                                            //         context)
+                                                            //     .add(
+                                                            //   const loadingEvent(
+                                                            //       load:
+                                                            //           false),
+                                                            // );
                                                           } else {
                                                             // Show a message to the user
                                                             FxToast.showErrorToast(
@@ -901,22 +927,34 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                                 context:
                                                                     context);
 
-                                                            HomeBloc.get(
-                                                                    context)
-                                                                .add(
-                                                              const loadingEvent(
-                                                                  load: false),
-                                                            );
+                                                            // HomeBloc.get(
+                                                            //         context)
+                                                            //     .add(
+                                                            //   const loadingEvent(
+                                                            //       load:
+                                                            //           false),
+                                                            // );
                                                           }
                                                         }
                                                       }
                                                     }
 
-                                                    setState(() {
-                                                      _images = images;
-                                                    });
+                                                    HomeBloc.get(context).add(
+                                                        ImageListWidget(
+                                                            imageWidgetss:
+                                                                images));
+
+                                                    // HomeBloc.get(context).add(
+                                                    //   const loadingEvent(
+                                                    //       load: false),
+                                                    // );
                                                   }
                                                 });
+
+                                                // HomeBloc.get(context).add(
+                                                //   const loadingEvent(
+                                                //       load: false),
+                                                // );
                                               },
                                               child: Stack(
                                                 fit: StackFit.expand,
@@ -932,8 +970,8 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                         ? CarouselSlider(
                                                             carouselController:
                                                                 _carouselController,
-                                                            items:
-                                                                _images ?? [],
+                                                            items: state
+                                                                .imageWidgetss,
                                                             options:
                                                                 CarouselOptions(
                                                               aspectRatio:
@@ -1011,6 +1049,8 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                                   )
                                                 : const Positioned(
                                                     child: Text("")),
+
+                                            //info Button
                                             Positioned(
                                               top: 0,
                                               child: Tooltip(
@@ -1132,7 +1172,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                   : Center(
                                       child: ElevatedButton.icon(
                                           onPressed: () {
-                                            if (state.imageWidget == null) {
+                                            if (state.imageWidgetss.isEmpty) {
                                               FxToast.showErrorToast(
                                                 context: context,
                                                 message:

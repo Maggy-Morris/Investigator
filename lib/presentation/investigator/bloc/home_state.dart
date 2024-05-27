@@ -17,6 +17,7 @@ class HomeState extends Equatable {
 
   final PlatformFile? imageFile;
   final Widget? imageWidget;
+  final List<Widget> imageWidgetss;
   List<String> snapShots;
   final String accuracy;
   final Submission submission;
@@ -27,6 +28,7 @@ class HomeState extends Equatable {
   final List<String> data;
 
   HomeState({
+    this.imageWidgetss = const [],
     this.load = false,
     this.responseMessage = '',
     this.timeDuration = 0,
@@ -49,6 +51,7 @@ class HomeState extends Equatable {
   });
 
   HomeState copyWith({
+    List<Widget>? imageWidgetss,
     bool? load,
     String? responseMessage,
     int? timeDuration,
@@ -70,7 +73,8 @@ class HomeState extends Equatable {
     List<String>? data,
   }) {
     return HomeState(
-      load : load ?? this.load,
+      imageWidgetss: imageWidgetss ?? this.imageWidgetss,
+      load: load ?? this.load,
       responseMessage: responseMessage ?? this.responseMessage,
       timeDuration: timeDuration ?? this.timeDuration,
       pathProvided: pathProvided ?? this.pathProvided,
@@ -94,7 +98,8 @@ class HomeState extends Equatable {
 
   @override
   List<Object?> get props => [
-    load,
+        imageWidgetss,
+        load,
         responseMessage,
         timeDuration,
         pathProvided,

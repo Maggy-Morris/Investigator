@@ -49,6 +49,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     /// functionality Company delete employees Data
     on<SearchForEmployeeByVideoEvent>(_onSearchForEmployeeByVideoEvent);
     on<ImageToSearchForEmployee>(_onImageToSearchForEmployee);
+    on<ImageListWidget>(_onImageListWidget);
+
     on<EditPageNumber>(_onEditPageNumber);
     // on<GetPaginatedFramesEvent>(_onGetPaginatedFramesEvent);
     on<EditPageCount>(_onEditPageCount);
@@ -96,6 +98,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   _onEditPageCount(EditPageCount event, Emitter<HomeState> emit) async {
     emit(state.copyWith(
         pageCount: event.pageCount, submission: Submission.editing));
+  }
+
+  _onImageListWidget(ImageListWidget event, Emitter<HomeState> emit) async {
+    // emit(state.copyWith(imageWidgetss: []));
+    emit(state.copyWith(load: true));
+
+    emit(state.copyWith(imageWidgetss: event.imageWidgetss));
+    emit(state.copyWith(load: false));
   }
 
   _onImageToSearchForEmployee(

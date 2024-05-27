@@ -20,12 +20,11 @@ class SubmessionError extends HomeEvent {
 class loadingEvent extends HomeEvent {
   final bool load;
 
-  const loadingEvent({ required this.load});
+  const loadingEvent({required this.load});
 
   @override
   List<Object> get props => [load];
 }
-
 
 class SetTimeDuration extends HomeEvent {
   final int timeDuration;
@@ -68,6 +67,15 @@ class ImageToSearchForEmployee extends HomeEvent {
 
   @override
   List<Object?> get props => [imageWidget];
+}
+
+class ImageListWidget extends HomeEvent {
+  List<Widget> imageWidgetss;
+
+  ImageListWidget({required this.imageWidgetss});
+
+  @override
+  List<Object?> get props => [imageWidgetss];
 }
 
 class CompnyNameFromSP extends HomeEvent {
