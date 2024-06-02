@@ -101,7 +101,7 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
       UpdateEmployeeEvent event, Emitter<GroupSearchState> emit) async {
     emit(state.copyWith(submission: Submission.loading));
     try {
-      final result = await RemoteProvider().UpdateEmployeeData(
+      final result = await RemoteProvider().updateEmployeeData(
           companyName: event.companyName,
           personName: state.personName,
           phoneNum: state.phoneNum,
@@ -109,7 +109,7 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
           userId: state.userId,
           id: event.id,
           blackListed: "",
-          roomNamesChoosen: []);
+          roomNamesChosen: []);
       if (result.updated == true) {
         emit(state.copyWith(
           submission: Submission.success,

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:html';
 
 import 'package:flutter/foundation.dart';
 import 'package:Investigator/authentication/authentication_repository.dart';

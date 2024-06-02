@@ -51,7 +51,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   _onUpdatePassword(UpdatePassword event, Emitter<SettingsState> emit) async {
     emit(state.copyWith(submission: Submission.loading));
     try {
-      final result = await RemoteProvider().UpdatePassword(
+      final result = await RemoteProvider().updatePassword(
         email: AuthenticationRepository.instance.currentUser.username ?? "",
         password: state.passwordUpdate,
         oldPassword: state.oldpassword,
@@ -126,7 +126,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   _onUpdateRooms(UpdateRooms event, Emitter<SettingsState> emit) async {
     emit(state.copyWith(submission: Submission.loading));
     try {
-      final result = await RemoteProvider().UpdateRooms(
+      final result = await RemoteProvider().updateRooms(
         // companyName: event.companyName,
         // personName: state.personName,
         // phoneNum: state.phoneNum,

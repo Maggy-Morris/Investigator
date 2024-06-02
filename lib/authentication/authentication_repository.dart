@@ -197,7 +197,7 @@ class AuthenticationRepository {
     try {
       // final modelAuth =
       await RemoteProvider()
-          .SignUpRemoteCredentials(
+          .signUpRemoteCredentials(
               email, password, companyName, roomsNumber, roomNames)
           .then(
         (value) {

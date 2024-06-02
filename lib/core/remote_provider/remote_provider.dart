@@ -3,16 +3,10 @@ import 'package:Investigator/core/models/search_by_video.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:Investigator/authentication/call_back_authentication.dart';
-import 'package:Investigator/core/models/add_camera_model.dart';
-// import 'package:Investigator/core/models/apply_model_model.dart';
-import 'package:Investigator/core/models/camera_details_model.dart';
-// import 'package:Investigator/core/models/dashboard_models.dart';
 import 'package:Investigator/core/remote_provider/remote_data_source.dart';
 
-// import '../models/add_company_model.dart';
 import '../models/add_person_model.dart';
 import '../models/call_back_model.dart';
-import '../models/dashboard_models.dart';
 import '../models/delete_model.dart';
 import '../models/employee_model.dart';
 import '../models/history_screen_model.dart';
@@ -64,7 +58,7 @@ class RemoteProvider {
   }
 
   //SignUp API
-  Future<signupModel> SignUpRemoteCredentials(
+  Future<signupModel> signUpRemoteCredentials(
     String email,
     String password,
     String companyName,
@@ -105,7 +99,7 @@ class RemoteProvider {
 
   ///edit Rooms Data
 
-  Future<UpdateModel> UpdateRooms({
+  Future<UpdateModel> updateRooms({
     // required String companyName,
     required String email,
     required int roomsNumber,
@@ -137,7 +131,7 @@ class RemoteProvider {
 
   ///edit Password Data
 
-  Future<UpdatePasswordModel> UpdatePassword({
+  Future<UpdatePasswordModel> updatePassword({
     required String password,
     required String oldPassword,
     required String email,
@@ -167,7 +161,7 @@ class RemoteProvider {
     }
   }
 
-  ///Add Comany
+  ///Add Company
   Future<CallBackModel> addCompany({
     required String companyName,
   }) async {
@@ -234,7 +228,7 @@ class RemoteProvider {
   }
 
   /// Add New Person with image as stream of bytes
-  Future<UpdateModel> UpdateEmployeeData({
+  Future<UpdateModel> updateEmployeeData({
     required String companyName,
     required String personName,
     required String email,
@@ -242,7 +236,7 @@ class RemoteProvider {
     required String phoneNum,
     required String userId,
     required String blackListed,
-    List<String>? roomNamesChoosen,
+    List<String>? roomNamesChosen,
   }) async {
     try {
       Map<String, dynamic> body = {
@@ -254,7 +248,7 @@ class RemoteProvider {
           "email": email,
           "phone": phoneNum,
           "user_id": userId,
-          if (roomNamesChoosen != null) "IAM": roomNamesChoosen,
+          if (roomNamesChosen != null) "IAM": roomNamesChosen,
         }
       };
 
@@ -695,12 +689,12 @@ class RemoteProvider {
   // get all pathes
   Future<pathes_model> getHistoryDetails({
     required String companyName,
-    required String video_Path,
+    required String videoPath,
   }) async {
     try {
       Map<String, dynamic> callBack = await RemoteDataSource()
           .post(endPoint: "/qdrant/history_files", body: {
-        "video_path": video_Path,
+        "video_path": videoPath,
         "collection_name": companyName,
       });
 

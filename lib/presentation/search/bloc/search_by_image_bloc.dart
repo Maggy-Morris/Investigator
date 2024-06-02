@@ -145,7 +145,7 @@ class SearchByImageBloc extends Bloc<SearchByImageEvent, SearchByImageState> {
       UpdateEmployeeEvent event, Emitter<SearchByImageState> emit) async {
     emit(state.copyWith(submission: Submission.loading));
     try {
-      final result = await RemoteProvider().UpdateEmployeeData(
+      final result = await RemoteProvider().updateEmployeeData(
         companyName: event.companyName,
         personName: state.personName,
         phoneNum: state.phoneNum,
@@ -153,7 +153,7 @@ class SearchByImageBloc extends Bloc<SearchByImageEvent, SearchByImageState> {
         userId: state.userId,
         id: event.id,
         blackListed: state.selectedOption,
-        roomNamesChoosen: state.roomNAMS,
+        roomNamesChosen: state.roomNAMS,
       );
       if (result.updated == true) {
         emit(

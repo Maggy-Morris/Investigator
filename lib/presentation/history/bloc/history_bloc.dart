@@ -137,7 +137,7 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
     try {
       await RemoteProvider()
           .getHistoryDetails(
-        video_Path: event.videoPathForHistory,
+        videoPath: event.videoPathForHistory,
         companyName:
             AuthenticationRepository.instance.currentUser.companyName?.first,
       )

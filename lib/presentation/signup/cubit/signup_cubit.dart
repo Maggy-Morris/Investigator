@@ -81,7 +81,7 @@ class SignupCubit extends Cubit<SignupState> {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     try {
       await RemoteProvider()
-          .SignUpRemoteCredentials(
+          .signUpRemoteCredentials(
         state.email.value,
         state.password.value,
         state.companyName ?? "",

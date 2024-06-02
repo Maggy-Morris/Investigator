@@ -387,14 +387,14 @@ class AllEmployeesBloc extends Bloc<AllEmployeesEvent, AllEmployeesState> {
       UpdateEmployeeEvent event, Emitter<AllEmployeesState> emit) async {
     emit(state.copyWith(submission: Submission.loading));
     try {
-      final result = await RemoteProvider().UpdateEmployeeData(
+      final result = await RemoteProvider().updateEmployeeData(
         companyName: event.companyName,
         personName: state.personName,
         phoneNum: state.phoneNum,
         email: state.email,
         userId: state.userId,
         blackListed: state.selectedOption,
-        roomNamesChoosen: state.roomNAMS,
+        roomNamesChosen: state.roomNAMS,
         id: event.id,
       );
       if (result.updated == true) {
