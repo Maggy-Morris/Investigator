@@ -14,7 +14,7 @@ import '../../standard_layout/screens/standard_layout.dart';
 import '../bloc/settings_bloc.dart'; // Import your settings_bloc file
 
 class Settings extends StatefulWidget {
-  Settings({Key? key}) : super(key: key);
+  const Settings({Key? key}) : super(key: key);
 
   @override
   _SettingsState createState() => _SettingsState();
@@ -187,7 +187,7 @@ class _SettingsState extends State<Settings> {
                             ),
                             (Responsive.isWeb(context)) ? 500 : 250,
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                         ],
                       ),
                       const SizedBox(height: 20),
@@ -231,7 +231,7 @@ class _SettingsState extends State<Settings> {
                                       onChanged: (value) {
                                         if (value.isNotEmpty) {
                                           SettingsBloc.get(context).add(
-                                            UpdateRoomsEvent(
+                                            const UpdateRoomsEvent(
                                               checks: true,
                                               // index: index,
                                             ),
@@ -245,7 +245,7 @@ class _SettingsState extends State<Settings> {
                                           );
                                         } else if (value.isEmpty) {
                                           SettingsBloc.get(context).add(
-                                            UpdateRoomsEvent(
+                                            const UpdateRoomsEvent(
                                               checks: false,
                                               // index: index,
                                             ),
@@ -421,7 +421,7 @@ Widget _buildInputCard(
             TextField(
               readOnly:
                   readOnly, // Set readOnly based on the provided parameter
-              style: TextStyle(color: Colors.black),
+              style: const TextStyle(color: Colors.black),
               controller: TextEditingController(text: value),
               onChanged: onChanged,
               decoration: InputDecoration(

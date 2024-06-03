@@ -46,7 +46,7 @@ class signupModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['logined'] = logined;
     data['status'] = status;
     return data;

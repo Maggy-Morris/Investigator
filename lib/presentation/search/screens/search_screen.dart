@@ -4,9 +4,6 @@ import 'dart:io';
 import 'package:Investigator/core/widgets/slider_widget.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/services.dart';
-import 'package:syncfusion_flutter_core/theme.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
-// import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:yaru/yaru.dart';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -22,13 +19,11 @@ import 'package:Investigator/presentation/standard_layout/screens/standard_layou
 import '../../../authentication/authentication_repository.dart';
 import '../../../core/enum/enum.dart';
 import '../../../core/loader/loading_indicator.dart';
-import '../../../core/models/search_by_image_model.dart';
 import '../../../core/remote_provider/remote_data_source.dart';
 import '../../../core/widgets/drop_down_widgets.dart';
 import '../../../core/widgets/fullscreenImage.dart';
 import '../../all_employees/screens/text.dart';
 import '../../camera_controller/cubit/photo_app_cubit.dart';
-// import '../../camera_controller/photo_app_logic.dart';
 import '../bloc/search_by_image_bloc.dart';
 import 'face_painter.dart';
 
@@ -46,9 +41,9 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
       AuthenticationRepository.instance.currentUser.companyName?.first ?? "";
   late TabController tabController;
   // bool _isBackCamera = true;
-  final double _min = 10;
-  final double _max = 100;
-  double _value = 10;
+  // final double _min = 10;
+  // final double _max = 100;
+  // double _value = 10;
   bool? isChecked;
   List<String> checkboxItems =
       AuthenticationRepository.instance.currentUser.roomsNames ?? [];

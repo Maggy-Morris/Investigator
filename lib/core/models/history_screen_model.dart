@@ -74,19 +74,19 @@ class historyScreenModel {
     if (json['data'] != null) {
       data = <History>[];
       json['data'].forEach((v) {
-        data!.add(new History.fromJson(v));
+        data!.add(History.fromJson(v));
       });
     }
     nPages = json['n_pages'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['count'] = this.count;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['count'] = count;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
-    data['n_pages'] = this.nPages;
+    data['n_pages'] = nPages;
     return data;
   }
 }
@@ -117,13 +117,13 @@ class History {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['function'] = this.function;
-    data['image_paths'] = this.imagePaths;
-    data['persons'] = this.persons;
-    data['timestamp'] = this.timestamp;
-    data['video_path'] = this.videoPath;
-    data['video_url'] = this.videoUrl;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['function'] = function;
+    data['image_paths'] = imagePaths;
+    data['persons'] = persons;
+    data['timestamp'] = timestamp;
+    data['video_path'] = videoPath;
+    data['video_url'] = videoUrl;
     return data;
   }
 }

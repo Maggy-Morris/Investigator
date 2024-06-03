@@ -1,10 +1,9 @@
 import 'package:equatable/equatable.dart';
-import 'package:file_picker/file_picker.dart';
 
 class SearchByVideoAndImage extends Equatable {
   bool? found;
   List<String>? data;
-  String? global_path;  
+  String? global_path;
   int? response_count;
 
 
@@ -26,7 +25,7 @@ class SearchByVideoAndImage extends Equatable {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['Found'] = found;
     data['global_path'] = global_path;
     data['response_count'] = response_count;

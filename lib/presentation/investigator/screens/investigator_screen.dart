@@ -1,10 +1,8 @@
-import 'dart:convert';
-import 'dart:typed_data';
+// import 'dart:convert';
+// import 'dart:typed_data';
 import 'package:image/image.dart' as img;
 
-import 'package:Investigator/core/widgets/FullImageURL.dart';
 import 'package:Investigator/core/widgets/flutter_pagination/flutter_pagination.dart';
-import 'package:camera/camera.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:chewie/chewie.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -19,9 +17,6 @@ import 'package:Investigator/core/utils/responsive.dart';
 import 'package:Investigator/core/widgets/sizedbox.dart';
 import 'package:Investigator/core/widgets/toast/toast.dart';
 import 'package:Investigator/presentation/standard_layout/screens/standard_layout.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:syncfusion_flutter_core/theme.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:html' as html;
 
@@ -29,9 +24,7 @@ import '../../../authentication/authentication_repository.dart';
 import '../../../core/remote_provider/remote_data_source.dart';
 import '../../../core/widgets/fullscreenImage.dart';
 import '../../../core/widgets/image_downloader.dart';
-import '../../../core/widgets/persons_per_widget.dart';
 import '../../../core/widgets/slider_widget.dart';
-import '../../../core/widgets/videoPlayer.dart';
 import '../../camera_controller/cubit/photo_app_cubit.dart';
 import '../bloc/home_bloc.dart';
 
@@ -45,13 +38,13 @@ class AddCameraScreen extends StatefulWidget {
 class _AddCameraScreenState extends State<AddCameraScreen> {
   // TextEditingController nameController = TextEditingController();
   // Widget? _image;
-  List<Widget>? _images;
+  // List<Widget>? _images;
 
   // CameraController? controller;
   // XFile? imageFile;
-  final double _min = 10;
-  final double _max = 100;
-  double _value = 10;
+  // final double _min = 10;
+  // final double _max = 100;
+  // double _value = 10;
 
   // bool _isBackCamera = true;
   String companyNameRepo =
@@ -61,7 +54,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
   //////////////////////////////////////////////////////
   VideoPlayerController? _controller;
 
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   /////////////////////////////////////////////////
   @override
@@ -1489,7 +1482,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
       final blob = html.Blob([videoBytes]);
       final url = html.Url.createObjectUrlFromBlob(blob);
 
-      _controller = VideoPlayerController.network(url)
+      _controller = VideoPlayerController.networkUrl(Uri.parse(url))
         ..initialize().then((_) {
           // timeDuratioin == null
           _controller?.pause();
@@ -1537,7 +1530,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                 //                   "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageSource}")));
                 // },
                 child: Image.network(
-                  "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageSource}",
+                  "http:${RemoteDataSource.baseUrlWithoutPort}8000/$imageSource",
                   width: double.infinity,
                   height: double.infinity,
                   // Images.profileImage,
@@ -1582,7 +1575,7 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                             builder: (context) => FullScreenImage(
                                 text: text,
                                 imageUrl:
-                                    "http:${RemoteDataSource.baseUrlWithoutPort}8000/${imageSource}")));
+                                    "http:${RemoteDataSource.baseUrlWithoutPort}8000/$imageSource")));
                   },
                   icon: const Icon(
                     Icons.crop_free_sharp,
@@ -1613,11 +1606,11 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
     );
   }
 
-  Uint8List _decodeBase64Image({required String base64Image}) {
-    final bytes = base64.decode(base64Image);
-
-    return Uint8List.fromList(bytes);
-  }
+  // Uint8List _decodeBase64Image({required String base64Image}) {
+  //   final bytes = base64.decode(base64Image);
+  //
+  //   return Uint8List.fromList(bytes);
+  // }
 
   // _downloadImage({required String data, String downloadName = 'image'}) async {
   //   if (data.isNotEmpty) {

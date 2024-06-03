@@ -14,8 +14,8 @@ class HistoryState extends Equatable {
   // final List<Paths> allPathes;
   final int pageIndex;
   final int pageCount;
-  final List<GetAllCameraDetails> camerasDetails;
-  final List<GetAllCameraDetails> singleCameraDetails;
+  // final List<GetAllCameraDetails> camerasDetails;
+  // final List<GetAllCameraDetails> singleCameraDetails;
   final String responseMessage;
 
   final String pathProvided;
@@ -26,7 +26,7 @@ class HistoryState extends Equatable {
   final String modelName;
 
   /// detail
-  final List<List<GetAllCameraCountPerHour>> camerasCountsPerHour;
+  // final List<List<GetAllCameraCountPerHour>> camerasCountsPerHour;
 
   final Submission submission;
   // final List<int> videoStream;
@@ -45,8 +45,8 @@ class HistoryState extends Equatable {
     this.modelName = "",
     this.responseMessage = "",
     this.submission = Submission.initial,
-    this.singleCameraDetails = const [],
-    this.camerasDetails = const [],
+    // this.singleCameraDetails = const [],
+    // this.camerasDetails = const [],
     // this.allPathes = const [],
     this.allHistory = const [],
 
@@ -54,7 +54,7 @@ class HistoryState extends Equatable {
     // this.violenceCameraDetails = const [],
     // this.ageCameraDetails = const [],
     // this.genderCameraDetails = const [],
-    this.camerasCountsPerHour = const [],
+    // this.camerasCountsPerHour = const [],
     // this.videoStream = const [],
   });
 
@@ -77,9 +77,9 @@ class HistoryState extends Equatable {
     Submission? submission,
     // List<Paths>? allPathes,
     List<History>? allHistory,
-    List<GetAllCameraDetails>? camerasDetails,
-    List<GetAllCameraDetails>? singleCameraDetails,
-    List<List<GetAllCameraCountPerHour>>? camerasCountsPerHour,
+    // List<GetAllCameraDetails>? camerasDetails,
+    // List<GetAllCameraDetails>? singleCameraDetails,
+    // List<List<GetAllCameraCountPerHour>>? camerasCountsPerHour,
     // List<List<GetAllCameraCountPerHour>>? vehicleCameraDetails,
     // List<List<GetAllCameraViolencePerHour>>? violenceCameraDetails,
     // List<List<GetAllCameraAgePerHour>>? ageCameraDetails,
@@ -126,10 +126,10 @@ class HistoryState extends Equatable {
       // genderCameraDetails: genderCameraDetails ?? this.genderCameraDetails,
       // videoStream: videoStream ?? this.videoStream,
       submission: submission ?? this.submission,
-      singleCameraDetails: singleCameraDetails ?? this.singleCameraDetails,
+      // singleCameraDetails: singleCameraDetails ?? this.singleCameraDetails,
       // allPathes: allPathes ?? this.allPathes,
-      camerasDetails: camerasDetails ?? this.camerasDetails,
-      camerasCountsPerHour: camerasCountsPerHour ?? this.camerasCountsPerHour,
+      // camerasDetails: camerasDetails ?? this.camerasDetails,
+      // camerasCountsPerHour: camerasCountsPerHour ?? this.camerasCountsPerHour,
     );
   }
 
@@ -156,10 +156,10 @@ class HistoryState extends Equatable {
         // genderCameraDetails,
         // videoStream,
         submission,
-        singleCameraDetails,
+        // singleCameraDetails,
 
         // allPathes,
-        camerasDetails,
-        camerasCountsPerHour,
+        // camerasDetails,
+        // camerasCountsPerHour,
       ];
 }

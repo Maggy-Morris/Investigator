@@ -1,6 +1,4 @@
-import 'dart:convert';
 
-import 'package:Investigator/core/widgets/FullImageURL.dart';
 import 'package:Investigator/core/widgets/flutter_pagination/flutter_pagination.dart';
 import 'package:Investigator/core/widgets/slider_widget.dart';
 import 'package:camera/camera.dart';
@@ -18,9 +16,6 @@ import 'package:Investigator/core/utils/responsive.dart';
 import 'package:Investigator/core/widgets/sizedbox.dart';
 import 'package:Investigator/core/widgets/toast/toast.dart';
 import 'package:Investigator/presentation/standard_layout/screens/standard_layout.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:syncfusion_flutter_core/theme.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:html' as html;
 
@@ -29,7 +24,6 @@ import '../../../core/remote_provider/remote_data_source.dart';
 import '../../../core/widgets/drop_down_widgets.dart';
 import '../../../core/widgets/fullscreenImage.dart';
 import '../../../core/widgets/image_downloader.dart';
-import '../../../core/widgets/persons_per_widget.dart';
 import '../../all_employees/screens/text.dart';
 import '../../camera_controller/cubit/photo_app_cubit.dart';
 import '../bloc/group_search_bloc.dart';
@@ -45,15 +39,15 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
   TextEditingController nameController = TextEditingController();
   CameraController? controller;
   XFile? imageFile;
-  final double _min = 10;
-  final double _max = 100;
-  double _value = 10;
+  // final double _min = 10;
+  // final double _max = 100;
+  // double _value = 10;
   // bool _isBackCamera = true;
   String companyNameRepo =
       AuthenticationRepository.instance.currentUser.companyName?.first ?? "";
   List<String> checkboxItems =
       AuthenticationRepository.instance.currentUser.roomsNames ?? [];
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   //////////////////////////////////////////////////////
   VideoPlayerController? _controller;
@@ -2123,11 +2117,11 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
     );
   }
 
-  Uint8List _decodeBase64Image({required String base64Image}) {
-    final bytes = base64.decode(base64Image);
-
-    return Uint8List.fromList(bytes);
-  }
+  // Uint8List _decodeBase64Image({required String base64Image}) {
+  //   final bytes = base64.decode(base64Image);
+  //
+  //   return Uint8List.fromList(bytes);
+  // }
 
   Widget _contactUi({
     required String name,

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../authentication/authentication_repository.dart';
-import '../../../core/resources/app_colors.dart';
 import '../cubit/signup_cubit.dart';
 
 class SignUpPage extends StatelessWidget {

@@ -42,7 +42,7 @@ getRoutesAdmin() {
     //       cameraName: route.queryParameters["name"] ?? "",
     //     )),
 
-    '/settings': (route) => NoAnimationPage(child: Settings()),
+    '/settings': (route) => const NoAnimationPage(child: Settings()),
 
     '/investigator': (route) => const NoAnimationPage(child: AddCameraScreen()),
     '/databaseSearch': (route) =>

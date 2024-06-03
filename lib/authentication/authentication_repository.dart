@@ -133,7 +133,7 @@ class AuthenticationRepository {
       controller.add(ahmed1);
     } catch (e) {
       // Handle error
-      print("Error updating roomsNames: $e");
+      debugPrint("Error updating roomsNames: $e");
     }
   }
 

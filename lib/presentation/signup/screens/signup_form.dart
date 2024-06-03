@@ -1,4 +1,3 @@
-import 'package:Investigator/presentation/login/view/login_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,7 +11,6 @@ import 'package:Investigator/presentation/login/widgets/custom_text.dart';
 // import 'package:svg_flutter/svg.dart';
 
 import '../../../core/resources/app_colors.dart';
-import '../../all_employees/screens/all_employees.dart';
 import '../cubit/signup_cubit.dart';
 
 class SignUpForm extends StatelessWidget {
@@ -20,7 +18,7 @@ class SignUpForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+    // final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
     return BlocListener<SignupCubit, SignupState>(
       listener: (context, state) {

@@ -5,8 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/enum/enum.dart';
-import '../../../core/models/camera_details_model.dart';
-import '../../../core/models/dashboard_models.dart';
 import '../../../core/remote_provider/remote_provider.dart';
 
 part 'history_event.dart';

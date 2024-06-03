@@ -1,10 +1,7 @@
 // import 'dart:convert';
 // import 'dart:typed_data';
-import 'dart:html' as html;
 
 import 'package:Investigator/core/widgets/FullImageURL.dart';
-import 'package:carousel_slider/carousel_controller.dart';
-import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 // import 'package:chewie/chewie.dart';
 // import 'package:file_picker/file_picker.dart';
@@ -20,7 +17,6 @@ import '../../../core/resources/app_colors.dart';
 // import '../../../core/utils/responsive.dart';
 import '../../../core/widgets/flutter_pagination/flutter_pagination.dart';
 import '../../../core/widgets/image_downloader.dart';
-import '../../../core/widgets/persons_per_widget.dart';
 import '../../../core/widgets/sizedbox.dart';
 import '../../../core/widgets/toast/toast.dart';
 import '../../../core/widgets/video_player_widget.dart';

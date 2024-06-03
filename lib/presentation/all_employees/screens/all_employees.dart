@@ -20,7 +20,6 @@ import '../../../authentication/authentication_repository.dart';
 import '../../../core/enum/enum.dart';
 import '../../../core/widgets/drop_down_widgets.dart';
 import '../../../core/widgets/fullscreenImage.dart';
-import '../../../core/widgets/persons_per_widget.dart';
 import '../../../core/widgets/toast/toast.dart';
 import '../bloc/all_employess_bloc.dart';
 

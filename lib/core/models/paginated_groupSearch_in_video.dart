@@ -44,9 +44,9 @@ class PaginatedSearchByVideoInGroupSearch extends Equatable {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    if (this.dataCards != null) {
-      data['data'] = this.dataCards!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (dataCards != null) {
+      data['data'] = dataCards!.map((v) => v.toJson()).toList();
     }
     data['n_page'] = n_page;
     // data['count'] = count;

@@ -4,11 +4,11 @@ import 'core/resources/app_colors.dart';
 
 final theme = ThemeData(
   unselectedWidgetColor: Colors.white,
-  scrollbarTheme: ScrollbarThemeData(),
+  scrollbarTheme: const ScrollbarThemeData(),
   // textTheme: GoogleFonts.openSansTextTheme(),
   useMaterial3: true,
   fontFamily: 'Cairo',
-  textTheme: TextTheme(
+  textTheme: const TextTheme(
     // displayLarge: TextStyle(color: Colors.white),
     // displayMedium: TextStyle(color: Colors.white),
     // displaySmall: TextStyle(color: Colors.white),

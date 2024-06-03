@@ -9,7 +9,6 @@ import 'package:Investigator/core/remote_provider/remote_provider.dart';
 import '../../../core/models/add_company_model.dart';
 import '../../../core/models/employee_model.dart';
 import '../../../core/models/paginated_groupSearch_in_video.dart';
-import '../../../core/models/search_by_video_in_group_search.dart';
 
 part 'group_search_event.dart';
 

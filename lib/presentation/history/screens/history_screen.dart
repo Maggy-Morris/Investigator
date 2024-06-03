@@ -2,14 +2,11 @@ import 'package:Investigator/core/enum/enum.dart';
 import 'package:Investigator/core/loader/loading_indicator.dart';
 import 'package:Investigator/core/remote_provider/remote_data_source.dart';
 import 'package:Investigator/core/widgets/flutter_pagination/flutter_pagination.dart';
-import 'package:Investigator/core/widgets/persons_per_widget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:chewie/chewie.dart';
 
-import 'package:video_player/video_player.dart';
 
 import '../../../core/resources/app_colors.dart';
 import '../../../core/utils/responsive.dart';

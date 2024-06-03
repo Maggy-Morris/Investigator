@@ -1,15 +1,10 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../authentication/authentication_repository.dart';
 import '../../core/enum/enum.dart';
-import '../../core/loader/loading_indicator.dart';
 import '../../core/resources/app_colors.dart';
-import '../../core/utils/responsive.dart';
-import '../../core/widgets/sizedbox.dart';
-import '../../core/widgets/textformfield.dart';
 import '../../core/widgets/toast/toast.dart';
 import '../all_employees/screens/all_employees.dart';
 import '../investigator/bloc/home_bloc.dart';
@@ -263,31 +258,31 @@ class ChooseYourCompany extends StatelessWidget {
     );
   }
 
-  Widget _listBox({
-    required String hintText,
-    required void Function(String)? onChanged,
-    required TextEditingController? controller,
-    bool? enabled,
-  }) {
-    return CustomTextField(
-      border: const OutlineInputBorder(),
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 12,
-        vertical: 6,
-      ),
-      controller: controller,
-      filled: true,
-      enabled: enabled ?? true,
-      fillColor: Colors.grey.shade200,
-      enabledBorder:
-          OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      disabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(style: BorderStyle.none)),
-      focusedBorder:
-          OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      hintText: hintText,
-      onChanged: onChanged,
-    );
-  }
+  // Widget _listBox({
+  //   required String hintText,
+  //   required void Function(String)? onChanged,
+  //   required TextEditingController? controller,
+  //   bool? enabled,
+  // }) {
+  //   return CustomTextField(
+  //     border: const OutlineInputBorder(),
+  //     contentPadding: const EdgeInsets.symmetric(
+  //       horizontal: 12,
+  //       vertical: 6,
+  //     ),
+  //     controller: controller,
+  //     filled: true,
+  //     enabled: enabled ?? true,
+  //     fillColor: Colors.grey.shade200,
+  //     enabledBorder:
+  //         OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+  //     disabledBorder: OutlineInputBorder(
+  //         borderRadius: BorderRadius.circular(10),
+  //         borderSide: const BorderSide(style: BorderStyle.none)),
+  //     focusedBorder:
+  //         OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+  //     hintText: hintText,
+  //     onChanged: onChanged,
+  //   );
+  // }
 }

@@ -11,7 +11,7 @@ class pathes_model {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -34,7 +34,7 @@ class PathForImages {
         timestamp = json['timestamp'].cast<String>();
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['count'] = count;
     data['file_path'] = filePath;
     data['timestamp'] = timestamp;

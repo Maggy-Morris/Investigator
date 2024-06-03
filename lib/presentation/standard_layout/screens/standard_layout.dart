@@ -30,7 +30,7 @@ class StandardLayoutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       // drawer: mainDrawer(context),
-      body: Container(
+      body: SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         // decoration: BoxDecoration(

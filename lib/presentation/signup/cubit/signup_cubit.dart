@@ -1,11 +1,9 @@
-import 'package:Investigator/authentication/call_back_authentication.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:Investigator/presentation/login/widgets/password.dart';
 
 import '../../../authentication/authentication_repository.dart';
-import '../../../core/models/sigup_model.dart';
 import '../../../core/remote_provider/remote_provider.dart';
 import '../../login/widgets/email.dart';
 
@@ -105,7 +103,7 @@ class SignupCubit extends Cubit<SignupState> {
           );
         }
       });
-    } on SignUpWithEmailAndPasswordFailureFirebase catch (e) {
+    } on SignUpWithEmailAndPasswordFailureFirebase catch (_) {
       emit(
         state.copyWith(
           errorMessage: "E-mail or CompanyName is already in use",

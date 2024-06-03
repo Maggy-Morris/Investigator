@@ -10,8 +10,8 @@ class UpdatePasswordModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['updated'] = this.updated;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['updated'] = updated;
     data['data'] = this.data;
     return data;
   }
