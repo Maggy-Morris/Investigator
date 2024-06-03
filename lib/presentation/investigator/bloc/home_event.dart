@@ -107,11 +107,12 @@ class reloadPath extends HomeEvent {
 
 class GetAccuracy extends HomeEvent {
   final String accuracy;
+  final double sliderValue;
 
-  const GetAccuracy({required this.accuracy});
+  const GetAccuracy({required this.accuracy, required this.sliderValue});
 
   @override
-  List<Object?> get props => [accuracy];
+  List<Object?> get props => [accuracy,sliderValue];
 }
 
 class getPersonName extends HomeEvent {

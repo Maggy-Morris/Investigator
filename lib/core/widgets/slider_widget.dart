@@ -5,7 +5,7 @@ import 'package:syncfusion_flutter_sliders/sliders.dart';
 class SliderWidget extends StatefulWidget {
   final double min = 10;
   final double max = 100;
-  final double value = 10;
+  final double value;
   final Function(double) onChanged;
   final Function(dynamic, String)? labelFormatterCallback;
   final bool showLabelFormatter;
@@ -16,6 +16,7 @@ class SliderWidget extends StatefulWidget {
     // required this.max,
     // required this.value,
     required this.onChanged,
+    this.value = 10,
     this.labelFormatterCallback,
     this.showLabelFormatter = false,
   }) : super(key: key);
@@ -25,12 +26,12 @@ class SliderWidget extends StatefulWidget {
 }
 
 class _SliderWidgetState extends State<SliderWidget> {
-  late double _currentValue;
+  // late double _currentValue;
 
   @override
   void initState() {
     super.initState();
-    _currentValue = widget.value;
+    // _currentValue = widget.value;
   }
 
   @override
@@ -54,14 +55,15 @@ class _SliderWidgetState extends State<SliderWidget> {
           activeColor: const Color.fromRGBO(214, 221, 224, 1),
           min: widget.min,
           max: widget.max,
-          value: _currentValue,
+          value: widget.value,
           interval: 18, // Assuming interval is 1
           showTicks: true,
           showLabels: true,
           onChanged: (dynamic newValue) {
-            setState(() {
-              _currentValue = newValue;
-            });
+            // setState(() {
+            //   _currentValue = newValue;
+            // });
+            debugPrint(newValue.toString());
             widget.onChanged(newValue);
           },
           labelFormatterCallback: widget.showLabelFormatter

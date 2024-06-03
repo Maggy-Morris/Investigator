@@ -139,7 +139,7 @@ class GroupSearchBloc extends Bloc<GroupSearchEvent, GroupSearchState> {
 
   _onGetAccuracy(GetAccuracy event, Emitter<GroupSearchState> emit) async {
     emit(state.copyWith(
-        accuracy: event.accuracy, submission: Submission.editing));
+        accuracy: event.accuracy,sliderValue:event.sliderValue, submission: Submission.editing));
   }
 
   _onreloadTargetsData(

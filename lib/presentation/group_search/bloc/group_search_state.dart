@@ -7,9 +7,8 @@ class GroupSearchState extends Equatable {
 
   int pageIndexForTargets;
 
-  
   int pageCount;
-    int pageCountForTargets;
+  int pageCountForTargets;
 
   final String selectedOption;
 
@@ -26,6 +25,7 @@ class GroupSearchState extends Equatable {
   List<String> timestamps;
 
   final String accuracy;
+  final double sliderValue;
   final Submission submission;
   final String responseMessage;
 
@@ -61,6 +61,7 @@ class GroupSearchState extends Equatable {
     this.userId = "",
     this.personName = "",
     this.accuracy = '',
+    this.sliderValue = 10.0,
     this.imageWidget,
     this.timestamps = const [],
     this.snapShots = const [],
@@ -94,6 +95,7 @@ class GroupSearchState extends Equatable {
     String? userId,
     String? personName,
     String? accuracy,
+    double? sliderValue,
     List<String>? timestamps,
     List<String>? snapShots,
     Widget? imageWidget,
@@ -108,13 +110,12 @@ class GroupSearchState extends Equatable {
     List<String>? data,
   }) {
     return GroupSearchState(
-
       timeDuration: timeDuration ?? this.timeDuration,
       pathProvided: pathProvided ?? this.pathProvided,
       pageIndex: pageIndex ?? this.pageIndex,
-      pageIndexForTargets : pageIndexForTargets ?? this.pageIndexForTargets,
+      pageIndexForTargets: pageIndexForTargets ?? this.pageIndexForTargets,
       pageCount: pageCount ?? this.pageCount,
-      pageCountForTargets:pageCountForTargets??this.pageCountForTargets,
+      pageCountForTargets: pageCountForTargets ?? this.pageCountForTargets,
       timestamps: timestamps ?? this.timestamps,
       roomNAMS: roomNAMS ?? this.roomNAMS,
       showTextField: showTextField ?? this.showTextField,
@@ -128,6 +129,7 @@ class GroupSearchState extends Equatable {
       phoneNum: phoneNum ?? this.phoneNum,
       personName: personName ?? this.personName,
       accuracy: accuracy ?? this.accuracy,
+      sliderValue: sliderValue ?? this.sliderValue,
       snapShots: snapShots ?? this.snapShots,
       imageWidget: imageWidget ?? this.imageWidget,
       data: data ?? this.data,
@@ -157,6 +159,7 @@ class GroupSearchState extends Equatable {
         selectedOption,
         responseMessage,
         accuracy,
+        sliderValue,
         email,
         phoneNum,
         profession,

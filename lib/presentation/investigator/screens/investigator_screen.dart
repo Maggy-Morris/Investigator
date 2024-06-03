@@ -123,8 +123,10 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                   padding: const EdgeInsets.only(
                                       right: 50.0, left: 50.0, bottom: 15),
                                   child: SliderWidget(
+                                    value: state.sliderValue,
                                     onChanged: (newValue) {
                                       HomeBloc.get(context).add(GetAccuracy(
+                                          sliderValue: newValue,
                                           accuracy:
                                               (newValue / 100).toString()));
                                     },
@@ -806,8 +808,10 @@ class _AddCameraScreenState extends State<AddCameraScreen> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 50.0, vertical: 20),
                                   child: SliderWidget(
+                                    value: state.sliderValue,
                                     onChanged: (newValue) {
                                       HomeBloc.get(context).add(GetAccuracy(
+                                          sliderValue: newValue,
                                           accuracy:
                                               (newValue / 100).toString()));
                                     },

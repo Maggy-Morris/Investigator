@@ -15,7 +15,8 @@ class PhotoAppState extends Equatable {
   final String? selectedOption;
   final List<String>? blacklisted_list_checks;
 
-  final String? sliderValue;
+  final String? accuracy;
+  final double sliderValue;
 
   final bool securityBreachChecked;
   final Submission submission;
@@ -31,7 +32,8 @@ class PhotoAppState extends Equatable {
     this.textAccuracy,
     required this.isLoading,
     required this.hasError,
-    this.sliderValue,
+    this.accuracy,
+    this.sliderValue = 10.0,
     this.errorMessage,
     this.roomChoosen,
     required this.isChosen,
@@ -51,7 +53,8 @@ class PhotoAppState extends Equatable {
   List<Object?> get props => [
         blacklisted_list_checks,
         textAccuracy,
-        sliderValue,
+        accuracy,
+    sliderValue,
         roomChoosen,
         isChosen,
         errorMessage,
@@ -72,7 +75,8 @@ class PhotoAppState extends Equatable {
   PhotoAppState copyWith({
     List<String>? textAccuracy,
     List<String>? blacklisted_list_checks,
-    String? sliderValue,
+    String? accuracy,
+    double? sliderValue,
     bool? isLoading,
     bool? hasError,
     String? errorMessage,
@@ -92,6 +96,7 @@ class PhotoAppState extends Equatable {
     return PhotoAppState(
       blacklisted_list_checks: blacklisted_list_checks ?? this.blacklisted_list_checks,
       textAccuracy: textAccuracy ?? this.textAccuracy,
+      accuracy: accuracy ?? this.accuracy,
       sliderValue: sliderValue ?? this.sliderValue,
       isLoading: isLoading ?? this.isLoading,
       hasError: hasError ?? this.hasError,

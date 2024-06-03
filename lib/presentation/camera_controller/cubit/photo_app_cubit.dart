@@ -352,7 +352,7 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
           'username': AuthenticationRepository.instance.currentUser.username,
           'current_room': state.roomChoosen,
           "breach_checker": state.securityBreachChecked,
-          "similarity_score": state.sliderValue ?? "0.35",
+          "similarity_score": state.accuracy ?? "0.35",
         };
         String jsonData = jsonEncode(data);
         _channel.sink.add(jsonData);
@@ -435,9 +435,10 @@ class PhotoAppCubit extends Cubit<PhotoAppState> {
     ));
   }
 
-  void sliderControl({required String sliderVal}) {
+  void sliderControl({required String accuracy,required double sliderValue}) {
     emit(state.copyWith(
-      sliderValue: sliderVal,
+      accuracy: accuracy,
+      sliderValue:sliderValue,
     ));
   }
 

@@ -122,7 +122,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   _onGetAccuracy(GetAccuracy event, Emitter<HomeState> emit) async {
     emit(state.copyWith(
-        accuracy: event.accuracy, submission: Submission.editing));
+        accuracy: event.accuracy,sliderValue:event.sliderValue, submission: Submission.editing));
   }
 
   _onreloadSnapShots(reloadSnapShots event, Emitter<HomeState> emit) async {

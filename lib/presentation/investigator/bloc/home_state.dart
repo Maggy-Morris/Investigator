@@ -20,6 +20,7 @@ class HomeState extends Equatable {
   final List<Widget> imageWidgetss;
   List<String> snapShots;
   final String accuracy;
+  final double sliderValue;
   final Submission submission;
 
   final String companyName;
@@ -36,6 +37,7 @@ class HomeState extends Equatable {
     this.pageCount = 0,
     this.pageIndex = 0,
     this.accuracy = '',
+    this.sliderValue = 10,
     this.imageWidget,
     this.snapShots = const [],
     this.data = const [],
@@ -59,6 +61,7 @@ class HomeState extends Equatable {
     int? pageCount,
     int? pageIndex,
     String? accuracy,
+    double? sliderValue,
     List<String>? snapShots,
     Widget? imageWidget,
     PlatformFile? video,
@@ -81,6 +84,7 @@ class HomeState extends Equatable {
       pageIndex: pageIndex ?? this.pageIndex,
       pageCount: pageCount ?? this.pageCount,
       accuracy: accuracy ?? this.accuracy,
+      sliderValue: sliderValue ?? this.sliderValue,
       snapShots: snapShots ?? this.snapShots,
       imageWidget: imageWidget ?? this.imageWidget,
       data: data ?? this.data,
@@ -106,6 +110,7 @@ class HomeState extends Equatable {
         pageIndex,
         pageCount,
         accuracy,
+    sliderValue,
         snapShots,
         imageWidget,
         data,

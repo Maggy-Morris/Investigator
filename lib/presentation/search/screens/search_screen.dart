@@ -1465,9 +1465,11 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                             context
                                                 .read<PhotoAppCubit>()
                                                 .sliderControl(
-                                                    sliderVal: (newValue / 100)
+                                                sliderValue:newValue,
+                                                    accuracy: (newValue / 100)
                                                         .toString());
                                           },
+                                          value: state.sliderValue,
                                           showLabelFormatter: true,
                                         ),
                                       ),
@@ -1542,11 +1544,13 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 50.0, vertical: 20),
                                         child: SliderWidget(
+                                          value: state.sliderValue,
                                           onChanged: (newValue) {
                                             context
                                                 .read<PhotoAppCubit>()
                                                 .sliderControl(
-                                                    sliderVal: (newValue / 100)
+                                                sliderValue:newValue,
+                                                    accuracy: (newValue / 100)
                                                         .toString());
                                           },
                                         ),

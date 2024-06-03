@@ -192,11 +192,12 @@ class reloadPath extends GroupSearchEvent {
 
 class GetAccuracy extends GroupSearchEvent {
   final String accuracy;
+  final double sliderValue;
 
-  const GetAccuracy({required this.accuracy});
+  const GetAccuracy({required this.accuracy,required this.sliderValue});
 
   @override
-  List<Object?> get props => [accuracy];
+  List<Object?> get props => [accuracy,sliderValue];
 }
 
 class getPersonName extends GroupSearchEvent {

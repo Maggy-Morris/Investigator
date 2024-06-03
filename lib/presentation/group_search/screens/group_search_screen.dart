@@ -141,9 +141,11 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                             right: 50.0, left: 50.0, bottom: 5),
                                         child: SliderWidget(
                                           showLabelFormatter: true,
+                                          value: state.sliderValue,
                                           onChanged: (newValue) {
                                             GroupSearchBloc.get(context).add(
                                                 GetAccuracy(
+                                                  sliderValue: newValue,
                                                     accuracy: (newValue / 100)
                                                         .toString()));
                                           },
@@ -1095,9 +1097,11 @@ class _GroupSearchScreenState extends State<GroupSearchScreen> {
                                         padding: const EdgeInsets.only(
                                             right: 50.0, left: 50.0, bottom: 5),
                                         child: SliderWidget(
+                                          value: state.sliderValue,
                                           onChanged: (newValue) {
                                             GroupSearchBloc.get(context).add(
                                                 GetAccuracy(
+                                                  sliderValue: newValue,
                                                     accuracy: (newValue / 100)
                                                         .toString()));
                                           },
