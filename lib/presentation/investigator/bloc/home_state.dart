@@ -7,8 +7,8 @@ class HomeState extends Equatable {
 
   final String pathProvided;
 
-  int pageIndex;
-  int pageCount;
+  final int pageIndex;
+  final int pageCount;
   final List<Data> employeeNamesList;
   final List<String> companiesNamesList;
   final PlatformFile? video;
@@ -18,17 +18,17 @@ class HomeState extends Equatable {
   final PlatformFile? imageFile;
   final Widget? imageWidget;
   final List<Widget> imageWidgetss;
-  List<String> snapShots;
+  final List<String> snapShots;
   final String accuracy;
   final double sliderValue;
   final Submission submission;
 
   final String companyName;
-  String personName;
+  final String personName;
   final String personId;
   final List<String> data;
 
-  HomeState({
+  const HomeState({
     this.imageWidgetss = const [],
     this.load = false,
     this.responseMessage = '',

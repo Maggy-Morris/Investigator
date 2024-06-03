@@ -3,33 +3,33 @@ part of 'group_search_bloc.dart';
 class GroupSearchState extends Equatable {
   final String pathProvided;
   final int timeDuration;
-  int pageIndex;
+  final int pageIndex;
 
-  int pageIndexForTargets;
+  final int pageIndexForTargets;
 
-  int pageCount;
-  int pageCountForTargets;
+  final int pageCount;
+  final int pageCountForTargets;
 
   final String selectedOption;
 
   final bool showTextField;
   final bool check;
 
-  List<String> roomNAMS;
+  final List<String> roomNAMS;
   final List<Dataaa> employeeNamesList;
   final List<String> companiesNamesList;
   final PlatformFile? video;
   final PlatformFile? imageFile;
   final Widget? imageWidget;
-  List<String> snapShots;
-  List<String> timestamps;
+  final List<String> snapShots;
+  final List<String> timestamps;
 
   final String accuracy;
   final double sliderValue;
   final Submission submission;
   final String responseMessage;
 
-  String personName;
+  final String personName;
   final String id;
 
   final String phoneNum;
@@ -38,11 +38,11 @@ class GroupSearchState extends Equatable {
   final String profession;
 
   final String companyName;
-  String filterCase;
+  final String filterCase;
   final String personId;
   final List<String> data;
 
-  GroupSearchState({
+  const GroupSearchState({
     this.timeDuration = 0,
     this.pathProvided = "",
     this.pageCount = 0,
